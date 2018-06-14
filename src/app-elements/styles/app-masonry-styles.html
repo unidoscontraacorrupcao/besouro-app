@@ -1,0 +1,67 @@
+<script type="module" src="../../../../@polymer/polymer/polymer-legacy.js"></script>
+
+<dom-module id="app-masonry-styles">
+  <template>
+    <style>
+      :host {
+      }
+      .show-more {
+        text-align: center;
+        position: relative;
+        padding: 10px;
+      }
+      .results paper-icon-button {
+        color: var(--default-primary-color);
+        background: var(--primary-background-color);
+        border-radius: 50%;
+        padding: 5px;
+      }
+      .spinner {
+        text-align: center;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 10px;
+      }
+      .spinner paper-spinner {
+        background: var(--primary-background-color);
+        border-radius: 50%;
+        padding: 6px;
+      }
+      card-item {
+        display: inline-block;
+        width: calc(25% - 20px);
+        margin: 20px 10px 0;
+      }
+      grain-masonry {
+        width: calc(100% + 20px);
+        margin-left: -10px;
+      }
+      .no-results {
+        text-align: center;
+        display: block;
+        padding: 10px 0;
+      }
+      @media screen and (max-width: 1201px) {
+        card-item {
+          width: calc(33.333333333% - 20px);
+        }
+      }
+      @media screen and (max-width: 960px) {
+        card-item {
+          width: calc(50% - 20px);
+        }
+      }
+      @media screen and (min-width: 641px) and (max-width: 728px) {
+        card-item {
+          width: calc(100% - 20px);
+        }
+      }
+      @media screen and (max-width: 420px) {
+        card-item {
+          width: calc(100% - 20px);
+        }
+      }
+    </style>
+  </template>
+</dom-module>

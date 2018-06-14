@@ -1,0 +1,99 @@
+<script type="module" src="../../../@polymer/polymer/polymer-element.js"></script>
+
+<script type="module" src="../../../@polymer/paper-toast/paper-toast.js"></script>
+<script type="module" src="../../../@polymer/paper-icon-button/paper-icon-button.js"></script>
+
+<script type="module" src="./app-icons.js"></script>
+
+<dom-module id="app-notify">
+  <template>
+    <style>
+      :host {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 350px;
+        max-width: 100%;
+      }
+      .dismiss {
+        float: right;
+      }
+      #status5 {
+        --paper-toast-background-color: var(--error-color);
+        --paper-toast-color: var(--text-primary-color);
+      }
+      #status4 {
+        --paper-toast-background-color: var(--warning-color);
+        --paper-toast-color: var(--primary-text-color);
+      }
+      #status1 {
+        --paper-toast-background-color: var(--info-color);
+        --paper-toast-color: var(--primary-text-color);
+      }
+    </style>
+    <paper-toast id="status5" duration="9000"
+      text="{{message}}" class="fit-bottom">
+      <paper-icon-button class="dismiss" icon="app:close" on-tap="close"></paper-icon-button>
+    </paper-toast>
+    <paper-toast id="status4" duration="6000"
+      text="{{message}}" class="fit-bottom">
+      <paper-icon-button class="dismiss" icon="app:close" on-tap="close"></paper-icon-button>
+    </paper-toast>
+    <paper-toast id="status1" duration="3000"
+      text="{{message}}" class="fit-bottom">
+      <paper-icon-button class="dismiss" icon="app:close" on-tap="close"></paper-icon-button>
+    </paper-toast>
+  </template>
+  <script type="module">
+import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
+import '../../../@polymer/paper-toast/paper-toast.js';
+import '../../../@polymer/paper-icon-button/paper-icon-button.js';
+import './app-icons.js';
+class AppNotify extends PolymerElement {
+  static get is() { return 'app-notify'; }
+  static get properties() {
+    return {
+      error: {
+        type: Object,
+        observer: 'showMessage'
+      },
+      status: {
+        type: String
+      },
+      message: {
+        type: String
+      },
+      useKeyIfMissing: {
+        value: true
+      }
+    };
+  }
+
+  showMessage(error) {
+    if(error && error.status) {
+      var code =  Number(error.status) ?
+        Math.round(error.status/100) : 1;
+      this.status = "status"+code;
+      if(this.$[this.status])
+        this.$[this.status].show();
+      switch(code) {
+        case 4:
+          this.message = 'Credenciais inválidas';
+          break;
+        case 5:
+          this.message = 'Erro no Servidor. Tente novamente mais tarde.';
+          break;
+        default:
+          this.message = error.statusText;
+      }
+    }
+  }
+
+  close() {
+    if(this.$[this.status])
+      this.$[this.status].close();
+  }
+}
+customElements.define(AppNotify.is, AppNotify);
+</script>
+</dom-module>
