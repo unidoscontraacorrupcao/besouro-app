@@ -1,37 +1,27 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/app-layout/app-drawer/app-drawer.js';
-import '../../../@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
-import '../../../@polymer/app-layout/app-header/app-header.js';
-import '../../../@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '../../../@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
-import '../../../@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '../../../@polymer/app-route/app-location.js';
-import '../../../@polymer/app-route/app-route.js';
-import '../../../@polymer/iron-pages/iron-pages.js';
-import '../../../@polymer/iron-selector/iron-selector.js';
-import '../../../@polymer/paper-icon-button/paper-icon-button.js';
-import '../../../@polymer/paper-tabs/paper-tabs.js';
-import '../../../@polymer/paper-tabs/paper-tab.js';
-import '../../../polymerfire/firebase-app.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/app-layout/app-drawer/app-drawer.js';
+import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
+import '@polymer/app-layout/app-header/app-header.js';
+import '@polymer/app-layout/app-header-layout/app-header-layout.js';
+import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
+import '@polymer/app-route/app-location.js';
+import '@polymer/app-route/app-route.js';
+import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/iron-selector/iron-selector.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-tabs/paper-tabs.js';
 import '../pages/login-page.js';
 import '../pages/inbox-page.js';
-import '../pages/campaigns-page.js';
 import '../pages/profile-page.js';
-import '../pages/new-campaign-page.js';
-import '../pages/show-campaign-page.js';
-import '../pages/proposals-page.js';
-import '../pages/campaign-followers-page.js';
-import '../pages/campaign-share-page.js';
 import '../pages/mission-page.js';
 import '../pages/show-mission-page.js';
 import '../pages/mission-receipts-page.js';
-import '../pages/statistics-page.js';
 import '../pages/not-found-page.js';
 import './app-icons.js';
 import './app-theme.js';
-import { setPassiveTouchGestures } from '../../../@polymer/polymer/lib/utils/settings.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
-import { importHref } from '../../../@polymer/polymer/lib/utils/import-href.js';
+import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
 setPassiveTouchGestures(true);
@@ -64,7 +54,7 @@ class AppShell extends PolymerElement {
 
       .tall .username,
       .tall .email {
-        color: var(--light-text-color); 
+        color: var(--light-text-color);
         font-size: 0.6em;
         line-height: 1;
         font-weight: 100;
@@ -111,13 +101,9 @@ class AppShell extends PolymerElement {
       }
     </style>
 
-    <firebase-app auth-domain="double-time-136323.firebaseapp.com" database-url="https://double-time-136323.firebaseio.com" storage-bucket="gs://double-time-136323.appspot.com" api-key="AIzaSyB7lA_X-kxqTJ8hyW0zlxvtP9m_WxvVYDo" project-id="double-time-136323" messaging-sender-id="837884325154">
-    </firebase-app>
+    <app-location route="{{route}}"></app-location>
 
-    <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
-    </app-location>
-
-    <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
 
     <app-drawer-layout fullbleed="" narrow="{{narrow}}">
@@ -125,7 +111,7 @@ class AppShell extends PolymerElement {
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
           <div bottom-item="" on-tap="gotoProfile">
-            <iron-image src="{{user.photoURL}}" sizing="cover"> 
+            <iron-image src="{{user.photoURL}}" sizing="cover">
             </iron-image>
             <div class="username">
               {{user.displayName}}
@@ -137,10 +123,9 @@ class AppShell extends PolymerElement {
           </div>
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="inbox" href="[[rootPath]]inbox">Caixa de Entrada</a>
-          <a name="campaign" href="[[rootPath]]campaigns">Campanhas</a>
+          <a name="inbox" href="inbox">Caixa de Entrada</a>
           <hr>
-          <a name="login" href="[[rootPath]]login" on-tap="signOut">Sair</a>
+          <a name="login" href="login" on-tap="signOut">Sair</a>
         </iron-selector>
       </app-drawer>
 
@@ -148,18 +133,11 @@ class AppShell extends PolymerElement {
       <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged" role="main">
           <profile-page name="profile" route="{{route}}" user="{{user}}"></profile-page>
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
-          <campaigns-page name="campaigns" route="{{route}}" user="[[user]]" on-open-drawer="_openDrawer"></campaigns-page>
-          <show-campaign-page name="show-campaign" user="[[user]]" route="{{route}}"></show-campaign-page>
-          <proposals-page name="proposals" user="[[user]]" route="{{route}}"></proposals-page>
-          <new-campaign-page route="{{route}}" user="[[user]]" name="new-campaign"></new-campaign-page>
-          <campaign-followers-page route="{{route}}" user="[[user]]" name="campaign-followers"></campaign-followers-page>
-          <campaign-share-page route="{{route}}" user="[[user]]" name="campaign-share"></campaign-share-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}"></mission-receipts-page>
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
-          <statistics-page user="{{user}}" name="statistics" route-data="{{routeData}}" route="{{route}}"></statistics-page>
           <not-found-page name="not-found"></not-found-page>
           <login-page name="login" id="login" user="{{user}}" route="{{route}}">
         </login-page>
@@ -177,12 +155,12 @@ class AppShell extends PolymerElement {
         reflectToAttribute: true,
         observer: '_pageChanged',
       },
-      routeData: Object,
+      routeData: {
+      type: Object,
+      value: function() { return {}; }
+      },
       subroute: Object,
       route: Object,
-      // This shouldn't be neccessary, but the Analyzer isn't picking up
-      // Polymer.Element#rootPath
-      rootPath: String,
       user: Object
     };
   }
@@ -194,9 +172,10 @@ class AppShell extends PolymerElement {
   }
 
   _routePageChanged(page) {
+    console.log("foooooo");
+    console.log(this.routeData);
     // If no page was found in the route data, page will be an empty string.
     // Default to 'inbox' in that case.
-    if (page === 'c') page = 'show-campaign';
     this.page = page || 'inbox';
     // Close a non-persistent drawer when the page & route are changed.
     if (!this.$.drawer.persistent) {
@@ -206,12 +185,13 @@ class AppShell extends PolymerElement {
 
   _pageChanged(page) {
     // Load page import on demand. Show 404 page if fails
-    const resolvedPageUrl = this.resolveUrl(`../pages/${page}-page.html`);
-    importHref(
-        resolvedPageUrl,
-        null,
-        this._showPage404.bind(this),
-        true);
+    console.log(`../pages/${page}-page.js`);
+    console.log(this.route);
+    import(`../pages/${page}-page.js`).then((MyView1) => {
+      console.log("MyView1 loaded");
+    }).catch((reason) => {
+      console.log("MyView1 failed to load", reason);
+    });
   }
 
   _selectedPageChanged(e) {

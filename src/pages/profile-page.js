@@ -1,20 +1,16 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import '../../../@polymer/paper-listbox/paper-listbox.js';
-import '../../../@polymer/paper-item/paper-item.js';
-import '../../../@polymer/paper-spinner/paper-spinner.js';
-import '../../../@polymer/paper-toggle-button/paper-toggle-button.js';
-import '../../../@polymer/neon-animation/web-animations.js';
-import '../../../polymerfire/firebase-storage-multiupload.js';
-import '../../../polymerfire/firebase-storage-ref.js';
-import '../../../polymerfire/firebase-document.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-spinner/paper-spinner.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
 import '../app-elements/shared-styles.js';
 import '../profile-elements/password-dialog.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class ProfilePage extends PolymerElement {
   static get template() {
     return html`
@@ -104,14 +100,6 @@ class ProfilePage extends PolymerElement {
       <password-dialog id="passDialog" on-confirm-password="_updatePassword"></password-dialog>
     </app-dialog>
 
-    <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
-    </firebase-auth>
-
-    <firebase-storage-ref id="photoRef" download-url="{{data.photoURL}}">
-    </firebase-storage-ref>
-
-    <firebase-document id="document" path="/users/{{user.uid}}/content" data="{{appUser}}">
-    </firebase-document>
 
     <app-header-layout has-scrolling-region="">
       <app-header slot="header" fixed="" condenses="" effects="waterfall">

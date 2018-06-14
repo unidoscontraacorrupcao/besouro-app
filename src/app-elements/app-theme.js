@@ -1,6 +1,6 @@
-import '../../../@polymer/polymer/lib/elements/custom-style.js';
-import '../../../@polymer/paper-styles/shadow.js';
-import '../../../@polymer/paper-styles/typography.js';
+import '@polymer/polymer/lib/elements/custom-style.js';
+import '@polymer/paper-styles/shadow.js';
+import '@polymer/paper-styles/typography.js';
 const $_documentContainer = document.createElement('template');
 $_documentContainer.setAttribute('style', 'display: none;');
 

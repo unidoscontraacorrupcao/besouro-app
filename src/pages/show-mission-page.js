@@ -1,21 +1,16 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/app-route/app-route.js';
-import '../../../@polymer/app-layout/app-header/app-header.js';
-import '../../../@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-progress/paper-progress.js';
-import '../../../@polymer/paper-spinner/paper-spinner.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../@polymer/paper-fab/paper-fab.js';
-import '../../../@polymer/paper-tooltip/paper-tooltip.js';
-import '../../../polymerfire/firebase-document.js';
-import '../../../polymerfire/firebase-storage-ref.js';
-import '../../../polymerfire/firebase-query.js';
-import '../../../@polymer/paper-menu-button/paper-menu-button.js';
-import '../../../@polymer/paper-icon-button/paper-icon-button.js';
-import '../../../@polymer/paper-listbox/paper-listbox.js';
-import '../../../@polymer/neon-animation/web-animations.js';
-import '../../../share-menu/share-menu.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/app-route/app-route.js';
+import '@polymer/app-layout/app-header/app-header.js';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-progress/paper-progress.js';
+import '@polymer/paper-spinner/paper-spinner.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-fab/paper-fab.js';
+import '@polymer/paper-tooltip/paper-tooltip.js';
+import '@polymer/paper-menu-button/paper-menu-button.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-listbox/paper-listbox.js';
 import '../app-elements/app-scrollable-dialog.js';
 import '../app-elements/app-form-header.js';
 import '../app-elements/app-icons.js';
@@ -26,8 +21,8 @@ import '../mission-elements/accept-mission-modal.js';
 import '../mission-elements/reject-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
 import '../mission-elements/mission-receipt.js';
-import '../mixin-elements/mission-duration-mixin.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   static get template() {
     return html`
@@ -225,23 +220,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     <app-route route="{{route}}" pattern="/show-mission/:key" data="{{data}}">
     </app-route>
 
-    <firebase-storage-ref id="campaignRef">
-    </firebase-storage-ref>
 
-    <firebase-document id="document" path="/missions/{{data.key}}" data="{{mission}}">
-    </firebase-document>
-
-    <firebase-document id="campaign" data="{{campaign}}" log="true">
-    </firebase-document>
-
-    <firebase-query id="query" path="/comments/[[data.key]]" data="{{comments}}">
-    </firebase-query>
-
-    <firebase-query id="accepted" path="/users/{{user.uid}}/accepted/{{data.key}}" data="{{acceptedMission}}">
-    </firebase-query>
-
-    <firebase-query id="receipts" path="/missions/[[data.key]]/content/receipts" data="{{receipts}}">
-    </firebase-query>
 
     <app-scrollable-dialog id="finishedDialog" opened="{{finishedModal}}" modal="">
       <finish-mission-modal user="[[user]]" mission-id="{{data.key}}"></finish-mission-modal>
@@ -333,7 +312,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
             <h3>Compartilhar missão</h3>
             <div id="share-btn">
               <paper-icon-button on-tap="_shareMission" icon="app:share"></paper-icon-button>
-              <share-menu id="shareMenu" title="{{mission.content.title}}" text="{{mission.content.description}}" url="{{address}}/{{data.key}}?shared=true" enabled-services="[&quot;telegram&quot;, &quot;facebook&quot;, &quot;whatsapp&quot;, &quot;email&quot;, &quot;clipboard&quot;]"></share-menu>
             </div>
           </div>
         </div>
@@ -450,12 +428,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         value: function() {}
       }
     };
-  }
-
-  static get observers() {
-    return [
-      'routePathChanged(route.path)'
-    ]
   }
 
   _selectedChanged(selected) {

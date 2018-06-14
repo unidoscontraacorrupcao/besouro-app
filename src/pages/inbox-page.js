@@ -1,14 +1,12 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-fab/paper-fab.js';
-import '../../../@polymer/paper-tooltip/paper-tooltip.js';
-import '../../../polymerfire/firebase-query.js';
-import '../../../polymerfire/firebase-document.js';
-import '../../../@polymer/paper-spinner/paper-spinner.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-fab/paper-fab.js';
+import '@polymer/paper-tooltip/paper-tooltip.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class InboxPage extends PolymerElement {
   static get template() {
     return html`
@@ -45,14 +43,8 @@ class InboxPage extends PolymerElement {
       }
     </style>
 
-    <firebase-document id="campaigns">
-    </firebase-document>
 
-    <firebase-document id="missions" path="/missions" data="{{allMissions}}">
-    </firebase-document>
 
-    <firebase-query id="accepted" path="/users/{{user.uid}}/accepted" data="{{acceptedMissions}}">
-    </firebase-query>
 
     <app-header-layout has-scrolling-region="">
 
@@ -181,44 +173,6 @@ class InboxPage extends PolymerElement {
   }
 
   _getMissionsByCampaigns() {
-    if (this.user === null) return;
-    var userFollowingCampaigns = new Promise((resolve, reject) => {
-      let campaigns = [];
-      let filteredCampaignsKeys = [];
-      let campaignsKeys = [];
-      this.$.campaigns.db.ref("/campaigns").once("value", function(snapshot) {
-        if(snapshot.val() != null) {
-          campaigns = Object.values(snapshot.val());
-          campaignsKeys = Object.keys(snapshot.val())
-          campaigns.forEach(function(campaign, index) {
-            if (!(campaign.content.usersFollow == undefined) && campaign.content.usersFollow.includes(this.user.uid))
-              filteredCampaignsKeys.push(campaignsKeys[index])
-          }.bind(this));
-        }
-        resolve(filteredCampaignsKeys);
-      }.bind(this));
-    });
-
-    userFollowingCampaigns.then(function(campaigns) {
-      setTimeout(function() {
-        this.set("userMissions", []);
-        campaigns.forEach(function(campaign) {
-          this.$.campaigns.db.ref("/missions").orderByChild("content/cid").equalTo(campaign).once("value", function(snapshot){
-            if (snapshot.val() != null) {
-              const missionsContents = Object.values(snapshot.val());
-              const missionsKeys = Object.keys(snapshot.val());
-              missionsContents.forEach(function(content, index) {
-                content["$key"] =  missionsKeys[index]
-                this.push("userMissions", content);
-              }.bind(this));
-            }
-          }.bind(this));
-        }.bind(this));
-        setTimeout(function() {
-          this._filterMissions();
-        }.bind(this), 1000);
-      }.bind(this), 1000);
-    }.bind(this));
   }
 
   _onAllMissionsChanged() {

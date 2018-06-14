@@ -1,13 +1,11 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../vaadin-date-picker/vaadin-date-picker.js';
-import '../../../share-menu/share-menu.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
 import '../app-elements/shared-styles.js';
 import '../app-elements/app-confirmation-icon.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionModal extends PolymerElement {
   static get template() {
     return html`
@@ -41,7 +39,6 @@ class MissionModal extends PolymerElement {
         <p>Quanto mais pessoas souberem da sua missão maiores são as chances de alcançarmos nosso objetivo por isso não perca tempo e compartilhe em suas redes sociais </p>
       <div class="buttons">
         <paper-button class="accent block" on-tap="_shareMision">Compartilhar</paper-button>
-        <share-menu id="shareMenu" title="{{mission.content.title}}" text="{{mission.content.description}}" url="{{address}}/{{mission.\$key}}" enabled-services="[&quot;telegram&quot;, &quot;facebook&quot;, &quot;whatsapp&quot;, &quot;email&quot;, &quot;clipboard&quot;]"></share-menu>
       </div>
       </div>
       </div>
@@ -78,13 +75,6 @@ class MissionModal extends PolymerElement {
 
   constructor() {
     super();
-  }
-
-  ready() {
-    super.ready();
-    this.$.shareMenu.addEventListener('iron-overlay-closed', function() {
-      this.dispatchEvent(new CustomEvent('finished', {}));
-    });
   }
 }
 customElements.define(MissionModal.is, MissionModal);

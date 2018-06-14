@@ -1,20 +1,18 @@
-<script type="module" src="../../../@polymer/polymer/polymer-element.js"></script>
-<script type="module" src="../../../@polymer/paper-input/paper-input.js"></script>
-<script type="module" src="../../../@polymer/iron-form/iron-form.js"></script>
-<script type="module" src="../../../@polymer/paper-button/paper-button.js"></script>
-<script type="module" src="../../../polymerfire/firebase-query.js"></script>
-<script type="module" src="../../../polymerfire/firebase-storage-multiupload.js"></script>
-<script type="module" src="../../../@polymer/app-media/app-media.js"></script>
-<script type="module" src="../../../@polymer/app-media/app-media-recorder.js"></script>
-<script type="module" src="../../../@polymer/app-layout/app-header-layout/app-header-layout.js"></script>
-<script type="module" src="../../../@polymer/paper-spinner/paper-spinner.js"></script>
-
-<script type="module" src="../app-elements/app-form-header.js"></script>
-<script type="module" src="../app-elements/app-scrollable-dialog.js"></script>
-<script type="module" src="../mission-elements/mission-receipt.js"></script>
-<script type="module" src="../app-elements/app-icons.js"></script>
-<script type="module" src="../app-elements/shared-styles.js"></script>
-
+import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
+import '../../../@polymer/paper-input/paper-input.js';
+import '../../../@polymer/iron-form/iron-form.js';
+import '../../../@polymer/paper-button/paper-button.js';
+import '../../../polymerfire/firebase-query.js';
+import '../../../polymerfire/firebase-storage-multiupload.js';
+import '../../../@polymer/app-media/app-media.js';
+import '../../../@polymer/app-media/app-media-recorder.js';
+import '../../../@polymer/app-layout/app-header-layout/app-header-layout.js';
+import '../../../@polymer/paper-spinner/paper-spinner.js';
+import '../app-elements/app-form-header.js';
+import '../app-elements/app-scrollable-dialog.js';
+import '../mission-elements/mission-receipt.js';
+import '../app-elements/app-icons.js';
+import '../app-elements/shared-styles.js';
 <dom-module id="mission-accepted-page">
   <template>
     <style include="shared-styles"></style>
@@ -138,21 +136,6 @@
     </app-header-layout>
     </template>
   <script type="module">
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/iron-form/iron-form.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../polymerfire/firebase-query.js';
-import '../../../polymerfire/firebase-storage-multiupload.js';
-import '../../../@polymer/app-media/app-media.js';
-import '../../../@polymer/app-media/app-media-recorder.js';
-import '../../../@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '../../../@polymer/paper-spinner/paper-spinner.js';
-import '../app-elements/app-form-header.js';
-import '../app-elements/app-scrollable-dialog.js';
-import '../mission-elements/mission-receipt.js';
-import '../app-elements/app-icons.js';
-import '../app-elements/shared-styles.js';
 class MissionAcceptedPage extends PolymerElement {
   static get is() { return 'mission-accepted-page'; }
 

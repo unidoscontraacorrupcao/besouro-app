@@ -1,8 +1,8 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../app-elements/app-confirmation-icon.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class FinishConfirmationModal extends PolymerElement {
   static get template() {
     return html`

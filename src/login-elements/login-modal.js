@@ -1,12 +1,10 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/iron-image/iron-image.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../polymerfire/firebase-auth.js';
-import '../../../polymerfire/firebase-document.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-image/iron-image.js';
+import '@polymer/paper-button/paper-button.js';
 import '../app-elements/shared-styles.js';
 import './register-view.js';
 import './login-view.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class LoginModal extends PolymerElement {
   static get template() {
     return html`
@@ -57,11 +55,7 @@ class LoginModal extends PolymerElement {
       </div>
     </div>
 
-    <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
-    </firebase-auth>
 
-    <firebase-document id="document">
-    </firebase-document>
 
     <register-view id="register" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signUpData}}" on-open-login="openLogin" on-provider-auth="authWithProvider"></register-view>
     <login-view id="login" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signInData}}" on-open-register="openRegister" on-provider-auth="authWithProvider"></login-view>

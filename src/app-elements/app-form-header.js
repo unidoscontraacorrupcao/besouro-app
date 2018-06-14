@@ -1,9 +1,9 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/app-layout/app-header/app-header.js';
-import '../../../@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '../../../@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/app-layout/app-header/app-header.js';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
+import '@polymer/paper-dialog-scrollable/paper-dialog-scrollable.js';
 import './shared-styles.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class AppFormHeader extends PolymerElement {
   static get template() {
     return html`

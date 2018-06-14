@@ -1,16 +1,14 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../@polymer/paper-input/paper-textarea.js';
-import '../../../polymerfire/firebase-document.js';
-import '../../../polymerfire/firebase-storage-multiupload.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-textarea.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
 import '../app-elements/shared-styles.js';
 import './finish-confirmation-modal.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
-import { mixinBehaviors } from '../../../@polymer/polymer/lib/legacy/class.js';
-import { PaperInputBehavior } from '../../../@polymer/paper-input/paper-input-behavior.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { PaperInputBehavior } from '@polymer/paper-input/paper-input-behavior.js';
 class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerElement) {
   static get template() {
     return html`
@@ -99,11 +97,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
       <finish-confirmation-modal></finish-confirmation-modal>
     </app-dialog>
 
-    <firebase-document path="/missions/[[missionId]]/content/receipts" id="document" data="{{missionReceipts}}">
-    </firebase-document>
 
-    <firebase-storage-multiupload path="/missions/[[missionId]]" files="[[fileArray]]" upload-tasks="{{uploadTasks}}" log="true" id="storage">
-    </firebase-storage-multiupload>
 
       <h2 class="message"> Obrigado! </h2>
 

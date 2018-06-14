@@ -1,10 +1,9 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../vaadin-date-picker/vaadin-date-picker.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionComment extends PolymerElement {
   static get template() {
     return html`

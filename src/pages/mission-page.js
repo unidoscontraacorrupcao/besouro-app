@@ -1,22 +1,16 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/iron-form/iron-form.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../polymerfire/firebase-query.js';
-import '../../../polymerfire/firebase-document.js';
-import '../../../polymerfire/firebase-storage-multiupload.js';
-import '../../../@polymer/app-media/app-media.js';
-import '../../../@polymer/app-media/app-media-recorder.js';
-import '../../../@polymer/paper-toggle-button/paper-toggle-button.js';
-import '../../../@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import '../../../@polymer/paper-item/paper-item.js';
-import '../../../@polymer/paper-listbox/paper-listbox.js';
-import '../../../@polymer/paper-input/paper-textarea.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-input/paper-textarea.js';
 import '../app-elements/app-form-header.js';
 import '../mission-elements/mission-modal.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionPage extends PolymerElement {
   static get template() {
     return html`
@@ -153,14 +147,8 @@ class MissionPage extends PolymerElement {
       </mission-modal>
     </app-dialog>
 
-    <firebase-query id="query" path="/missions" data="{{missionData}}">
-    </firebase-query>
 
-    <firebase-document id="document">
-    </firebase-document>
 
-    <firebase-storage-multiupload path="/missions/[[missionId]]" files="[[fileArray]]" upload-tasks="{{uploadTasks}}" log="true" id="storage">
-    </firebase-storage-multiupload>
 
     <app-header-layout has-scrolling-region="">
       <app-form-header shadow="" slot="header">
@@ -438,20 +426,6 @@ class MissionPage extends PolymerElement {
   }
 
   _getUserCampaigns(){
-    if (this.user === null) return;
-    this.$.document.db.ref("/campaigns").orderByChild("content/uid").equalTo(this.user.uid).once("value", function(snapshot){
-      if (snapshot.val()){
-        const values = Object.values(snapshot.val());
-        const keys = Object.keys(snapshot.val());
-        let campaigns = [];
-        values.forEach(function(value, index){
-          let data = value;
-          data["key"] = keys[index];
-          campaigns.push(data);
-        })
-        this.set("userCampaigns", campaigns);
-      }
-    }.bind(this));
   }
 
   routePathChanged(page) {
@@ -502,11 +476,8 @@ class MissionPage extends PolymerElement {
 
   ready() {
     super.ready();
-    this.$.modal.shadowRoot.querySelector("share-menu").addEventListener('finished', this._returnToInbox.bind(this));
     this.set("editMissionFunc",  this._editMission.bind(this));
     this.set("saveMissionFunc",  this._saveMission.bind(this));
-    console.log("hdjshdkashdj");
-    console.log(this.saveMissionFunc);
   }
 }
 customElements.define(MissionPage.is, MissionPage);

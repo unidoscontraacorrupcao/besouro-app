@@ -1,14 +1,11 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../vaadin-date-picker/vaadin-date-picker.js';
-import '../../../polymerfire/firebase-storage-ref.js';
-import '../../../polymerfire/firebase-document.js';
-import '../../../@polymer/iron-image/iron-image.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/iron-image/iron-image.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mixin-elements/mission-duration-mixin.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionReceipt extends PolymerElement {
   static get template() {
     return html`
@@ -49,11 +46,7 @@ class MissionReceipt extends PolymerElement {
 
     </style>
 
-    <firebase-storage-ref metadata="{{metadata}}" storage-uri="{{gsUri}}" download-url="{{downloadUrl}}" log="true" id="storage">
-    </firebase-storage-ref>
 
-    <firebase-document path="/missions/{{rcptData.missionId}}/content/receipts" id="document" data="{{receipts}}">
-    </firebase-document>
 
 
         <div class="content">
@@ -104,7 +97,6 @@ class MissionReceipt extends PolymerElement {
 
   setRcptData(data) {
     this.set('rcptData', data);
-    this._setFirebasePaths();
   }
 
   _setFirebasePaths() {

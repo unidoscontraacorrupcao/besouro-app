@@ -1,9 +1,7 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../polymerfire/firebase-storage-ref.js';
-import '../../../google-youtube/google-youtube.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionPlayer extends PolymerElement {
   static get template() {
     return html`
@@ -42,11 +40,7 @@ class MissionPlayer extends PolymerElement {
 
     </style>
 
-    <firebase-storage-ref download-url="{{imageUrl}}" id="storage">
-    </firebase-storage-ref>
 
-    <firebase-storage-ref download-url="{{audioUrl}}" id="audioStorage">
-    </firebase-storage-ref>
 
     <dom-if if="{{mediaUrl}}">
       <template>
@@ -61,8 +55,6 @@ class MissionPlayer extends PolymerElement {
     </dom-if>
     <app-dialog id="dialog">
       <div id="fullscreen">
-        <google-youtube id="video" chromeless="" video-id="{{mediaUrl}}" height="100vh" width="100vw">
-        </google-youtube>
         <paper-icon-button icon="app:close" on-tap="stop" id="dismiss">
         </paper-icon-button>
       </div>
@@ -101,7 +93,6 @@ class MissionPlayer extends PolymerElement {
   _setMissionLayer(imageUrl, audioUrl, mission) {
     let image = '';
     if(!mission) return;
-    this._setFirebasePaths(mission);
     if(mission.video) {
       image = `https://img.youtube.com/vi/${mission.video}/0.jpg`;
       this.mediaUrl = mission.video;

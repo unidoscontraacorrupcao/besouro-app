@@ -1,5 +1,12 @@
-/* @polymerMixin */
-MissionDurationMixin = function(superClass) {
+import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
+
+/**
+ * My Mixin
+ * @polymer
+ * @mixinFunction
+ * @polymerMixin
+ */
+let DurationMixin = function(superClass) {
   return class extends superClass {
     calcMissionDate(mission) {
       if(!mission) return;
@@ -32,3 +39,5 @@ MissionDurationMixin = function(superClass) {
     }
   }
 }
+
+export const MissionDurationMixin = dedupingMixin(DurationMixin);

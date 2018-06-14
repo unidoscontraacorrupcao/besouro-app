@@ -1,9 +1,9 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/iron-image/iron-image.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../@polymer/paper-input/paper-input.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-image/iron-image.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
 import '../app-elements/shared-styles.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class RegisterView extends PolymerElement {
   static get template() {
     return html`

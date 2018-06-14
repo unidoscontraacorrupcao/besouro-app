@@ -1,12 +1,12 @@
-import '../../../@polymer/polymer/polymer-legacy.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../@polymer/iron-icon/iron-icon.js';
-import { PaperDialogBehavior } from '../../../@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
+import '@polymer/polymer/polymer-legacy.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/iron-icon/iron-icon.js';
+import { PaperDialogBehavior } from '@polymer/paper-dialog-behavior/paper-dialog-behavior.js';
 import './app-icons.js';
 import './styles/app-dialog-styles.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
-import { mixinBehaviors } from '../../../@polymer/polymer/lib/legacy/class.js';
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 class AppDialog extends mixinBehaviors([PaperDialogBehavior], PolymerElement) {
   static get template() {
     return html`

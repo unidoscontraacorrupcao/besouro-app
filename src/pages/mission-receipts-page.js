@@ -1,19 +1,14 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/iron-form/iron-form.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../polymerfire/firebase-query.js';
-import '../../../polymerfire/firebase-storage-multiupload.js';
-import '../../../@polymer/app-media/app-media.js';
-import '../../../@polymer/app-media/app-media-recorder.js';
-import '../../../@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '../../../@polymer/paper-spinner/paper-spinner.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/app-layout/app-header-layout/app-header-layout.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import '../app-elements/app-form-header.js';
 import '../app-elements/app-scrollable-dialog.js';
 import '../mission-elements/mission-receipt.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionReceiptsPage extends PolymerElement {
   static get template() {
     return html`
@@ -98,11 +93,7 @@ class MissionReceiptsPage extends PolymerElement {
     <app-route route="{{route}}" pattern="/mission-receipts/:key" data="{{routeData}}">
     </app-route>
 
-    <firebase-document id="document" path="/missions/{{routeData.key}}" data="{{mission}}" log="true">
-    </firebase-document>
 
-    <firebase-document id="photoDoc" data="{{appUser}}" log="true">
-    </firebase-document>
 
     <app-scrollable-dialog id="missionReceipt">
       <mission-receipt></mission-receipt>

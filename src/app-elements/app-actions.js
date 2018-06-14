@@ -1,10 +1,10 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-fab/paper-fab.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-fab/paper-fab.js';
 import './shared-styles.js';
 import './app-icons.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
-import { mixinBehaviors } from '../../../@polymer/polymer/lib/legacy/class.js';
-import { NeonAnimatableBehavior } from '../../../@polymer/neon-animation/neon-animatable-behavior.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { NeonAnimatableBehavior } from '@polymer/neon-animation/neon-animatable-behavior.js';
 class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement) {
   static get template() {
     return html`

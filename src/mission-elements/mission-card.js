@@ -1,14 +1,18 @@
-import { PolymerElement } from '../../../@polymer/polymer/polymer-element.js';
-import '../../../@polymer/paper-input/paper-input.js';
-import '../../../@polymer/paper-button/paper-button.js';
-import '../../../vaadin-date-picker/vaadin-date-picker.js';
-import '../../../polymerfire/firebase-storage-ref.js';
-import '../../../@polymer/iron-image/iron-image.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/iron-image/iron-image.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
-import '../mixin-elements/mission-duration-mixin.js';
+import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import './mission-player.js';
-import { html } from '../../../@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+
+/**
+ * @polymer
+ * @MissionCard
+ * @appliesMixin MissionDurationMixin
+ */
 class MissionCard extends MissionDurationMixin(PolymerElement) {
   static get template() {
     return html`
@@ -123,12 +127,6 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         margin-top: 20px;
       }
     </style>
-
-    <firebase-storage-ref id="campaignRef">
-    </firebase-storage-ref>
-
-    <firebase-document id="campaign" data="{{campaign}}" log="true">
-    </firebase-document>
 
     <div class="card mission-card">
       <div class="card-header">
