@@ -49,6 +49,8 @@ class InboxPage extends PolymerElement {
         bottom: 0;
         background: white;
         width: 100vw;
+        border-top-style: solid;
+        border-top-color: #E7E7E7;
       }
 
       #app-actions span {
