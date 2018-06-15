@@ -21,6 +21,7 @@ class InboxPage extends PolymerElement {
       [main-title] {
         color: var(--accent-color);
         margin-left: 10px;
+        text-transform: uppercase;
       }
 
       .inbox {
@@ -41,10 +42,67 @@ class InboxPage extends PolymerElement {
         background-color: var(--default-primary-color);
         border-radius: 50%;
       }
+
+
+      #app-actions {
+        position: fixed;
+        bottom: 0;
+        background: white;
+        width: 100vw;
+      }
+
+      #app-actions span {
+        text-transform: uppercase;
+        color: var(--light-text-color);
+        font-size: 0.7em;
+      }
+
+      #app-actions #actions-content {
+        width: 90%;
+        margin: auto;
+        display: flex;
+        text-align: center;
+        padding-bottom: 5px;
+      }
+
+      #app-actions #actions-content > * {flex-grow: 1;}
+
+      .icon-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .icon-container span { margin-top: -6px; }
+
+      .icon-container > * {
+        margin: auto;
+      }
+
+      #new-mission-btn {
+        margin-top: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: var(--accent-color);
+        border-radius: 50%;
+        margin: 8px auto;
+      }
+
+      #new-mission-btn paper-icon-button {
+        width: 40px;
+        color: white;
+      }
+
+      #app-actions #new-mission-btn paper-icon-button { display: block; }
+      #app-actions #missions-btn paper-icon-button { 
+        display: block; 
+        padding: 5px;
+      }
+      #app-actions #notifications-btn paper-icon-button { 
+        display: block; 
+        padding: 5px;
+      }
+
     </style>
-
-
-
 
     <app-header-layout has-scrolling-region="">
 
@@ -52,11 +110,11 @@ class InboxPage extends PolymerElement {
         <app-toolbar>
           <paper-icon-button icon="app:menu" drawer-toggle="" on-tap="openDrawer"></paper-icon-button>
           <div main-title="">{{pageTitle}}</div>
-          <paper-icon-button on-tap="_openStatatisticsPage" icon="app:timeline"></paper-icon-button>
+          <paper-icon-button icon="app:search"></paper-icon-button>
         </app-toolbar>
         <app-toolbar sticky="">
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
-            <paper-tab>CAIXA DE ENTRADA</paper-tab>
+            <paper-tab>MISSÕES PUBLICAS</paper-tab>
             <paper-tab>MINHAS MISSÕES</paper-tab>
           </paper-tabs>
         </app-toolbar>
@@ -77,14 +135,27 @@ class InboxPage extends PolymerElement {
       <div id="inboxLoading">
         <paper-spinner active=""></paper-spinner>
       </div>
-      <app-actions id="actions" selected="{{selected}}" icon="app:add">
-        <paper-fab slot="actions" mini="" icon="app:add" id="newMission" on-tap="_openMissionForm" name="edit"></paper-fab>
-        <paper-tooltip slot="actions" for="newMission">Sugerir Missão</paper-tooltip>
-        <paper-fab slot="actions" mini="" icon="app:assessment" id="survey" name="edit"></paper-fab>
-        <paper-tooltip slot="actions" for="survey">Enquete</paper-tooltip>
-        <paper-fab slot="actions" mini="" icon="app:create" id="post" name="edit"></paper-fab>
-        <paper-tooltip slot="actions" for="post">Postagem</paper-tooltip>
-      </app-actions>
+
+      <div id="app-actions">
+        <div id="actions-content">
+          <div id="missions-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:stars"></paper-icon-button>
+              <span>missões</span>
+            </div>
+          </div>
+          <div>
+            <div id="new-mission-btn">
+              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
+            </div>
+          </div>
+          <div id="notifications-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:notifications"></paper-icon-button>
+              <span>notificações</span>
+            </div>
+          </div>
+        </div>
     </app-header-layout>
 `;
   }
@@ -105,7 +176,7 @@ class InboxPage extends PolymerElement {
       },
       pageTitle: {
         type: String,
-        value: 'Painel inicial'
+        value: 'MISSÕES'
       },
       acceptedMissions: {
         type: Array,
@@ -181,10 +252,6 @@ class InboxPage extends PolymerElement {
 
   _onUserChanged() {
     this._getMissionsByCampaigns();
-  }
-
-  _openStatatisticsPage() {
-    this.set("route.path", "/statistics");
   }
 }
 window.customElements.define(InboxPage.is, InboxPage);

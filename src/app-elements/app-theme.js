@@ -24,13 +24,13 @@ $_documentContainer.innerHTML = `<custom-style>
     :root { 
       --default-primary-color: #FFFFFF;
       --dark-primary-color: #646A74;
-      --accent-color: #E15E36;
-      --light-accent-color: #FF9100;
+      --accent-color: #E6007E;
+      --light-accent-color: #E6007E;
       --primary-background-color: #ffffff;
       --secondary-background-color: #f8f8f8;
       --primary-text-color: #2d2d2d;
-      --secondary-text-color: #8B949C;
-      --light-text-color: #ffffff;
+      --secondary-text-color: #000083;
+      --light-text-color: #B7B8B7;
       --disabled-text-color: #666666;
       --divider-color: #e0e0e0;
 
@@ -68,12 +68,12 @@ $_documentContainer.innerHTML = `<custom-style>
       --paper-slider-active-color: #E15E36;
       --paper-slider-pin-color: #E15E36;
 
-      --paper-spinner-layer-1-color: #E15E36;
-      --paper-spinner-layer-2-color: #E15E36;
-      --paper-spinner-layer-3-color: #E15E36;
-      --paper-spinner-layer-4-color: #E15E36;
+      --paper-spinner-layer-1-color: #E6007E;
+      --paper-spinner-layer-2-color: #E6007E;
+      --paper-spinner-layer-3-color: #E6007E;
+      --paper-spinner-layer-4-color: #E6007E;
 
-      --paper-tabs-selection-bar-color: #E15E36;
+      --paper-tabs-selection-bar-color: #D9589F;
       --paper-tab-ink: #E15E36;
 
       --paper-toggle-button-checked-bar-color: #E15E36;

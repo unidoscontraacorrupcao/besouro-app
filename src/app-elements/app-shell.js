@@ -172,8 +172,6 @@ class AppShell extends PolymerElement {
   }
 
   _routePageChanged(page) {
-    console.log("foooooo");
-    console.log(this.routeData);
     // If no page was found in the route data, page will be an empty string.
     // Default to 'inbox' in that case.
     this.page = page || 'inbox';
