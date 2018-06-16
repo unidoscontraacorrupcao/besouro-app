@@ -15,6 +15,7 @@ class AppBesouroApi extends PolymerElement {
     content-type="application/json"
     method={{method}}
     on-response="handleResponse"
+    loading
     debounce-duration="300"></iron-ajax>
     `
   }
@@ -34,7 +35,11 @@ class AppBesouroApi extends PolymerElement {
         value: ""
       },
       body: String,
-      params: Object
+      params: Object,
+      responseData: {
+        type: Object,
+        notify: true
+      }
     }
   }
 
@@ -44,6 +49,11 @@ class AppBesouroApi extends PolymerElement {
 
   response() {
     this.$.ajax.lastResponse;
+  }
+
+  handleResponse(e) {
+    console.log(e);
+    this.set("responseData", e.detail.response);
   }
 }
 

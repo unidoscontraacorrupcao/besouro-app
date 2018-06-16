@@ -144,7 +144,7 @@ class MissionPage extends PolymerElement {
     </style>
 
 
-    <app-besouro-api id="api"></app-besouro-api>
+    <app-besouro-api id="api" response-data={{responseData}}></app-besouro-api>
 
     <app-dialog id="confirmation" opened="{{openedModal}}">
       <mission-modal id="modal" mission="{{sharedMission}}" modal-title="{{confirmationTitle}}" modal-description="{{confirmationDescription}}">
@@ -220,10 +220,6 @@ class MissionPage extends PolymerElement {
         type: Array,
         value: []
       },
-      uploadTasks: {
-        type: Array,
-        value: []
-      },
       missionId: {
         type: String
       },
@@ -254,6 +250,11 @@ class MissionPage extends PolymerElement {
       missionFormTitle: {
         type: String,
         value: "Criar Missão"
+      },
+      responseData: {
+        type: Object,
+        value: {},
+        observer: "_onResponseDataChanged"
       },
       saveMissionFunc: Function,
       editMissionFunc: Function,
@@ -290,19 +291,10 @@ class MissionPage extends PolymerElement {
       this.$.api.request();
   }
 
-  _getCampaignByName(_name) {
-    let campaignId = "";
-    this.userCampaigns.forEach(function(_value) {
-    let campaignName = _value.content.name.replace(/\s*$/,"");
-    campaignName = campaignName.replace(/\s*^/,"");
-      if (campaignName === _name) {
-        campaignId = _value.key;
-      }
-    });
-    return campaignId;
-  }
-
-  _saveMissionStorage() {
+  _onResponseDataChanged() {
+    if (Object.keys(this.responseData).length > 0) {
+      this.$.confirmation.present();
+    }
   }
 
   _validMission() {
