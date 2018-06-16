@@ -9,6 +9,7 @@ import '@polymer/paper-input/paper-textarea.js';
 import '../app-elements/app-form-header.js';
 import '../mission-elements/mission-modal.js';
 import '../app-elements/app-icons.js';
+import '../app-elements/app-besouro-api.js';
 import '../app-elements/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionPage extends PolymerElement {
@@ -142,12 +143,13 @@ class MissionPage extends PolymerElement {
 
     </style>
 
+
+    <app-besouro-api id="api"></app-besouro-api>
+
     <app-dialog id="confirmation" opened="{{openedModal}}">
       <mission-modal id="modal" mission="{{sharedMission}}" modal-title="{{confirmationTitle}}" modal-description="{{confirmationDescription}}">
       </mission-modal>
     </app-dialog>
-
-
 
 
     <app-header-layout has-scrolling-region="">
@@ -179,20 +181,12 @@ class MissionPage extends PolymerElement {
         </div>
       </div>
       <div class="form" id="form">
-        <paper-input id="missionTitle" required="" error-message="Chamada da missão está em branco" value="{{mission.title}}" label="Chamada" char-counter="" maxlength="100"></paper-input>
+        <paper-input id="missionTitle" required="" error-message="Chamada da missão está em branco" value="{{mission.title}}" label="Título" char-counter="" maxlength="100"></paper-input>
         <paper-input id="missionDate" required="" error-message="Duração da missão está em branco" type="date" value="{{mission.endDate}}" label="Prazo da missão"></paper-input>
         <paper-textarea max-rows="2" type="text" id="missionDesc" required="" error-message="Descrição da missão está em branco" value="{{mission.description}}" label="Descrição" char-counter="" maxlength="1000"></paper-textarea>
         <div id="mission-required">
           <paper-toggle-button checked="{{mission.requiredReceipt}}">Comprovação obrigatória</paper-toggle-button>
         </div>
-
-      <paper-dropdown-menu label="Campanha">
-        <paper-listbox slot="dropdown-content" selected="1">
-          <template is="dom-repeat" items="{{userCampaigns}}">
-            <paper-item>{{item.content.name}}</paper-item>
-          </template>
-        </paper-listbox>
-      </paper-dropdown-menu>
 
         <div id="save">
           <paper-button id="saveBtn" toggles="" raised="" class="accent">{{missionFormTitle}}</paper-button>
@@ -290,26 +284,10 @@ class MissionPage extends PolymerElement {
   }
 
   _saveMission(e) {
-   if (this._validMission()) {
-      this.mission.uid = this.user.uid;
-      let vid = (this.mission.video) ? this.mission.video.match(this.vidRegex)[1] : '';
-      if (vid && vid.includes('v=')) vid = vid.match(/.*v=(.*)&?/)[1];
-      if (vid) {
-        this.mission.video = vid;
-      } else {
-        this.mission.video = '';
-      }
-      this.mission.cid = this.missionCampaign;
-      this.$.query.ref.push({ content: this.mission });
-      
-      if (this.input && this.input.files.length > 0) {
-        this.set("uploadedFile",  this.input.files[0]);
-        this._saveMissionStorage();
-     }
-     this.set('mission', {});
-     this.sharedMission = this.missionData[this.missionData.length - 1];
-     this.$.confirmation.present();
-   }
+      this.$.api.method = "POST";
+      this.$.api.body = this.mission;
+      this.$.api.path = "missions";
+      this.$.api.request();
   }
 
   _getCampaignByName(_name) {
@@ -325,9 +303,6 @@ class MissionPage extends PolymerElement {
   }
 
   _saveMissionStorage() {
-    this.missionId = this.missionData[this.missionData.length - 1].$key;
-    if (this.uploadedFile) this.fileArray.push(this.uploadedFile);
-    this.$.storage.upload();
   }
 
   _validMission() {
@@ -381,14 +356,6 @@ class MissionPage extends PolymerElement {
       }
       else
         this.$.genericInput.invalid = true;
-    }
-
-    const campaignDropdown = this.shadowRoot.querySelector("paper-dropdown-menu");
-    const campaignId = this._getCampaignByName(campaignDropdown.value);
-    if (campaignId) {
-      this.set("missionCampaign", campaignId);
-    } else {
-      valid = false;
     }
     return valid;
   }

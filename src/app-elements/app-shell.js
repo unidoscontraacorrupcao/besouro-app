@@ -156,13 +156,16 @@ class AppShell extends PolymerElement {
         observer: '_pageChanged',
       },
       routeData: {
-      type: Object,
-      value: function() { return {}; }
+        type: Object,
+        value: function() { return {}; }
       },
       subroute: Object,
       route: Object,
-      user: Object
-    };
+      user: {
+        type: Object,
+        value: function () { return { uid: "1" } }
+      }
+    }
   }
 
   static get observers() {
