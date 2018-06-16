@@ -1,4 +1,5 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-spinner/paper-spinner.js';
@@ -6,6 +7,7 @@ import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
+import '../app-elements/app-besouro-api.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class InboxPage extends PolymerElement {
   static get template() {
@@ -96,16 +98,18 @@ class InboxPage extends PolymerElement {
       }
 
       #app-actions #new-mission-btn paper-icon-button { display: block; }
-      #app-actions #missions-btn paper-icon-button { 
-        display: block; 
+      #app-actions #missions-btn paper-icon-button {
+        display: block;
         padding: 5px;
       }
-      #app-actions #notifications-btn paper-icon-button { 
-        display: block; 
+      #app-actions #notifications-btn paper-icon-button {
+        display: block;
         padding: 5px;
       }
 
     </style>
+
+    <app-besouro-api id="api" response-data={{responseData}}></app-besouro-api>
 
     <app-header-layout has-scrolling-region="">
 
@@ -125,7 +129,7 @@ class InboxPage extends PolymerElement {
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card mission="{{mission.content}}" key="{{mission.\$key}}" on-show-mission="_goToMission"></mission-card>
+            <mission-card mission="{{mission}}" on-show-mission="_goToMission"></mission-card>
           </template>
         </div>
         <div class="inbox">
@@ -208,13 +212,18 @@ class InboxPage extends PolymerElement {
       userAcceptedMissions: {
         type: Array,
         value: []
-      }
+      },
+      responseData: {
+        type: Object,
+        value: {},
+        observer: "_onResponseDataChanged"
+      },
     }
   }
 
   _selectedChanged(selected) {
     if(!selected) return;
-    this._getMissionsByCampaigns();
+    this._getMissions();
   }
 
   openDrawer() {
@@ -246,15 +255,17 @@ class InboxPage extends PolymerElement {
     this.domChangeEventCount += 1;
   }
 
-  _getMissionsByCampaigns() {
+  _getMissions() {
+    this.$.api.method = "GET";
+    this.$.api.path = "missions";
+    this.$.api.request();
   }
 
-  _onAllMissionsChanged() {
-    this._getMissionsByCampaigns();
-  }
-
-  _onUserChanged() {
-    this._getMissionsByCampaigns();
+  _onResponseDataChanged() {
+    if (Object.keys(this.responseData).length > 0) {
+      this.set("inboxMissions", this.responseData.results);
+      console.log(this.responseData);
+    }
   }
 }
 window.customElements.define(InboxPage.is, InboxPage);

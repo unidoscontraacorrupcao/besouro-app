@@ -130,32 +130,17 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
     <div class="card mission-card">
       <div class="card-header">
-        <a href="/show-campaign/{{mission.cid}}">
+        <a href="/show-campaign/1">
           <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
-          <span>{{campaign.content.name}}</span>
-          <p class="timing"> <iron-icon icon="app:watch-later"></iron-icon> {{remainingTime}} </p>
+          <span>algum texto aqui</span>
         </a>
         <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
       </div>
-      <dom-if if="{{!hasMessage}}">
-        <template>
-          <div class="card-content">
-            <h1> {{mission.title}} </h1>
-            <p> {{mission.description}} </p>
-          </div>
-          <iron-image sizing="cover" preload="" fade="" src="{{missionImage}}"></iron-image>
-        </template>
-      </dom-if>
-      <dom-if if="{{hasMessage}}">
-        <template>
-        <div class="card-content">
-          <h1> {{mission.title}} </h1>
-          <div class="message">
-            {{message}}
-          </div>
-        </div>
-        </template>
-      </dom-if>
+      <div class="card-content">
+        <h1> {{mission.title}} </h1>
+        <p> {{mission.description}} </p>
+      </div>
+      <iron-image sizing="cover" preload="" fade="" src="{{missionimage}}"></iron-image>
       <div class="card-footer">
         <div class="stats">
           <span><span class="stats-number">{{accepted}}</span> aceitaram | </span>
@@ -166,12 +151,8 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
           </paper-button>
         </div>
       </div>
-      <dom-if if="{{!hasMessage}}">
-        <template>
-          <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{key}}">
-          </mission-player>
-        </template>
-      </dom-if>
+      <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{key}}">
+      </mission-player>
     </div>
 `;
   }
@@ -189,10 +170,6 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         type: String
       },
       key: String,
-      remainingTime: {
-        type: String,
-        computed: 'calcMissionDate(mission)'
-      },
       fileArray: {
         type: Array,
         value: []
@@ -214,16 +191,8 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   setMissionData(mission) {
-    const cid = mission.cid;
-    this.$.campaign.path = `/campaigns/${cid}`;
-    this.set('accepted', mission.usersAccepted ? mission.usersAccepted.length : '0');
-    this.set('concluded', mission.usersFinished ? mission.usersFinished.length: '0');
-    this.set('hasMessage', mission.receipts ? mission.receipts.reduce(function (t, r) {
-      return t || (r.uid === this.uid && r.status === 'realized');
-    }.bind(this), false) : false);
-    if(this.hasMessage) {
-      this.set('message', 'Obrigado por colaborar conosco nessa missão! Com sua ajuda, somos mais fortes!');
-    }
+    this.set('accepted', 1);
+    this.set('concluded', 1);
   }
 
   _onCampaignChanged() {
