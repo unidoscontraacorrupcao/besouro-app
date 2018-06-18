@@ -21,6 +21,7 @@ import '../mission-elements/accept-mission-modal.js';
 import '../mission-elements/reject-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
 import '../mission-elements/mission-receipt.js';
+import '../app-elements/app-besouro-api.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
@@ -217,6 +218,8 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       .comments h2 { margin: 0; }
     </style>
 
+    <app-besouro-api id="api" response-data={{responseData}}></app-besouro-api>
+
     <app-route route="{{route}}" pattern="/show-mission/:key" data="{{data}}">
     </app-route>
 
@@ -235,14 +238,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     </app-dialog>
 
     <app-scrollable-dialog id="receiptsDialog">
-      <mission-receipts-modal mission-id="{{data.key}}" receipts="{{mission.content.receipts}}"></mission-receipts-modal>
+      <mission-receipts-modal mission-id="{{data.key}}" receipts="{{mission.receipts}}"></mission-receipts-modal>
     </app-scrollable-dialog>
 
     <app-header-layout has-scrolling-region="">
       <app-header slot="header" fixed="" condenses="" effects="waterfall resize-title blend-background parallax-background">
         <app-toolbar>
           <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
-          <h1 condensed-title="" class="dark title">{{mission.content.title}}</h1>
+          <h1 condensed-title="" class="dark title">{{mission.title}}</h1>
           <paper-menu-button horizontal-align="right">
             <paper-icon-button icon="app:more-vert" slot="dropdown-trigger"></paper-icon-button>
             <paper-listbox slot="dropdown-content">
@@ -252,13 +255,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </app-toolbar>
         <app-toolbar class="tall">
           <h1 bottom-item="" main-title="" class="title">
-            {{mission.content.title}}
+            {{mission.title}}
             <div class="timing">
               <iron-icon icon="app:watch-later"></iron-icon>
               <span>{{remainingTime}}</span>
             </div>
           </h1>
-          <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission.content}}" mission-key="{{data.key}}">
+          <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{data.key}}">
           </mission-player>
           <div class="actions">
             {{comments.length}}<paper-icon-button icon="app:chat-bubble-outline"></paper-icon-button>
@@ -271,23 +274,23 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </div>
         <div class="author-name">
           <span>Criado por</span>
-          <span id="author">{{campaign.content.candidateName}}</span>
+          <span id="author">USER</span>
         </div>
       </div>
       <div class="stats">
         <div class="stats-content">
           <div>
             <a on-tap="_openAcceptedMissionList">
-              <span class="stats-value">{{acceptedMissionStats}}</span> <span>aceitaram</span>
+              <span class="stats-value">0</span> <span>aceitaram</span>
             </a>
           </div>
           <div>
             <a on-tap="_openFinishedMissionList">
-              <span class="stats-value">{{mission.content.usersFinished.length}}</span> <span>concluiram</span>
+              <span class="stats-value">0</span> <span>concluiram</span>
             </a>
           </div>
           <div>
-            <a on-tap="_openMissionReceipts"><span class="stats-value">{{mission.content.usersPending.length}}</span> <span>pendentes</span></a>
+            <a on-tap="_openMissionReceipts"><span class="stats-value">0</span> <span>pendentes</span></a>
           </div>
         </div>
       </div>
@@ -299,10 +302,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </paper-button>
       </div>
 
-      <template is="dom-if" if="{{mission.content}}">
+      <template is="dom-if" if="{{mission}}">
         <div class="content">
           <h3>Entenda a missão</h3>
-          <p>{{mission.content.description}}</p>
+          <p>{{mission.description}}</p>
 
           <a id="leaveMission" href="#">Desistir dessa missão</a>
         </div>
@@ -344,7 +347,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </template>
     </app-header-layout>
 
-    <dom-if if="{{!mission.content}}">
+    <dom-if if="{{!mission}}">
       <template>
         <div class="progress">
           <div class="spinner">
@@ -358,6 +361,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   static get is() { return 'show-mission-page'; }
+
+  static get observers() {
+    return [
+      'routePathChanged(route.path)'
+    ]
+  }
+
   static get properties() {
     return {
       missionAction: {
@@ -380,8 +390,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         observer: '_observeRejectedModal'
       },
       mission: {
-        type: Object,
-        observer: '_missionChanged'
+        type: Object
       },
       campaign: {
         type: Object,
@@ -426,7 +435,12 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       sharedMission: {
         type: Object,
         value: function() {}
-      }
+      },
+      responseData: {
+        type: Object,
+        value: {},
+        observer: "_onResponseDataChanged"
+      },
     };
   }
 
@@ -642,16 +656,19 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.route["shared"] = this.data.key;
       this.route.__queryParams = {};
     }
-    this.$.document.path = `/missions/${this.data.key}`;
     setTimeout(this._missionChanged.bind(this), 100);
   }
 
   _missionChanged() {
-    if (Object.keys(this.mission).length == 0) return;
-    const cid = this.mission.content.cid;
-    this.$.campaign.path = `/campaigns/${cid}`;
-    this._calcMissionStats();
-    this._setActionBtn();
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.data.key}`;
+    this.$.api.request();
+  }
+
+  _onResponseDataChanged() {
+    if (Object.keys(this.responseData).length > 0) {
+      this.set("mission", this.responseData);
+    }
   }
 
   _campaignChanged() {

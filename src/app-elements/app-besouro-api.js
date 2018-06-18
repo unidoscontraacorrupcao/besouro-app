@@ -25,7 +25,7 @@ class AppBesouroApi extends PolymerElement {
     return {
       baseUrl: {
         type: String,
-        value: "http://127.0.0.1:8000/api/v1"
+        value: "http://192.168.15.7:8000/api/v1"
       },
       method: {
         type: String
