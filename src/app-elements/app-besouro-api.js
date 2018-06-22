@@ -55,7 +55,7 @@ class AppBesouroApi extends PolymerElement {
   }
 
   xhrRequest(args) {
-    this.$.xhr.send(args).completes;
+    return this.$.xhr.send(args);
   }
 }
 
