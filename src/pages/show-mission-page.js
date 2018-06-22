@@ -489,21 +489,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _acceptMission(e) {
-    if(!this.user) {
-      this.set('route.path', '/');
-      return;
-    }
-
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
     this.$.api.body = {"id": this.data.key, "user_id": "1" };
     this.$.api.request().then(function(ajax) {
-      console.log(ajax.response);
+      this._missionChanged();
     }.bind(this));
-
    this.$.acceptedDialog.present();
-    //this._calcMissionStats();
-    //this._setActionBtn();
   }
 
   _rejectMission(e) {
@@ -572,7 +564,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.set("currentMissionStats", "new");
     else
       this.set("currentMissionStats", "started");
-
     this._setActionBtn();
   }
 
