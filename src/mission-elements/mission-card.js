@@ -140,7 +140,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         <h1> {{mission.title}} </h1>
         <p> {{mission.description}} </p>
       </div>
-      <iron-image sizing="cover" preload="" fade="" src="{{missionimage}}"></iron-image>
+      <iron-image sizing="cover" preload="" fade="" src="{{missionImage}}"></iron-image>
       <div class="card-footer">
         <div class="stats">
           <span><span class="stats-number">{{accepted}}</span> aceitaram | </span>
@@ -174,10 +174,6 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         type: Array,
         value: []
       },
-      campaign: {
-        type: Object,
-        observer: "_onCampaignChanged"
-      },
       candidatePhoto: String
     }
   }
@@ -191,15 +187,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   setMissionData(mission) {
+    this.set("missionImage", `http://localhost:8000/local${mission.fileUpload}`)
     this.set('accepted', 1);
     this.set('concluded', 1);
-  }
-
-  _onCampaignChanged() {
-    if (Object.keys(this.campaign).length == 0) return;
-    this.$.campaignRef.getDownloadURL(`/campaigns/${this.mission.cid}/${this.campaign.content.candidateImage}`).then(function(photo) {
-      this.set("candidatePhoto", photo);
-    }.bind(this));
   }
 }
 customElements.define(MissionCard.is, MissionCard);
