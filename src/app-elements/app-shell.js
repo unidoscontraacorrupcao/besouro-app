@@ -102,7 +102,6 @@ class AppShell extends PolymerElement {
     </style>
 
     <app-location route="{{route}}"></app-location>
-
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
 
@@ -186,8 +185,6 @@ class AppShell extends PolymerElement {
 
   _pageChanged(page) {
     // Load page import on demand. Show 404 page if fails
-    console.log(`../pages/${page}-page.js`);
-    console.log(this.route);
     import(`../pages/${page}-page.js`).then((MyView1) => {
       console.log("MyView1 loaded");
     }).catch((reason) => {
