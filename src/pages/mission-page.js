@@ -280,12 +280,15 @@ class MissionPage extends PolymerElement {
   }
 
   _saveMission(e) {
-      this.$.api.method = "POST";
-      this.$.api.body = this.mission;
-      this.$.api.path = "missions";
-      this.$.api.request().then(function(ajax) {
+      var formData = new FormData();
+      formData.append("title", this.mission.title);
+      formData.append("description", this.mission.description);
+      formData.append("coverFile", this.input.files[0]);
+      formData.enctype = "multipart/form-data";
+      var data = {method: "post", url: "http://localhost:8000/api/v1/missions/", body: formData };
+    this.$.api.xhrRequest(data).then(function(response){
         this.$.confirmation.present();
-      }.bind(this));
+    }.bind(this));
   }
 
   _validMission() {

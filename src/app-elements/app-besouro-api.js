@@ -1,5 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
+import '@polymer/iron-ajax/iron-request.js';
 
 class AppBesouroApi extends PolymerElement {
 
@@ -11,11 +12,14 @@ class AppBesouroApi extends PolymerElement {
     url={{baseUrl}}/{{path}}
     body='{{body}}'
     params={{params}}
+    headers={{headers}}
     handle-as="json"
-    content-type="application/json"
+    content-type="{{contentType}}"
     method={{method}}
     loading
     debounce-duration="300"></iron-ajax>
+
+    <iron-request id="xhr"></iron-request>
     `
   }
 
@@ -34,12 +38,24 @@ class AppBesouroApi extends PolymerElement {
         value: ""
       },
       body: String,
-      params: Object
+      params: Object,
+      contentType: {
+        type: String,
+        value: "application/json"
+      },
+      headers: {
+        type: Object,
+        value: {}
     }
+  }
   }
 
   request() {
     return this.$.ajax.generateRequest().completes;
+  }
+
+  xhrRequest(args) {
+    this.$.xhr.send(args).completes;
   }
 }
 
