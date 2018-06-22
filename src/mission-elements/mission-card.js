@@ -187,9 +187,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   _goToMission() {
-    const missionUrl = this.mission.links["self"].split("/");
-    const missionKey = missionUrl[missionUrl.length - 2];
-    this.dispatchEvent(new CustomEvent('show-mission', { detail: { mission: missionKey } }))
+    this.dispatchEvent(new CustomEvent('show-mission', { detail: { mission: this.mission.id } }))
   }
 
   setMissionData(mission) {

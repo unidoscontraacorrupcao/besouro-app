@@ -109,7 +109,7 @@ class InboxPage extends PolymerElement {
 
     </style>
 
-    <app-besouro-api id="api" response-data={{responseData}}></app-besouro-api>
+    <app-besouro-api id="api"></app-besouro-api>
 
     <app-header-layout has-scrolling-region="">
 
@@ -213,11 +213,6 @@ class InboxPage extends PolymerElement {
         type: Array,
         value: []
       },
-      responseData: {
-        type: Object,
-        value: {},
-        observer: "_onResponseDataChanged"
-      },
     }
   }
 
@@ -257,15 +252,10 @@ class InboxPage extends PolymerElement {
 
   _getMissions() {
     this.$.api.method = "GET";
-    this.$.api.path = "missions";
-    this.$.api.request();
-  }
-
-  _onResponseDataChanged() {
-    if (Object.keys(this.responseData).length > 0) {
-      this.set("inboxMissions", this.responseData.results);
-      console.log(this.responseData);
-    }
+    this.$.api.path = "missions/";
+    this.$.api.request().then(function(ajax) {
+      this.set("inboxMissions", ajax.response);
+    }.bind(this));
   }
 }
 window.customElements.define(InboxPage.is, InboxPage);

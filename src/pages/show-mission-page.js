@@ -218,7 +218,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       .comments h2 { margin: 0; }
     </style>
 
-    <app-besouro-api id="api" response-data={{responseData}}></app-besouro-api>
+    <app-besouro-api id="api"></app-besouro-api>
 
     <app-route route="{{route}}" pattern="/show-mission/:key" data="{{data}}">
     </app-route>
@@ -436,11 +436,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         type: Object,
         value: function() {}
       },
-      responseData: {
-        type: Object,
-        value: {},
-        observer: "_onResponseDataChanged"
-      },
     };
   }
 
@@ -499,21 +494,16 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       return;
     }
 
-    if (!(this.campaign.content.usersFollow.includes(this.user.uid))) {
-      this.campaign.content.usersFollow.push(this.user.uid);
-      this.$.campaign.data = this.campaign.content;
-      this.$.campaign.saveValue(`/campaigns/${this.mission.content.cid}/`, "content");
-    }
+    this.$.api.method = "POST";
+    this.$.api.path = `missions/accept`;
+    this.$.api.body = {"id": this.data.key, "user_id": "1" };
+    this.$.api.request().then(function(ajax) {
+      console.log(ajax.response);
+    }.bind(this));
 
-   const mission = JSON.parse(JSON.stringify(this.mission));
-   const usersAccepted = new Set(this.mission.content.usersAccepted);
-   usersAccepted.add({"uid": this.user.uid, "userName": this.user.displayName});
-   this.mission.content.usersAccepted = Array.from(usersAccepted);
-   this.$.document.ref.set(this.mission);
-   this.$.accepted.ref.set(this.mission);
    this.$.acceptedDialog.present();
-   this._calcMissionStats();
-   this._setActionBtn();
+    //this._calcMissionStats();
+    //this._setActionBtn();
   }
 
   _rejectMission(e) {
@@ -578,38 +568,17 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _calcMissionStats() {
-    this.set("currentMissionStats", "new");
-    this.set("acceptedMissionStats", 0);
-    this.set("mission.content.usersFinished", []);
-    this.set("mission.content.usersPending", []);
-    this.set("actionIcon", "app:check");
-    if (!this.mission.content.usersAccepted) return;
-    this.set("acceptedMissionStats", this.mission.content.usersAccepted.length);
-    let currentStats = '';
-    let currentUser = (this.user) ? this.user.uid : '';
-    this.mission.content.usersAccepted.forEach(function(user) {
-      if (user.uid === currentUser)
-        currentStats = "started";
-    });
-    if (currentStats) this.set('currentMissionStats', currentStats);
-    if (!this.mission.content.receipts) return;
-    const receipts = this.mission.content.receipts;
-    let finishedCounter = 0;
-    let pendingCounter = 0;
-    let usersFinishedList = []
-    let usersPendingList = []
-    receipts.forEach((receipt) => {
-      if (receipt.status === "realized")
-        usersFinishedList.push(receipt);
-      if (receipt.status === "pending")
-        usersPendingList.push(receipt);
-      if (receipt.uid === currentUser)
-        currentStats = receipt.status
-    });
-    this.set("mission.content.usersFinished", usersFinishedList);
-    this.set("mission.content.usersPending", usersPendingList);
+    if (!this.userAcceptedMission())
+      this.set("currentMissionStats", "new");
+    else
+      this.set("currentMissionStats", "started");
 
-    if (currentStats) this.set('currentMissionStats', currentStats);
+    this._setActionBtn();
+  }
+
+  userAcceptedMission() {
+    if (this.mission.users.length == 0) return false;
+    if (this.mission.users.includes(1)) return true;
   }
 
   _setActionBtn() {
@@ -662,13 +631,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   _missionChanged() {
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}`;
-    this.$.api.request();
-  }
-
-  _onResponseDataChanged() {
-    if (Object.keys(this.responseData).length > 0) {
-      this.set("mission", this.responseData);
-    }
+    this.$.api.request().then(function(ajax) {
+      this.set("mission", ajax.response);
+      this._calcMissionStats();
+    }.bind(this));
   }
 
   _campaignChanged() {

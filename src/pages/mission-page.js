@@ -144,7 +144,7 @@ class MissionPage extends PolymerElement {
     </style>
 
 
-    <app-besouro-api id="api" response-data={{responseData}}></app-besouro-api>
+    <app-besouro-api id="api"></app-besouro-api>
 
     <app-dialog id="confirmation" opened="{{openedModal}}">
       <mission-modal id="modal" mission="{{sharedMission}}" modal-title="{{confirmationTitle}}" modal-description="{{confirmationDescription}}">
@@ -251,11 +251,6 @@ class MissionPage extends PolymerElement {
         type: String,
         value: "Criar Missão"
       },
-      responseData: {
-        type: Object,
-        value: {},
-        observer: "_onResponseDataChanged"
-      },
       saveMissionFunc: Function,
       editMissionFunc: Function,
       confirmationTitle: String,
@@ -288,13 +283,9 @@ class MissionPage extends PolymerElement {
       this.$.api.method = "POST";
       this.$.api.body = this.mission;
       this.$.api.path = "missions";
-      this.$.api.request();
-  }
-
-  _onResponseDataChanged() {
-    if (Object.keys(this.responseData).length > 0) {
-      this.$.confirmation.present();
-    }
+      this.$.api.request().then(function(ajax) {
+        this.$.confirmation.present();
+      }.bind(this));
   }
 
   _validMission() {
