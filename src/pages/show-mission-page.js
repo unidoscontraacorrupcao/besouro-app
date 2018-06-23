@@ -281,16 +281,16 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         <div class="stats-content">
           <div>
             <a on-tap="_openAcceptedMissionList">
-              <span class="stats-value">0</span> <span>aceitaram</span>
+              <span class="stats-value">{{acceptedMissionCount}}</span> <span>aceitaram</span>
             </a>
           </div>
           <div>
             <a on-tap="_openFinishedMissionList">
-              <span class="stats-value">0</span> <span>concluiram</span>
+              <span class="stats-value">{{concludedMissionCount}}</span> <span>concluiram</span>
             </a>
           </div>
           <div>
-            <a on-tap="_openMissionReceipts"><span class="stats-value">0</span> <span>pendentes</span></a>
+            <a on-tap="_openMissionReceipts"><span class="stats-value">{{pendingMissionCount}}</span> <span>pendentes</span></a>
           </div>
         </div>
       </div>
@@ -413,7 +413,15 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       receipts: {
         type: Array,
       },
-      acceptedMissionStats: {
+      acceptedMissionCount: {
+        type: Number,
+        value: 0
+      },
+      concludedMissionCount: {
+        type: Number,
+        value: 0
+      },
+      pendingMissionCount: {
         type: Number,
         value: 0
       },
@@ -520,11 +528,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _openMissionReceipts() {
-    if (this.mission.content.usersPending &&
-      this.mission.content.usersPending.length > 0 &&
-      this.mission.content.uid == this.user.uid) {
-      this.set('route.path', `/mission-receipts/${this.data.key}`);
-    }
+    this.set('route.path', `/mission-receipts/${this.data.key}`);
   }
 
   _openFinishedMissionList() {
@@ -566,11 +570,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.set("currentMissionStats", ajax.response.status);
       this._setActionBtn();
     }.bind(this));
-  }
-
-  userAcceptedMission() {
-    if (this.mission.users.length == 0) return false;
-    if (this.mission.users.includes(1)) return true;
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.data.key}/statistics`;
+    this.$.api.request().then(function(ajax) {
+      this.set("acceptedMissionCount", ajax.response.accepted);
+      this.set("concludedMissionCount", ajax.response.realized);
+      this.set("pendingMissionCount", ajax.response.pending);
+      this._setActionBtn();
+    }.bind(this));
   }
 
   _setActionBtn() {
@@ -627,13 +634,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.set("mission", ajax.response);
       this._calcMissionStats();
     }.bind(this));
-  }
-
-  _campaignChanged() {
-    if ((Object.keys(this.mission)[0] == "content") && (Object.keys(this.campaign)[0] == "content"))
-      this.$.campaignRef.getDownloadURL(`/campaigns/${this.mission.content.cid}/${this.campaign.content.candidateImage}`).then(function(photo) {
-        this.set("candidatePhoto", photo);
-      }.bind(this));
   }
 
   _shareMission(e) {
