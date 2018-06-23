@@ -20,10 +20,22 @@ class InboxPage extends PolymerElement {
         height: 100vh;
       }
 
+      app-toolbar { font-size: 35px; }
+      .tabs-text {
+        font-size: 20px;
+        font-family: Folio;
+        text-transform: uppercase;
+      }
+
+      .header-icon {
+        padding: 0;
+      }
+
       [main-title] {
         color: var(--accent-color);
-        margin-left: 10px;
+        margin-left: 15px;
         text-transform: uppercase;
+        font-family: Folio;
       }
 
       .inbox {
@@ -115,14 +127,14 @@ class InboxPage extends PolymerElement {
 
       <app-header slot="header" condenses="" reveals="" fixed="" effects="waterfall">
         <app-toolbar>
-          <paper-icon-button icon="app:menu" drawer-toggle="" on-tap="openDrawer"></paper-icon-button>
+          <paper-icon-button class="header-icon" icon="app:menu" drawer-toggle="" on-tap="openDrawer"></paper-icon-button>
           <div main-title="">{{pageTitle}}</div>
-          <paper-icon-button icon="app:search"></paper-icon-button>
+          <paper-icon-button class="header-icon" icon="app:search"></paper-icon-button>
         </app-toolbar>
         <app-toolbar sticky="">
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
-            <paper-tab>MISSÕES PUBLICAS</paper-tab>
-            <paper-tab>MINHAS MISSÕES</paper-tab>
+            <paper-tab><span class="tabs-text">missões públicas</span></paper-tab>
+            <paper-tab><span class="tabs-text">minhas missões</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
       </app-header>

@@ -14,13 +14,10 @@ $_documentContainer.innerHTML = `<custom-style>
      * Based on Polymer: http://www.polymer-project.org/
      * Compatible with Polymer 1.0
      */
-    @font-face {
-      font-family: "Calibre";
-      src: url("/fonts/Calibre-Light.ttf") format("truetype"),
-           url("/fonts/Calibre-Medium.ttf") format("truetype"),
-           url("/fonts/Calibre-Regular.otf") format("opentype");
-    }
-
+      @font-face {
+        font-family: folio;
+        src:url("fonts/FOLIOBC.ttf");
+      }
     :root { 
       --default-primary-color: #FFFFFF;
       --dark-primary-color: #646A74;
