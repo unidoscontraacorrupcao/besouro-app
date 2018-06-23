@@ -560,11 +560,12 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _calcMissionStats() {
-    if (!this.userAcceptedMission())
-      this.set("currentMissionStats", "new");
-    else
-      this.set("currentMissionStats", "started");
-    this._setActionBtn();
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.data.key}/user-status/${1}`;
+    this.$.api.request().then(function(ajax) {
+      this.set("currentMissionStats", ajax.response.status);
+      this._setActionBtn();
+    }.bind(this));
   }
 
   userAcceptedMission() {
