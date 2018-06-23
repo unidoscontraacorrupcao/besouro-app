@@ -564,6 +564,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _calcMissionStats() {
+    if (!this.data) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}/user-status/${1}`;
     this.$.api.request().then(function(ajax) {

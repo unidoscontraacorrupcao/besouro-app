@@ -134,7 +134,7 @@ class InboxPage extends PolymerElement {
         </div>
         <div class="inbox">
           <template is="dom-repeat" items="{{userAcceptedMissions}}" as="acceptedMissions">
-            <mission-card mission="{{acceptedMissions.content}}" key="{{acceptedMissions.\$key}}" on-show-mission="_goToMission" uid="{{user.uid}}">
+            <mission-card mission="{{acceptedMissions}}" on-show-mission="_goToMission">
             </mission-card>
           </template>
         </div>
@@ -218,7 +218,8 @@ class InboxPage extends PolymerElement {
 
   _selectedChanged(selected) {
     if(!selected) return;
-    this._getMissions();
+    this._getInboxMissions();
+    this._getAcceptedMissions();
   }
 
   openDrawer() {
@@ -234,13 +235,6 @@ class InboxPage extends PolymerElement {
     this.set('route.path', `/show-mission/${mission}`);
   }
 
-  _filterMissions() {
-    const keys = [].concat.apply([], [this.acceptedMissions.map((m) => m.$key)]);
-    this.inboxMissions = this.userMissions.filter((m) => !keys.includes(m.$key));
-    this.set("userAcceptedMissions",  this.userMissions.filter((m) => keys.includes(m.$key)));
-    this.hideLoading();
-  }
-
   hideLoading(force=false) {
     // the load is complete.
     if (force) this.shadowRoot.querySelector('#inboxLoading').setAttribute('style', 'display:none');
@@ -250,11 +244,19 @@ class InboxPage extends PolymerElement {
     this.domChangeEventCount += 1;
   }
 
-  _getMissions() {
+  _getInboxMissions() {
     this.$.api.method = "GET";
-    this.$.api.path = "missions/";
+    this.$.api.path = "missions/inbox/1";
     this.$.api.request().then(function(ajax) {
       this.set("inboxMissions", ajax.response);
+    }.bind(this));
+  }
+
+  _getAcceptedMissions() {
+    this.$.api.method = "GET";
+    this.$.api.path = "missions/accepted/1";
+    this.$.api.request().then(function(ajax) {
+      this.set("userAcceptedMissions", ajax.response);
     }.bind(this));
   }
 }
