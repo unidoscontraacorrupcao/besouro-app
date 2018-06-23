@@ -143,8 +143,7 @@ class MissionReceiptsPage extends PolymerElement {
         type: Object
       },
       mission: {
-        type: Object,
-        observer: '_missionChanged'
+        type: Object
       },
       routeData: Object,
       missionLoaded: {
@@ -161,7 +160,8 @@ class MissionReceiptsPage extends PolymerElement {
       receiptIcon: {
         type: String,
         value: "app:check"
-      }
+      },
+      receiptsItem: Object
     }
   }
 
@@ -176,6 +176,10 @@ class MissionReceiptsPage extends PolymerElement {
   }
 
   routePathChanged(path) {
+    this._getReceipts();
+  }
+
+  _getReceipts() {
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.routeData.key}/receipts`;
     this.$.api.request().then(function(ajax) {
@@ -202,8 +206,8 @@ class MissionReceiptsPage extends PolymerElement {
   }
 
   _closeReceiptModal() {
+    this._getReceipts();
     this.$.missionReceipt.dismiss();
-    this.$.document.path = `/missions/${this.routeData.key}`;
   }
 
   _setReceiptIcon(_item) {

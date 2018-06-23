@@ -47,8 +47,7 @@ class MissionReceipt extends PolymerElement {
     </style>
 
 
-
-
+    <app-besouro-api id="api"></app-besouro-api>
         <div class="content">
           <div id="modal-header">
             <h2><span> {{rcptData.userName}} </span></h2>
@@ -63,7 +62,7 @@ class MissionReceipt extends PolymerElement {
               <span> {{rcptData.description}} </span>
             </div>
 
-            <a href="{{downloadUrl}}" target="_blank">Comprovante</a>
+            <a href="http://localhost:8000/local{{rcptData.receiptFile}}" target="_blank">Comprovante</a>
 
           <hr>
 
@@ -99,30 +98,22 @@ class MissionReceipt extends PolymerElement {
     this.set('rcptData', data);
   }
 
-  _setFirebasePaths() {
-    if(this.rcptData.receiptFileName) {
-      this.$.storage.path = `/missions/${this.rcptData.missionId}/${this.rcptData.receiptFileName}`;
-    }
-  }
-
-  _setMissionStatus(status) {
-    const _receipts = this.receipts;
-    const currentReceiptIdx = _receipts.findIndex( element => element.uid === this.rcptData.uid );
-    _receipts[currentReceiptIdx]["status"] = status;
-    this.set('receipts',  _receipts);
-    this.$.document.saveValue(`/missions/${this.rcptData.missionId}/content`, 'receipts').then(function() {
-      this.$.document.saveValue(`/users/${this.rcptData.uid}/accepted/${this.rcptData.missionId}/content`, 'receipts');
+  _setReceiptStatus(status) {
+    this.$.api.method = "POST";
+    this.$.api.path = `missions/receipt/${this.rcptData.id}`;
+    this.$.api.body = {"status": status };
+    this.$.api.request().then(function(ajax) {
+      this.dispatchEvent(new CustomEvent('close-modal'));
     }.bind(this));
   }
 
   _acceptMission(e) {
-    this._setMissionStatus("realized");
-    this.dispatchEvent(new CustomEvent('close-modal'));
+    this._setReceiptStatus("realized");
   }
 
   _rejectMission(e) {
-    this._setMissionStatus("rejected");
-    this.dispatchEvent(new CustomEvent('close-modal'));
+    this._setReceiptStatus("rejected");
   }
+
 }
 customElements.define(MissionReceipt.is, MissionReceipt);
