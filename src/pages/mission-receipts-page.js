@@ -90,6 +90,7 @@ class MissionReceiptsPage extends PolymerElement {
 
     </style>
 
+    <app-besouro-api id="api"></app-besouro-api>
     <app-route route="{{route}}" pattern="/mission-receipts/:key" data="{{routeData}}">
     </app-route>
 
@@ -102,16 +103,16 @@ class MissionReceiptsPage extends PolymerElement {
     <app-header-layout has-scrolling-region="">
       <app-form-header shadow="" slot="header">
         <paper-icon-button slot="arrow-back" icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
-        <span slot="main-title">{{mission.content.receipts.length}} pessoas concluiram</span>
+        <span slot="main-title">{{mission.content.receipts.length}} avaliações pendentes</span>
         <paper-icon-button slot="more-vert" icon="app:more-vert"></paper-icon-button>
       </app-form-header>
 
       <template is="dom-if" if="{{missionLoaded}}" restamp="">
         <div class="receipts">
-          <template is="dom-repeat" items="{{mission.content.receipts}}" filter="setUserPhoto">
+          <template is="dom-repeat" items="{{receipts}}" filter="setUserPhoto">
             <div class="receipt-item">
               <div class="supporter-img">
-                <iron-image id="{{item.uid}}" sizing="cover"></iron-image>
+                <iron-image src="http://localhost:8000/local{{item.receiptFile}}" sizing="cover"></iron-image>
               </div>
               <div class="supporter-name">
                 <a on-tap="_openUserReceipt"><span>{{item.userName}}</span></a>
@@ -150,6 +151,9 @@ class MissionReceiptsPage extends PolymerElement {
         type: Boolean,
         value: false
       },
+      route: {
+        type: Object
+      },
       receiptModal: {
         type: Boolean,
         observer: '_closeModal'
@@ -161,9 +165,25 @@ class MissionReceiptsPage extends PolymerElement {
     }
   }
 
+  static get observers() {
+    return [
+      'routePathChanged(route.path)'
+    ]
+  }
+
   constructor() {
     super();
   }
+
+  routePathChanged(path) {
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.routeData.key}/receipts`;
+    this.$.api.request().then(function(ajax) {
+      this.set("receipts", ajax.response);
+      this.set('missionLoaded', true);
+    }.bind(this));
+  }
+
 
   _openUserReceipt(e) {
     const data = e.model.get('item');
@@ -174,12 +194,6 @@ class MissionReceiptsPage extends PolymerElement {
 
   _returnToInbox() {
     this.set('route.path', `/show-mission/${this.routeData.key}`);
-  }
-
-  _missionChanged() {
-    if (this.mission.content !== undefined && this.mission.content.receipts) {
-      this.set('missionLoaded', true);
-    }
   }
 
   ready() {
@@ -199,11 +213,6 @@ class MissionReceiptsPage extends PolymerElement {
   }
 
   setUserPhoto(_item) {
-    setTimeout(function() {
-      this.$.photoDoc.getStoredValue(`/users/${_item.uid}/content`).then(function(res) {
-        this.shadowRoot.querySelector(`#${_item.uid}`).setAttribute("src", res.photoURL);
-      }.bind(this));
-    }.bind(this), 10);
     return true;
   }
 
