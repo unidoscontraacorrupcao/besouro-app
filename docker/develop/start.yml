@@ -1,0 +1,15 @@
+version: "3.6"
+
+networks:
+  besouro:
+    name: besouro
+
+services:
+  app:
+    image: besouro/app:dev
+    networks:
+      - besouro
+    ports:
+      - "8081:8081"
+    volumes:
+      - "../../app:/app"
