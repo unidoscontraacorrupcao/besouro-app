@@ -93,6 +93,8 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     }
     </style>
 
+    <app-besouro-api id="api"></app-besouro-api>
+
     <app-dialog id="finishConfirmation">
       <finish-confirmation-modal></finish-confirmation-modal>
     </app-dialog>
@@ -175,24 +177,22 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
   }
 
   _sendReceipts() {
-    let receipt = {};
-    receipt = { "userName": this.user.displayName,
-      "userEmail": this.user.email,
-      "uid": this.user.uid,
-      "status": "pending",
-      "description": this.description};
+    var formData = new FormData();
+    formData.append("userName", "david");
+    formData.append("userEmail", "david@mail.com");
+    formData.append("uid", "1");
+    formData.append("status", "pending");
+    formData.append("description", this.description);
 
     if(this.input && this.input.files.length > 0) {
-      if (!Array.isArray(this.missionReceipts))
-        this.set('missionReceipts',  []);
-      receipt["receiptFileName"] = this.fileName;
-      this.fileArray.push(this.file);
-      this.$.storage.upload();
-      this.set('file', undefined);
+      formData.append("receiptFile", this.input.files[0]);
     }
-
-    this.push("missionReceipts", receipt);
-    this.$.finishConfirmation.present();
+    var data = {method: "post",
+      url: `${this.$.api.baseUrl}/missions/${this.missionId}/receipt/`,
+      body: formData};
+    this.$.api.xhrRequest(data).then(function(response){
+        this.$.finishConfirmation.present();
+    }.bind(this));
   }
 }
 customElements.define(FinishMissionModal.is, FinishMissionModal);

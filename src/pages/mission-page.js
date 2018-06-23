@@ -284,7 +284,6 @@ class MissionPage extends PolymerElement {
       formData.append("title", this.mission.title);
       formData.append("description", this.mission.description);
       formData.append("coverFile", this.input.files[0]);
-      formData.enctype = "multipart/form-data";
       var data = {method: "post",
         url: `${this.$.api.baseUrl}/missions/`,
         body: formData};
