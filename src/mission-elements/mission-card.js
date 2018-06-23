@@ -22,6 +22,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         display: block;
       }
 
+
       .mission-card {
         display: block;
         padding: 0px;
@@ -45,6 +46,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
       .card-header {
         position: relative;
+        margin-bottom: 10px;
       }
       .card-header span {
         font-size: 1.1em;
@@ -68,25 +70,34 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       }
       .card-content h1 {
         margin: 0;
-        color: black;
+        color:#312783;
+        font-family: Folio;
         font-weight: bold;
       }
+
+      .author { color: #343434; }
+
       .card-content p {
-        font-size: 0.8em;
-        line-height: 1.5;
+        font-size: 1.5em;
         flex-grow: 1;
         max-height: 6em;
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
+        font-family: Folio;
+        margin: 15px 0 15px 0;
       }
 
+      .timing, .card-content p { color: #BFC0BF; }
+
       .card-header .timing {
-        font-size: 0.8em;
+        font-size: 1.3em;
         position: absolute;
         bottom: 0;
         left: 75px;
+        top: 25px;
+        font-family: Folio;
       }
 
       .timing iron-icon {
@@ -131,9 +142,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     <app-besouro-api id="api"></app-besouro-api>
     <div class="card mission-card">
       <div class="card-header">
-        <a href="/show-campaign/1">
           <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
-          <span>algum texto aqui</span>
+          <span class="author">Autoria da missão</span>
+          <p class="timing"> <iron-icon icon="app:watch-later"></iron-icon> {{remainingTime}} </p>
         </a>
         <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
       </div>
@@ -176,7 +187,11 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         type: Array,
         value: []
       },
-      candidatePhoto: String
+      candidatePhoto: String,
+      remainingTime: {
+        type: String,
+        value: "xx dias restantes"
+      }
     }
   }
 
