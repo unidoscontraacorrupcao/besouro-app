@@ -128,6 +128,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       }
     </style>
 
+    <app-besouro-api id="api"></app-besouro-api>
     <div class="card mission-card">
       <div class="card-header">
         <a href="/show-campaign/1">
@@ -145,6 +146,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         <div class="stats">
           <span><span class="stats-number">{{accepted}}</span> aceitaram | </span>
           <span><span class="stats-number">{{concluded}}</span> concluiram</span>
+          <span><span class="stats-number">{{pending}}</span> pendentes</span>
           <paper-button on-tap="_goToMission">
             <iron-icon icon="app:chat-bubble-outline"></iron-icon>
             Comentar
@@ -188,8 +190,13 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   setMissionData(mission) {
     this.set("missionImage", `http://localhost:8000/local${mission.fileUpload}`)
-    this.set('accepted', 1);
-    this.set('concluded', 1);
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${mission.id}/statistics`;
+    this.$.api.request().then(function(ajax) {
+      this.set("accepted", ajax.response.accepted);
+      this.set("concluded", ajax.response.realized);
+      this.set("pending", ajax.response.pending);
+    }.bind(this));
   }
 }
 customElements.define(MissionCard.is, MissionCard);
