@@ -141,7 +141,7 @@ class InboxPage extends PolymerElement {
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card mission="{{mission}}" on-show-mission="_goToMission"></mission-card>
+            <mission-card mission="{{mission}}" on-show-mission="_goToMission" on-reload-inbox="_reloadInbox"></mission-card>
           </template>
         </div>
         <div class="inbox">
@@ -254,6 +254,11 @@ class InboxPage extends PolymerElement {
       this.shadowRoot.querySelector('#inboxLoading').setAttribute('style', 'display:none');
     }
     this.domChangeEventCount += 1;
+  }
+
+  _reloadInbox() {
+    this._getInboxMissions();
+    this._getAcceptedMissions();
   }
 
   _getInboxMissions() {

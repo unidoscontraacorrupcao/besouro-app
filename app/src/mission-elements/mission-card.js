@@ -4,6 +4,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
+import '../mission-elements/accept-mission-modal.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import './mission-player.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -169,6 +170,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
     </style>
 
+    <app-dialog id="acceptedDialog">
+      <accept-mission-modal></accept-mission-modal>
+    </app-dialog>
+
     <app-besouro-api id="api"></app-besouro-api>
     <div class="card mission-card">
       <div class="card-header">
@@ -185,7 +190,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
       <iron-image sizing="cover" preload="" fade="" src="{{missionImage}}"></iron-image>
         <div class="card-action">
-          <a href="#"><span id="btnText">{{btnAction}}</span></a>
+          <a href="#" id="btnLink"><span id="btnText">{{btnAction}}</span></a>
         </div>
 
       <div class="card-footer">
@@ -228,7 +233,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         value: "xx dias restantes"
       },
       currentMissionStats: String,
-      btnAction: String
+      btnAction: String,
+      finishMissionFunc: Function,
+      acceptMissionFunc: Function
     }
   }
 
@@ -240,8 +247,12 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this.dispatchEvent(new CustomEvent('show-mission', { detail: { mission: this.mission.id } }))
   }
 
+  _reloadInbox() {
+    this.dispatchEvent(new CustomEvent('reload-inbox', { detail: {} }))
+  }
+
   setMissionData(mission) {
-    this._setMissionStats(mission);
+    this._setMissionStats();
     this.set("missionImage", `http://localhost:8000/local${mission.fileUpload}`)
     this.$.api.method = "GET";
     this.$.api.path = `missions/${mission.id}/statistics`;
@@ -252,9 +263,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     }.bind(this));
   }
 
-  _setMissionStats(mission) {
+  _setMissionStats() {
     this.$.api.method = "GET";
-    this.$.api.path = `missions/${mission.id}/user-status/${1}`;
+    this.$.api.path = `missions/${this.mission.id}/user-status/${1}`;
     this.$.api.request().then(function(ajax) {
       this.set("currentMissionStats", ajax.response.status);
       this._setActionBtn();
@@ -263,6 +274,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   _setActionBtn() {
     const cardAction = this.shadowRoot.querySelector(".card-action");
+    const link = this.$.btnLink;
+    link.removeEventListener("tap", this.acceptMissionFunc, false);
+    link.removeEventListener("tap", this.finishMissionFunc, false);
 
     if (this.currentMissionStats == "realized") {
       this.set('btnAction', 'Missão concluida');
@@ -272,13 +286,14 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
     if (this.currentMissionStats == "new") {
       this.set('btnAction', 'Aceitar missão');
+      link.addEventListener('tap', this.acceptMissionFunc);
       cardAction.setAttribute("style", "background-color: rgba(216, 28, 136, 0.8);");
     }
 
     if (this.currentMissionStats == "started") {
       this.set('btnAction', 'Concluir missão');
+      link.addEventListener('tap', this.finishMissionFunc);
       cardAction.setAttribute("style", "background-color: rgba(31, 163, 208, 0.8);");
-      //btn.addEventListener('tap', this.finishMissionFunc);
     }
 
     if (this.currentMissionStats == "pending") {
@@ -293,6 +308,29 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       this.$.btnText.setAttribute("style", "width: 300px;");
     }
   }
+
+  _acceptMission() {
+    this.$.api.method = "POST";
+    this.$.api.path = `missions/accept`;
+    this.$.api.body = {"id": this.mission.id, "user_id": "1" };
+    this.$.api.request().then(function(ajax) {
+      this._reloadInbox();
+    }.bind(this));
+   this.$.acceptedDialog.present();
+  }
+
+  _finishMission(e) {
+    this.$.finishedDialog.present();
+    this._setMissionStats();
+    this._setActionBtn();
+  }
+
+  ready() {
+    super.ready();
+    this.acceptMissionFunc = this._acceptMission.bind(this);
+    this.finishMissionFunc = this._finishMission.bind(this);
+  }
+
 
 }
 customElements.define(MissionCard.is, MissionCard);
