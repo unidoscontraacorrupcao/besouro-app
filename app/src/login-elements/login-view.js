@@ -10,39 +10,17 @@ class LoginView extends PolymerElement {
     <style include="shared-styles">
       :host {
         display: flex;
-        background: url(/images/frame-bg.svg);
-        background-size: cover;
-        background-position: center;
+        background-color: #F5F5F5;
         flex-direction: column;
         min-height: 100vh;
       }
       .fill {
         flex: 1;
-        padding: 20px 60px;
-      }
-      paper-button {
-        display: block;
-        text-align: center;
-        margin: 20px auto 10px;
-        background: var(--default-primary-color);
-      }
-      paper-input {
-        --paper-input-container-color: var(--default-primary-color);
-        --paper-input-container-focus-color: var(--default-primary-color);
-        --paper-input-container-invalid-color: var(--default-primary-color);
-        --paper-input-container-input-color: var(--default-primary-color);
-      }
-      .facebook {
-        color: #1A467B;
-        border: none;
-        background: white;
-        border-radius: 50%;
-        overflow: hidden;
-        margin: 10px;
+        padding: 2vh 6vh 0;
       }
       .image {
-        height: 13vh;
-        margin: 6vh 10px 0;
+        height: 20vh;
+        margin: 6vh 17vw 0 17vw;
       }
       .image iron-image {
         width: 100%;
@@ -51,36 +29,143 @@ class LoginView extends PolymerElement {
         margin: auto;
         display: block;
       }
+      .title {
+        text-transform: uppercase;
+        text-align: center;
+        margin: 4vh auto 0;
+        padding-bottom: 0.5vh;
+        color: #312783;
+        font-family: Folio;
+        font-size: 50px;
+        line-height: 55px;
+      }
       .fields {
-        padding-top: 40px;
+        margin-top: 4vh;
+      }
+      paper-input {
+        --paper-input-container-color: #B7B8B7;
+        --paper-input-container-focus-color: #312783;
+        --paper-input-container-input-color: #312783;
+      }
+      paper-button {
+        display: block;
+        height: auto;
+        max-width: 170px;
+        color: white;
+        background-color: #E6007E;
+        font-family: Folio;
+        font-size: 24px;
+        letter-spacing: 5px;
+        line-height: 26px;
+        text-align: center;
+        margin: 4vh auto 0;
+        border-radius: 0;
+      }
+      .forgot-password {
+        margin-top: 1vh;
+        color: #e6007e;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 19px;
+        text-align: center;
       }
       .social {
         text-align: center;
-        margin: 30px;
+        margin-top: 5vh;
       }
       .social-text {
-        font-weight: bold;
-        color: #99391f;
+        font-family: Folio;
+        font-size: 18px;
+        line-height: 19px;
+        color: #312783;
+      }
+      .social-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1.6vh auto 0;
+      }
+      .social-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+      .social-button.google {
+        height: 67px;
+        width: 67px;
+        border: 1px solid #b7b7b7;
+        background-color: white;
+      }
+      .social-button.facebook {
+        margin-left: 2.35vw;
+        height: 66px;
+        width: 66px;
+        color: white;
+        background-color: #4460a0;
+      }
+      .line {
+        box-sizing: border-box;
+        margin-top: 4vh;
+        height: 3px;
+        width: 100%;
+        border: 1px solid #b7b8b7;
+        opacity: 0.3;
+      }
+      .sign-up-text {
+        margin-top: 3.7vh;
+        text-transform: uppercase;
+        color: #312783;
+        font-family: Folio;
+        font-size: 50px;
+        line-height: 55px;
+        text-align: center;
+      }
+      .sign-up-button {
+        background-color: #009fe3;
+        max-width: none;
+        margin-bottom: 5vh;
       }
     </style>
     <div class="fill">
       <div class="image">
-        <iron-image sizing="contain" src="/images/logo-white.svg"></iron-image>
+        <iron-image sizing="contain" src="/images/logo.png"></iron-image>
+      </div>
+      <div class="title">
+        Faça Login
       </div>
       <div class="fields">
-        <paper-input label="email" type="email" value="{{email}}" error-message="Usuário não existe" on-value-changed="setInvalid"></paper-input>
-        <paper-input label="senha" type="password" minlength="8" value="{{password}}" error-message="Senha incorreta" on-value-changed="setInvalid"></paper-input>
+        <paper-input label="Email" type="email" value="{{email}}" error-message="Usuário inválido!" on-value-changed="setInvalid"></paper-input>
+        <paper-input label="Senha" type="password" minlength="8" value="{{password}}" error-message="Senha incorreta!" on-value-changed="setInvalid"></paper-input>
       </div>
-      <paper-button class="plain" on-tap="submitCredentials">Entrar</paper-button>
+      <paper-button on-tap="submitCredentials">
+        Entrar
+      </paper-button>
+      <div class="forgot-password">
+        esqueci minha senha
+      </div>
     </div>
     <div class="social">
-      <div class="social-text">Você também pode usar</div> 
-      <div class="social-text">suas redes sociais.</div>
-      <paper-icon-button class="facebook" icon="app:facebook" on-tap="signInWithFacebook"></paper-icon-button>
-      <paper-icon-button class="facebook" icon="app:google" on-tap="signInWithGoogle"></paper-icon-button>
-      <div class="social-text" on-tap="openRegister">
-        <span>Esqueci minha senha</span> | <span> Não tenho cadastro</span>
+      <div class="social-text">
+      Você também pode usar suas redes sociais
       </div>
+      <div class="social-buttons">
+        <div class="social-button google">
+          <paper-icon-button icon="app:google" on-tap="signInWithGoogle"></paper-icon-button>
+        </div>
+        <div class="social-button facebook">
+          <paper-icon-button icon="app:facebook" on-tap="signInWithFacebook"></paper-icon-button>
+        </div>
+      </div>
+    </div>
+    <div class="fill">
+      <div class="line"></div>
+      <div class="sign-up-text" on-tap="openRegister">
+        Ainda não faz parte do app?
+      </div>
+      <paper-button class="sign-up-button" on-tap="submitCredentials">
+        Cadastre-se
+      </paper-button>
     </div>
 `;
   }

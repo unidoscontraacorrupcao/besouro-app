@@ -15,6 +15,8 @@ class LoginPage extends PolymerElement {
     <app-dialog id="dialog" modal="" animated="">
       <login-modal id="login" shared-mission="{{sharedMissionID}}" user="{{user}}" status-known="{{statusKnown}}"></login-modal>
     </app-dialog>
+
+    <login-view></login-view>
 `;
   }
 
