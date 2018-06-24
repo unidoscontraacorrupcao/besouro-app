@@ -137,6 +137,36 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         height: 6em;
         margin-top: 20px;
       }
+
+      .card-action {
+        width: 75%;
+        max-width: 400px;
+        height: 80px;
+        bottom: 0;
+        top: 250px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        z-index: 999;
+        position: absolute;
+        text-align: center;
+      }
+
+      .card-action span {
+       font-family: Folio;
+       text-transform: uppercase;
+       font-size: 2em;
+       color: white;
+       position: absolute;
+       width: 250px;
+       top: 28px;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       margin: auto;
+       letter-spacing: 3px;
+      }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -152,7 +182,12 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         <h1> {{mission.title}} </h1>
         <p> {{mission.description}} </p>
       </div>
+
       <iron-image sizing="cover" preload="" fade="" src="{{missionImage}}"></iron-image>
+        <div class="card-action">
+          <a href="#"><span id="btnText">{{btnAction}}</span></a>
+        </div>
+
       <div class="card-footer">
         <div class="stats">
           <span><span class="stats-number">{{accepted}}</span> aceitaram | </span>
@@ -191,7 +226,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       remainingTime: {
         type: String,
         value: "xx dias restantes"
-      }
+      },
+      currentMissionStats: String,
+      btnAction: String
     }
   }
 
@@ -204,6 +241,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   setMissionData(mission) {
+    this._setMissionStats(mission);
     this.set("missionImage", `http://localhost:8000/local${mission.fileUpload}`)
     this.$.api.method = "GET";
     this.$.api.path = `missions/${mission.id}/statistics`;
@@ -213,5 +251,48 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       this.set("pending", ajax.response.pending);
     }.bind(this));
   }
+
+  _setMissionStats(mission) {
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${mission.id}/user-status/${1}`;
+    this.$.api.request().then(function(ajax) {
+      this.set("currentMissionStats", ajax.response.status);
+      this._setActionBtn();
+    }.bind(this));
+  }
+
+  _setActionBtn() {
+    const cardAction = this.shadowRoot.querySelector(".card-action");
+
+    if (this.currentMissionStats == "realized") {
+      this.set('btnAction', 'Missão concluida');
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
+    }
+
+    if (this.currentMissionStats == "new") {
+      this.set('btnAction', 'Aceitar missão');
+      cardAction.setAttribute("style", "background-color: rgba(216, 28, 136, 0.8);");
+    }
+
+    if (this.currentMissionStats == "started") {
+      this.set('btnAction', 'Concluir missão');
+      cardAction.setAttribute("style", "background-color: rgba(31, 163, 208, 0.8);");
+      //btn.addEventListener('tap', this.finishMissionFunc);
+    }
+
+    if (this.currentMissionStats == "pending") {
+      this.set("btnAction", "Avaliação pendente");
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
+    }
+
+    if (this.currentMissionStats == "rejected") {
+      this.set("btnAction", "Avaliação rejeitada");
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
+    }
+  }
+
 }
 customElements.define(MissionCard.is, MissionCard);
