@@ -5,6 +5,7 @@ import '@polymer/iron-image/iron-image.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/accept-mission-modal.js';
+import '../mission-elements/finish-mission-modal.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import './mission-player.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -174,6 +175,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       <accept-mission-modal></accept-mission-modal>
     </app-dialog>
 
+    <app-scrollable-dialog id="finishedDialog" modal>
+      <finish-mission-modal user="[[user]]" mission-id="{{mission.id}}"></finish-mission-modal>
+    </app-scrollable-dialog>
+
     <app-besouro-api id="api"></app-besouro-api>
     <div class="card mission-card">
       <div class="card-header">
@@ -235,7 +240,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       currentMissionStats: String,
       btnAction: String,
       finishMissionFunc: Function,
-      acceptMissionFunc: Function
+      acceptMissionFunc: Function,
     }
   }
 
@@ -327,9 +332,19 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   ready() {
     super.ready();
+    this.shadowRoot.querySelector('finish-mission-modal').shadowRoot.querySelector('finish-confirmation-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
     this.acceptMissionFunc = this._acceptMission.bind(this);
     this.finishMissionFunc = this._finishMission.bind(this);
   }
+
+  _dismissFinishModal() {
+    this.set('currentMissionStats', 'new');
+    document.querySelector('#finishConfirmation').dismiss();
+    this._setMissionStats();
+    this._setActionBtn();
+    this.$.finishedDialog.dismiss();
+  }
+
 
 
 }
