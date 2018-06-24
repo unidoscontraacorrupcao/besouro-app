@@ -8,55 +8,7 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class LoginModal extends PolymerElement {
   static get template() {
     return html`
-    <style include="shared-styles">
-      :host {
-        display: block;
-        background: var(--secondary-background-color);
-      }
-      #content {
-        display: flex;
-        position: relative;
-        flex-direction: column;
-        min-height: 100vh;
-      }
-      .fill {
-        flex: 1;
-        padding: 40px;
-      }
-      p {
-        min-height: 18vh;
-      }
-      paper-button {
-        display: block;
-        text-align: center;
-        margin: 20px auto;
-      }
-      .image {
-        height: 24vh;
-        margin: 6vh 10px 0;
-      }
-      .image iron-image {
-        width: 100%;
-        height: 100%;
-        max-width: 250px;
-      }
-    </style>
-
-    <div id="content">
-      <div class="fill center">
-        <div class="image">
-          <iron-image sizing="contain" src="/images/splash.svg"></iron-image>
-        </div>
-        <p>SOMOS é uma plataforma para engajar eleitores e candidatos 
-          a desempenharem suas melhores versões pela renovação da política.
-        </p>
-        <paper-button class="accent" on-tap="openRegister">Começar</paper-button>
-        <a class="bottom" href="#">créditos</a>
-      </div>
-    </div>
-
-
-
+    <style include="shared-styles"></style>
     <register-view id="register" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signUpData}}" on-open-login="openLogin" on-provider-auth="authWithProvider"></register-view>
     <login-view id="login" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signInData}}" on-open-register="openRegister" on-provider-auth="authWithProvider"></login-view>
 `;
@@ -90,21 +42,13 @@ class LoginModal extends PolymerElement {
   }
 
   openRegister() {
-    this.$.content.style.display = 'none';
     this.$.register.style.display = 'flex';
     this.$.login.style.display = 'none';
   }
 
   openLogin() {
-    this.$.content.style.display = 'none';
     this.$.register.style.display = 'none';
     this.$.login.style.display = 'flex';
-  }
-
-  openSplash() {
-    this.$.content.style.display = 'flex';
-    this.$.register.style.display = 'none';
-    this.$.login.style.display = 'none';
   }
 
   sendSignUpCredentials(credentials) {

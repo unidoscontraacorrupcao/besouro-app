@@ -160,10 +160,10 @@ class LoginView extends PolymerElement {
     </div>
     <div class="fill">
       <div class="line"></div>
-      <div class="sign-up-text" on-tap="openRegister">
+      <div class="sign-up-text">
         Ainda não faz parte do app?
       </div>
-      <paper-button class="sign-up-button" on-tap="submitCredentials">
+      <paper-button class="sign-up-button" on-tap="openRegister">
         Cadastre-se
       </paper-button>
     </div>

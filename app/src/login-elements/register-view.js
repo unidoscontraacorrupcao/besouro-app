@@ -9,40 +9,18 @@ class RegisterView extends PolymerElement {
     return html`
     <style include="shared-styles">
       :host {
-        display: flex;
-        background: url(/images/frame-bg.svg);
-        background-size: cover;
-        background-position: center;
+        display: none;
+        background-color: #f5f5f5;
         flex-direction: column;
         min-height: 100vh;
       }
       .fill {
         flex: 1;
-        padding: 20px 60px;
-      }
-      paper-button {
-        display: block;
-        text-align: center;
-        margin: 20px auto 10px;
-        background: var(--default-primary-color);
-      }
-      paper-input {
-        --paper-input-container-color: var(--default-primary-color);
-        --paper-input-container-focus-color: var(--default-primary-color);
-        --paper-input-container-invalid-color: var(--default-primary-color);
-        --paper-input-container-input-color: var(--default-primary-color);
-      }
-      .facebook {
-        color: #1A467B;
-        border: none;
-        background: white;
-        border-radius: 50%;
-        overflow: hidden;
-        margin: 10px;
+        padding: 2vh 6vh 0;
       }
       .image {
-        height: 13vh;
-        margin: 6vh 10px 0;
+        height: 20vh;
+        margin: 6vh 17vw 0 17vw;
       }
       .image iron-image {
         width: 100%;
@@ -51,32 +29,123 @@ class RegisterView extends PolymerElement {
         margin: auto;
         display: block;
       }
+      .title {
+        text-transform: uppercase;
+        text-align: center;
+        margin: 4vh auto 0;
+        padding-bottom: 0.5vh;
+        color: #312783;
+        font-family: Folio;
+        font-size: 45px;
+        line-height: 55px;
+      }
+      .fields {
+        margin-top: 4vh;
+      }
+      paper-input {
+        --paper-input-container-color: #b7b8b7;
+        --paper-input-container-focus-color: #312783;
+        --paper-input-container-input-color: #312783;
+      }
+      paper-button {
+        display: block;
+        height: auto;
+        max-width: 170px;
+        color: white;
+        background-color: #e6007e;
+        font-family: Folio;
+        font-size: 24px;
+        letter-spacing: 5px;
+        line-height: 26px;
+        text-align: center;
+        margin: 4vh auto 0;
+        border-radius: 0;
+      }
       .social {
         text-align: center;
-        margin: 30px;
+        margin-top: 5vh;
       }
       .social-text {
-        font-weight: bold;
-        color: #99391f;
+        font-family: Folio;
+        font-size: 18px;
+        line-height: 19px;
+        color: #312783;
+      }
+      .social-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1.6vh auto 0;
+      }
+      .social-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+      .social-button.google {
+        height: 67px;
+        width: 67px;
+        border: 1px solid #b7b7b7;
+        background-color: white;
+      }
+      .social-button.facebook {
+        margin-left: 2.35vw;
+        height: 66px;
+        width: 66px;
+        color: white;
+        background-color: #4460a0;
+      }
+      .line {
+        box-sizing: border-box;
+        margin-top: 4vh;
+        height: 3px;
+        width: 100%;
+        border: 1px solid #b7b8b7;
+        opacity: 0.3;
+      }
+      .login-button {
+        border: 1px solid #009fe3;
+        background-color: #f5f5f5;
+        color: #009fe3;
+        max-width: none;
+        margin-bottom: 5vh;
       }
     </style>
     <div class="fill">
       <div class="image">
-        <iron-image sizing="contain" src="/images/logo-white.svg"></iron-image>
+        <iron-image sizing="contain" src="/images/logo.png"></iron-image>
+      </div>
+      <div class="title">
+        Cadastre-se
       </div>
       <div class="fields">
-        <paper-input label="nome" value="{{name}}" minlength="5" auto-validate="" error-message="O nome deve ter no mínimo 5 caracteres."></paper-input>
-        <paper-input label="email" type="email" value="{{email}}" auto-validate="" error-message="Informe um email válido."></paper-input>
-        <paper-input label="senha" type="password" minlength="8" value="{{password}}" auto-validate="" error-message="A senha deve ter no mínimo 8 caracteres."></paper-input>
+        <paper-input label="Email" type="email" value="{{email}}" error-message="Insira um e-mail válido." on-value-changed="setInvalid"></paper-input>
+        <paper-input label="Nome" value="{{name}}" minlength="5" auto-validate="" error-message="O nome deve ter no mínimo 5 caracteres."></paper-input>
+        <paper-input label="Senha" type="password" minlength="8" value="{{password}}" error-message="A senha deve ter no mínimo 8 caracteres." on-value-changed="setInvalid"></paper-input>
       </div>
-      <paper-button class="plain" on-tap="submitCredentials">Registrar</paper-button>
+      <paper-button on-tap="submitCredentials">
+        Entrar
+      </paper-button>
     </div>
     <div class="social">
-      <div class="social-text">Você também pode usar</div> 
-      <div class="social-text">suas redes sociais.</div>
-      <paper-icon-button class="facebook" icon="app:facebook" on-tap="signUpWithFacebook"></paper-icon-button>
-      <paper-icon-button class="facebook" icon="app:google" on-tap="signUpWithGoogle"></paper-icon-button>
-      <div class="social-text" on-tap="openLogin">Já possuo cadastro</div>
+      <div class="social-text">
+      Você também pode usar suas redes sociais
+      </div>
+      <div class="social-buttons">
+        <div class="social-button google">
+          <paper-icon-button icon="app:google" on-tap="signInWithGoogle"></paper-icon-button>
+        </div>
+        <div class="social-button facebook">
+          <paper-icon-button icon="app:facebook" on-tap="signInWithFacebook"></paper-icon-button>
+        </div>
+      </div>
+    </div>
+    <div class="fill">
+      <div class="line"></div>
+      <paper-button class="login-button" on-tap="openLogin">
+        Já possuo login
+      </paper-button>
     </div>
 `;
   }
