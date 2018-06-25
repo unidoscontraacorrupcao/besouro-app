@@ -43,14 +43,14 @@ class ProfilePage extends PolymerElement {
         height: 84px;
         background: var(--accent-color);
       }
-      .cover .image, 
+      .cover .image,
       .cover iron-image {
         width: 150px;
         height: 150px;
         border-radius: 50%;
         display: block;
         margin: auto;
-        overflow: hidden; 
+        overflow: hidden;
         background: var(--divider-color);
       }
       .cover paper-icon-button {
@@ -100,7 +100,6 @@ class ProfilePage extends PolymerElement {
       <password-dialog id="passDialog" on-confirm-password="_updatePassword"></password-dialog>
     </app-dialog>
 
-
     <app-header-layout has-scrolling-region="">
       <app-header slot="header" fixed="" condenses="" effects="waterfall">
         <app-toolbar>
@@ -113,7 +112,7 @@ class ProfilePage extends PolymerElement {
       <div class="fill">
         <div class="cover">
           <div class="image">
-            <iron-image id="profile" src="{{user.photoURL}}" sizing="cover">  
+            <iron-image id="profile" src="{{user.photoURL}}" sizing="cover">
             </iron-image>
             <paper-icon-button icon="app:create" on-tap="uploadImage"></paper-icon-button>
             <dom-if if="{{!user}}">
@@ -193,7 +192,6 @@ class ProfilePage extends PolymerElement {
       password: 'samplepass',
       confirmpass: 'samplepass'
     };
-    this.passProvider = this.user.providerData[0].providerId === 'password';
   }
   _selectedChanged(selected) {}
 
