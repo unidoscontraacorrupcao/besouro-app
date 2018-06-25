@@ -19,13 +19,12 @@ class RegisterView extends PolymerElement {
         padding: 2vh 6vh 0;
       }
       .image {
-        height: 20vh;
-        margin: 6vh 17vw 0 17vw;
+        height: 98px;
+        margin: 6vh auto 0;
       }
       .image iron-image {
-        width: 100%;
-        height: 100%;
-        max-width: 250px;
+        width: 210px;
+        height: 98px;
         margin: auto;
         display: block;
       }

@@ -19,13 +19,12 @@ class LoginView extends PolymerElement {
         padding: 2vh 6vh 0;
       }
       .image {
-        height: 20vh;
-        margin: 6vh 17vw 0 17vw;
+        height: 98px;
+        margin: 6vh auto 0;
       }
       .image iron-image {
-        width: 100%;
-        height: 100%;
-        max-width: 250px;
+        width: 210px;
+        height: 98px;
         margin: auto;
         display: block;
       }
@@ -135,8 +134,8 @@ class LoginView extends PolymerElement {
         Faça Login
       </div>
       <div class="fields">
-        <paper-input label="Email" type="email" value="{{email}}" error-message="Usuário inválido!" on-value-changed="setInvalid"></paper-input>
-        <paper-input label="Senha" type="password" minlength="8" value="{{password}}" error-message="Senha incorreta!" on-value-changed="setInvalid"></paper-input>
+        <paper-input label="Email" type="email" value="{{email}}" error-message="Usuário inválido!"></paper-input>
+        <paper-input label="Senha" type="password" minlength="8" value="{{password}}" error-message="Senha incorreta!"></paper-input>
       </div>
       <paper-button on-tap="submitCredentials">
         Entrar
@@ -182,15 +181,17 @@ class LoginView extends PolymerElement {
       sharedMission: String
     };
   }
+
   submitCredentials(e) {
-   const inputs = Array.from(this.shadowRoot.querySelectorAll('paper-input'));
-   let invalid = inputs.reduce((invalid, input) => invalid || input.invalid, false);
-   let isblank = inputs.reduce((isblank, input) => isblank || !input.value, false);
-   if (invalid || isblank) return; //TODO: use app-notify to display error message.
-   else this.credentials = {
-     email: this.email,
-     password: this.password,
-   };
+    const inputs = Array.from(this.shadowRoot.querySelectorAll('paper-input'));
+    let invalid = inputs.reduce((invalid, input) => invalid || input.invalid, false);
+    let isblank = inputs.reduce((isblank, input) => isblank || !input.value, false);
+    if (!invalid && !isblank) {
+      this.credentials = {
+        email: this.email,
+        password: this.password
+      };
+    }
   }
 
   signInWithFacebook(e) {
@@ -203,10 +204,6 @@ class LoginView extends PolymerElement {
 
   openRegister(e) {
     this.dispatchEvent(new CustomEvent('open-register'));
-  }
-
-  setInvalid(e) {
-    e.target.invalid = false;
   }
 }
 
