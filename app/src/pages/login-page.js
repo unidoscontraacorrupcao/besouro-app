@@ -6,18 +6,9 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class LoginPage extends PolymerElement {
   static get template() {
     return html`
-    <style include="shared-styles">
-      :host {
-        display: block;
-      }
-    </style>
-
-    <app-dialog id="dialog" modal="" animated="">
+      <style include="shared-styles"></style>
       <login-modal id="login" shared-mission="{{sharedMissionID}}" user="{{user}}" status-known="{{statusKnown}}"></login-modal>
-    </app-dialog>
-
-    <login-modal></login-modal>
-`;
+    `;
   }
 
   static get is() { return 'login-page'; }
@@ -67,26 +58,19 @@ class LoginPage extends PolymerElement {
     }
   }
 
-  toggleDialog(e) {
-    if (e.detail.value) {
-
-    }
-  }
-
-  open() {
-    this.$.dialog.open();
-  }
-
   signOut() {
-    this.$.login.$.auth.signOut();
+    this.$.login.signOut();
   }
 
   ready() {
     super.ready();
-    this.$.login.addEventListener('returnToMission', function(e) {
-      this.set("route.shared", {});
-      this.set("route.path", `/show-mission/${e.detail.mission}`);
-    }.bind(this));
+    if(this.user != undefined && "id" in this.user) {
+      this.set("route.path", "/");
+    }
+    // this.$.login.addEventListener('returnToMission', function(e) {
+    //   this.set("route.shared", {});
+    //   this.set("route.path", `/show-mission/${e.detail.mission}`);
+    // }.bind(this));
   }
 }
 
