@@ -112,7 +112,7 @@ class MissionReceiptsPage extends PolymerElement {
           <template is="dom-repeat" items="{{receipts}}" filter="setUserPhoto">
             <div class="receipt-item">
               <div class="supporter-img">
-                <iron-image src="http://localhost:8000/local{{item.receiptFile}}" sizing="cover"></iron-image>
+                <iron-image src="{{baseUrl}}{{item.receiptFile}}" sizing="cover"></iron-image>
               </div>
               <div class="supporter-name">
                 <a on-tap="_openUserReceipt"><span>{{item.userName}}</span></a>
@@ -161,7 +161,11 @@ class MissionReceiptsPage extends PolymerElement {
         type: String,
         value: "app:check"
       },
-      receiptsItem: Object
+      receiptsItem: Object,
+      baseUrl: {
+        type: String,
+        computed: "getBaseUrl()"
+      }
     }
   }
 
@@ -218,6 +222,10 @@ class MissionReceiptsPage extends PolymerElement {
 
   setUserPhoto(_item) {
     return true;
+  }
+
+  getBaseUrl() {
+    return this.$.api.baseUrl;
   }
 
   hideLoading(e) {

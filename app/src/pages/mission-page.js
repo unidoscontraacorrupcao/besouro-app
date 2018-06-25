@@ -285,7 +285,7 @@ class MissionPage extends PolymerElement {
       formData.append("description", this.mission.description);
       formData.append("coverFile", this.input.files[0]);
       var data = {method: "post",
-        url: `${this.$.api.baseUrl}/missions/`,
+        url: `${this.$.api.baseUrl}/api/v1/missions/`,
         body: formData};
       this.$.api.xhrRequest(data).then(function(response){
           this.$.confirmation.present();
@@ -419,7 +419,6 @@ class MissionPage extends PolymerElement {
       this.$.document.saveValue(`/missions/${this.route.data.missionID}/`, "content");
       if (this.input && this.input.files.length > 0) {
         this.set("uploadedFile",  this.input.files[0]);
-        this._saveMissionStorage();
       }
       this.set('mission', {});
       this.sharedMission = this.missionData[this.missionData.length - 1];

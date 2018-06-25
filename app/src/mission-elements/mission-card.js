@@ -258,7 +258,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   setMissionData(mission) {
     this._setMissionStats();
-    this.set("missionImage", `http://localhost:8000/local${mission.fileUpload}`)
+    this.set("missionImage", `${this.$.api.baseUrl}${mission.fileUpload}`)
     this.$.api.method = "GET";
     this.$.api.path = `missions/${mission.id}/statistics`;
     this.$.api.request().then(function(ajax) {

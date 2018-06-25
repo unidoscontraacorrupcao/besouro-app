@@ -105,7 +105,7 @@ class MissionPlayer extends PolymerElement {
       this.mediaType = undefined;
     }
     if(mission.fileUpload) {
-      this.set("missionImage", `http://localhost:8000/local${mission.fileUpload}`);
+      this.set("missionImage", `${this.$.api.baseUrl}${mission.fileUpload}`);
     }
   }
 
