@@ -8,7 +8,6 @@ class AppBesouroApi extends PolymerElement {
     return html`
     <iron-ajax
     id="ajax"
-    auto
     url={{baseUrl}}/{{path}}
     body='{{body}}'
     params={{params}}
@@ -60,4 +59,3 @@ class AppBesouroApi extends PolymerElement {
 }
 
 customElements.define(AppBesouroApi.is, AppBesouroApi);
-

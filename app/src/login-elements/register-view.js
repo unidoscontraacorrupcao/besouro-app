@@ -120,9 +120,9 @@ class RegisterView extends PolymerElement {
         Cadastre-se
       </div>
       <div class="fields">
-        <paper-input label="Email" type="email" value="{{email}}" error-message="Insira um e-mail válido." on-value-changed="setInvalid"></paper-input>
-        <paper-input label="Nome" value="{{name}}" minlength="5" auto-validate="" error-message="O nome deve ter no mínimo 5 caracteres."></paper-input>
-        <paper-input label="Senha" type="password" minlength="8" value="{{password}}" error-message="A senha deve ter no mínimo 8 caracteres." on-value-changed="setInvalid"></paper-input>
+        <paper-input label="Email" type="email" value="{{email}}" auto-validate="" error-message="Insira um endereço de email válido." required></paper-input>
+        <paper-input label="Nome" value="{{name}}" auto-validate="" error-message="Nome deve ser preenchido." allowed-pattern="[a-zA-Z ]" required></paper-input>
+        <paper-input label="Senha" type="password" value="{{password}}" auto-validate="" minlength="8" error-message="Senha deve possuir pelo menos 8 caracteres." required></paper-input>
       </div>
       <paper-button on-tap="submitCredentials">
         Entrar
@@ -151,28 +151,31 @@ class RegisterView extends PolymerElement {
   }
 
   static get is() { return 'register-view'; }
+
   static get properties() {
     return {
       credentials: {
         type: Object,
         notify: true
       },
-      name: String,
       email: String,
+      name: String,
       password: String,
       sharedMission: String
     };
   }
+
   submitCredentials(e) {
     const inputs = Array.from(this.shadowRoot.querySelectorAll('paper-input'));
     let invalid = inputs.reduce((invalid, input) => invalid || input.invalid, false);
     let isblank = inputs.reduce((isblank, input) => isblank || !input.value, false);
-    if(invalid || isblank) return; //TODO: use app-notify to display error message.
-    else this.credentials = {
-      displayName: this.name,
-      email: this.email,
-      password: this.password,
-    };
+    if (!invalid && !isblank) {
+      this.credentials = {
+        email: this.email,
+        name: this.name,
+        password: this.password
+      };
+    }
   }
 
   signUpWithFacebook(e) {

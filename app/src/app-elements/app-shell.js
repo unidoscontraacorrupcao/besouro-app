@@ -101,6 +101,7 @@ class AppShell extends PolymerElement {
       }
     </style>
 
+    <iron-localstorage name="user-storage" value="{{user}}"></iron-localstorage>
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
