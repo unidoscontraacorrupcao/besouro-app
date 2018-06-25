@@ -32,10 +32,22 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       :host {
         display: block;
-        background: var(--secondary-background-color);
+        background: white;
         @apply --default-font;
         height: 100vh;
         --layer-image: '';
+      }
+
+      .content h2 {
+        font-size: 2em;
+        font-family: Folio;
+        text-transform: uppercase;
+        color: var(--secondary-text-color);
+      }
+
+      .content p {
+        font-size: 1.5em;
+        color: #A3A3A3;
       }
 
       mission-player { margin: auto; }
@@ -134,7 +146,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       .mission-author {
         display: flex;
         background-color: var(--primary-background-color);
-        height: 60px;
+        height: 70px;
         padding: 5px 0 5px 10px;
       }
 
@@ -149,6 +161,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       .author-name {
         margin-left: 5px;
         margin-top: 9px;
+        flex-grow: 1;
       }
 
       #author {
@@ -176,16 +189,18 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         padding-top: 8px;
       }
 
-      #share-btn { padding: 4px 0px; }
+      #share-btn { margin: 10px 25px 0 0; }
       #share-btn paper-icon-button { color: var(--dark-primary-color); }
 
       .stats {
-        height: 25px;
-        font-size: 0.9em;
+        height: 50px;
+        font-size: 1.3em;
+        font-family: Folio;
       }
 
       .stats-content {
         width: 80%;
+        padding-top: 10px;
         margin: auto;
         text-align: center;
       }
@@ -196,6 +211,8 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       }
 
       .stats-value { color: var(--light-accent-color); }
+
+      .stats-text { color: #BFC0BF; }
 
       #action {
         text-align: center;
@@ -238,6 +255,26 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       }
       .comments h2 { margin: 0; }
 
+      .card-action {
+        width: 75%;
+        max-width: 400px;
+        height: 80px;
+        margin: auto;
+        text-align: center;
+        margin-top: 60px;
+      }
+
+      .card-action a { text-decoration: none; }
+      .card-action span {
+       font-family: Folio;
+       text-transform: uppercase;
+       font-size: 2em;
+       color: white;
+       margin: auto;
+       letter-spacing: 3px;
+      }
+
+      .card-action div { padding-top: 15px; }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -295,10 +332,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
           <iron-image src="{{candidatePhoto}}" sizing="contain"></iron-image>
         </div>
         <div class="author-name">
-          <span>Criado por</span>
-          <span id="author">USER</span>
+          <span>Autoria da missão</span>
+        </div>
+        <div id="share-btn">
+          <paper-icon-button on-tap="_shareMission" icon="app:share"></paper-icon-button>
         </div>
       </div>
+
       <div class="stats">
         <div class="stats-content">
           <div>
@@ -317,30 +357,22 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </div>
       </div>
 
-      <div id="action">
-        <paper-button id="btnAction" toggles="" raised="">
-          <iron-icon icon="{{actionIcon}}"></iron-icon>
-          <span id="actionText">{{btnAction}}</span>
-        </paper-button>
+      <div class="card-action">
+        <div>
+          <a href="#" id="btnLink"><span id="btnText">{{btnAction}}</span></a>
+        </div>
       </div>
 
       <template is="dom-if" if="{{mission}}">
         <div class="content">
-          <h3>Entenda a missão</h3>
+          <h2>Entenda a missão</h2>
           <p>{{mission.description}}</p>
-        </div>
 
-        <div class="share-mission">
-          <div class="share-mission-content">
-            <h3>Compartilhar missão</h3>
-            <div id="share-btn">
-              <paper-icon-button on-tap="_shareMission" icon="app:share"></paper-icon-button>
-            </div>
-          </div>
-        </div>
+          <h2>recompensa</h2>
+          <p>Recompensa da missão</p>
 
             <div class="comments">
-              <h2>Comentários</h2>
+              <h2>Comentários da Comunidade</h2>
               <dom-repeat items="{{comments}}" as="comment">
                 <template>
                   <mission-comment user-photo="[[comment.content.image]]" comment="{{comment.content}}" key="{{comment.key}}">
@@ -364,6 +396,8 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
                 </dom-if>
               </div>
             </div>
+        </div>
+
         </template>
     </app-header-layout>
 
@@ -605,44 +639,43 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     }.bind(this));
   }
 
+
   _setActionBtn() {
-    const btn = this.$.btnAction;
-    const btnText = this.$.actionText;
-    btn.classList = [];
-    btn.removeEventListener("tap", this.acceptMissionFunc, false);
-    btn.removeEventListener("tap", this.finishMissionFunc, false);
-    btnText.classList.add("btn-text-mission");
+    const cardAction = this.shadowRoot.querySelector(".card-action");
+    const link = this.$.btnLink;
+    link.removeEventListener("tap", this.acceptMissionFunc, false);
+    link.removeEventListener("tap", this.finishMissionFunc, false);
 
     if (this.currentMissionStats == "realized") {
       this.set('btnAction', 'Missão concluida');
-      btn.classList.add("btn-realized-mission");
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
     }
 
     if (this.currentMissionStats == "new") {
       this.set('btnAction', 'Aceitar missão');
-      btn.classList.add("btn-new-mission");
-      btn.addEventListener('tap', this.acceptMissionFunc);
+      link.addEventListener('tap', this.acceptMissionFunc);
+      cardAction.setAttribute("style", "background-color: rgba(216, 28, 136, 0.8);");
     }
 
     if (this.currentMissionStats == "started") {
       this.set('btnAction', 'Concluir missão');
-      btn.classList.add("btn-started-mission");
-      btn.addEventListener('tap', this.finishMissionFunc);
+      link.addEventListener('tap', this.finishMissionFunc);
+      cardAction.setAttribute("style", "background-color: rgba(31, 163, 208, 0.8);");
     }
 
     if (this.currentMissionStats == "pending") {
       this.set("btnAction", "Avaliação pendente");
-      this.set("actionIcon", "app:report");
-      btn.classList.add("btn-realized-mission");
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
     }
 
     if (this.currentMissionStats == "rejected") {
       this.set("btnAction", "Avaliação rejeitada");
-      this.set("actionIcon", "app:report");
-      btn.classList.add("btn-realized-mission");
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
     }
   }
-
   /* every time that route is show-mission, we reload the mission */
   routePathChanged(path) {
     if (this.route.__queryParams && this.route.__queryParams["shared"] === "true") {
