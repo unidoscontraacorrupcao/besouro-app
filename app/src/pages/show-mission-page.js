@@ -41,7 +41,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       mission-player { margin: auto; }
 
       app-header {
-        height: 222px;
+        height: 390px;
         color: var(--light-text-color);
         /* https://bugs.chromium.org/p/chromium/issues/detail?id=637072 */
         --app-header-background-front-layer: {
@@ -62,7 +62,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       app-header[shadow] .tall .actions { display: none; }
 
-      .tall { height: 158px; }
+      app-toolbar {
+        width: 93%;
+        margin: auto;
+      }
+      .tall {
+        height: 315px;
+      }
 
       .tall .actions {
         position: absolute;
@@ -70,7 +76,18 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         right: 5px;
       }
 
-      h1.title[main-title] { margin: 5px 20px; }
+      paper-icon-button {
+        padding: 0;
+        color: white;
+      }
+
+      h1.title[main-title] {
+        color: white;
+        text-transform: uppercase;
+        font-family: Folio;
+        font-size: 2em;
+        padding-top: 10px;
+      }
 
       h3 {
         color: var(--dark-primary-color);
@@ -79,7 +96,11 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .dark { color: black; }
 
-      .timing { font-size: 0.6em; }
+      .timing {
+        font-size: 0.6em;
+        margin-top: 25px;
+        text-transform: none;
+      }
 
       .timing iron-icon { height: 15px; }
 
@@ -216,6 +237,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         padding: 10px 0px;
       }
       .comments h2 { margin: 0; }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -245,7 +267,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       <app-header slot="header" fixed="" condenses="" effects="waterfall resize-title blend-background parallax-background">
         <app-toolbar>
           <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
-          <h1 condensed-title="" class="dark title">{{mission.title}}</h1>
+          <h1 condensed-title="" class="main-title">{{mission.title}}</h1>
           <paper-menu-button horizontal-align="right">
             <paper-icon-button icon="app:more-vert" slot="dropdown-trigger"></paper-icon-button>
             <paper-listbox slot="dropdown-content">
@@ -306,8 +328,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         <div class="content">
           <h3>Entenda a missão</h3>
           <p>{{mission.description}}</p>
-
-          <a id="leaveMission" href="#">Desistir dessa missão</a>
         </div>
 
         <div class="share-mission">
@@ -399,7 +419,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       candidatePhoto: String,
       remainingTime: {
         type: String,
-        computed: 'calcMissionDate(mission.content)'
+        computed: 'calcRemainingTime(mission)'
       },
       missionImage: {
         type: String,
@@ -454,6 +474,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     } else {
       this._setLayerImage(this.missionImage);
     }
+  }
+
+  calcRemainingTime() {
+    return "xx dias restantes"
   }
 
   _returnToInbox() {
@@ -516,7 +540,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _setLayerImage(missionImage) {
-    if(missionImage && this.mission.content) {
+    if(missionImage && this.mission) {
       this.updateStyles({ '--layer-image': `url(${missionImage})` });
     }
   }
