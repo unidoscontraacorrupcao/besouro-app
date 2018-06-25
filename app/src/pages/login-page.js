@@ -67,10 +67,6 @@ class LoginPage extends PolymerElement {
     if(this.user != undefined && "id" in this.user) {
       this.set("route.path", "/");
     }
-    // this.$.login.addEventListener('returnToMission', function(e) {
-    //   this.set("route.shared", {});
-    //   this.set("route.path", `/show-mission/${e.detail.mission}`);
-    // }.bind(this));
   }
 }
 
