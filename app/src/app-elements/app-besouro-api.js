@@ -28,7 +28,7 @@ class AppBesouroApi extends PolymerElement {
     return {
       baseUrl: {
         type: String,
-        value: "http://localhost:8000"
+        value: "http://192.168.0.22:8000"
       },
       method: {
         type: String
@@ -42,24 +42,30 @@ class AppBesouroApi extends PolymerElement {
       contentType: {
         type: String,
         value: "application/json"
-      }
+      },
+      user: Object,
+      xhrData: Object
   }
   }
 
   request() {
+    if (this.method == "POST")
+      this.$.ajax.headers = this.getHeaders();
+    else
+      this.$.ajax.headers = {};
     return this.$.ajax.generateRequest().completes;
   }
 
-  xhrRequest(args) {
-    let data = args;
-    data["headers"] = this.getHeaders();
-    return this.$.xhr.send(data);
+  xhrRequest() {
+    this.xhrData["headers"] = this.getHeaders();
+    return this.$.xhr.send(this.xhrData);
   }
 
   getHeaders() {
     // This token is from a ej_user.
-    // I used this command to genenrate it:/manage.py drf_create_token <username>
-    return {"authorization": "Token f9561452ed1c1c8575b81f5e02b58c7906c849ee"};
+    // I used this command to genenrate it: ./manage.py drf_create_token <username>
+    if (!this.user) return {};
+    return {"authorization": `Token ${this.user.key}`};
   }
 }
 
