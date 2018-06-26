@@ -23,12 +23,11 @@ class ProfilePage extends PolymerElement {
         @apply --default-font;
       }
       app-header {
-        color: white;
-        background: rgba(49,39,131,0.5);
-        --app-form-header-background: rgba(49,39,131,0.5);
-        --app-form-header-color: white;
+        --app-form-header-background: white;
+        --app-form-header-color: #333333;
       }
-      app-toolbar {
+      app-toolbar:not([tab-bar]) {
+        color: white;
         padding: 0;
         height: 250px;
         --layout-center_-_align-items: normal;
@@ -67,6 +66,12 @@ class ProfilePage extends PolymerElement {
         height: 100%;
         z-index: -1;
       }
+      .tabs-text {
+        font-family: Folio;
+        text-transform: uppercase;
+        font-size: 18px;
+        line-height: 19px;
+      }
       paper-input paper-button {
         color: var(--accent-color);
         border: none;
@@ -90,7 +95,7 @@ class ProfilePage extends PolymerElement {
       .email {
         max-width: 340px;
         margin: auto;
-        padding: 80px 20px 0;
+        padding: 0px 20px 0;
       }
       .email {
         padding-top: 0;
@@ -106,7 +111,7 @@ class ProfilePage extends PolymerElement {
       }
       paper-button {
         max-width: 340px;
-        margin: 40px auto;
+        margin: 20px auto 100px;
         display: block;
         text-align: center;
         border-radius: 20px;
@@ -116,6 +121,75 @@ class ProfilePage extends PolymerElement {
         height: 0;
         width: 0;
       }
+
+      #app-actions {
+        position: fixed;
+        bottom: 0;
+        background: white;
+        width: 85%;
+        border-top-style: solid;
+        border-top-color: #E7E7E7;
+        z-index: 1000;
+      }
+
+      #app-actions span {
+        text-transform: uppercase;
+        color: var(--light-text-color);
+        font-family: Folio;
+      }
+
+      #app-actions #actions-content {
+        width: 80%;
+        display: flex;
+        text-align: center;
+        padding-bottom: 5px;
+        padding-top: 5px;
+      }
+
+      #app-actions #actions-content > * {flex-grow: 1;}
+
+      .icon-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .icon-container span { margin-top: -6px; }
+
+      .icon-container > * {
+        margin: auto;
+      }
+
+      #new-mission-btn {
+        margin-top: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: var(--accent-color);
+        border-radius: 50%;
+        margin: 8px auto;
+      }
+
+      #new-mission-btn paper-icon-button {
+        width: 40px;
+        color: white;
+      }
+
+      #app-actions #new-mission-btn paper-icon-button { display: block; }
+      #app-actions #missions-btn paper-icon-button {
+        display: block;
+        padding: 0px;
+      }
+      #app-actions #notifications-btn paper-icon-button {
+        display: block;
+        padding: 0px;
+      }
+
+      @media only screen and (max-width: 640px) {
+        #app-actions { width: 100%; }
+        #actions-content {
+          width: 90%;
+          margin: auto;
+        }
+      }
     </style>
 
     <app-dialog id="dialog">
@@ -123,7 +197,7 @@ class ProfilePage extends PolymerElement {
     </app-dialog>
 
     <app-header-layout has-scrolling-region="">
-      <app-header slot="header" condenses>
+      <app-header slot="header">
         <app-toolbar>
           <paper-icon-button class="left" icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
           <h1 main-title>
@@ -140,26 +214,76 @@ class ProfilePage extends PolymerElement {
           <iron-image class="image" id="profile" src="{{user.photoURL}}" sizing="cover"></iron-image>
           <div class="image-filter"></div>
         </app-toolbar>
+        <app-toolbar tab-bar>
+          <paper-tabs selected="{{tab}}" fallback-selection="0">
+            <paper-tab>
+              <span class="tabs-text">
+                infos
+              </span>
+            </paper-tab>
+            <paper-tab>
+              <span class="tabs-text">
+                troféus
+              </span>
+            </paper-tab>
+            <paper-tab>
+              <span class="tabs-text">
+                contribuições
+              </span>
+            </paper-tab>
+          </paper-tabs>
+        </app-toolbar>
       </app-header>
-      <input type="file" id="upload" on-change="getPhoto" accept=".jpg, .jpeg, .png">
-      <div class="fill">
-        <div class="username">
-          <paper-input label="nome" value="{{data.displayName}}" minlength="5" auto-validate="" error-message="O nome deve ter no mínimo 5 caracteres."></paper-input>
+      <iron-pages selected="{{tab}}">
+        <div id="info">
+          <input type="file" id="upload" on-change="getPhoto" accept=".jpg, .jpeg, .png">
+          <div class="fill">
+            <div class="username">
+              <paper-input label="nome" value="{{data.displayName}}" minlength="5" auto-validate="" error-message="O nome deve ter no mínimo 5 caracteres."></paper-input>
+            </div>
+            <div class="email">
+              <paper-input label="email" type="email" value="{{data.email}}" disabled=""></paper-input>
+            </div>
+            <div class="email">
+              <paper-input label="senha" type="password" value="{{data.password}}" minlength="8" auto-validate="" error-message="A senha deve ter no mínimo 8 caracteres." disabled="{{!passProvider}}">
+              </paper-input>
+              <paper-input label="confirmação de senha" type="password" value="{{data.confirmpass}}" disabled="{{!passProvider}}">
+              </paper-input>
+            </div>
+            <hr>
+            <div class="notify">
+              <span>Receber notificações</span> <paper-toggle-button checked=""></paper-toggle-button>
+            </div>
+            <paper-button class="accent" on-tap="saveUserData">Salvar</paper-button>
+          </div>
         </div>
-        <div class="email">
-          <paper-input label="email" type="email" value="{{data.email}}" disabled=""></paper-input>
+        <div id="trophies">
+          Troféus
         </div>
-        <div class="email">
-          <paper-input label="senha" type="password" value="{{data.password}}" minlength="8" auto-validate="" error-message="A senha deve ter no mínimo 8 caracteres." disabled="{{!passProvider}}">
-          </paper-input>
-          <paper-input label="confirmação de senha" type="password" value="{{data.confirmpass}}" disabled="{{!passProvider}}">
-          </paper-input>
+        <div id="contributions">
+          Contribuições
         </div>
-        <hr>
-        <div class="notify">
-          <span>Receber notificações</span> <paper-toggle-button checked=""></paper-toggle-button>
+      </iron-pages>
+      <div id="app-actions">
+        <div id="actions-content">
+          <div id="missions-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:navMissions"></paper-icon-button>
+              <span>missões</span>
+            </div>
+          </div>
+          <div>
+            <div id="new-mission-btn">
+              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
+            </div>
+          </div>
+          <div id="notifications-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:navNotifications"></paper-icon-button>
+              <span>notificações</span>
+            </div>
+          </div>
         </div>
-        <paper-button class="accent" on-tap="saveUserData">Salvar</paper-button>
       </div>
     </app-header-layout>
 `;
@@ -185,6 +309,11 @@ class ProfilePage extends PolymerElement {
       },
       appUser: {
         type: Object
+      },
+      tab: {
+        type: Object,
+        value: function() { return 0; },
+        observer: 'tabChanged'
       }
     };
   }
@@ -218,6 +347,22 @@ class ProfilePage extends PolymerElement {
 
   _returnToInbox() {
     this.set('route.path', '/');
+  }
+
+  tabChanged(e) {
+    if(this.tab == 0) {
+      this.setTabDivs('flex', 'none', 'none');
+    } else if(this.tab == 1) {
+      this.setTabDivs('none', 'flex', 'none');
+    } else {
+      this.setTabDivs('none', 'none', 'flex');
+    }
+  }
+
+  setTabDivs(info, trophies, contributions) {
+    this.$.info.style.display = info;
+    this.$.trophies.style.display = trophies;
+    this.$.contributions.style.display = contributions;
   }
 
   uploadImage(e) {
