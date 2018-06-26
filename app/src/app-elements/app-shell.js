@@ -90,15 +90,6 @@ class AppShell extends PolymerElement {
         color: black;
         font-weight: bold;
       }
-      @media screen and (min-width: 961px) {
-        app-drawer {
-          top: -70px;
-          left: unset;
-          --app-drawer-content-container: {
-            background: transparent;
-          };
-        }
-      }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -162,7 +153,8 @@ class AppShell extends PolymerElement {
       route: Object,
       user: {
         type: Object,
-        value: function () { return { uid: "1" } }
+        observer: "_userChanged",
+        value: function() {return JSON.parse(sessionStorage.getItem("user"));}
       }
     }
   }
@@ -185,9 +177,7 @@ class AppShell extends PolymerElement {
 
   _pageChanged(page) {
     // Load page import on demand. Show 404 page if fails
-    import(`../pages/${page}-page.js`).then((MyView1) => {
-      console.log("MyView1 loaded");
-    }).catch((reason) => {
+    import(`../pages/${page}-page.js`).catch((reason) => {
       console.log("MyView1 failed to load", reason);
     });
   }
@@ -203,6 +193,16 @@ class AppShell extends PolymerElement {
 
   _openDrawer(e) {
     this.$.drawer.open();
+  }
+
+  _userChanged(e) {
+    if(this.user && this.user != undefined && "key" in this.user && "uid" in this.user && "displayName" in this.user) {
+      sessionStorage.setItem("user", JSON.stringify(this.user));
+      this.set('route.path', '/');
+    } else {
+      sessionStorage.setItem("user", JSON.stringify({}));
+      this.set('route.path', '/login');
+    }
   }
 
   signOut(e) {

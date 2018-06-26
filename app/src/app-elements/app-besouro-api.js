@@ -64,4 +64,3 @@ class AppBesouroApi extends PolymerElement {
 }
 
 customElements.define(AppBesouroApi.is, AppBesouroApi);
-
