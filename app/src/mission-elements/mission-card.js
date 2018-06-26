@@ -57,6 +57,12 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         left: 75px;
       }
 
+      .card-header paper-icon-button {
+        padding: 0px;
+        color: var(--accent-color);
+      }
+
+
       .mission-card iron-image.campaign {
         height: 50px;
         width: 50px;
