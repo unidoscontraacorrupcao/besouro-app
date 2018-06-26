@@ -183,7 +183,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     <div class="card mission-card">
       <div class="card-header">
           <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
-          <span class="author">Autoria da missão</span>
+          <span class="author">{{user.displayName}}</span>
           <p class="timing"> <iron-icon icon="app:watch-later"></iron-icon> {{remainingTime}} </p>
         </a>
         <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
@@ -241,6 +241,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       btnAction: String,
       finishMissionFunc: Function,
       acceptMissionFunc: Function,
+      user: Object
     }
   }
 
@@ -270,7 +271,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   _setMissionStats() {
     this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.mission.id}/user-status/${1}`;
+    this.$.api.path = `missions/${this.mission.id}/user-status/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("currentMissionStats", ajax.response.status);
       this._setActionBtn();
@@ -317,7 +318,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   _acceptMission() {
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
-    this.$.api.body = {"id": this.mission.id, "user_id": "1" };
+    this.$.api.body = {"id": this.mission.id, "user_id": this.user.uid };
     this.$.api.request().then(function(ajax) {
       this._reloadInbox();
     }.bind(this));

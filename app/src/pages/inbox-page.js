@@ -141,12 +141,12 @@ class InboxPage extends PolymerElement {
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card mission="{{mission}}" on-show-mission="_goToMission" on-reload-inbox="_reloadInbox"></mission-card>
+            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission" on-reload-inbox="_reloadInbox"></mission-card>
           </template>
         </div>
         <div class="inbox">
           <template is="dom-repeat" items="{{userAcceptedMissions}}" as="acceptedMissions">
-            <mission-card mission="{{acceptedMissions}}" on-show-mission="_goToMission">
+            <mission-card user="{{user}}" mission="{{acceptedMissions}}" on-show-mission="_goToMission">
             </mission-card>
           </template>
         </div>
@@ -209,8 +209,7 @@ class InboxPage extends PolymerElement {
         value: 0
       },
       user: {
-        type: Object,
-        observer: '_onUserChanged'
+        type: Object
       },
       userMissions: {
         type: Array,
@@ -263,7 +262,7 @@ class InboxPage extends PolymerElement {
 
   _getInboxMissions() {
     this.$.api.method = "GET";
-    this.$.api.path = "missions/inbox/1";
+    this.$.api.path = `missions/inbox/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("inboxMissions", ajax.response);
     }.bind(this));
@@ -271,7 +270,7 @@ class InboxPage extends PolymerElement {
 
   _getAcceptedMissions() {
     this.$.api.method = "GET";
-    this.$.api.path = "missions/accepted/1";
+    this.$.api.path = `missions/accepted/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("userAcceptedMissions", ajax.response);
     }.bind(this));

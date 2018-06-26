@@ -244,8 +244,7 @@ class MissionPage extends PolymerElement {
       },
       missionCampaign: String,
       user: {
-        type: Object,
-        observer: '_onUserChanged'
+        type: Object
       },
       missionFormTitle: {
         type: String,
