@@ -188,10 +188,12 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     if(this.input && this.input.files.length > 0) {
       formData.append("receiptFile", this.input.files[0]);
     }
-    var data = {method: "post",
+    this.$.api.xhrData = { method: "post", 
       url: `${this.$.api.baseUrl}/api/v1/missions/${this.missionId}/receipt/`,
-      body: formData};
-    this.$.api.xhrRequest(data).then(function(response){
+      body: formData
+    };
+    this.$.api.user = this.user;
+    this.$.api.xhrRequest().then(function(response){
         this.$.finishConfirmation.present();
     }.bind(this));
   }

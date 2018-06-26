@@ -333,6 +333,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
     this.$.api.body = {"id": this.mission.id, "user_id": this.user.uid };
+    this.$.api.user = this.user;
     this.$.api.request().then(function(ajax) {
       this._reloadInbox();
     }.bind(this));

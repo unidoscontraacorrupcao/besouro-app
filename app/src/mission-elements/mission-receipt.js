@@ -90,7 +90,8 @@ class MissionReceipt extends PolymerElement {
       apiUrl: {
         type: String,
         computed: "getApiUrl()"
-      }
+      },
+      user: Object
     };
   }
 
@@ -106,6 +107,7 @@ class MissionReceipt extends PolymerElement {
     this.$.api.method = "POST";
     this.$.api.path = `missions/receipt/${this.rcptData.id}`;
     this.$.api.body = {"status": status };
+    this.$.api.user = this.user;
     this.$.api.request().then(function(ajax) {
       this.dispatchEvent(new CustomEvent('close-modal'));
     }.bind(this));

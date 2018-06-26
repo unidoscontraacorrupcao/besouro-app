@@ -53,7 +53,7 @@ class LoginModal extends PolymerElement {
 
   signUp(credentials) {
     this.$.ajax.method = "POST";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/registration/"
+    this.$.ajax.url = "http://192.168.0.22:8000/rest-auth/registration/"
     this.$.ajax.headers = null;
     this.$.ajax.body = {
       "username": credentials.email,
@@ -78,7 +78,7 @@ class LoginModal extends PolymerElement {
 
   signIn(credentials) {
     this.$.ajax.method = "POST";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/login/"
+    this.$.ajax.url = "http://192.168.0.22:8000/rest-auth/login/"
     this.$.ajax.headers = null;
     this.$.ajax.body = {
       "username": credentials.email,
@@ -105,7 +105,7 @@ class LoginModal extends PolymerElement {
 
   signOut() {
     this.$.ajax.method = "POST";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/logout/";
+    this.$.ajax.url = "http://192.168.0.22:8000/rest-auth/logout/";
     this.$.ajax.headers = { "Authorization": `Token ${this.user.key}` };
     this.$.ajax.body = null;
     this.$.ajax.generateRequest().completes.then((req) => {this.user = null;});
@@ -113,7 +113,7 @@ class LoginModal extends PolymerElement {
 
   getUserDataByKey(key) {
     this.$.ajax.method = "GET";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/user/"
+    this.$.ajax.url = "http://192.168.0.22:8000/rest-auth/user/"
     this.$.ajax.headers = { "Authorization": `Token ${key}` };
     this.$.ajax.body = null;
     this.$.ajax.generateRequest().completes.then(
@@ -133,7 +133,7 @@ class LoginModal extends PolymerElement {
 
   getUserDataById(key, id) {
     this.$.ajax.method = "GET";
-    this.$.ajax.url = `http://localhost:8000/api/v1/users/${id}/`
+    this.$.ajax.url = `http://192.168.0.22:8000/api/v1/users/${id}/`
     this.$.ajax.headers = { "Authorization": `Token ${key}` };
     this.$.ajax.body = null;
     this.$.ajax.generateRequest().completes.then(
@@ -158,7 +158,7 @@ class LoginModal extends PolymerElement {
 
   updateUserNameByKey(key, name) {
     this.$.ajax.method = "GET";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/user/"
+    this.$.ajax.url = "http://192.168.0.22:8000/rest-auth/user/"
     this.$.ajax.headers = { "Authorization": `Token ${key}` };
     this.$.ajax.body = null;
     this.$.ajax.generateRequest().completes.then(
@@ -178,7 +178,7 @@ class LoginModal extends PolymerElement {
 
   updateUserNameById(key, id, name) {
     this.$.ajax.method = "PATCH";
-    this.$.ajax.url = `http://localhost:8000/api/v1/users/${id}/`
+    this.$.ajax.url = `http://192.168.0.22:8000/api/v1/users/${id}/`
     this.$.ajax.headers = { "Authorization": `Token ${key}` };
     this.$.ajax.body = { "display_name": `${id}.${name}` };
     this.$.ajax.generateRequest().completes.then(

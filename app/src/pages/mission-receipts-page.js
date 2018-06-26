@@ -97,7 +97,7 @@ class MissionReceiptsPage extends PolymerElement {
 
 
     <app-scrollable-dialog id="missionReceipt">
-      <mission-receipt></mission-receipt>
+      <mission-receipt user=[[user]]></mission-receipt>
     </app-scrollable-dialog>
 
     <app-header-layout has-scrolling-region="">
@@ -165,7 +165,8 @@ class MissionReceiptsPage extends PolymerElement {
       baseUrl: {
         type: String,
         computed: "getBaseUrl()"
-      }
+      },
+      user: Object
     }
   }
 
