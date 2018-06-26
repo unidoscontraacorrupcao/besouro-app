@@ -290,10 +290,12 @@ class MissionPage extends PolymerElement {
       if (this.mission.video)
         formData.append("videoLink", this.mission.video);
       formData.append("owner", this.user.uid);
-      var data = {method: "post",
+      this.$.api.xhrData = { method: "post",
         url: `${this.$.api.baseUrl}/api/v1/missions/`,
-        body: formData};
-      this.$.api.xhrRequest(data).then(function(response){
+        body: formData
+      };
+      this.$.api.user = this.user;
+      this.$.api.xhrRequest().then(function(response){
           this.$.confirmation.present();
       }.bind(this));
     }

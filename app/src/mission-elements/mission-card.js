@@ -57,6 +57,12 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         left: 75px;
       }
 
+      .card-header paper-icon-button {
+        padding: 0px;
+        color: var(--accent-color);
+      }
+
+
       .mission-card iron-image.campaign {
         height: 50px;
         width: 50px;
@@ -327,6 +333,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
     this.$.api.body = {"id": this.mission.id, "user_id": this.user.uid };
+    this.$.api.user = this.user;
     this.$.api.request().then(function(ajax) {
       this._reloadInbox();
     }.bind(this));

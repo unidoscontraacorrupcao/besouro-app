@@ -11,6 +11,7 @@ import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
+
 import '../app-elements/app-scrollable-dialog.js';
 import '../app-elements/app-form-header.js';
 import '../app-elements/app-icons.js';
@@ -377,13 +378,9 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         <app-toolbar>
           <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
           <h1 condensed-title="" class="main-title">{{mission.title}}</h1>
-          <paper-menu-button horizontal-align="right">
-            <paper-icon-button icon="app:more-vert" slot="dropdown-trigger"></paper-icon-button>
-            <paper-listbox slot="dropdown-content">
-              <paper-item on-tap="_editMission">Editar missão</paper-item>
-            </paper-listbox>
-          </paper-menu-button>
+          <paper-icon-button icon="app:mission-edit"></paper-icon-button>
         </app-toolbar>
+
         <app-toolbar class="tall">
           <h1 bottom-item="" main-title="" class="title">
             {{mission.title}}

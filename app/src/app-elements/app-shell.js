@@ -206,7 +206,7 @@ class AppShell extends PolymerElement {
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
-          <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}"></mission-receipts-page>
+          <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
           <not-found-page name="not-found"></not-found-page>
