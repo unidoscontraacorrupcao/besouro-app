@@ -142,6 +142,7 @@ class LoginModal extends PolymerElement {
           this.user = {
             key: key,
             uid: req.response.id,
+            email: req.response.username,
             displayName: req.response.display_name.split(".")[1]
           };
         } else {
@@ -186,6 +187,7 @@ class LoginModal extends PolymerElement {
           this.user = {
             key: key,
             uid: req.response.id,
+            email: req.response.username,
             displayName: req.response.display_name.split(".")[1]
           };
         } else {

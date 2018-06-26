@@ -40,45 +40,75 @@ class AppShell extends PolymerElement {
         z-index: -1 !important;
       }
 
-      app-toolbar.tall {
-        background: var(--accent-color);
-        height: 148px;
+      app-drawer:not([persistent]) {
+        --app-drawer-width: 90%;
       }
 
-      .tall iron-image {
-        height: 60px;
-        width: 60px;
+      app-drawer[persistent] {
+        --app-drawer-width: 256px;
+      }
+
+      app-toolbar {
+        background-color: #009fe3;
+        height: 180px;
+      }
+
+      app-toolbar > div[top-item] {
+        margin-left: 15px;
+        margin-top: 15px;
+      }
+
+      div[top-item] > paper-icon-button {
+        --paper-icon-button-ink-color: #312783;
+        padding: 5px;
+      }
+
+      app-toolbar > iron-image {
+        height: 80px;
+        width: 80px;
+        margin-top: 20px;
+        margin-left: 4px;
+        border: 2px solid white;
         border-radius: 50%;
         background: var(--secondary-text-color);
       }
 
-      .tall .username,
-      .tall .email {
-        color: var(--light-text-color);
-        font-size: 0.6em;
-        line-height: 1;
-        font-weight: 100;
+      app-toolbar > div[main-title] {
+        margin-top: 20px;
+        margin-left: 10px;
       }
-      .tall .username {
-        font-size: 0.8em;
-        font-weight: 400;
+
+      div[main-title] > .username {
+        color: white;
+        font-family: Folio;
+        font-size: 24px;
+        line-height: 26px;
       }
-      .tall [bottom-item] {
-        padding: 10px;
+
+      div[main-title] > .email {
+        color: #312783;
+        margin-top: 20px;
+        font-family: Folio;
+        font-size: 14px;
+        line-height: 16px;
       }
-      .tall [bottom-item] paper-icon-button {
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
-        color: var(--light-text-color);
+
+      app-toolbar > div[bottom-item] {
+        margin: 10px 0 15px 30px;
+        opacity: 0.5;
+        color: white;
+        font-family: Folio;
+        font-size: 14px;
+        line-height: 16px;
       }
 
       .drawer-list {
         padding: 20px 0;
         display: block;
-        height: calc(100% - 185px);
+        height: calc(100% - 180px);
         background: white;
       }
+
       .drawer-list a {
         display: block;
         padding: 0 16px;
@@ -86,6 +116,7 @@ class AppShell extends PolymerElement {
         color: var(--primary-text-color);
         line-height: 40px;
       }
+
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
@@ -100,22 +131,30 @@ class AppShell extends PolymerElement {
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
-          <div bottom-item="" on-tap="gotoProfile">
-            <iron-image src="{{user.photoURL}}" sizing="cover">
-            </iron-image>
+          <div top-item="">
+            <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
+          </div>
+          <iron-image src="{{user.photoURL}}" sizing="cover"></iron-image>
+          <div main-title>
             <div class="username">
               {{user.displayName}}
             </div>
             <div class="email">
               {{user.email}}
             </div>
-            <paper-icon-button icon="app:expand-more"></paper-icon-button>
+          </div>
+          <div bottom-item="" on-tap="signOut">
+            fazer logout
           </div>
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="inbox" href="inbox">Caixa de Entrada</a>
+          <a name="inbox" href="inbox">
+            <!--paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button-->
+            Missões
+          </a>
+          <a name="profile" href="profile">Perfil</a>
+          <a name="notifications" href="" disabled>Notificações</a>
           <hr>
-          <a name="login" href="login" on-tap="signOut">Sair</a>
         </iron-selector>
       </app-drawer>
 
