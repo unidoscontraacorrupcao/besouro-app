@@ -139,18 +139,51 @@ class LoginModal extends PolymerElement {
     this.$.ajax.generateRequest().completes.then(
       function(req) {
         if("id" in req.response) {
-          this.user = {
-            key: key,
-            uid: req.response.id,
-            email: req.response.username,
-            displayName: req.response.display_name.split(".")[1]
-          };
+          this.getUserProfileById(key, req.response.id, req.response.username, req.response.display_name);
         } else {
           console.error("[Login] ID not found");
         }
       }.bind(this),
       function(rejected) {
         console.error("[Login] User data by id request failed");
+        console.error(rejected);
+      }.bind(this)
+    );
+  }
+
+  getUserProfileById(key, id, email, name) {
+    this.$.ajax.method = "GET";
+    this.$.ajax.url = `http://localhost:8000/api/v1/profiles/${id}/`
+    this.$.ajax.headers = { "Authorization": `Token ${key}` };
+    this.$.ajax.body = null;
+    this.$.ajax.generateRequest().completes.then(
+      function(req) {
+        if("image" in req.response) {
+          let image = req.response.image;
+          if(image == undefined || image == null || image == "") {
+            image = "/images/default_avatar.jpg";
+          }
+          let displayName = "";
+          let isAdmin = false;
+          if(name.indexOf(".") != -1) {
+            displayName = name.split(".")[1];
+          } else {
+            isAdmin = true;
+          }
+          this.user = {
+            key: key,
+            uid: id,
+            email: email,
+            photoURL: image,
+            displayName: displayName,
+            isAdmin: isAdmin
+          };
+        } else {
+          console.error("[Login] Image not found");
+        }
+      }.bind(this),
+      function(rejected) {
+        console.error("[Login] Profile data by id request failed");
         console.error(rejected);
       }.bind(this)
     );
@@ -188,7 +221,9 @@ class LoginModal extends PolymerElement {
             key: key,
             uid: req.response.id,
             email: req.response.username,
-            displayName: req.response.display_name.split(".")[1]
+            photoURL: "/images/default_avatar.jpg",
+            displayName: req.response.display_name.split(".")[1],
+            isAdmin: false
           };
         } else {
           console.error("[Sign Up] ID not found");

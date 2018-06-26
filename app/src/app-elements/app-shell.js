@@ -277,13 +277,25 @@ class AppShell extends PolymerElement {
   }
 
   _userChanged(e) {
-    if(this.user && this.user != undefined && "key" in this.user && "uid" in this.user && "displayName" in this.user) {
+    if(this.valid_user()) {
       sessionStorage.setItem("user", JSON.stringify(this.user));
       this.set('route.path', '/');
     } else {
+      console.log("[Shell] Cleaning Session");
       sessionStorage.setItem("user", JSON.stringify({}));
       this.set('route.path', '/login');
     }
+  }
+
+  valid_user() {
+    return this.user != undefined
+      && this.user != null
+      && "key" in this.user
+      && "uid" in this.user
+      && "email" in this.user
+      && "photoURL" in this.user
+      && "displayName" in this.user
+      && "isAdmin" in this.user;
   }
 
   signOut(e) {

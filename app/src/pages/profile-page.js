@@ -23,14 +23,49 @@ class ProfilePage extends PolymerElement {
         @apply --default-font;
       }
       app-header {
-        color: var(--default-primary-color);
-        background: var(--accent-color);
-        --app-form-header-background: var(--accent-color);
-        --app-form-header-color: var(--default-primary-color);
-        @apply --default-font-medium;
+        color: white;
+        background: rgba(49,39,131,0.5);
+        --app-form-header-background: rgba(49,39,131,0.5);
+        --app-form-header-color: white;
       }
-      h1[main-title] {
-        margin-left: 20px;
+      app-toolbar {
+        padding: 0;
+        height: 250px;
+        --layout-center_-_align-items: normal;
+      }
+      app-toolbar > paper-icon-button.left {
+        margin: 20px 0 0 20px;
+      }
+      app-toolbar > h1[main-title] {
+        width: 100%;
+        display: flex
+      }
+      h1[main-title] > div.wrap-title {
+        align-self: flex-end;
+        font-family: Folio;
+        font-size: 32px;
+        line-height: 35px;
+        font-weight: normal;
+      }
+      div.wrap-title > div.status {
+        font-size: 14px;
+        line-height: 19px;
+      }
+      app-toolbar > paper-icon-button.right {
+        margin: 20px 20px 0 0;
+      }
+      app-toolbar > iron-image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+      }
+      .image-filter {
+        position: absolute;
+        background: rgba(49,39,131,0.5);
+        width: 100%;
+        height: 100%;
+        z-index: -1;
       }
       paper-input paper-button {
         color: var(--accent-color);
@@ -39,20 +74,7 @@ class ProfilePage extends PolymerElement {
       .fill {
         flex: 1;
       }
-      .cover {
-        height: 84px;
-        background: var(--accent-color);
-      }
-      .cover .image,
-      .cover iron-image {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        display: block;
-        margin: auto;
-        overflow: hidden;
-        background: var(--divider-color);
-      }
+
       .cover paper-icon-button {
         display: block;
         margin: -40px auto;
@@ -101,27 +123,26 @@ class ProfilePage extends PolymerElement {
     </app-dialog>
 
     <app-header-layout has-scrolling-region="">
-      <app-header slot="header" fixed="" condenses="" effects="waterfall">
+      <app-header slot="header" condenses>
         <app-toolbar>
-          <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
-          <h1 main-title="">{{user.displayName}}</h1>
-          <paper-icon-button icon="app:more-vert" on-tap="_openMenu"></paper-icon-button>
+          <paper-icon-button class="left" icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
+          <h1 main-title>
+            <div class="wrap-title">
+              <div class="title-name">
+                {{user.displayName}}
+              </div>
+              <div class="status">
+                Status do participante
+              </div>
+            </div>
+          </h1>
+          <paper-icon-button class="right" icon="app:edit-profile" on-tap="uploadImage"></paper-icon-button>
+          <iron-image class="image" id="profile" src="{{user.photoURL}}" sizing="cover"></iron-image>
+          <div class="image-filter"></div>
         </app-toolbar>
       </app-header>
       <input type="file" id="upload" on-change="getPhoto" accept=".jpg, .jpeg, .png">
       <div class="fill">
-        <div class="cover">
-          <div class="image">
-            <iron-image id="profile" src="{{user.photoURL}}" sizing="cover">
-            </iron-image>
-            <paper-icon-button icon="app:create" on-tap="uploadImage"></paper-icon-button>
-            <dom-if if="{{!user}}">
-              <template>
-                <paper-spinner active=""></paper-spinner>
-              </template>
-            </dom-if>
-          </div>
-        </div>
         <div class="username">
           <paper-input label="nome" value="{{data.displayName}}" minlength="5" auto-validate="" error-message="O nome deve ter no mínimo 5 caracteres."></paper-input>
         </div>

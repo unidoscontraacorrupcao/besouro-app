@@ -6,7 +6,7 @@ networks:
 
 services:
   app:
-    image: besouro/app:staging
+    image: besouro/app:0.0.2
     networks:
       - besouro
     ports:

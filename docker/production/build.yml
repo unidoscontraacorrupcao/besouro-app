@@ -7,11 +7,9 @@ version: "3.6"
 
 services:
   production:
-    image: besouro/app:0.0.1
+    image: besouro/app:0.0.2
     build:
       args:
         api_url: api.dev.besouro.ejplatform.org
       context: ../../
       dockerfile: ./docker/production/Dockerfile
-      cache_from:
-        - besouro/app:0.0.1
