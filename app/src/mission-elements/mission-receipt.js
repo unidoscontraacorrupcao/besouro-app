@@ -62,7 +62,7 @@ class MissionReceipt extends PolymerElement {
               <span> {{rcptData.description}} </span>
             </div>
 
-            <a href="http://localhost:8000/local{{rcptData.receiptFile}}" target="_blank">Comprovante</a>
+            <a href="{{apiUrl}}{{rcptData.receiptFile}}" target="_blank">Comprovante</a>
 
           <hr>
 
@@ -86,7 +86,11 @@ class MissionReceipt extends PolymerElement {
         type: Array,
         value: []
       },
-      downloadUrl: String
+      downloadUrl: String,
+      apiUrl: {
+        type: String,
+        computed: "getApiUrl()"
+      }
     };
   }
 
@@ -115,5 +119,8 @@ class MissionReceipt extends PolymerElement {
     this._setReceiptStatus("rejected");
   }
 
+  getApiUrl() {
+    return this.$.api.baseUrl;
+  }
 }
 customElements.define(MissionReceipt.is, MissionReceipt);

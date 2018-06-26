@@ -8,15 +8,15 @@ class AppBesouroApi extends PolymerElement {
     return html`
     <iron-ajax
     id="ajax"
-    auto
-    url={{baseUrl}}/{{path}}
+    url={{baseUrl}}/api/v1/{{path}}
     body='{{body}}'
     params={{params}}
-    headers={{headers}}
+    headers="{{getHeaders()}}"
     handle-as="json"
     content-type="{{contentType}}"
     method={{method}}
     loading
+    withCredentials
     debounce-duration="300"></iron-ajax>
 
     <iron-request id="xhr"></iron-request>
@@ -28,7 +28,7 @@ class AppBesouroApi extends PolymerElement {
     return {
       baseUrl: {
         type: String,
-        value: "http://localhost:8000/api/v1"
+        value: "http://localhost:8000"
       },
       method: {
         type: String
@@ -42,11 +42,7 @@ class AppBesouroApi extends PolymerElement {
       contentType: {
         type: String,
         value: "application/json"
-      },
-      headers: {
-        type: Object,
-        value: {}
-    }
+      }
   }
   }
 
@@ -55,7 +51,15 @@ class AppBesouroApi extends PolymerElement {
   }
 
   xhrRequest(args) {
-    return this.$.xhr.send(args);
+    let data = args;
+    data["headers"] = this.getHeaders();
+    return this.$.xhr.send(data);
+  }
+
+  getHeaders() {
+    // This token is from a ej_user.
+    // I used this command to genenrate it:/manage.py drf_create_token <username>
+    return {"authorization": "Token f9561452ed1c1c8575b81f5e02b58c7906c849ee"};
   }
 }
 

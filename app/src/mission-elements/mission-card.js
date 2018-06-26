@@ -4,6 +4,8 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
+import '../mission-elements/accept-mission-modal.js';
+import '../mission-elements/finish-mission-modal.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import './mission-player.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -137,7 +139,45 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         height: 6em;
         margin-top: 20px;
       }
+
+      .card-action {
+        width: 75%;
+        max-width: 400px;
+        height: 80px;
+        bottom: 0;
+        top: 250px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        z-index: 999;
+        position: absolute;
+        text-align: center;
+      }
+
+      .card-action span {
+       font-family: Folio;
+       text-transform: uppercase;
+       font-size: 2em;
+       color: white;
+       position: absolute;
+       width: 250px;
+       top: 28px;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       margin: auto;
+       letter-spacing: 3px;
+      }
+
     </style>
+
+    <app-dialog id="acceptedDialog">
+      <accept-mission-modal></accept-mission-modal>
+    </app-dialog>
+
+    <app-scrollable-dialog id="finishedDialog" modal>
+      <finish-mission-modal user="[[user]]" mission-id="{{mission.id}}"></finish-mission-modal>
+    </app-scrollable-dialog>
 
     <app-besouro-api id="api"></app-besouro-api>
     <div class="card mission-card">
@@ -152,7 +192,12 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         <h1> {{mission.title}} </h1>
         <p> {{mission.description}} </p>
       </div>
+
       <iron-image sizing="cover" preload="" fade="" src="{{missionImage}}"></iron-image>
+        <div class="card-action">
+          <a href="#" id="btnLink"><span id="btnText">{{btnAction}}</span></a>
+        </div>
+
       <div class="card-footer">
         <div class="stats">
           <span><span class="stats-number">{{accepted}}</span> aceitaram | </span>
@@ -191,7 +236,11 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       remainingTime: {
         type: String,
         value: "xx dias restantes"
-      }
+      },
+      currentMissionStats: String,
+      btnAction: String,
+      finishMissionFunc: Function,
+      acceptMissionFunc: Function,
     }
   }
 
@@ -203,8 +252,13 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this.dispatchEvent(new CustomEvent('show-mission', { detail: { mission: this.mission.id } }))
   }
 
+  _reloadInbox() {
+    this.dispatchEvent(new CustomEvent('reload-inbox', { detail: {} }))
+  }
+
   setMissionData(mission) {
-    this.set("missionImage", `http://localhost:8000/local${mission.fileUpload}`)
+    this._setMissionStats();
+    this.set("missionImage", `${this.$.api.baseUrl}${mission.fileUpload}`)
     this.$.api.method = "GET";
     this.$.api.path = `missions/${mission.id}/statistics`;
     this.$.api.request().then(function(ajax) {
@@ -213,5 +267,85 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       this.set("pending", ajax.response.pending);
     }.bind(this));
   }
+
+  _setMissionStats() {
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.mission.id}/user-status/${1}`;
+    this.$.api.request().then(function(ajax) {
+      this.set("currentMissionStats", ajax.response.status);
+      this._setActionBtn();
+    }.bind(this));
+  }
+
+  _setActionBtn() {
+    const cardAction = this.shadowRoot.querySelector(".card-action");
+    const link = this.$.btnLink;
+    link.removeEventListener("tap", this.acceptMissionFunc, false);
+    link.removeEventListener("tap", this.finishMissionFunc, false);
+
+    if (this.currentMissionStats == "realized") {
+      this.set('btnAction', 'Missão concluida');
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
+    }
+
+    if (this.currentMissionStats == "new") {
+      this.set('btnAction', 'Aceitar missão');
+      link.addEventListener('tap', this.acceptMissionFunc);
+      cardAction.setAttribute("style", "background-color: rgba(216, 28, 136, 0.8);");
+    }
+
+    if (this.currentMissionStats == "started") {
+      this.set('btnAction', 'Concluir missão');
+      link.addEventListener('tap', this.finishMissionFunc);
+      cardAction.setAttribute("style", "background-color: rgba(31, 163, 208, 0.8);");
+    }
+
+    if (this.currentMissionStats == "pending") {
+      this.set("btnAction", "Avaliação pendente");
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
+    }
+
+    if (this.currentMissionStats == "rejected") {
+      this.set("btnAction", "Avaliação rejeitada");
+      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      this.$.btnText.setAttribute("style", "width: 300px;");
+    }
+  }
+
+  _acceptMission() {
+    this.$.api.method = "POST";
+    this.$.api.path = `missions/accept`;
+    this.$.api.body = {"id": this.mission.id, "user_id": "1" };
+    this.$.api.request().then(function(ajax) {
+      this._reloadInbox();
+    }.bind(this));
+   this.$.acceptedDialog.present();
+  }
+
+  _finishMission(e) {
+    this.$.finishedDialog.present();
+    this._setMissionStats();
+    this._setActionBtn();
+  }
+
+  ready() {
+    super.ready();
+    this.shadowRoot.querySelector('finish-mission-modal').shadowRoot.querySelector('finish-confirmation-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
+    this.acceptMissionFunc = this._acceptMission.bind(this);
+    this.finishMissionFunc = this._finishMission.bind(this);
+  }
+
+  _dismissFinishModal() {
+    this.set('currentMissionStats', 'new');
+    document.querySelector('#finishConfirmation').dismiss();
+    this._setMissionStats();
+    this._setActionBtn();
+    this.$.finishedDialog.dismiss();
+  }
+
+
+
 }
 customElements.define(MissionCard.is, MissionCard);

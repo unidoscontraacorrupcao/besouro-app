@@ -1,7 +1,7 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 class MissionPlayer extends PolymerElement {
   static get template() {
     return html`
@@ -41,6 +41,7 @@ class MissionPlayer extends PolymerElement {
     </style>
 
 
+    <app-besouro-api id="api"></app-besouro-api>
 
     <dom-if if="{{mediaUrl}}">
       <template>
@@ -71,8 +72,6 @@ class MissionPlayer extends PolymerElement {
         type: String,
         observer: 'setupMedia'
       },
-      audioUrl: String,
-      imageUrl: String,
       missionKey: String,
       mission: Object,
       allowedTypes: {
@@ -88,9 +87,9 @@ class MissionPlayer extends PolymerElement {
       playing: Boolean
     }
   }
-  static get observers() { return ['_setMissionLayer(imageUrl, audioUrl, mission)']; }
+  static get observers() { return ['_setMissionLayer(mission)']; }
 
-  _setMissionLayer(imageUrl, audioUrl, mission) {
+  _setMissionLayer(mission) {
     let image = '';
     if(!mission) return;
     if(mission.video) {
@@ -105,8 +104,9 @@ class MissionPlayer extends PolymerElement {
       this.mediaUrl = undefined;
       this.mediaType = undefined;
     }
-    if(mission.imageTitle) image = this.imageUrl;
-    this.missionImage = image;
+    if(mission.fileUpload) {
+      this.set("missionImage", `${this.$.api.baseUrl}${mission.fileUpload}`);
+    }
   }
 
   setupMedia(mediaType) {
