@@ -332,7 +332,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
           <iron-image src="{{candidatePhoto}}" sizing="contain"></iron-image>
         </div>
         <div class="author-name">
-          <span>Autoria da missão</span>
+          <span>{{user.displayName}}</span>
         </div>
         <div id="share-btn">
           <paper-icon-button on-tap="_shareMission" icon="app:share"></paper-icon-button>
@@ -346,11 +346,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
               <span class="stats-value">{{acceptedMissionCount}}</span> <span>aceitaram</span>
             </a>
           </div>
+
+          <span>&nbsp|&nbsp</span>
           <div>
             <a on-tap="_openFinishedMissionList">
               <span class="stats-value">{{concludedMissionCount}}</span> <span>concluiram</span>
             </a>
           </div>
+          <span id="statsSeparator">&nbsp|&nbsp</span>
           <div>
             <a on-tap="_openMissionReceipts"><span class="stats-value">{{pendingMissionCount}}</span> <span>pendentes</span></a>
           </div>
@@ -557,7 +560,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   _acceptMission(e) {
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
-    this.$.api.body = {"id": this.data.key, "user_id": "1" };
+    this.$.api.body = {"id": this.data.key, "user_id": this.user.uid };
     this.$.api.request().then(function(ajax) {
       this._missionChanged();
     }.bind(this));
@@ -624,7 +627,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   _calcMissionStats() {
     if (!this.data) return;
     this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.data.key}/user-status/${1}`;
+    this.$.api.path = `missions/${this.data.key}/user-status/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("currentMissionStats", ajax.response.status);
       this._setActionBtn();

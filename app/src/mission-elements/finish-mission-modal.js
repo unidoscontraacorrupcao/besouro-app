@@ -157,7 +157,8 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
       fileArray: {
         type: Array,
         value: []
-      }
+      },
+      user: Object
     }
   }
 
@@ -178,9 +179,9 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
 
   _sendReceipts() {
     var formData = new FormData();
-    formData.append("userName", "david");
+    formData.append("userName", this.user.displayName);
     formData.append("userEmail", "david@mail.com");
-    formData.append("uid", "1");
+    formData.append("uid", this.user.uid);
     formData.append("status", "pending");
     formData.append("description", this.description);
 

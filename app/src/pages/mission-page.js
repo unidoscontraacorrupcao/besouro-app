@@ -244,8 +244,7 @@ class MissionPage extends PolymerElement {
       },
       missionCampaign: String,
       user: {
-        type: Object,
-        observer: '_onUserChanged'
+        type: Object
       },
       missionFormTitle: {
         type: String,
@@ -280,16 +279,24 @@ class MissionPage extends PolymerElement {
   }
 
   _saveMission(e) {
+    if (this._validMission()) {
       var formData = new FormData();
       formData.append("title", this.mission.title);
       formData.append("description", this.mission.description);
-      formData.append("coverFile", this.input.files[0]);
+      if (this.mission.coverFile)
+        formData.append("coverFile", this.mission.coverFile);
+      if (this.mission.audiofile)
+        formData.append("audiofile", this.mission.audiofile);
+      if (this.mission.video)
+        formData.append("videoLink", this.mission.video);
+      formData.append("owner", this.user.uid);
       var data = {method: "post",
         url: `${this.$.api.baseUrl}/api/v1/missions/`,
         body: formData};
       this.$.api.xhrRequest(data).then(function(response){
           this.$.confirmation.present();
       }.bind(this));
+    }
   }
 
   _validMission() {
@@ -319,15 +326,16 @@ class MissionPage extends PolymerElement {
     if (!(this.input === undefined) && this.input.files.length > 0) {
       const imgFormats = ["png", "jpg"]
       const audioFormats = ["mp3", "wav", "ogg"]
+      const _file = this.input.files[0];
       const fileName = this.input.files[0].name;
       const fileFormat = fileName.split('.').pop();
       /* is a image */
       if (imgFormats.includes(fileFormat)) {
-        this.mission.imageTitle = fileName;
+        this.mission.coverFile = _file;
       }
 
       else if (audioFormats.includes(fileFormat)) {
-        this.mission.audioTitle = fileName;
+        this.mission.audioFile = _file;
         this.$.genericInput.invalid = false;
       }
       else {
@@ -342,7 +350,7 @@ class MissionPage extends PolymerElement {
         valid = false;
       }
       else
-        this.$.genericInput.invalid = true;
+        this.$.genericInput.invalid = false;
     }
     return valid;
   }

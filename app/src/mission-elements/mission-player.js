@@ -90,22 +90,22 @@ class MissionPlayer extends PolymerElement {
   static get observers() { return ['_setMissionLayer(mission)']; }
 
   _setMissionLayer(mission) {
-    let image = '';
-    if(!mission) return;
-    if(mission.video) {
-      image = `https://img.youtube.com/vi/${mission.video}/0.jpg`;
-      this.mediaUrl = mission.video;
-      this.mediaType = 'video';
-    } else if(mission.audioTitle) {
-      image = `/images/audiowave.png`;
-      this.mediaUrl = this.audioUrl;
-      this.mediaType = 'audio';
-    } else {
-      this.mediaUrl = undefined;
-      this.mediaType = undefined;
-    }
-    if(mission.fileUpload) {
-      this.set("missionImage", `${this.$.api.baseUrl}${mission.fileUpload}`);
+    //let image = '';
+    //if(!mission) return;
+    //if(mission.youtubeVideo) {
+    //  image = `https://img.youtube.com/vi/${mission.video}/0.jpg`;
+    //  this.mediaUrl = mission.video;
+    //  this.mediaType = 'video';
+    //} else if(mission.audio != "/media/default.jpg") {
+    //  image = `/images/audiowave.png`;
+    //  this.mediaUrl = `${this.$.api.baseUrl}${mission.audio}`;
+    //  this.mediaType = 'audio';
+    //} else {
+    //  this.mediaUrl = undefined;
+    //  this.mediaType = undefined;
+    //}
+    if(mission.image) {
+      this.set("missionImage", `${this.$.api.baseUrl}${mission.image}`);
     }
   }
 
