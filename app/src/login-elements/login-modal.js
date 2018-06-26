@@ -139,7 +139,16 @@ class LoginModal extends PolymerElement {
     this.$.ajax.generateRequest().completes.then(
       function(req) {
         if("id" in req.response) {
-          this.getUserProfileById(key, req.response.id, req.response.username, req.response.display_name);
+          // this.getUserProfileById(key, req.response.id, req.response.username, req.response.display_name);
+          // TODO: Replace back to profile
+          this.user = {
+            key: key,
+            uid: id,
+            email: req.response.email,
+            photoURL: "/images/default_avatar.png",
+            displayName: req.response.display_name.split(".")[1],
+            isAdmin: req.response.is_superuser || req.response.is_staff
+          };
         } else {
           console.error("[Login] ID not found");
         }
@@ -161,7 +170,7 @@ class LoginModal extends PolymerElement {
         if("image" in req.response) {
           let image = req.response.image;
           if(image == undefined || image == null || image == "") {
-            image = "/images/default_avatar.jpg";
+            image = "/images/default_avatar.png";
           }
           let displayName = "";
           let isAdmin = false;
@@ -221,7 +230,7 @@ class LoginModal extends PolymerElement {
             key: key,
             uid: req.response.id,
             email: req.response.username,
-            photoURL: "/images/default_avatar.jpg",
+            photoURL: "/images/default_avatar.png",
             displayName: req.response.display_name.split(".")[1],
             isAdmin: false
           };
