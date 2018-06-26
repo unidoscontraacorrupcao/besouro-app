@@ -182,6 +182,7 @@ class InboxPage extends PolymerElement {
             </div>
           </div>
         </div>
+        </div>
     </app-header-layout>
 `;
   }

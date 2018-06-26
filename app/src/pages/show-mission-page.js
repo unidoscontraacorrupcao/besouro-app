@@ -156,12 +156,15 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         height: 50px;
         width: 50px;
         border-radius: 50%;
+        background-color: var(--dark-primary-color);
       }
 
       .author-name {
-        margin-left: 5px;
-        margin-top: 9px;
+        margin-left: 10px;
+        margin-top: 16px;
         flex-grow: 1;
+        font-family: Folio;
+        font-size: 1.3em;
       }
 
       #author {
@@ -251,7 +254,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .comments {
         background-color: var(--primary-background-color);
-        padding: 10px 0px;
+        padding: 10px 0px 60px 0px;
       }
       .comments h2 { margin: 0; }
 
@@ -275,6 +278,75 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       }
 
       .card-action div { padding-top: 15px; }
+
+      #app-actions {
+        position: fixed;
+        bottom: 0;
+        background: white;
+        width: 85%;
+        border-top-style: solid;
+        border-top-color: #E7E7E7;
+        z-index: 1000;
+      }
+
+      #app-actions span {
+        text-transform: uppercase;
+        color: var(--light-text-color);
+        font-family: Folio;
+      }
+
+      #app-actions #actions-content {
+        width: 80%;
+        display: flex;
+        text-align: center;
+        padding-bottom: 5px;
+        padding-top: 5px;
+      }
+
+      #app-actions #actions-content > * {flex-grow: 1;}
+
+      .icon-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .icon-container span { margin-top: -6px; }
+
+      .icon-container > * {
+        margin: auto;
+      }
+
+      #new-mission-btn {
+        margin-top: 20px;
+        width: 40px;
+        height: 40px;
+        background-color: var(--accent-color);
+        border-radius: 50%;
+        margin: 8px auto;
+      }
+
+      #new-mission-btn paper-icon-button {
+        width: 40px;
+        color: white;
+      }
+
+      #app-actions #new-mission-btn paper-icon-button { display: block; }
+      #app-actions #missions-btn paper-icon-button {
+        display: block;
+        padding: 0px;
+      }
+      #app-actions #notifications-btn paper-icon-button {
+        display: block;
+        padding: 0px;
+      }
+
+   @media only screen and (max-width: 640px) {
+      #app-actions { width: 100%; }
+      #actions-content {
+        width: 90%;
+        margin: auto;
+    }
+  }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -329,7 +401,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       </app-header>
       <div class="mission-author">
         <div class="author-photo">
-          <iron-image src="{{candidatePhoto}}" sizing="contain"></iron-image>
+          <iron-image sizing="contain"></iron-image>
         </div>
         <div class="author-name">
           <span>{{user.displayName}}</span>
@@ -402,6 +474,28 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </div>
 
         </template>
+
+      <div id="app-actions">
+        <div id="actions-content">
+          <div id="missions-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:navMissions"></paper-icon-button>
+              <span>missões</span>
+            </div>
+          </div>
+          <div>
+            <div id="new-mission-btn">
+              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
+            </div>
+          </div>
+          <div id="notifications-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:navNotifications"></paper-icon-button>
+              <span>notificações</span>
+            </div>
+          </div>
+        </div>
+        </div>
     </app-header-layout>
 
     <dom-if if="{{!mission}}">
@@ -453,7 +547,9 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         type: Object,
         observer: '_campaignChanged'
       },
-      candidatePhoto: String,
+      userPhoto: {
+        type: String
+      },
       remainingTime: {
         type: String,
         computed: 'calcRemainingTime(mission)'
