@@ -75,6 +75,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         color:#312783;
         font-family: Folio;
         font-weight: bold;
+        text-transform: uppercase;
       }
 
       .author { color: #343434; }
@@ -91,7 +92,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         margin: 15px 0 15px 0;
       }
 
-      .timing, .card-content p { color: #BFC0BF; }
+      .timing, .card-content p { color: var(--light-text-color); }
 
       .card-header .timing {
         font-size: 1.3em;
@@ -115,8 +116,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       }
 
       .card-footer .stats {
-        padding: 20px 10px;
-        font-size: 0.9rem;
+        padding: 25px 40px;
+        font-size: 1.2rem;
+        font-family: Folio;
       }
       .card-footer .stats .stats-number {
         color: var(--accent-color);
@@ -125,9 +127,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       .card-footer .stats paper-button {
         border: none;
         text-transform: none;
-        font-size: 0.9em;
         float: right;
-        margin-top: -12px;
+        padding: 0px;
+        margin-top: -24px;
       }
       .card-footer .actions iron-icon {
         margin-right: 5px;
@@ -183,7 +185,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     <div class="card mission-card">
       <div class="card-header">
           <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
-          <span class="author">{{user.displayName}}</span>
+          <span class="author">{{missionOwner()}}</span>
           <p class="timing"> <iron-icon icon="app:watch-later"></iron-icon> {{remainingTime}} </p>
         </a>
         <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
@@ -200,12 +202,13 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
       <div class="card-footer">
         <div class="stats">
-          <span><span class="stats-number">{{accepted}}</span> aceitaram | </span>
+          <span><span class="stats-number">{{accepted}}</span> aceitaram</span>
+          <span id="statsSeparator">&nbsp|&nbsp</span>
           <span><span class="stats-number">{{concluded}}</span> concluiram</span>
+          <span id="statsSeparator">&nbsp|&nbsp</span>
           <span><span class="stats-number">{{pending}}</span> pendentes</span>
           <paper-button on-tap="_goToMission">
             <iron-icon icon="app:chat-bubble-outline"></iron-icon>
-            Comentar
           </paper-button>
         </div>
       </div>
@@ -259,7 +262,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   setMissionData(mission) {
     this._setMissionStats();
-    this.set("missionImage", `${this.$.api.baseUrl}${mission.fileUpload}`)
+    this.set("missionImage", `${this.$.api.baseUrl}${mission.image}`)
     this.$.api.method = "GET";
     this.$.api.path = `missions/${mission.id}/statistics`;
     this.$.api.request().then(function(ajax) {
@@ -315,6 +318,11 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     }
   }
 
+  missionOwner() {
+    if (!this.mission.owner) return;
+    return this.mission.owner.display_name.split(".")[1];
+  }
+
   _acceptMission() {
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
@@ -345,8 +353,5 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this._setActionBtn();
     this.$.finishedDialog.dismiss();
   }
-
-
-
 }
 customElements.define(MissionCard.is, MissionCard);

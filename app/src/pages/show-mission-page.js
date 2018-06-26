@@ -346,11 +346,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
               <span class="stats-value">{{acceptedMissionCount}}</span> <span>aceitaram</span>
             </a>
           </div>
+
+          <span>&nbsp|&nbsp</span>
           <div>
             <a on-tap="_openFinishedMissionList">
               <span class="stats-value">{{concludedMissionCount}}</span> <span>concluiram</span>
             </a>
           </div>
+          <span id="statsSeparator">&nbsp|&nbsp</span>
           <div>
             <a on-tap="_openMissionReceipts"><span class="stats-value">{{pendingMissionCount}}</span> <span>pendentes</span></a>
           </div>

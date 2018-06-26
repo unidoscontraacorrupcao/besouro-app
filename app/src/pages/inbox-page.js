@@ -62,20 +62,20 @@ class InboxPage extends PolymerElement {
         position: fixed;
         bottom: 0;
         background: white;
-        width: 100vw;
+        width: 85%;
         border-top-style: solid;
         border-top-color: #E7E7E7;
+        z-index: 1000;
       }
 
       #app-actions span {
         text-transform: uppercase;
         color: var(--light-text-color);
-        font-size: 0.7em;
+        font-family: Folio;
       }
 
       #app-actions #actions-content {
-        width: 90%;
-        margin: auto;
+        width: 80%;
         display: flex;
         text-align: center;
         padding-bottom: 5px;
@@ -112,13 +112,20 @@ class InboxPage extends PolymerElement {
       #app-actions #new-mission-btn paper-icon-button { display: block; }
       #app-actions #missions-btn paper-icon-button {
         display: block;
-        padding: 5px;
+        padding: 0px;
       }
       #app-actions #notifications-btn paper-icon-button {
         display: block;
-        padding: 5px;
+        padding: 0px;
       }
 
+   @media only screen and (max-width: 640px) {
+      #app-actions { width: 100%; }
+      #actions-content {
+        width: 90%;
+        margin: auto;
+    }
+  }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -159,7 +166,7 @@ class InboxPage extends PolymerElement {
         <div id="actions-content">
           <div id="missions-btn">
             <div class="icon-container">
-              <paper-icon-button icon="app:stars"></paper-icon-button>
+              <paper-icon-button icon="app:navMissions"></paper-icon-button>
               <span>missões</span>
             </div>
           </div>
@@ -170,7 +177,7 @@ class InboxPage extends PolymerElement {
           </div>
           <div id="notifications-btn">
             <div class="icon-container">
-              <paper-icon-button icon="app:notifications"></paper-icon-button>
+              <paper-icon-button icon="app:navNotifications"></paper-icon-button>
               <span>notificações</span>
             </div>
           </div>
