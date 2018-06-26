@@ -1,0 +1,17 @@
+# This docker-compose file is not designed to run services
+# Usage:
+#   sudo docker-compose -f docker/production/build.yml build
+#   sudo docker-compose -f docker/production/build.yml push
+
+version: "3.6"
+
+services:
+  production:
+    image: besouro/app:staging
+    build:
+      args:
+        api_url: api.dev.besouro.ejplatform.org
+      context: ../../
+      dockerfile: ./docker/production/Dockerfile
+      cache_from:
+        - besouro/app:staging

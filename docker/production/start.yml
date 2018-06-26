@@ -1,0 +1,13 @@
+version: "3.6"
+
+networks:
+  besouro:
+    name: besouro
+
+services:
+  app:
+    image: besouro/app:staging
+    networks:
+      - besouro
+    ports:
+      - "80:80"
