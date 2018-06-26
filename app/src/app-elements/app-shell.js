@@ -103,7 +103,6 @@ class AppShell extends PolymerElement {
       }
 
       .drawer-list {
-        padding: 20px 0;
         display: block;
         height: calc(100% - 180px);
         background: white;
@@ -111,15 +110,37 @@ class AppShell extends PolymerElement {
 
       .drawer-list a {
         display: block;
+        margin-top: 30px;
         padding: 0 16px;
+        text-transform: uppercase;
         text-decoration: none;
-        color: var(--primary-text-color);
-        line-height: 40px;
+        color: #e6007e;
+        font-family: Folio;
+        font-size: 24px;
+        line-height: 26px;
       }
 
-      .drawer-list a.iron-selected {
-        color: black;
-        font-weight: bold;
+      .drawer-list a[disabled] {
+        color: #b7b8b7;
+        margin-left: 5px;
+      }
+
+      .drawer-list a.drawer-item {
+        color: #312783;
+        margin-left: 5px;
+      }
+
+      .drawer-list a .drawer-item-block {
+        color: white;
+        background-color: #e7007e;
+        padding: 7px 10px;
+        margin-left: 5px;
+      }
+
+      .drawer-list hr {
+        margin-left: 20px;
+        margin-right: 20px;
+        border: 1px solid #b7b8b7;
       }
     </style>
 
@@ -149,11 +170,32 @@ class AppShell extends PolymerElement {
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="inbox" href="inbox">
-            <!--paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button-->
+            <paper-icon-button icon="app:navMissions" drawer-toggle></paper-icon-button>
             Missões
           </a>
-          <a name="profile" href="profile">Perfil</a>
-          <a name="notifications" href="" disabled>Notificações</a>
+          <a name="profile" href="profile">
+            <paper-icon-button icon="app:profile" drawer-toggle></paper-icon-button>
+            Perfil
+          </a>
+          <a name="notifications" href="">
+            <paper-icon-button icon="app:navNotifications" drawer-toggle></paper-icon-button>
+            Notificações
+          </a>
+          <hr>
+          <a name="rules" href="" disabled>
+            Regras
+          </a>
+          <a name="back" class="drawer-item" href="http://www.unidoscontraacorrupcao.org.br" target="_blank">
+            Voltar às novas medidas
+          </a>
+          <a name="sign_it" href="http://www.unidoscontraacorrupcao.org.br/#assine">
+            <span class="drawer-item-block">
+              Assine
+            </span>
+          </a>
+          <a name="rules" class="drawer-item" href="">
+            Divulgue
+          </a>
           <hr>
         </iron-selector>
       </app-drawer>
