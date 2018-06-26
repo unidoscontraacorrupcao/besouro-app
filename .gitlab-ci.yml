@@ -1,0 +1,65 @@
+image: arkye/stiltzkey-cicd:latest
+services:
+  - docker:dind
+stages:
+  - test
+  - push image
+  - deploy
+
+# TODO: Create test job
+
+# Stage: test
+
+# test:
+#   stage: test
+#   script:
+#   tags:
+#     - docker
+
+# Stage: push image
+
+push staging image:
+  stage: push image
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+    - docker-compose -f ./docker/develop/build.yml build
+    - docker-compose -f ./docker/production/build.yml build
+    - docker-compose -f ./docker/production/build.yml push
+  only:
+    - /develop/
+  tags:
+    - docker
+
+# TODO: Production Environment
+
+# push production image:
+#   stage: push image
+#   script:
+#   only:
+#     - /master/
+#   tags:
+#     - docker
+
+# TODO: Deployment jobs
+
+# Stage: deploy
+
+# deploy staging:
+#   stage: deploy
+#   environment:
+#     name: staging
+#     url: http://dev.besouro.ejplatform.org/
+#   script:
+#   only:
+#     - /develop/
+#   tags:
+#     - docker
+
+# deploy production:
+#   stage: deploy
+#   environment: production
+#   script:
+#   only:
+#     - /master/
+#   tags:
+#     - docker
