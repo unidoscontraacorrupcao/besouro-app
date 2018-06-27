@@ -7,7 +7,7 @@ version: "3.6"
 
 services:
   production:
-    image: besouro/app:0.0.2e
+    image: besouro/app:0.0.2f
     build:
       args:
         api_url: api.dev.besouro.ejplatform.org

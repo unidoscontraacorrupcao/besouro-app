@@ -11,3 +11,5 @@ FROM nginx:1.13
 
 COPY --from=app /root/build/es6-bundled/ /usr/share/nginx/html/
 COPY --from=app /root/fonts /usr/share/nginx/html/fonts
+
+COPY ./docker/production/default.conf /etc/nginx/conf.d/default.conf
