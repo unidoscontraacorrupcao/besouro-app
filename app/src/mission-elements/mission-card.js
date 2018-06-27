@@ -99,9 +99,20 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         -webkit-box-orient: vertical;
         font-family: Folio;
         margin: 15px 0 15px 0;
+        line-height: 1;
       }
 
       .timing, .card-content p { color: var(--light-text-color); }
+
+      .timing span {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 21px;
+        right: 0;
+        width: 160px;
+        font-size: 1.1rem;
+      }
 
       .card-header .timing {
         font-size: 1.3em;
@@ -110,12 +121,6 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         left: 75px;
         top: 25px;
         font-family: Folio;
-      }
-
-      .timing iron-icon {
-        width: 15px;
-        height: 15px;
-        margin-top: -3px;
       }
 
       .go {
@@ -221,7 +226,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       <div class="card-header">
           <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
           <span class="author">{{missionOwner()}}</span>
-          <p class="timing"> <iron-icon icon="app:mission-timing"></iron-icon> {{remainingTime}} </p>
+          <p class="timing"> <iron-icon icon="app:mission-timing"></iron-icon> <span id="remaining-time">{{remainingTime}}</span> </p>
         </a>
         <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
       </div>
