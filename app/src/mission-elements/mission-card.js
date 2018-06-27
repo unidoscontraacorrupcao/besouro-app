@@ -365,12 +365,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   missionOwner() {
     if (!this.mission.owner) return;
     var name = this.mission.owner.display_name.split(".")[1];
-    console.log(name);
-    console.log(this.user);
     if (name != undefined)
       return this.mission.owner.display_name.split(".")[1];
     else
-      return this.user.name;
+      return this.mission.owner.name;
   }
 
   _acceptMission() {
