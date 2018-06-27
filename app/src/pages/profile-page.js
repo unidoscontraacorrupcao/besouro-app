@@ -273,7 +273,7 @@ class ProfilePage extends PolymerElement {
             </div>
           </div>
           <div>
-            <div id="new-mission-btn">
+            <div id="new-mission-btn" style="display: none">
               <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
             </div>
           </div>
