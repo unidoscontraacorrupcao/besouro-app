@@ -84,7 +84,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         text-transform: uppercase;
       }
 
-      .author { color: #343434; }
+      .author {
+        color: #343434;
+        font-family: Folio;
+      }
 
       .card-content p {
         font-size: 1.5em;
@@ -121,10 +124,16 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         right: 10px;
       }
 
+      .card-footer { height: 60px; }
+
       .card-footer .stats {
-        padding: 25px 40px;
-        font-size: 1.2rem;
         font-family: Folio;
+        padding-top: 22px;
+        display: flex;
+        width: 90%;
+        margin: auto;
+        color: var(--light-text-color);
+        font-size: 1.2rem;
       }
       .card-footer .stats .stats-number {
         color: var(--accent-color);
@@ -133,9 +142,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       .card-footer .stats paper-button {
         border: none;
         text-transform: none;
-        float: right;
-        padding: 0px;
-        margin-top: -24px;
+        margin-top: -11px;
       }
       .card-footer .actions iron-icon {
         margin-right: 5px;
@@ -177,6 +184,28 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
        letter-spacing: 3px;
       }
 
+
+    #card-action-bg { width: 300px; }
+
+    @media only screen and (max-width: 460px) {
+      .card-footer .stats {
+      font-size: 1.0rem;
+      }
+    }
+
+    @media only screen and (max-width: 390px) {
+      .card-footer .stats {
+      width: 95%;
+      font-size: 0.9rem;
+      }
+    }
+
+    @media only screen and (max-width: 330px) {
+      .stats { font-size: 1rem;}
+      .card-footer .stats { width: 98%; }
+      .card-action span { font-size: 1.5em };
+
+    }
     </style>
 
     <app-dialog id="acceptedDialog">
@@ -208,14 +237,23 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
       <div class="card-footer">
         <div class="stats">
-          <span><span class="stats-number">{{accepted}}</span> aceitaram</span>
-          <span id="statsSeparator">&nbsp|&nbsp</span>
-          <span><span class="stats-number">{{concluded}}</span> concluiram</span>
-          <span id="statsSeparator">&nbsp|&nbsp</span>
-          <span><span class="stats-number">{{pending}}</span> pendentes</span>
+          <div>
+           <span><span class="stats-number">{{accepted}} </span>aceitaram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
+          </div>
+
+          <div>
+           <span><span class="stats-number">{{concluded}}</span> concluiram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
+          </div>
+
+          <div>
+           <span><span class="stats-number">{{pending}}</span> pendentes</span>
+          </div>
+
           <paper-button on-tap="_goToMission">
-            <iron-icon icon="app:chat-bubble-outline"></iron-icon>
+            <iron-icon icon="app:mission-comments"></iron-icon>
+            <span>&nbsp;xx</span>
           </paper-button>
+
         </div>
       </div>
       <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{key}}">
@@ -296,7 +334,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     if (this.currentMissionStats == "realized") {
       this.set('btnAction', 'Missão concluida');
       cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
-      this.$.btnText.setAttribute("style", "width: 300px;");
+      this.$.btnText.setAttribute("id", "card-action-bg");
     }
 
     if (this.currentMissionStats == "new") {
@@ -314,13 +352,13 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     if (this.currentMissionStats == "pending") {
       this.set("btnAction", "Avaliação pendente");
       cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
-      this.$.btnText.setAttribute("style", "width: 300px;");
+      this.$.btnText.setAttribute("class", "card-action-bg");
     }
 
     if (this.currentMissionStats == "rejected") {
       this.set("btnAction", "Avaliação rejeitada");
       cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
-      this.$.btnText.setAttribute("style", "width: 300px;");
+      this.$.btnText.setAttribute("class", "card-action-bg");
     }
   }
 

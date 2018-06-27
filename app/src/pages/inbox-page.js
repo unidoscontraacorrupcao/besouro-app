@@ -62,7 +62,7 @@ class InboxPage extends PolymerElement {
         position: fixed;
         bottom: 0;
         background: white;
-        width: 85%;
+        width: calc(100% - 256px);
         border-top-style: solid;
         border-top-color: #E7E7E7;
         z-index: 1000;
@@ -80,6 +80,7 @@ class InboxPage extends PolymerElement {
         text-align: center;
         padding-bottom: 5px;
         padding-top: 5px;
+        margin: auto;
       }
 
       #app-actions #actions-content > * {flex-grow: 1;}
@@ -126,6 +127,7 @@ class InboxPage extends PolymerElement {
         margin: auto;
     }
   }
+  }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -170,11 +172,13 @@ class InboxPage extends PolymerElement {
               <span>missões</span>
             </div>
           </div>
+          <!--
           <div>
             <div id="new-mission-btn" style="display: none">
               <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
             </div>
           </div>
+          -->
           <div id="notifications-btn">
             <div class="icon-container">
               <paper-icon-button icon="app:navNotifications"></paper-icon-button>
