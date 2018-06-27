@@ -147,7 +147,8 @@ class LoginModal extends PolymerElement {
             email: req.response.email,
             photoURL: "/images/default_avatar.png",
             displayName: req.response.display_name.split(".")[1],
-            isAdmin: req.response.is_superuser || req.response.is_staff
+            isAdmin: req.response.is_superuser || req.response.is_staff,
+            name: req.response.name
           };
         } else {
           console.error("[Login] ID not found");

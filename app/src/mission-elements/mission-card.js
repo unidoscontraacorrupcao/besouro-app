@@ -221,7 +221,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       <div class="card-header">
           <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
           <span class="author">{{missionOwner()}}</span>
-          <p class="timing"> <iron-icon icon="app:watch-later"></iron-icon> {{remainingTime}} </p>
+          <p class="timing"> <iron-icon icon="app:mission-timing"></iron-icon> {{remainingTime}} </p>
         </a>
         <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
       </div>
@@ -364,7 +364,13 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   missionOwner() {
     if (!this.mission.owner) return;
-    return this.mission.owner.display_name.split(".")[1];
+    var name = this.mission.owner.display_name.split(".")[1];
+    console.log(name);
+    console.log(this.user);
+    if (name != undefined)
+      return this.mission.owner.display_name.split(".")[1];
+    else
+      return this.user.name;
   }
 
   _acceptMission() {
