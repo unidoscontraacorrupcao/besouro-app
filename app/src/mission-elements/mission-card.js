@@ -189,8 +189,11 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
        letter-spacing: 3px;
       }
 
+    .card-action-bg {
+      width: 300px !important;
+      font-size: 1.5rem !important;
+    }
 
-    #card-action-bg { width: 300px; }
 
     @media only screen and (max-width: 460px) {
       .card-footer .stats {
@@ -202,6 +205,11 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       .card-footer .stats {
       width: 95%;
       font-size: 0.9rem;
+      }
+
+      .card-action-bg {
+        width: 230px !important;
+        font-size: 1.2rem !important;
       }
     }
 
