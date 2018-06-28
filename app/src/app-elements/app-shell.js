@@ -34,6 +34,10 @@ class AppShell extends PolymerElement {
         display: block;
       }
 
+      [hidden] {
+        display: none !important;
+      }
+
       app-drawer-layout:-webkit-full-screen-ancestor app-header,
       app-header-layout:-webkit-full-screen-ancestor app-header,
       app-drawer-layout:-webkit-full-screen-ancestor app-drawer {
@@ -66,6 +70,8 @@ class AppShell extends PolymerElement {
       app-toolbar > iron-image {
         height: 80px;
         width: 80px;
+        min-width: 80px;
+        min-height: 80px;
         margin-top: 20px;
         margin-left: 4px;
         border: 2px solid white;
@@ -76,20 +82,27 @@ class AppShell extends PolymerElement {
       app-toolbar > div[main-title] {
         margin-top: 20px;
         margin-left: 10px;
+        width: 60%;
       }
 
       div[main-title] > .username {
         color: white;
+        max-width: 100%;
         font-family: Folio;
         font-size: 24px;
         line-height: 26px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       div[main-title] > .email {
         color: #312783;
+        max-width: 100%;
         margin-top: 20px;
         font-family: Folio;
         font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         line-height: 16px;
       }
 
@@ -100,6 +113,12 @@ class AppShell extends PolymerElement {
         font-family: Folio;
         font-size: 14px;
         line-height: 16px;
+        cursor: pointer;
+      }
+
+      div[bottom-item] > a {
+        color: white;
+        text-decoration: none;
       }
 
       .drawer-list {
@@ -141,6 +160,7 @@ class AppShell extends PolymerElement {
         margin-left: 20px;
         margin-right: 20px;
         border: 1px solid #b7b8b7;
+        opacity: 0.3;
       }
     </style>
 
@@ -152,36 +172,43 @@ class AppShell extends PolymerElement {
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
-          <div top-item="">
+          <div top-item="" hidden$="[[!narrow]]">
             <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
           </div>
-          <iron-image src="{{user.photoURL}}" sizing="cover"></iron-image>
+          <iron-image src="{{user.photoURL}}" sizing="cover" hidden$="[[!user.uid]]"></iron-image>
+          <iron-image src="/images/default_avatar.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
           <div main-title>
-            <div class="username">
+            <div class="username" hidden$="[[!user.uid]]">
               {{user.displayName}}
             </div>
-            <div class="email">
+            <div class="username" hidden$="[[user.uid]]">
+              Visitante
+            </div>
+            <div class="email" hidden$="[[!user.uid]]">
               {{user.email}}
             </div>
           </div>
-          <div bottom-item="" on-tap="signOut">
+          <div bottom-item="" on-tap="signOut" hidden$="[[!user.uid]]">
             fazer logout
+          </div>
+          <div bottom-item="" on-tap="" hidden$="[[user.uid]]">
+            <a href="login">fazer login</a>
           </div>
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="inbox" href="inbox">
+          <a name="inbox" href="inbox" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navMissions" drawer-toggle></paper-icon-button>
             Missões
           </a>
-          <a name="profile" href="profile">
+          <a name="profile" href="profile" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:profile" drawer-toggle></paper-icon-button>
             Perfil
           </a>
-          <a name="notifications" href="">
+          <a name="notifications" href="" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navNotifications" drawer-toggle></paper-icon-button>
             Notificações
           </a>
-          <hr>
+          <hr hidden$="[[!user.uid]]">
           <a name="rules" href="" disabled>
             Regras
           </a>

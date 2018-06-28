@@ -106,7 +106,6 @@ class LoginView extends PolymerElement {
       .line {
         box-sizing: border-box;
         margin-top: 4vh;
-        height: 3px;
         width: 100%;
         border: 1px solid #b7b8b7;
         opacity: 0.3;

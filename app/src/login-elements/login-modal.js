@@ -108,7 +108,8 @@ class LoginModal extends PolymerElement {
     this.$.ajax.url = "http://localhost:8000/rest-auth/logout/";
     this.$.ajax.headers = { "Authorization": `Token ${this.user.key}` };
     this.$.ajax.body = null;
-    this.$.ajax.generateRequest().completes.then((req) => {this.user = null;});
+    this.$.ajax.generateRequest();
+    this.user = null;
   }
 
   getUserDataByKey(key) {
