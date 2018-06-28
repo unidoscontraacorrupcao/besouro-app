@@ -1,0 +1,15 @@
+# This docker-compose file is not designed to run services
+# Usage:
+#   sudo docker-compose -f docker/base/build.yml build
+#   sudo docker-compose -f docker/base/build.yml push
+
+version: "3.6"
+
+services:
+  base:
+    image: besouro/app:base
+    build:
+      context: ../../
+      dockerfile: ./docker/base/Dockerfile
+      cache_from:
+        - besouro/app:base
