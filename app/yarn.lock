@@ -883,6 +883,15 @@
     "@polymer/paper-styles" "^3.0.0-pre.21"
     "@polymer/polymer" "^3.0.0"
 
+"@polymer/paper-toast@^3.0.0-pre.19":
+  version "3.0.0-pre.21"
+  resolved "https://registry.yarnpkg.com/@polymer/paper-toast/-/paper-toast-3.0.0-pre.21.tgz#5ecea2a4f05616b2d4839e2d0ebf65b3fbf958ab"
+  dependencies:
+    "@polymer/iron-a11y-announcer" "^3.0.0-pre.21"
+    "@polymer/iron-fit-behavior" "^3.0.0-pre.21"
+    "@polymer/iron-overlay-behavior" "^3.0.0-pre.21"
+    "@polymer/polymer" "^3.0.0"
+
 "@polymer/paper-toggle-button@^3.0.0-pre.19":
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/paper-toggle-button/-/paper-toggle-button-3.0.0-pre.21.tgz#37701a66c142dd670dc0510d822d98337a6a57bd"
