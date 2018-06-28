@@ -40,15 +40,16 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       }
 
       .content h2 {
-        font-size: 2em;
+        font-size: 1.3em;
         font-family: Folio;
         text-transform: uppercase;
         color: var(--secondary-text-color);
       }
 
       .content p {
-        font-size: 1.5em;
-        color: #A3A3A3;
+        font-size: 1.1em;
+        color: rgba(51,51,51,1);
+        font-family: helvetica-light;
       }
 
       mission-player { margin: auto; }
@@ -136,7 +137,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .comment .message { display: flex; }
 
-      .comment .message paper-input { flex: 1; }
+      .comment .message paper-textarea { flex: 1; }
 
       .comment .message paper-button { margin: auto 5px 5px; }
 
@@ -259,7 +260,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         background-color: var(--primary-background-color);
         padding: 10px 0px 60px 0px;
       }
-      .comments h2 { margin: 0; }
+      .comments h2 { margin-bottom: 20px; }
 
       .card-action {
         width: 75%;
@@ -267,7 +268,8 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         height: 80px;
         margin: auto;
         text-align: center;
-        margin-top: 60px;
+        margin-top: 70px;
+        margin-bottom: 70px;
       }
 
       .card-action a { text-decoration: none; }
@@ -403,7 +405,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
             {{mission.title}}
             <div class="timing">
               <iron-icon icon="app:watch-later"></iron-icon>
-              <span>{{remainingTime}}</span>
+              <span>{{mission.remainig_days}}</span>
             </div>
           </h1>
           <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{data.key}}">
@@ -456,28 +458,19 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
           <p>Recompensa da missão</p>
 
             <div class="comments">
-              <h2>Comentários da Comunidade</h2>
-              <dom-repeat items="{{comments}}" as="comment">
-                <template>
-                  <mission-comment user-photo="[[comment.content.image]]" comment="{{comment.content}}" key="{{comment.key}}">
+              <h2>Comentários</h2>
+              <template is="dom-repeat" items="{{mission.comment_set}}" as="comment">
+                  <mission-comment comment="{{comment}}">
                   </mission-comment>
-                </template>
-              </dom-repeat>
+              </template>
               <div class="comment">
-                <dom-if if="{{user}}">
-                  <template>
+                <template is="dom-if" if="{{user}}">
                     <div class="message">
-                      <paper-input id="commentInput" label="Escreva um comentário" required="" error-message="O campo não pode ser vazio.">
-                      </paper-input>
+                      <paper-textarea id="commentInput" label="Escreva um comentário" required="" error-message="O campo não pode ser vazio.">
+                      </paper-textarea>
                       <paper-button on-tap="addComment" class="plain">Enviar</paper-button>
                     </div>
                   </template>
-                </dom-if>
-                <dom-if if="{{!user}}">
-                  <template>
-                    Faça o <a href="/login">login</a> para comentar.
-                  </template>
-                </dom-if>
               </div>
             </div>
         </div>
@@ -559,10 +552,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       userPhoto: {
         type: String
       },
-      remainingTime: {
-        type: String,
-        computed: 'calcRemainingTime(mission)'
-      },
       missionImage: {
         type: String,
         observer: '_setLayerImage'
@@ -622,10 +611,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     }
   }
 
-  calcRemainingTime() {
-    return "xx dias restantes"
-  }
-
   _returnToInbox() {
     this.set('currentMissionStats', 'new');
     this.set('acceptedMissionStats', 0);
@@ -658,11 +643,16 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     }
 
     const content = {
-      username: this.user.displayName,
-      image: this.user.photoURL,
-      text: input.value
+      user_id: this.user.uid,
+      comment: input.value
     };
-    this.$.query.ref.push({ content });
+    this.$.api.method = "POST";
+    this.$.api.path = `missions/${this.data.key}/comment/`;
+    this.$.api.user = this.user;
+    this.$.api.body = content;
+    this.$.api.request().then(function(ajax) {
+      this._missionChanged();
+    }.bind(this));
     input.value = "";
   }
 

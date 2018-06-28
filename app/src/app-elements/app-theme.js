@@ -18,6 +18,17 @@ $_documentContainer.innerHTML = `<custom-style>
         font-family: folio;
         src:url("fonts/FOLIOBC.ttf");
       }
+
+      @font-face {
+        font-family: helvetica;
+        src:url("fonts/Helvetica/Helvetica-Normal.ttf");
+      }
+
+      @font-face {
+        font-family: helvetica-light;
+        src:url("fonts/Helvetica/Helvetica-Light.ttf");
+      }
+
     :root { 
       --default-primary-color: #FFFFFF;
       --dark-primary-color: #646A74;
