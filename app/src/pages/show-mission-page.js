@@ -54,7 +54,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       mission-player { margin: auto; }
 
       app-header {
-        height: 390px;
+        height: 320px;
         color: var(--light-text-color);
         /* https://bugs.chromium.org/p/chromium/issues/detail?id=637072 */
         --app-header-background-front-layer: {
@@ -79,9 +79,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         width: 93%;
         margin: auto;
       }
-      .tall {
-        height: 315px;
-      }
+      .tall { height: 245px; }
 
       .tall .actions {
         position: absolute;
@@ -197,26 +195,30 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       #share-btn paper-icon-button { color: var(--dark-primary-color); }
 
       .stats {
-        height: 50px;
-        font-size: 1.3em;
-        font-family: Folio;
+        color: var(--light-text-color);
       }
+
+      .stats .stats-number {
+        color: var(--accent-color);
+        font-weight: bold;
+      }
+
 
       .stats-content {
         width: 80%;
-        padding-top: 10px;
+        padding: 10px;
         margin: auto;
         text-align: center;
+        font-size: 1.2rem;
+        font-family: Folio;
+        display: flex;
       }
 
       .stats-content div {
         margin-right: 5px;
         display: inline;
+        flex-grow: 1;
       }
-
-      .stats-value { color: var(--light-accent-color); }
-
-      .stats-text { color: #BFC0BF; }
 
       #action {
         text-align: center;
@@ -348,6 +350,21 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         margin: auto;
     }
   }
+    @media only screen and (max-width: 460px) {
+      .stats-content { font-size: 1.0rem; }
+    }
+
+    @media only screen and (max-width: 390px) {
+      .stats-content {
+        font-size: 0.9rem;
+      }
+      .card-action { height: 65px;}
+    }
+    dhsajkdhjahska
+
+    @media only screen and (max-width: 330px) {
+      .card-action span { font-size: 1.5em };
+    }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -401,33 +418,28 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
           <iron-image sizing="contain"></iron-image>
         </div>
         <div class="author-name">
-          <span>{{user.displayName}}</span>
+          <span>{{ownerName}}</span>
         </div>
         <div id="share-btn">
           <paper-icon-button on-tap="_shareMission" icon="app:share"></paper-icon-button>
         </div>
       </div>
 
-      <div class="stats">
-        <div class="stats-content">
-          <div>
-            <a on-tap="_openAcceptedMissionList">
-              <span class="stats-value">{{acceptedMissionCount}}</span> <span>aceitaram</span>
-            </a>
-          </div>
+        <div class="stats">
+          <div class="stats-content">
+            <div>
+             <span><span class="stats-number">{{acceptedMissionCount}} </span>aceitaram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
+            </div>
 
-          <span>&nbsp|&nbsp</span>
-          <div>
-            <a on-tap="_openFinishedMissionList">
-              <span class="stats-value">{{concludedMissionCount}}</span> <span>concluiram</span>
-            </a>
-          </div>
-          <span id="statsSeparator">&nbsp|&nbsp</span>
-          <div>
-            <a on-tap="_openMissionReceipts"><span class="stats-value">{{pendingMissionCount}}</span> <span>pendentes</span></a>
+            <div>
+             <span><span class="stats-number">{{concludedMissionCount}}</span> concluiram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
+            </div>
+
+            <div>
+             <span><span class="stats-number">{{pendingMissionCount}}</span> pendentes</span>
+            </div>
           </div>
         </div>
-      </div>
 
       <div class="card-action">
         <div>
@@ -594,6 +606,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         type: Object,
         value: function() {}
       },
+      ownerName: {
+        type: String,
+        value: ""
+      }
     };
   }
 
@@ -733,6 +749,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.set("pendingMissionCount", ajax.response.pending);
       this._setActionBtn();
     }.bind(this));
+    this._setMissionOwnerName();
   }
 
 
@@ -799,6 +816,15 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     }.bind(this));
     document.body.appendChild(clonedNode);
     clonedNode.share();
+  }
+
+  _setMissionOwnerName() {
+    if (!this.mission.owner) return;
+    var name = this.mission.owner.display_name.split(".")[1];
+    if (name != undefined)
+      this.set("ownerName", name);
+    else
+      this.set("ownerName", this.mission.owner.name);
   }
 }
 window.customElements.define(ShowMissionPage.is, ShowMissionPage);
