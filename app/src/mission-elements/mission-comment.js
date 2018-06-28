@@ -27,23 +27,38 @@ class MissionComment extends PolymerElement {
       }
       .card-content {
         flex: 1;
+        margin-top: -22px;
       }
       .card-content h3 {
-        margin: 5px 0;
+        color: rgba(51,51,51,1);
+        font-family: Folio;
+        margin-bottom: 10px;
       }
+
       .card-content p {
         margin-top: 0;
         font-size: 1em;
         line-height: 1;
+        font-family: helvetica-light;
+        color:rgba(51,51,51,1);
       }
+
+      .author-photo iron-image {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        background-color: var(--dark-primary-color);
+        margin-right: 10px;
+      }
+
     </style>
     <div class="card mission-comment">
-      <div class="user-image">
-        <img src="{{userPhoto}}">
-      </div>
+        <div class="author-photo">
+          <iron-image sizing="contain"></iron-image>
+        </div>
       <div class="card-content">
-        <h3> {{comment.username}} </h3>
-        <p> {{comment.text}} </p>
+        <h3> {{comment.user.name}} </h3>
+        <p> {{comment.comment}} </p>
       </div>
     </div>
 `;
