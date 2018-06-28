@@ -1,4 +1,4 @@
-image: arkye/stiltzkey-cicd:latest
+image: besouro/cicd:latest
 services:
   - docker:dind
 stages:
@@ -22,7 +22,6 @@ push staging image:
   stage: push image
   script:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-    - docker-compose -f ./docker/develop/build.yml build
     - docker-compose -f ./docker/production/build.yml build
     - docker-compose -f ./docker/production/build.yml push
   only:
