@@ -1,7 +1,7 @@
-# Passo 1: Commit
+# _Deploy_ Manual
 
 1. Realize suas modificações em sua _branch_;
-1. Atualize a versão da imagem no arquivo `docker/production/build.yml` e `docker/production/start.yml`:
+1. Atualize a versão da imagem no arquivo `docker/production/build.yml`:
 
     ```yml
     # build.yml
@@ -9,27 +9,12 @@
 
     services:
       production:
-        image: besouro/app:0.0.2b # <--- Atualize aqui
+        image: besouro/app:0.1.0 # <--- Atualize aqui
         build:
           args:
             api_url: api.dev.besouro.ejplatform.org
           context: ../../
           dockerfile: ./docker/production/Dockerfile
-
-    # start.yml
-    version: "3.6"
-
-    networks:
-      besouro:
-        name: besouro
-
-    services:
-      app:
-        image: besouro/app:0.0.2b # <--- Atualize aqui
-        networks:
-          - besouro
-        ports:
-          - "80:80"
     ```
 1. Realize o merge para a _branch_ `develop`;
 1. Espere o pipeline do CI finalizar ([link](https://gitlab.com/unidoscontraacorrupcao/besouro-app/pipelines));
