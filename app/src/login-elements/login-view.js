@@ -14,6 +14,9 @@ class LoginView extends PolymerElement {
         flex-direction: column;
         min-height: 100vh;
       }
+      [hidden] {
+        display: none !important;
+      }
       .fill {
         flex: 1;
         padding: 2vh 6vh 0;
@@ -45,6 +48,10 @@ class LoginView extends PolymerElement {
         --paper-input-container-color: #B7B8B7;
         --paper-input-container-focus-color: #312783;
         --paper-input-container-input-color: #312783;
+      }
+      div.fields > paper-input-error {
+        position: relative;
+        margin-top: 5px;
       }
       paper-button {
         display: block;
@@ -134,7 +141,13 @@ class LoginView extends PolymerElement {
       </div>
       <div class="fields">
         <paper-input label="Email" type="email" value="{{email}}" error-message="Usuário inválido!"></paper-input>
+        <paper-input-error hidden$="[[!errors.email]]" invalid>
+          {{errors.email}}
+        </paper-input-error>
         <paper-input label="Senha" type="password" minlength="8" value="{{password}}" error-message="Senha incorreta!"></paper-input>
+        <paper-input-error hidden$="[[!errors.password]]" invalid>
+          {{errors.password}}
+        </paper-input-error>
       </div>
       <paper-button on-tap="submitCredentials">
         Entrar
@@ -175,6 +188,7 @@ class LoginView extends PolymerElement {
         type: Object,
         notify: true
       },
+      errors: Object,
       email: String,
       password: String,
       sharedMission: String

@@ -14,6 +14,9 @@ class RegisterView extends PolymerElement {
         flex-direction: column;
         min-height: 100vh;
       }
+      [hidden] {
+        display: none !important;
+      }
       .fill {
         flex: 1;
         padding: 2vh 6vh 0;
@@ -45,6 +48,10 @@ class RegisterView extends PolymerElement {
         --paper-input-container-color: #b7b8b7;
         --paper-input-container-focus-color: #312783;
         --paper-input-container-input-color: #312783;
+      }
+      div.fields > paper-input-error {
+        position: relative;
+        margin-top: 5px;
       }
       paper-button {
         display: block;
@@ -118,9 +125,18 @@ class RegisterView extends PolymerElement {
         Cadastre-se
       </div>
       <div class="fields">
-        <paper-input label="Email" type="email" value="{{email}}" auto-validate="" error-message="Insira um endereço de email válido." required></paper-input>
+        <paper-input label="Email" type="email" value="{{email}}" error-message="Insira um endereço de email válido." auto-validate required></paper-input>
+        <paper-input-error hidden$="[[!errors.email]]" invalid>
+          {{errors.email}}
+        </paper-input-error>
         <paper-input label="Nome" value="{{name}}" auto-validate="" error-message="Nome deve ser preenchido." allowed-pattern="[A-Za-zÀ-ÿ ]" required></paper-input>
+        <paper-input-error hidden$="[[!errors.name]]" invalid>
+          {{errors.name}}
+        </paper-input-error>
         <paper-input label="Senha" type="password" value="{{password}}" auto-validate="" minlength="8" error-message="Senha deve possuir pelo menos 8 caracteres." required></paper-input>
+        <paper-input-error hidden$="[[!errors.password]]" invalid>
+          {{errors.password}}
+        </paper-input-error>
       </div>
       <paper-button on-tap="submitCredentials">
         Entrar
@@ -156,8 +172,8 @@ class RegisterView extends PolymerElement {
         type: Object,
         notify: true
       },
+      errors: Object,
       email: String,
-      name: String,
       password: String,
       sharedMission: String
     };

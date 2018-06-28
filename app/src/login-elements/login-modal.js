@@ -8,11 +8,66 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class LoginModal extends PolymerElement {
   static get template() {
     return html`
-      <style include="shared-styles"></style>
+      <style include="shared-styles">
+        paper-toast {
+          --paper-toast-color: white;
+          --paper-toast-background-color: #e7007e;
+          left: auto !important;
+        }
+      </style>
 
-      <register-view id="register" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signUpData}}" on-open-login="openLogin" on-provider-auth="authWithProvider"></register-view>
+      <register-view id="register" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signUpData}}" errors="{{signUpErrors}}" on-open-login="openLogin" on-provider-auth="authWithProvider"></register-view>
 
       <login-view id="login" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signInData}}" on-open-register="openRegister" on-provider-auth="authWithProvider"></login-view>
+
+      <paper-toast id="toast" text="{{toastMessage}}"></paper-toast>
+
+      <iron-ajax
+        id="apiSignIn" content-type="application/json" handle-as="json"
+        method="POST"
+        url="http://localhost:8000/rest-auth/login/"
+        body='{"username":"{{signInData.email}}","password":"{{signInData.password}}"}'
+        on-response="_handleSignInResponse"
+        on-error="_handleSignInErrorResponse"></iron-ajax>
+
+      <iron-ajax
+        id="apiSignUp" content-type="application/json" handle-as="json"
+        method="POST"
+        url="http://localhost:8000/rest-auth/registration/"
+        body='{"username":"{{signUpData.email}}","email":"{{signUpData.email}}","password1":"{{signUpData.password}}","password2":"{{signUpData.password}}"}'
+        on-response="_handleSignUpResponse"
+        on-error="_handleSignUpErrorResponse"></iron-ajax>
+
+      <iron-ajax
+        id="apiSignOut" content-type="application/json" handle-as="json"
+        method="POST"
+        url="http://localhost:8000/rest-auth/logout/"
+        headers={{signedHeaders}}></iron-ajax>
+
+      <iron-ajax
+        id="apiGetUserByKey" content-type="application/json" handle-as="json"
+        method="GET"
+        url="http://localhost:8000/rest-auth/user/"
+        headers={{signedHeaders}}
+        on-response="_handleGetUserByKeyResponse"
+        on-error="_handleGetUserByKeyErrorResponse"></iron-ajax>
+
+      <iron-ajax
+        id="apiGetUser" content-type="application/json" handle-as="json"
+        method="GET"
+        url="http://localhost:8000/api/v1/users/"
+        headers={{signedHeaders}}
+        on-response="_handleGetUserResponse"
+        on-error="_handleGetUserErrorResponse"></iron-ajax>
+
+      <iron-ajax
+        id="apiUpdateUser" content-type="application/json" handle-as="json"
+        method="PATCH"
+        url="http://localhost:8000/api/v1/users/"
+        headers={{signedHeaders}}
+        body='{"display_name":"{{userData.uid}}.{{signUpData.name}}"}'
+        on-response="_handleUpdateUserResponse"
+        on-error="_handleUpdateUserErrorResponse"></iron-ajax>
 
       <iron-ajax id="ajax" handle-as="json" content-type="application/json" debounce-duration="300"></iron-ajax>
     `;
@@ -25,11 +80,42 @@ class LoginModal extends PolymerElement {
         type: Object,
         notify: true
       },
+      userData: {
+        type: Object,
+        value: {
+          key: 0,
+          uid: 0,
+          email: 0,
+          photoURL: "/images/default_avatar.png",
+          displayName: 0,
+          isAdmin: false
+        }
+      },
       signUpData: {
-        observer: 'signUp'
+        type: Object,
+        value: {
+          idle: true
+        },
+        observer: '_onSignUpDataChanged'
+      },
+      signUpErrors: {
+        type: Object,
+        value: {}
       },
       signInData: {
-        observer: 'signIn'
+        type: Object,
+        value: {
+          idle: true
+        },
+        observer: '_onSignInDataChanged'
+      },
+      signInErrors: {
+        type: Object,
+        value: {}
+      },
+      signedHeaders: {
+        type: Object,
+        value: {}
       },
       statusKnown: {
         notify: true
@@ -37,7 +123,8 @@ class LoginModal extends PolymerElement {
       sharedMission: {
         type: String,
         value: ""
-      }
+      },
+      toastMessage: String
     };
   }
 
@@ -51,199 +138,178 @@ class LoginModal extends PolymerElement {
     this.$.login.style.display = 'flex';
   }
 
-  signUp(credentials) {
-    this.$.ajax.method = "POST";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/registration/"
-    this.$.ajax.headers = null;
-    this.$.ajax.body = {
-      "username": credentials.email,
-      "email": credentials.email,
-      "password1": credentials.password,
-      "password2": credentials.password
-    };
-    this.$.ajax.generateRequest().completes.then(
-      function(req) {
-        if("key" in req.response) {
-          this.updateUserNameByKey(req.response.key, credentials.name);
-        } else {
-          console.error("[Sign Up] Key not found");
-        }
-      }.bind(this),
-      function(rejected) {
-        console.error("[Sign Up] Sign up request failed");
-        console.error(rejected);
-      }.bind(this)
-    );
-  }
-
-  signIn(credentials) {
-    this.$.ajax.method = "POST";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/login/"
-    this.$.ajax.headers = null;
-    this.$.ajax.body = {
-      "username": credentials.email,
-      "password": credentials.password
-    };
-    this.$.ajax.generateRequest().completes.then(
-      function(req) {
-        if("key" in req.response) {
-          this.getUserDataByKey(req.response.key);
-        } else {
-          console.error("[Login] Key not found");
-        }
-      }.bind(this),
-      function(rejected) {
-        console.error("[Login] Sign in request failed");
-        console.error(rejected);
-      }.bind(this)
-    );
-  }
-
   authWithProvider(e) {
     // TODO: Request login based on provider
   }
 
   signOut() {
-    this.$.ajax.method = "POST";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/logout/";
-    this.$.ajax.headers = { "Authorization": `Token ${this.user.key}` };
-    this.$.ajax.body = null;
-    this.$.ajax.generateRequest();
-    this.user = null;
+    this.signedHeaders = {
+      "authorization": `Token ${this.user.key}`
+    };
+    this.user = {};
+    this.$.apiSignOut.generateRequest();
   }
 
-  getUserDataByKey(key) {
-    this.$.ajax.method = "GET";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/user/"
-    this.$.ajax.headers = { "Authorization": `Token ${key}` };
-    this.$.ajax.body = null;
-    this.$.ajax.generateRequest().completes.then(
-      function(req) {
-        if("pk" in req.response) {
-          this.getUserDataById(key, req.response.pk);
-        } else {
-          console.error("[Login] PK not found");
-        }
-      }.bind(this),
-      function(rejected) {
-        console.error("[Login] User data by key request failed");
-        console.error(rejected);
-      }.bind(this)
-    );
+  _onSignInDataChanged() {
+    if(!("idle" in this.signInData)) {
+      this.$.apiSignIn.generateRequest();
+    }
   }
 
-  getUserDataById(key, id) {
-    this.$.ajax.method = "GET";
-    this.$.ajax.url = `http://localhost:8000/api/v1/users/${id}/`
-    this.$.ajax.headers = { "Authorization": `Token ${key}` };
-    this.$.ajax.body = null;
-    this.$.ajax.generateRequest().completes.then(
-      function(req) {
-        if("id" in req.response) {
-          // this.getUserProfileById(key, req.response.id, req.response.username, req.response.display_name);
-          // TODO: Replace back to profile
-          this.user = {
-            key: key,
-            uid: id,
-            email: req.response.email,
-            photoURL: "/images/default_avatar.png",
-            displayName: req.response.display_name.split(".")[1],
-            isAdmin: req.response.is_superuser || req.response.is_staff
-          };
-        } else {
-          console.error("[Login] ID not found");
-        }
-      }.bind(this),
-      function(rejected) {
-        console.error("[Login] User data by id request failed");
-        console.error(rejected);
-      }.bind(this)
-    );
+  _onSignUpDataChanged() {
+    if(!("idle" in this.signUpData)) {
+      this.$.apiSignUp.generateRequest();
+    }
   }
 
-  getUserProfileById(key, id, email, name) {
-    this.$.ajax.method = "GET";
-    this.$.ajax.url = `http://localhost:8000/api/v1/profiles/${id}/`
-    this.$.ajax.headers = { "Authorization": `Token ${key}` };
-    this.$.ajax.body = null;
-    this.$.ajax.generateRequest().completes.then(
-      function(req) {
-        if("image" in req.response) {
-          let image = req.response.image;
-          if(image == undefined || image == null || image == "") {
-            image = "/images/default_avatar.png";
-          }
-          let displayName = "";
-          let isAdmin = false;
-          if(name.indexOf(".") != -1) {
-            displayName = name.split(".")[1];
-          } else {
-            isAdmin = true;
-          }
-          this.user = {
-            key: key,
-            uid: id,
-            email: email,
-            photoURL: image,
-            displayName: displayName,
-            isAdmin: isAdmin
-          };
-        } else {
-          console.error("[Login] Image not found");
-        }
-      }.bind(this),
-      function(rejected) {
-        console.error("[Login] Profile data by id request failed");
-        console.error(rejected);
-      }.bind(this)
-    );
+  _handleSignInResponse(e) {
+    let response = e.detail.xhr.response;
+    if("key" in response) {
+      this.userData.key = response.key;
+      this.signedHeaders = {
+        "authorization": `Token ${response.key}`
+      };
+      this.$.apiGetUserByKey.generateRequest();
+    } else {
+      console.error("[Login] Key not found");
+      this.toastUnknownError();
+    }
   }
 
-  updateUserNameByKey(key, name) {
-    this.$.ajax.method = "GET";
-    this.$.ajax.url = "http://localhost:8000/rest-auth/user/"
-    this.$.ajax.headers = { "Authorization": `Token ${key}` };
-    this.$.ajax.body = null;
-    this.$.ajax.generateRequest().completes.then(
-      function(req) {
-        if("pk" in req.response) {
-          this.updateUserNameById(key, req.response.pk, name);
-        } else {
-          console.error("[Sign Up] PK not found");
-        }
-      }.bind(this),
-      function(rejected) {
-        console.error("[Sign Up] User data by key request failed");
-        console.error(rejected);
-      }.bind(this)
-    );
+  _handleSignInErrorResponse(e, iron) {
+    let response = iron.request.xhr.response;
+    let errors = {};
+    if("username" in response) {
+      errors.email = response.username.join("\n");
+    }
+    if("password" in response) {
+      errors.password = response.password.join("\n");
+    }
+    console.error(errors);
+    this.signInErrors = errors;
+
+    if("non_field_errors" in response) {
+      this.toastIt(response.non_field_errors.join("\n"));
+    } else {
+      this.toastInvalidFields();
+    }
   }
 
-  updateUserNameById(key, id, name) {
-    this.$.ajax.method = "PATCH";
-    this.$.ajax.url = `http://localhost:8000/api/v1/users/${id}/`
-    this.$.ajax.headers = { "Authorization": `Token ${key}` };
-    this.$.ajax.body = { "display_name": `${id}.${name}` };
-    this.$.ajax.generateRequest().completes.then(
-      function(req) {
-        if("id" in req.response) {
-          this.user = {
-            key: key,
-            uid: req.response.id,
-            email: req.response.username,
-            photoURL: "/images/default_avatar.png",
-            displayName: req.response.display_name.split(".")[1],
-            isAdmin: false
-          };
-        } else {
-          console.error("[Sign Up] ID not found");
-        }
-      }.bind(this),
-      function(rejected) {
-        console.error("[Sign Up] User data by id request failed");
-        console.error(rejected);
-      }.bind(this)
-    );
+  _handleSignUpResponse(e) {
+    let response = e.detail.xhr.response;
+    if("key" in response) {
+      this.userData.key = response.key;
+      this.signedHeaders = {
+        "authorization": `Token ${response.key}`
+      };
+      this.$.apiGetUserByKey.generateRequest();
+    } else {
+      console.error("[Sign Up] Key not found");
+      this.toastUnknownError();
+    }
+  }
+
+  _handleSignUpErrorResponse(e, iron) {
+    let response = iron.request.xhr.response;
+    let errors = {};
+    if("email" in response) {
+      errors.email = response.email.join("\n");
+    }
+    if("password1" in response) {
+      errors.password = response.password1.join("\n");
+    }
+    this.signUpErrors = errors;
+    console.error(errors);
+    this.toastInvalidFields();
+  }
+
+  _handleGetUserByKeyResponse(e) {
+    let response = e.detail.xhr.response;
+    if("pk" in response) {
+      this.userData.uid = response.pk;
+      if(!("idle" in this.signUpData)) {
+        this.$.apiUpdateUser.url += `${this.userData.uid}/`;
+        this.$.apiUpdateUser.generateRequest();
+      } else {
+        this.$.apiGetUser.url += `${this.userData.uid}/`;
+        this.$.apiGetUser.generateRequest();
+      }
+    } else {
+      console.error("[Sign Up/Login] User not found");
+      this.toastUnknownError();
+    }
+  }
+
+  _handleGetUserByKeyErrorResponse(e, iron) {
+    let response = iron.request.xhr.response;
+    console.error(response);
+    this.toastUnknownError();
+  }
+
+  _handleGetUserResponse(e) {
+    let response = e.detail.xhr.response;
+    if("id" in response) {
+      // TODO: Get user's avatar from profile
+      this.userData.email = response.email;
+      this.userData.displayName = this.parseName(response.display_name);
+      this.userData.isAdmin = response.is_superuser || response.is_staff;
+      this.user = this.userData;
+    } else {
+      console.error("[Login] User not found");
+      this.toastUnknownError();
+    }
+  }
+
+  _handleGetUserErrorResponse(e, iron) {
+    let response = iron.request.xhr.response;
+    console.error(response);
+    this.toastUnknownError();
+  }
+
+  _handleUpdateUserResponse(e) {
+    let response = e.detail.xhr.response;
+    if("id" in response) {
+      // TODO: Get user's avatar from profile
+      this.userData.email = response.email;
+      this.userData.displayName = this.parseName(response.display_name);
+      this.userData.isAdmin = false;
+      this.user = this.userData;
+    } else {
+      console.error("[Sign Up] Update user failed");
+      this.toastUnknownError();
+    }
+  }
+
+  _handleUpdateUserErrorResponse(e, iron) {
+    let response = iron.request.xhr.response;
+    let errors = {};
+    if("display_name" in response) {
+      errors.name = response.name.join("\n");
+    }
+    this.signUpErrors = errors;
+    console.error(errors);
+    this.toastInvalidFields();
+  }
+
+  toastIt(message) {
+    this.toastMessage = message;
+    this.$.toast.open();
+  }
+
+  toastUnknownError() {
+    this.toastIt("Um erro aconteceu. Por favor, tente novamente mais tarde.")
+  }
+
+  toastInvalidFields() {
+    this.toastIt("Cadastro inválido. Consulte os erros nos campos.");
+  }
+
+  parseName(name) {
+    if(name.indexOf(".") != -1) {
+      return name.split(".")[1];
+    } else {
+      return "Admin";
+    }
   }
 }
 

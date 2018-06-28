@@ -11,6 +11,7 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
+import '@polymer/paper-toast/paper-toast.js';
 import '../pages/login-page.js';
 import '../pages/inbox-page.js';
 import '../pages/profile-page.js';
