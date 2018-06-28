@@ -120,7 +120,7 @@ class RegisterView extends PolymerElement {
       </div>
       <div class="fields">
         <paper-input label="Email" type="email" value="{{email}}" auto-validate="" error-message="Insira um endereço de email válido." required></paper-input>
-        <paper-input label="Nome" value="{{name}}" auto-validate="" error-message="Nome deve ser preenchido." allowed-pattern="[a-zA-Z ]" required></paper-input>
+        <paper-input label="Nome" value="{{name}}" auto-validate="" error-message="Nome deve ser preenchido." allowed-pattern="[A-Za-zÀ-ÿ ]" required></paper-input>
         <paper-input label="Senha" type="password" value="{{password}}" auto-validate="" minlength="8" error-message="Senha deve possuir pelo menos 8 caracteres." required></paper-input>
       </div>
       <paper-button on-tap="submitCredentials">
