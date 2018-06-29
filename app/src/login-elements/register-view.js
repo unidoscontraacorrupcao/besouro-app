@@ -52,6 +52,8 @@ class RegisterView extends PolymerElement {
       div.fields > paper-input-error {
         position: relative;
         margin-top: 5px;
+        white-space: normal;
+        word-wrap: break-word;
       }
       paper-button {
         display: block;
