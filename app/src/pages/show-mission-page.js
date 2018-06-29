@@ -55,7 +55,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       mission-player { margin: auto; }
 
       app-header {
-        height: 320px;
+        height: 250px;
         color: var(--light-text-color);
         /* https://bugs.chromium.org/p/chromium/issues/detail?id=637072 */
         --app-header-background-front-layer: {
@@ -80,11 +80,11 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         width: 93%;
         margin: auto;
       }
-      .tall { height: 245px; }
+      .tall { height: 175px; }
 
       .tall .actions {
         position: absolute;
-        bottom: 5px;
+        bottom: -3px;
         right: 5px;
       }
 
@@ -97,8 +97,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         color: white;
         text-transform: uppercase;
         font-family: Folio;
-        font-size: 2em;
+        font-size: 32px;
         padding-top: 10px;
+        position: absolute;
+        top: 100px;
       }
 
       h3 {
@@ -109,12 +111,18 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       .dark { color: black; }
 
       .timing {
-        font-size: 0.6em;
-        margin-top: 25px;
+        font-size: 19px;
+        margin-top: 15px;
         text-transform: none;
+        position: absolute;
+        top: 30px;
       }
 
-      .timing iron-icon { height: 15px; }
+      .timing paper-icon-button { padding: 5px; }
+      .timing span {
+        position: absolute;
+        left: 28px;
+      }
 
       .progress {
         position: absolute;
@@ -207,12 +215,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .stats-content {
         width: 80%;
-        padding: 10px;
+        padding-top: 5px;
         margin: auto;
         text-align: center;
         font-size: 1.2rem;
         font-family: Folio;
         display: flex;
+        height: 30px;
       }
 
       .stats-content div {
@@ -404,28 +413,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
           <h1 bottom-item="" main-title="" class="title">
             {{mission.title}}
             <div class="timing">
-              <iron-icon icon="app:watch-later"></iron-icon>
+              <paper-icon-button icon="app:mission-timing"></paper-icon-button>
               <span>{{mission.remainig_days}}</span>
             </div>
           </h1>
           <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{data.key}}">
           </mission-player>
-          <div class="actions">
-            {{comments.length}}<paper-icon-button icon="app:chat-bubble-outline"></paper-icon-button>
-          </div>
         </app-toolbar>
       </app-header>
-      <div class="mission-author">
-        <div class="author-photo">
-          <iron-image sizing="contain"></iron-image>
-        </div>
-        <div class="author-name">
-          <span>{{ownerName}}</span>
-        </div>
-        <div id="share-btn">
-          <paper-icon-button on-tap="_shareMission" icon="app:share"></paper-icon-button>
-        </div>
-      </div>
 
         <div class="stats">
           <div class="stats-content">

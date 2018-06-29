@@ -58,7 +58,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       }
 
       .card-header paper-icon-button {
-        padding: 0px;
+        padding: 5px;
         color: var(--accent-color);
       }
 
@@ -234,7 +234,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       <div class="card-header">
           <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
           <span class="author">{{missionOwner()}}</span>
-          <p class="timing"> <iron-icon icon="app:mission-timing"></iron-icon> <span id="remaining-time">{{mission.remainig_days}}</span> </p>
+          <p class="timing"> <iron-icon icon="app:mission-timing-card"></iron-icon> <span id="remaining-time">{{mission.remainig_days}}</span> </p>
         </a>
         <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
       </div>

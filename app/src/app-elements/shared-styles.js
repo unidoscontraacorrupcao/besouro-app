@@ -106,6 +106,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
 
       app-header paper-icon-button {
         --paper-icon-button-ink-color: var(--secondary-text-color);
+        padding: 8px;
       }
 
       app-drawer-layout:-webkit-full-screen-ancestor app-header,

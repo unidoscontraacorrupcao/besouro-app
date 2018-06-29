@@ -57,7 +57,7 @@ class MissionComment extends PolymerElement {
           <iron-image sizing="contain"></iron-image>
         </div>
       <div class="card-content">
-        <h3> {{comment.user.name}} </h3>
+        <h3> {{userName()}} </h3>
         <p> {{comment.comment}} </p>
       </div>
     </div>
@@ -74,6 +74,14 @@ class MissionComment extends PolymerElement {
       key: String,
       userPhoto: String
     }
+  }
+
+  userName() {
+    var name = this.comment.user.display_name.split(".")[1];
+    if (name != undefined)
+      return this.comment.user.display_name.split(".")[1];
+    else
+      return this.comment.user.name;
   }
 }
 customElements.define(MissionComment.is, MissionComment);
