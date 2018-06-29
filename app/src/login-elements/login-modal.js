@@ -1,9 +1,16 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
+import '../api-elements/api-auth-user.js';
+import '../api-elements/api-login.js';
+import '../api-elements/api-logout.js';
+import '../api-elements/api-sign-up.js';
+import '../api-elements/api-update-user.js';
+import '../api-elements/api-user.js';
 import '../app-elements/shared-styles.js';
 import './register-view.js';
 import './login-view.js';
+import './forgot-password-view.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class LoginModal extends PolymerElement {
   static get template() {
@@ -18,58 +25,18 @@ class LoginModal extends PolymerElement {
 
       <register-view id="register" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signUpData}}" errors="{{signUpErrors}}" on-open-login="openLogin" on-provider-auth="authWithProvider"></register-view>
 
-      <login-view id="login" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signInData}}" on-open-register="openRegister" on-provider-auth="authWithProvider"></login-view>
+      <login-view id="login" shared-mission="{{sharedMission}}" user="[[user]]" credentials="{{signInData}}" on-open-register="openRegister" on-provider-auth="authWithProvider" on-open-forgot-password="openForgotPassword"></login-view>
+
+      <forgot-password-view id="forgotPassword" data="{{forgotPasswordData}}" errors="{{forgotPasswordErrors}}" on-open-register="openRegister" on-provider-auth="authWithProvider"></forgot-password-view>
 
       <paper-toast id="toast" text="{{toastMessage}}"></paper-toast>
 
-      <iron-ajax
-        id="apiSignIn" content-type="application/json" handle-as="json"
-        method="POST"
-        url="http://localhost:8000/rest-auth/login/"
-        body='{"username":"{{signInData.email}}","password":"{{signInData.password}}"}'
-        on-response="_handleSignInResponse"
-        on-error="_handleSignInErrorResponse"></iron-ajax>
-
-      <iron-ajax
-        id="apiSignUp" content-type="application/json" handle-as="json"
-        method="POST"
-        url="http://localhost:8000/rest-auth/registration/"
-        body='{"username":"{{signUpData.email}}","email":"{{signUpData.email}}","password1":"{{signUpData.password}}","password2":"{{signUpData.password}}"}'
-        on-response="_handleSignUpResponse"
-        on-error="_handleSignUpErrorResponse"></iron-ajax>
-
-      <iron-ajax
-        id="apiSignOut" content-type="application/json" handle-as="json"
-        method="POST"
-        url="http://localhost:8000/rest-auth/logout/"
-        headers={{signedHeaders}}></iron-ajax>
-
-      <iron-ajax
-        id="apiGetUserByKey" content-type="application/json" handle-as="json"
-        method="GET"
-        url="http://localhost:8000/rest-auth/user/"
-        headers={{signedHeaders}}
-        on-response="_handleGetUserByKeyResponse"
-        on-error="_handleGetUserByKeyErrorResponse"></iron-ajax>
-
-      <iron-ajax
-        id="apiGetUser" content-type="application/json" handle-as="json"
-        method="GET"
-        url="http://localhost:8000/api/v1/users/"
-        headers={{signedHeaders}}
-        on-response="_handleGetUserResponse"
-        on-error="_handleGetUserErrorResponse"></iron-ajax>
-
-      <iron-ajax
-        id="apiUpdateUser" content-type="application/json" handle-as="json"
-        method="PATCH"
-        url="http://localhost:8000/api/v1/users/"
-        headers={{signedHeaders}}
-        body='{"display_name":"{{userData.uid}}.{{signUpData.name}}"}'
-        on-response="_handleUpdateUserResponse"
-        on-error="_handleUpdateUserErrorResponse"></iron-ajax>
-
-      <iron-ajax id="ajax" handle-as="json" content-type="application/json" debounce-duration="300"></iron-ajax>
+      <api-login id="apiLogin" on-result="_onLogin"></api-login>
+      <api-sign-up id="apiSignUp" on-result="_onSignUp"></api-sign-up>
+      <api-logout id="apiLogout" on-result="_onLogout"></api-logout>
+      <api-auth-user id="apiAuthUser" on-result="_onAuthUser"></api-auth-user>
+      <api-user id="apiUser" on-result="_onUser"></api-user>
+      <api-update-user id="apiUpdateUser" on-result="_onUpdateUser"></api-update-user>
     `;
   }
 
@@ -113,6 +80,17 @@ class LoginModal extends PolymerElement {
         type: Object,
         value: {}
       },
+      forgotPasswordData: {
+        type: Object,
+        value: {
+          idle: true
+        },
+        observer: '_onForgotPasswordDataChanged'
+      },
+      forgotPasswordErrors: {
+        type: Object,
+        value: {}
+      },
       signedHeaders: {
         type: Object,
         value: {}
@@ -131,11 +109,19 @@ class LoginModal extends PolymerElement {
   openRegister() {
     this.$.register.style.display = 'flex';
     this.$.login.style.display = 'none';
+    this.$.forgotPassword.style.display = 'none';
   }
 
   openLogin() {
     this.$.register.style.display = 'none';
     this.$.login.style.display = 'flex';
+    this.$.forgotPassword.style.display = 'none';
+  }
+
+  openForgotPassword() {
+    this.$.register.style.display = 'none';
+    this.$.login.style.display = 'none';
+    this.$.forgotPassword.style.display = 'flex';
   }
 
   authWithProvider(e) {
@@ -143,152 +129,99 @@ class LoginModal extends PolymerElement {
   }
 
   signOut() {
-    this.signedHeaders = {
-      "authorization": `Token ${this.user.key}`
-    };
+    this.$.apiLogout.request(this.userData.key);
     this.user = {};
-    this.$.apiSignOut.generateRequest();
   }
 
   _onSignInDataChanged() {
     if(!("idle" in this.signInData)) {
-      this.$.apiSignIn.generateRequest();
+      this.$.apiLogin.request(this.signInData.email, this.signInData.password);
     }
   }
 
   _onSignUpDataChanged() {
     if(!("idle" in this.signUpData)) {
-      this.$.apiSignUp.generateRequest();
+      // this.$.apiSignUp.generateRequest();
+      this.$.apiSignUp.request(this.signUpData.email, this.signUpData.password);
     }
   }
 
-  _handleSignInResponse(e) {
-    let response = e.detail.xhr.response;
-    if("key" in response) {
-      this.userData.key = response.key;
-      this.signedHeaders = {
-        "authorization": `Token ${response.key}`
-      };
-      this.$.apiGetUserByKey.generateRequest();
+  _onForgotPasswordDataChanged() {
+    if(!("idle" in this.forgotPasswordData)) {
+      // this.$.apiForgotPassword.generateRequest();
+    }
+  }
+
+  _onLogin(e, result) {
+    if(result.success) {
+      this.userData.key = result.data.key;
+      this.$.apiAuthUser.request(this.userData.key);
     } else {
-      console.error("[Login] Key not found");
-      this.toastUnknownError();
-    }
-  }
-
-  _handleSignInErrorResponse(e, iron) {
-    let response = iron.request.xhr.response;
-    let errors = {};
-    if("username" in response) {
-      errors.email = response.username.join("\n");
-    }
-    if("password" in response) {
-      errors.password = response.password.join("\n");
-    }
-    console.error(errors);
-    this.signInErrors = errors;
-
-    if("non_field_errors" in response) {
-      this.toastIt(response.non_field_errors.join("\n"));
-    } else {
-      this.toastInvalidFields();
-    }
-  }
-
-  _handleSignUpResponse(e) {
-    let response = e.detail.xhr.response;
-    if("key" in response) {
-      this.userData.key = response.key;
-      this.signedHeaders = {
-        "authorization": `Token ${response.key}`
-      };
-      this.$.apiGetUserByKey.generateRequest();
-    } else {
-      console.error("[Sign Up] Key not found");
-      this.toastUnknownError();
-    }
-  }
-
-  _handleSignUpErrorResponse(e, iron) {
-    let response = iron.request.xhr.response;
-    let errors = {};
-    if("email" in response) {
-      errors.email = response.email.join("\n");
-    }
-    if("password1" in response) {
-      errors.password = response.password1.join("\n");
-    }
-    this.signUpErrors = errors;
-    console.error(errors);
-    this.toastInvalidFields();
-  }
-
-  _handleGetUserByKeyResponse(e) {
-    let response = e.detail.xhr.response;
-    if("pk" in response) {
-      this.userData.uid = response.pk;
-      if(!("idle" in this.signUpData)) {
-        this.$.apiUpdateUser.url += `${this.userData.uid}/`;
-        this.$.apiUpdateUser.generateRequest();
+      let errors = result.errors;
+      if(errors.notFound) {
+        this.toastUnknownError();
       } else {
-        this.$.apiGetUser.url += `${this.userData.uid}/`;
-        this.$.apiGetUser.generateRequest();
+        this.signInErrors = errors;
+        if(errors.non_field_errors) {
+          this.toastIt(errors.non_field_errors);
+        } else {
+          this.toastInvalidFields();
+        }
+      }
+    }
+  }
+
+  _onSignUp(e, result) {
+    if(result.success) {
+      this.userData.key = result.data.key;
+      this.$.apiAuthUser.request(this.userData.key);
+    } else {
+      let errors = result.errors;
+      if(errors.notFound) {
+        this.toastUnknownError();
+      } else {
+        this.signUpErrors = {
+          email: errors.email,
+          password: errors.password1
+        };
+        this.toastInvalidFields();
+      }
+    }
+  }
+
+  _onAuthUser(e, result) {
+    if(result.success) {
+      this.userData.uid = result.data.id;
+      if(!("idle" in this.signUpData)) {
+        this.$.apiUpdateUser.request(this.userData.key, this.userData.uid, this.signUpData.name);
+      } else {
+        this.$.apiUser.request(this.userData.key, this.userData.uid);
       }
     } else {
-      console.error("[Sign Up/Login] User not found");
       this.toastUnknownError();
     }
   }
 
-  _handleGetUserByKeyErrorResponse(e, iron) {
-    let response = iron.request.xhr.response;
-    console.error(response);
-    this.toastUnknownError();
-  }
-
-  _handleGetUserResponse(e) {
-    let response = e.detail.xhr.response;
-    if("id" in response) {
-      // TODO: Get user's avatar from profile
-      this.userData.email = response.email;
-      this.userData.displayName = this.parseName(response.display_name);
-      this.userData.isAdmin = response.is_superuser || response.is_staff;
+  _onUser(e, result) {
+    if(result.success) {
+      this.userData.email = result.data.email;
+      this.userData.displayName = result.data.displayName;
+      this.userData.isAdmin = result.data.isAdmin;
       this.user = this.userData;
     } else {
-      console.error("[Login] User not found");
       this.toastUnknownError();
     }
   }
 
-  _handleGetUserErrorResponse(e, iron) {
-    let response = iron.request.xhr.response;
-    console.error(response);
-    this.toastUnknownError();
-  }
-
-  _handleUpdateUserResponse(e) {
-    let response = e.detail.xhr.response;
-    if("id" in response) {
-      // TODO: Get user's avatar from profile
-      this.userData.email = response.email;
-      this.userData.displayName = this.parseName(response.display_name);
-      this.userData.isAdmin = false;
+  _onUpdateUser(e, result) {
+    if(result.success) {
+      this.userData.email = result.data.email;
+      this.userData.displayName = result.data.displayName;
+      this.userData.isAdmin = result.data.isAdmin;
       this.user = this.userData;
     } else {
-      console.error("[Sign Up] Update user failed");
       this.toastUnknownError();
     }
-  }
-
-  _handleUpdateUserErrorResponse(e, iron) {
-    let response = iron.request.xhr.response;
-    let errors = {};
-    if("display_name" in response) {
-      errors.name = response.name.join("\n");
-    }
-    this.signUpErrors = errors;
-    console.error(errors);
-    this.toastInvalidFields();
   }
 
   toastIt(message) {
@@ -302,14 +235,6 @@ class LoginModal extends PolymerElement {
 
   toastInvalidFields() {
     this.toastIt("Cadastro inválido. Consulte os erros nos campos.");
-  }
-
-  parseName(name) {
-    if(name.indexOf(".") != -1) {
-      return name.split(".")[1];
-    } else {
-      return "Admin";
-    }
   }
 }
 

@@ -4,13 +4,13 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import '../app-elements/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-class LoginView extends PolymerElement {
+class ForgotPasswordView extends PolymerElement {
   static get template() {
     return html`
     <style include="shared-styles">
       :host {
-        display: flex;
-        background-color: #F5F5F5;
+        display: none;
+        background-color: #f5f5f5;
         flex-direction: column;
         min-height: 100vh;
       }
@@ -38,14 +38,14 @@ class LoginView extends PolymerElement {
         padding-bottom: 0.5vh;
         color: #312783;
         font-family: Folio;
-        font-size: 50px;
+        font-size: 45px;
         line-height: 55px;
       }
       .fields {
         margin-top: 4vh;
       }
       paper-input {
-        --paper-input-container-color: #B7B8B7;
+        --paper-input-container-color: #b7b8b7;
         --paper-input-container-focus-color: #312783;
         --paper-input-container-input-color: #312783;
       }
@@ -60,7 +60,7 @@ class LoginView extends PolymerElement {
         height: auto;
         max-width: 170px;
         color: white;
-        background-color: #E6007E;
+        background-color: #e6007e;
         font-family: Folio;
         font-size: 24px;
         letter-spacing: 5px;
@@ -68,14 +68,6 @@ class LoginView extends PolymerElement {
         text-align: center;
         margin: 4vh auto 0;
         border-radius: 0;
-      }
-      .forgot-password {
-        margin-top: 1vh;
-        color: #e6007e;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 19px;
-        text-align: center;
       }
       .social {
         text-align: center;
@@ -139,28 +131,26 @@ class LoginView extends PolymerElement {
         <iron-image sizing="contain" src="/images/logo.png"></iron-image>
       </div>
       <div class="main-title">
-        Faça Login
+        Refazer Senha
+      </div>
+      <div class="social">
+        <div class="social-text">
+          Preencha o campo abaixo e aguarde o recebimento do link de acesso
+        </div>
       </div>
       <div class="fields">
-        <paper-input label="Email" type="email" value="{{email}}" error-message="Usuário inválido!"></paper-input>
+        <paper-input label="Email" type="email" value="{{email}}" error-message="Insira um endereço de email válido." auto-validate required></paper-input>
         <paper-input-error hidden$="[[!errors.email]]" invalid>
           {{errors.email}}
         </paper-input-error>
-        <paper-input label="Senha" type="password" minlength="8" value="{{password}}" error-message="Senha incorreta!"></paper-input>
-        <paper-input-error hidden$="[[!errors.password]]" invalid>
-          {{errors.password}}
-        </paper-input-error>
       </div>
-      <paper-button on-tap="submitCredentials">
-        Entrar
+      <paper-button on-tap="submitEmail">
+        Enviar
       </paper-button>
-      <div class="forgot-password" on-tap="openForgotPassword">
-        esqueci minha senha
-      </div>
     </div>
     <div class="social">
       <div class="social-text">
-        Você também pode usar suas redes sociais
+      Você também pode usar suas redes sociais
       </div>
       <div class="social-buttons">
         <div class="social-button google">
@@ -183,47 +173,41 @@ class LoginView extends PolymerElement {
 `;
   }
 
-  static get is() { return 'login-view'; }
+  static get is() { return 'forgot-password-view'; }
+
   static get properties() {
     return {
-      credentials: {
+      data: {
         type: Object,
         notify: true
       },
       errors: Object,
-      email: String,
-      password: String,
-      sharedMission: String
+      email: String
     };
   }
 
-  submitCredentials(e) {
+  submitEmail(e) {
     const inputs = Array.from(this.shadowRoot.querySelectorAll('paper-input'));
     let invalid = inputs.reduce((invalid, input) => invalid || input.invalid, false);
     let isblank = inputs.reduce((isblank, input) => isblank || !input.value, false);
     if (!invalid && !isblank) {
-      this.credentials = {
-        email: this.email,
-        password: this.password
-      };
+      this.data = {
+        email: this.email
+      }
     }
   }
 
-  signInWithFacebook(e) {
+  signUpWithFacebook(e) {
     this.dispatchEvent(new CustomEvent('provider-auth', { detail: { provider: 'facebook' } }));
   }
 
-  signInWithGoogle(e) {
+  signUpWithGoogle(e) {
     this.dispatchEvent(new CustomEvent('provider-auth', { detail: { provider: 'google' } }));
   }
 
   openRegister(e) {
     this.dispatchEvent(new CustomEvent('open-register'));
   }
-
-  openForgotPassword(e) {
-    this.dispatchEvent(new CustomEvent('open-forgot-password'));
-  }
 }
 
-window.customElements.define(LoginView.is, LoginView);
+window.customElements.define(ForgotPasswordView.is, ForgotPasswordView);

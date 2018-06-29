@@ -31,7 +31,7 @@ class RegisterView extends PolymerElement {
         margin: auto;
         display: block;
       }
-      .title {
+      .main-title {
         text-transform: uppercase;
         text-align: center;
         margin: 4vh auto 0;
@@ -123,7 +123,7 @@ class RegisterView extends PolymerElement {
       <div class="image">
         <iron-image sizing="contain" src="/images/logo.png"></iron-image>
       </div>
-      <div class="title">
+      <div class="main-title">
         Cadastre-se
       </div>
       <div class="fields">
