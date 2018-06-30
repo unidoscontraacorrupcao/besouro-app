@@ -12,7 +12,7 @@ $_documentContainer.innerHTML = `<dom-module id="app-dialog-styles">
       }
       :host([modal]) {
         min-width: 60%;
-        max-width: unset; 
+        max-width: unset;
         background: transparent;
       }
       :host ::slotted(.buttons paper-button) {
@@ -22,6 +22,13 @@ $_documentContainer.innerHTML = `<dom-module id="app-dialog-styles">
       :host([modal]) > * {
         margin: 0 !important;
         padding: 0 !important;
+      }
+
+     :host > ::slotted(*) {
+        padding: 0;
+        margin: 0;
+        width: calc(100vw - 50px);
+        max-width: 400px;
       }
 
       :host([animated]) ::slotted(*) {
@@ -34,7 +41,7 @@ $_documentContainer.innerHTML = `<dom-module id="app-dialog-styles">
         opacity: 1;
         transform: translateY(0);
       }
-      
+
       .list-item {
         color: var(--paper-grey-600);
         padding: 5px 0;

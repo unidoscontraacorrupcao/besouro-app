@@ -138,7 +138,7 @@ class InboxPage extends PolymerElement {
         <app-toolbar>
           <paper-icon-button class="header-icon" icon="app:menu" drawer-toggle="" on-tap="openDrawer"></paper-icon-button>
           <div main-title="">{{pageTitle}}</div>
-          <paper-icon-button class="header-icon" icon="app:search"></paper-icon-button>
+          <!-- <paper-icon-button class="header-icon" icon="app:search"></paper-icon-button> -->
         </app-toolbar>
         <app-toolbar sticky="">
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">

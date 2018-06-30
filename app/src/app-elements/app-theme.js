@@ -16,7 +16,7 @@ $_documentContainer.innerHTML = `<custom-style>
      */
       @font-face {
         font-family: folio;
-        src:url("fonts/FOLIOBC.ttf");
+        src:url("fonts/folio/FOLIOBC.ttf");
       }
 
       @font-face {
@@ -25,8 +25,8 @@ $_documentContainer.innerHTML = `<custom-style>
       }
 
       @font-face {
-        font-family: helvetica-light;
-        src:url("fonts/Helvetica/Helvetica-Light.ttf");
+        font-family: helvetica-neue;
+        src:url("fonts/Helvetica/HelveticaNeueLTStd-ThCn.otf");
       }
 
     :root { 
@@ -37,7 +37,7 @@ $_documentContainer.innerHTML = `<custom-style>
       --primary-background-color: #ffffff;
       --secondary-background-color: #f8f8f8;
       --primary-text-color: #2d2d2d;
-      --secondary-text-color: #000083;
+      --secondary-text-color: #312783;
       --light-text-color: #B7B8B7;
       --disabled-text-color: #666666;
       --divider-color: #e0e0e0;

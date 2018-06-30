@@ -5,11 +5,11 @@ $_documentContainer.setAttribute('style', 'display: none;');
 $_documentContainer.innerHTML = `<dom-module id="shared-styles">
   <template>
     <style>
-      
+
       body {
         @apply --default-font;
       }
-      
+
       .card {
         margin: 15px 0;
         padding: 16px;
@@ -54,7 +54,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         text-transform: capitalize;
         max-width: calc(100vw - 132px);
       }
-      
+
       /* block button */
       .block {
         display: block;
@@ -68,7 +68,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         border: none;
         height: 1px;
       }
-    
+
       h1 {
         font-size: 22px;
         line-height: 26px;
@@ -76,7 +76,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         text-overflow: ellipsis;
         white-space: nowrap;
         @apply --default-title-font;
-      } 
+      }
 
       app-header {
         background: var(--default-primary-color);
@@ -148,7 +148,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
       .file-upload iron-icon {
         --iron-icon-fill-color: var(--dark-primary-color);
       }
-      
+
       .facebook {
         color: #3d5c98;
       }
