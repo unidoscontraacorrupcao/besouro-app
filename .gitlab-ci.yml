@@ -1,64 +1,113 @@
-image: besouro/cicd:latest
-services:
-  - docker:dind
 stages:
-  - test
+  - push base image
+  - push dev image
   - push image
   - deploy
 
-# TODO: Create test job
-
-# Stage: test
-
-# test:
-#   stage: test
-#   script:
-#   tags:
-#     - docker
-
 # Stage: push image
 
-push staging image:
-  stage: push image
+push base image:
+  stage: push base image
+  image: docker
+  services:
+    - docker:dind
+  variables:
+    IMAGE: besouro/app
+    TAG: base
+    DOCKERFILE_PATH: docker/base/Dockerfile
   script:
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-    - docker-compose -f ./docker/production/build.yml build
-    - docker-compose -f ./docker/production/build.yml push
+    - docker build --cache-from $IMAGE:$TAG -t $IMAGE:$TAG -f $DOCKERFILE_PATH .
+    - docker push $IMAGE:$TAG
   only:
-    - /develop/
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /push-base-image/
   tags:
     - docker
 
-# TODO: Production Environment
+push dev image:
+  stage: push dev image
+  image: docker
+  services:
+    - docker:dind
+  variables:
+    IMAGE: besouro/app
+    TAG: dev
+    DOCKERFILE_PATH: docker/develop/Dockerfile
+  script:
+    - docker build --cache-from $IMAGE:$TAG -t $IMAGE:$TAG -f $DOCKERFILE_PATH .
+    - docker push $IMAGE:$TAG
+  only:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /push-dev-image/
+  tags:
+    - docker
 
-# push production image:
-#   stage: push image
-#   script:
-#   only:
-#     - /master/
-#   tags:
-#     - docker
+push staging image:
+  stage: push image
+  image: docker
+  services:
+    - docker:dind
+  environment:
+    name: staging
+    url: http://dev.besouro.ejplatform.org/
+  variables:
+    IMAGE: besouro/app
+    TAG: staging
+    API_HOST: api.dev.besouro.ejplatform.org
+    DOCKERFILE_PATH: docker/production/Dockerfile
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+    - docker build --cache-from $IMAGE:$TAG --build-arg api_host=$API_HOST -t $IMAGE:$TAG -f $DOCKERFILE_PATH .
+    - docker push $IMAGE:$TAG
+  only:
+    refs:
+      - develop
+  except:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /skip-push-staging-image/
+  tags:
+    - docker
 
-# TODO: Deployment jobs
+push staging tag image:
+  stage: push image
+  image: docker
+  services:
+    - docker:dind
+  environment:
+    name: staging
+    url: http://dev.besouro.ejplatform.org/
+  variables:
+    IMAGE: besouro/app
+    TAG: staging
+    API_HOST: api.dev.besouro.ejplatform.org
+    DOCKERFILE_PATH: docker/production/Dockerfile
+  script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+    - docker build --cache-from $IMAGE:$TAG --build-arg api_host=$API_HOST -t $IMAGE:$TAG-$CI_COMMIT_TAG -f $DOCKERFILE_PATH .
+    - docker push $IMAGE:$TAG-$CI_COMMIT_TAG
+  only:
+    refs:
+      - tags
+  tags:
+    - docker
 
 # Stage: deploy
 
-# deploy staging:
-#   stage: deploy
-#   environment:
-#     name: staging
-#     url: http://dev.besouro.ejplatform.org/
-#   script:
-#   only:
-#     - /develop/
-#   tags:
-#     - docker
-
-# deploy production:
-#   stage: deploy
-#   environment: production
-#   script:
-#   only:
-#     - /master/
-#   tags:
-#     - docker
+deploy tag to staging:
+  stage: deploy
+  image: besouro/cicd:k8s
+  environment:
+    name: staging
+    url: http://dev.besouro.ejplatform.org/
+  variables:
+    DEPLOYMENT: besouro-app
+    CONTAINER: app
+    IMAGE: besouro/app
+    TAG: staging
+  script:
+    - /deploy.sh $DEPLOYMENT $CONTAINER $IMAGE $TAG-$CI_COMMIT_TAG
+  only:
+    refs:
+      - tags
+  tags:
+    - docker
