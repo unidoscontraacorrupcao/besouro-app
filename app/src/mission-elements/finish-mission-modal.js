@@ -19,55 +19,36 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
         height: 100vh;
       }
 
-      .confirmation-text {
-        text-align: left;
-        line-height: 1.6;
-      }
-
-      #icon-bg {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        text-align: center;
-        background: linear-gradient(to left, var(--light-accent-color), var(--accent-color));
-      }
-
-      #icon-bg div {
-        margin: 4px 4px 4px 5px;
-      }
-
-      paper-icon-button {
-        color: white;
-      }
-
       .icon-bg paper-icon-button { margin-top: 3px; }
 
       .input-file-container { display: flex; }
+      .input-file-container paper-icon-button { padding: 0; }
 
-      paper-button {
-        float: left;
-        margin-bottom: 20px;
-        margin-top: 10px;
-        border: none;
-        box-shadow: none;
-        color: var(--accent-color);
-      }
+      .buttons { margin-left: 20px; }
 
     #file-name {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: 0.9em;
+      font-size: 16px;
+      color: var(--light-text-color);
       width: 180px;
     }
 
     .btn-text {
       margin-left: 10px;
+      text-align: left;
     }
 
     .btn-text h3, .btn-text h4 {
       margin: unset;
-      margin-top: 2px;
+      margin-top: 5px;
+      font-family: folio;
+    }
+
+    .btn-text h3 {
+      font-size: 18px;
+      text-transform: uppercase;
     }
 
     .description { margin-bottom: 20px; }
@@ -91,6 +72,89 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
         margin-top: 10px;
       }
     }
+
+      .header-content {
+        background-color: #009FE3;
+        height: 76px;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      #header-text {
+        padding: 30px 10px 20px 10px;
+        text-align: center;
+      }
+
+
+      #header-text span, #confirmation-text span {
+        text-transform: uppercase;
+        font-family: folio;
+      }
+
+      #header-text span {
+        font-size: 24px;
+        color: white;
+      }
+
+      #confirmation-text {
+        margin: 115px auto 34px auto;
+        width: 80%;
+        text-align: center;
+        color: var(--secondary-text-color);
+        font-size: 24px;
+      }
+
+      #confirmation-text p {
+        font-family: helvetica-neue;
+        font-size: 16px;
+        color: #333333;
+        margin: 34px auto 40px auto;
+        width: 90%;
+      }
+      .card-action {
+        width: 75%;
+        max-width: 400px;
+        height: 64px;
+        margin: auto;
+        text-align: center;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        background-color:var(--accent-color);
+      }
+
+      .card-action div { position: relative; }
+      .card-action a {
+        text-decoration: none;
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        margin: 19px 46px 19px 46px;
+      }
+
+      .card-action span {
+        font-family: Folio;
+        text-transform: uppercase;
+        font-size: 24px;
+        color: white;
+        margin: auto;
+        letter-spacing: 3px;
+      }
+
+      .icon-header {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+      }
+
+      .icon-header paper-icon-button { padding: 0; }
+
+      paper-textarea { text-align: left; }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -100,20 +164,21 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     </app-dialog>
 
 
-
-      <h2 class="message"> Obrigado! </h2>
-
-      <div class="confirmation-text">
+    <div class="modal-header">
+      <div class="header-content">
+        <div id="header-text"><span>concluir missão</span></div>
+        <div class="icon-header">
+          <paper-icon-button slot="suffix" icon="app:end-mission"></paper-icon-button>
+        </div>
+      </div>
+      <div id="confirmation-text">
+        <span>agradecemos seu engajamento! <3</span>
         <p>Agora é hora de pedir para o comitê de campanha validar sua missão e oferecer a sua recompensa. Pra isso basta enviar a comprovação solicitada na missão fazendo o upload ou descrevendo
           a sua solução.</p>
-      <div class="buttons">
 
+      <div class="buttons">
         <div class="input-file-container">
-          <div id="icon-bg">
-            <div>
-              <paper-icon-button class="accent block" slot="suffix" icon="app:cloud-upload" on-tap="_openInput"><paper-input id="input" type="file"></paper-input></paper-icon-button>
-            </div>
-          </div>
+          <paper-icon-button slot="suffix" icon="app:receipt-upload" on-tap="_openInput"><paper-input id="input" type="file"></paper-input></paper-icon-button>
           <div class="btn-text">
             <h3>Enviar arquivo</h3>
 
@@ -122,14 +187,17 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
             </h4>
           </div>
         </div>
-        <div class="description">
-          <paper-textarea value="{{description}}" max-rows="4" maxlength="1000" char-counter="" label="descrição"></paper-textarea>
+      </div>
+      <div class="description">
+        <paper-textarea value="{{description}}" max-rows="4" maxlength="1000" char-counter="" label="Uma breve descrição da comprovação pode ser escrita aqui"></paper-textarea>
+      </div>
+      <div class="card-action">
+        <div>
+          <a href="#" on-tap="_sendReceipts"><span>enviar</span></a>
         </div>
-
-        <paper-button toggles="" raised="" on-tap="_sendReceipts">enviar</paper-button>
       </div>
-
-      </div>
+    </div>
+  </div>
 `;
   }
 
@@ -188,14 +256,18 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     if(this.input && this.input.files.length > 0) {
       formData.append("receiptFile", this.input.files[0]);
     }
-    this.$.api.xhrData = { method: "post", 
+    this.$.api.xhrData = { method: "post",
       url: `${this.$.api.baseUrl}/api/v1/missions/${this.missionId}/receipt/`,
       body: formData
     };
     this.$.api.user = this.user;
     this.$.api.xhrRequest().then(function(response){
-        this.$.finishConfirmation.present();
+        this._dismiss();
     }.bind(this));
+  }
+
+  _dismiss() {
+    this.dispatchEvent(new CustomEvent('close-modal'));
   }
 }
 customElements.define(FinishMissionModal.is, FinishMissionModal);

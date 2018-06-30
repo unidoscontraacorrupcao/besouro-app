@@ -21,10 +21,6 @@ class AcceptMissionModal extends PolymerElement {
         text-align: center;
       }
 
-      .confirmation-text {
-        width: 80%;
-      }
-
       .modal-header {
         width: 100%;
       }
@@ -32,6 +28,9 @@ class AcceptMissionModal extends PolymerElement {
       .header-content {
         background-color: var(--accent-color);
         height: 76px;
+        position: absolute;
+        top: 0;
+        width: 100%;
       }
 
       #header-text {
@@ -50,7 +49,8 @@ class AcceptMissionModal extends PolymerElement {
       }
 
       #confirmation-text {
-        padding: 32px 10px 34px 10px;
+        margin: 115px auto 34px auto;
+        width: 80%;
         text-align: center;
         color: var(--secondary-text-color);
         font-size: 24px;
@@ -96,14 +96,31 @@ class AcceptMissionModal extends PolymerElement {
         margin: auto;
         letter-spacing: 3px;
       }
+
+      .icon-header {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+      }
+
+      .icon-header paper-icon-button { padding: 0; }
     </style>
 
     <div class="modal-header">
-      <div class="header-content"><div id="header-text"><span>missão aceita!</span></div></div>
+      <div class="header-content">
+        <div id="header-text"><span>missão aceita!</span></div>
+        <div class="icon-header">
+          <paper-icon-button slot="suffix" icon="app:accept-mission"></paper-icon-button>
+        </div>
+      </div>
       <div id="confirmation-text">
         <span>agradecemos seu envolvimento!</span>
         <p>
-        Fixie tote bag ethnic keytar. Neutra vinyl American Apparel kale chips tofu art party, cardigan raw denim quinoa. Cray paleo tattooed, Truffaut skateboard street art PBR jean shorts Shoreditch farm-to-table.
+        Fique atento ao prazo restante  e não deixe de concluir a missão. Veja na aba
+        <b>MINHAS MISSÕES</b> essa e outras missões que você aceitou.
         </p>
       <div class="card-action">
         <div>

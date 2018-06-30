@@ -225,7 +225,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       <accept-mission-modal></accept-mission-modal>
     </app-dialog>
 
-    <app-scrollable-dialog id="finishedDialog" modal>
+    <app-scrollable-dialog id="finishedDialog">
       <finish-mission-modal user="[[user]]" mission-id="{{mission.id}}"></finish-mission-modal>
     </app-scrollable-dialog>
 
@@ -399,14 +399,13 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   ready() {
     super.ready();
-    this.shadowRoot.querySelector('finish-mission-modal').shadowRoot.querySelector('finish-confirmation-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
+    this.shadowRoot.querySelector('finish-mission-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
     this.acceptMissionFunc = this._acceptMission.bind(this);
     this.finishMissionFunc = this._finishMission.bind(this);
   }
 
   _dismissFinishModal() {
     this.set('currentMissionStats', 'new');
-    document.querySelector('#finishConfirmation').dismiss();
     this._setMissionStats();
     this._setActionBtn();
     this.$.finishedDialog.dismiss();

@@ -69,5 +69,13 @@ class AppScrollableDialog extends mixinBehaviors([PaperDialogBehavior], PolymerE
     header.forEach(node => node.classList.toggle('animated'));
 
   }
+
+  ready() {
+    super.ready();
+    const paperDialogScrollable = this.shadowRoot.querySelector("paper-dialog-scrollable");
+    const scrollableDiv = paperDialogScrollable.shadowRoot.querySelector(".scrollable");
+    //makes paper-dialog-scrollable full width
+    scrollableDiv.setAttribute("style", "padding: 0 !important");
+  }
 }
 customElements.define(AppScrollableDialog.is, AppScrollableDialog);
