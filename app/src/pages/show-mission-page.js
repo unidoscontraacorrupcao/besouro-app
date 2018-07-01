@@ -406,7 +406,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         <app-toolbar>
           <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
           <h1 condensed-title="" class="main-title">{{mission.title}}</h1>
-          <paper-icon-button icon="app:mission-edit"></paper-icon-button>
+          <!-- <paper-icon-button icon="app:mission-edit"></paper-icon-button> -->
         </app-toolbar>
 
         <app-toolbar class="tall">

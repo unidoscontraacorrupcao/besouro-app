@@ -264,7 +264,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
           <paper-button on-tap="_goToMission">
             <iron-icon icon="app:mission-comments"></iron-icon>
-            <span>&nbsp;xx</span>
+            <span>&nbsp;{{mission.comment_set.length}}</span>
           </paper-button>
 
         </div>
