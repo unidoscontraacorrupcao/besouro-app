@@ -495,16 +495,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </div>
     </app-header-layout>
 
-    <dom-if if="{{!mission}}">
-      <template>
+    <div id="inboxLoading">
         <div class="progress">
           <div class="spinner">
             <paper-spinner active=""></paper-spinner>
           </div>
           <paper-progress indeterminate=""></paper-progress>
         </div>
-      </template>
-    </dom-if>
+    </div>
 `;
   }
 
@@ -677,6 +675,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _finishMission(e) {
+    console.log("finish");
     this.$.finishedDialog.present();
     this._calcMissionStats();
     this._setActionBtn();
@@ -720,11 +719,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
   _calcMissionStats() {
     if (!this.data) return;
+    if (this.mission.id == undefined) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}/user-status/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("currentMissionStats", ajax.response.status);
       this._setActionBtn();
+      this.hideLoading(true);
     }.bind(this));
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}/statistics`;
@@ -732,9 +733,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.set("acceptedMissionCount", ajax.response.accepted);
       this.set("concludedMissionCount", ajax.response.realized);
       this.set("pendingMissionCount", ajax.response.pending);
-      this._setActionBtn();
     }.bind(this));
-    this._setMissionOwnerName();
   }
 
 
@@ -780,10 +779,11 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.route["shared"] = this.data.key;
       this.route.__queryParams = {};
     }
-    setTimeout(this._missionChanged.bind(this), 100);
+    this._missionChanged();
   }
 
   _missionChanged() {
+    if (!this.data) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}`;
     this.$.api.request().then(function(ajax) {
@@ -803,13 +803,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     clonedNode.share();
   }
 
-  _setMissionOwnerName() {
-    if (!this.mission.owner) return;
-    var name = this.mission.owner.display_name.split(".")[1];
-    if (name != undefined)
-      this.set("ownerName", name);
-    else
-      this.set("ownerName", this.mission.owner.name);
+  hideLoading(force=false) {
+    // the load is complete.
+    if (force) this.shadowRoot.querySelector('#inboxLoading').setAttribute('style', 'display:none');
+    if (this.domChangeEventCount == 1) {
+      this.shadowRoot.querySelector('#inboxLoading').setAttribute('style', 'display:none');
+    }
+    this.domChangeEventCount += 1;
   }
+
 }
 window.customElements.define(ShowMissionPage.is, ShowMissionPage);

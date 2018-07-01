@@ -81,7 +81,7 @@ class InboxPage extends PolymerElement {
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission" on-reload-inbox="_reloadInbox"></mission-card>
+            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox"></mission-card>
           </template>
         </div>
         <div class="inbox">

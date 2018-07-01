@@ -124,7 +124,7 @@ class AcceptMissionModal extends PolymerElement {
         </p>
       <div class="card-action">
         <div>
-          <a href="#"><span>ver missão</span></a>
+          <a href="#" on-tap="_goToMission" ><span>ver missão</span></a>
         </div>
       </div>
 
@@ -135,7 +135,12 @@ class AcceptMissionModal extends PolymerElement {
 
   static get is() { return 'accept-mission-modal'; }
   static get properties() {
-    return {};
+    return {
+      missionId: String
+    }
+  }
+  _goToMission() {
+    this.dispatchEvent(new CustomEvent('modal-show-mission', { detail: { mission: this.missionId }}));
   }
 }
 window.customElements.define(AcceptMissionModal.is, AcceptMissionModal);

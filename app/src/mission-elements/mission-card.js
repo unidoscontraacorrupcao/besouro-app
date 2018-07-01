@@ -222,7 +222,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     </style>
 
     <app-dialog id="acceptedDialog">
-      <accept-mission-modal></accept-mission-modal>
+      <accept-mission-modal on-modal-show-mission="_modalGoToMission" mission-id="{{mission.id}}"></accept-mission-modal>
     </app-dialog>
 
     <app-scrollable-dialog id="finishedDialog">
@@ -307,6 +307,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   _goToMission() {
     this.dispatchEvent(new CustomEvent('show-mission', { detail: { mission: this.mission.id } }))
+  }
+  _modalGoToMission() {
+    this.dispatchEvent(new CustomEvent('modal-show-mission', { detail: { mission: this.mission.id } }))
+    this.$.acceptedDialog.dismiss();
   }
 
   _reloadInbox() {
