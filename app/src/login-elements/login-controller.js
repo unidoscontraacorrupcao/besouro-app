@@ -25,7 +25,6 @@ class LoginController extends PolymerElement {
       </style>
 
       <login-view id="login"
-        feedback="{{_login.feedback}}"
         on-login="_requestLogin",
         on-sign-up="_showSignUp" on-forgot-password="_showForgotPassword"></login-view>
 
@@ -59,19 +58,18 @@ class LoginController extends PolymerElement {
   static get properties() {
     return {
       _toastMessage: String,
-      _login: {
-        type: Object,
-        value: function() { return this._getEmptyLogin(); }
-      },
-      _signUp: {
-        type: Object,
-        value: function() { return this._getEmptySignUp(); }
-      },
-      _user: {
-        type: Object,
-        value: function() { return this._getEmptyUser(); }
-      }
+      _login: Object,
+      _signUp: Object,
+      _user: Object
     };
+  }
+
+  constructor() {
+    super();
+    this._toastMessage = ``;
+    this._login = this._getEmptyLogin();
+    this._signUp = this._getEmptySignUp();
+    this._user = this._getEmptyUser();
   }
 
   // Public Actions
@@ -98,27 +96,21 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `flex`;
     this.$.login.style.display = `none`;
     // this.$.forgotPassword.style.display = `none`;
-    this._user = this._getEmptyUser();
-    this._login = this._getEmptyLogin();
-    this._signUp = this._getEmptySignUp();
+    this._clearForms();
   }
 
   _showLogin() {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `flex`;
     // this.$.forgotPassword.style.display = `none`;
-    this._user = this._getEmptyUser();
-    this._login = this._getEmptyLogin();
-    this._signUp = this._getEmptySignUp();
+    this._clearForms();
   }
 
   _showForgotPassword() {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `none`;
     // this.$.forgotPassword.style.display = `flex`;
-    this._user = this._getEmptyUser();
-    this._login = this._getEmptyLogin();
-    this._signUp = this._getEmptySignUp();
+    this._clearForms();
   }
 
   // API Events
@@ -131,11 +123,12 @@ class LoginController extends PolymerElement {
       let errors = result.errors;
       if(errors.notFound) {
         this._toastUnknownError();
+        this.$.login.emptyPassword();
       } else {
-        this._login.feedback.errors = {
+        this.$.login.exposeErrors({
           email: errors.username,
           password: errors.password
-        };
+        });
         if(errors.non_field_errors) {
           this._toastIt(errors.non_field_errors);
         } else {
@@ -153,11 +146,12 @@ class LoginController extends PolymerElement {
       let errors = result.errors;
       if(errors.notFound) {
         this._toastUnknownError();
+        this.$.signUp.emptyPassword();
       } else {
-        this._signUp.feedback.errors = {
+        this.$.signUp.exposeErrors({
           email: errors.email,
           password: errors.password1
-        };
+        });
         this._toastInvalidFields();
       }
     }
@@ -172,6 +166,8 @@ class LoginController extends PolymerElement {
         this.$.apiUser.request(this._user.key, this._user.uid);
       }
     } else {
+      this.$.login.emptyPassword();
+      this.$.signUp.emptyPassword();
       this._toastUnknownError();
     }
   }
@@ -183,6 +179,8 @@ class LoginController extends PolymerElement {
       this._user.isAdmin = result.data.isAdmin;
       this.$.apiUserProfile.request(this._user.key, this._user.uid);
     } else {
+      this.$.login.emptyPassword();
+      this.$.signUp.emptyPassword();
       this._toastUnknownError();
     }
   }
@@ -197,13 +195,11 @@ class LoginController extends PolymerElement {
       this._user.politicalActivity = result.data.politicalActivity;
       this._user.biography = result.data.biography;
       this._user.photoURL = result.data.image;
-      if(`form` in this._signUp) {
-        this._signUp.feedback.finished = true;
-      } else {
-        this._login.feedback.finished = true;
-      }
-      this._dispatchUser()
+      this.$.login.emptyForm();
+      this._dispatchUser();
     } else {
+      this.$.login.emptyPassword();
+      this.$.signUp.emptyPassword();
       this._toastUnknownError();
     }
   }
@@ -215,7 +211,16 @@ class LoginController extends PolymerElement {
       this._user.isAdmin = result.data.isAdmin;
       this.$.apiUserProfile.request(this._user.key, this._user.uid);
     } else {
-      this._toastUnknownError();
+      let errors = result.errors;
+      if(errors.notFound) {
+        this._toastUnknownError();
+        this.$.signUp.emptyPassword();
+      } else {
+        this.$.signUp.exposeErrors({
+          name: errors.displayName
+        });
+        this._toastInvalidFields();
+      }
     }
   }
 
@@ -223,9 +228,7 @@ class LoginController extends PolymerElement {
 
   _dispatchUser() {
     this.dispatchEvent(new CustomEvent(`user-update`, { detail: this._user } ));
-    this._user = this._getEmptyUser();
-    this._login = this._getEmptyLogin();
-    this._signUp = this._getEmptySignUp();
+    this._clearForms();
   }
 
   _toastIt(message) {
@@ -239,6 +242,14 @@ class LoginController extends PolymerElement {
 
   _toastInvalidFields() {
     this._toastIt("Cadastro inválido. Consulte os erros nos campos.");
+  }
+
+  _clearForms() {
+    this._user = this._getEmptyUser();
+    this._login = this._getEmptyLogin();
+    this._signUp = this._getEmptySignUp();
+    this.$.login.emptyForm();
+    this.$.signUp.emptyForm();
   }
 
   _getEmptyUser() {
@@ -260,19 +271,11 @@ class LoginController extends PolymerElement {
   }
 
   _getEmptyLogin() {
-    return {
-      feedback: {
-        exists: false
-      }
-    };
+    return {};
   }
 
   _getEmptySignUp() {
-    return {
-      feedback: {
-        exists: false
-      }
-    };
+    return {};
   }
 }
 

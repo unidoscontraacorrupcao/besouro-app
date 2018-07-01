@@ -51,7 +51,6 @@ class LoginView extends PolymerElement {
         }
         div.fields > paper-input-error {
           position: relative;
-          margin-top: 5px;
           white-space: normal;
           word-wrap: break-word;
         }
@@ -142,21 +141,24 @@ class LoginView extends PolymerElement {
           Faça Login
         </div>
         <div class="fields">
-          <paper-input
+          <paper-input id="email"
             label="Email"
             type="email"
             value="{{_form.email}}"
+            invalid=[[_errors.email]]
             required></paper-input>
-          <paper-input-error hidden$="[[!feedback.errors.email]]" invalid>
-            {{feedback.errors.email}}
+          <paper-input-error
+            hidden$=[[!_errors.email]] invalid>
+            {{_errors.email}}
           </paper-input-error>
-          <paper-input
+          <paper-input id="password"
             label="Senha"
             type="password"
             value="{{_form.password}}"
+            invalid=[[_errors.password]]
             required></paper-input>
-          <paper-input-error hidden$="[[!feedback.errors.password]]" invalid>
-            {{feedback.errors.password}}
+          <paper-input-error hidden$=[[!_errors.password]] invalid>
+            {{_errors.password}}
           </paper-input-error>
         </div>
         <paper-button on-tap="_onLogin">
@@ -195,16 +197,32 @@ class LoginView extends PolymerElement {
 
   static get properties() {
     return {
-      feedback: {
-        type: Object,
-        value: function () { return this._getEmptyFeedback(); },
-        observer: `_onFeedback`
-      },
-      _form: {
-        type: Object,
-        value: function () { return this._getEmptyForm(); }
-      }
+      _errors: Object,
+      _form: Object
     };
+  }
+
+  constructor() {
+    super();
+    this._form = this._getEmptyForm();
+    this._errors = this._getEmptyErrors();
+  }
+
+  exposeErrors(errors) {
+    this._errors = errors;
+    this.emptyPassword();
+  }
+
+  emptyForm() {
+    this._form = this._getEmptyForm();
+    this._errors = this._getEmptyErrors();
+    this.$.email.updateValueAndPreserveCaret("");
+    this.$.password.updateValueAndPreserveCaret("");
+  }
+
+  emptyPassword() {
+    this.$.password.updateValueAndPreserveCaret("");
+    this._form.password = "";
   }
 
   _onLogin(e) {
@@ -227,13 +245,6 @@ class LoginView extends PolymerElement {
     this.dispatchEvent(new CustomEvent(`auth-google`));
   }
 
-  _onFeedback(e, feedback) {
-    if(this.feedback.finished) {
-      this._form = this._getEmptyForm();
-      this.feedback = this._getEmptyFeedback();
-    }
-  }
-
   _getEmptyForm() {
     return {
       email: ``,
@@ -241,9 +252,10 @@ class LoginView extends PolymerElement {
     };
   }
 
-  _getEmptyFeedback() {
+  _getEmptyErrors() {
     return {
-      finished: false
+      email: ``,
+      password: ``
     };
   }
 }
