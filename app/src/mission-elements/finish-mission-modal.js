@@ -58,9 +58,10 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     }
 
     @media screen and (max-width: 350px) {
-      .btn-text {
-        font-size: 0.75em;
-      }
+      .btn-text h3 { font-size: 15px; }
+      .btn-text h4 { font-size: 13px !important; }
+
+      .buttons { margin-left: unset; }
     }
 
     @media screen and (max-width: 310px) {
@@ -178,7 +179,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
 
       <div class="buttons">
         <div class="input-file-container">
-          <paper-icon-button slot="suffix" icon="app:receipt-upload" on-tap="_openInput"><paper-input id="input" type="file"></paper-input></paper-icon-button>
+          <paper-icon-button id="uploadIcon" slot="suffix" icon="app:receipt-upload" on-tap="_openInput"><paper-input id="input" type="file"></paper-input></paper-icon-button>
           <div class="btn-text">
             <h3>Enviar arquivo</h3>
 
@@ -268,6 +269,13 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
 
   _dismiss() {
     this.dispatchEvent(new CustomEvent('close-modal'));
+  }
+
+  ready() {
+    super.ready();
+    var receiptPaperIcon = this.$.uploadIcon;
+    var ironIcon = receiptPaperIcon.shadowRoot.querySelector("iron-icon");
+    ironIcon.setAttribute("style", "width: 40px; height: 40px;");
   }
 }
 customElements.define(FinishMissionModal.is, FinishMissionModal);
