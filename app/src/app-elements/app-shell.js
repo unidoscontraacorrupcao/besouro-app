@@ -126,6 +126,7 @@ class AppShell extends PolymerElement {
         display: block;
         height: calc(100% - 180px);
         background: white;
+        overflow: scroll;
       }
 
       .drawer-list a {
