@@ -18,11 +18,12 @@ class ApiLogout extends PolymerElement {
     `;
   }
 
-  static get is() { return "api-logout"; }
+  static get is() { return `api-logout`; }
 
   static get properties() {
     return {
-      _url: String
+      _url: String,
+      _headers: String
     };
   }
 
@@ -35,7 +36,7 @@ class ApiLogout extends PolymerElement {
     let validation = this._validate(token);
     if(validation.isValid) {
       this._headers = {
-        "authorization": `Token ${token}`
+        'Authorization': `Token ${token}`
       };
       this.$.ajax.generateRequest();
     } else {
@@ -58,7 +59,7 @@ class ApiLogout extends PolymerElement {
 
   _onError(e, iron) {
     let response = iron.request.xhr.response;
-    console.error("api-logout", response);
+    console.error(`api-logout`, response);
 
     let result = {
       success: false,

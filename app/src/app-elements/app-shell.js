@@ -166,8 +166,11 @@ class AppShell extends PolymerElement {
     </style>
 
     <app-location route="{{route}}"></app-location>
-    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
-    </app-route>
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{routeData}}"
+      tail="{{subroute}}"></app-route>
 
     <app-drawer-layout fullbleed="" narrow="{{narrow}}">
       <!-- Drawer content -->
@@ -189,11 +192,11 @@ class AppShell extends PolymerElement {
               {{user.email}}
             </div>
           </div>
-          <div bottom-item="" on-tap="signOut" hidden$="[[!user.uid]]">
+          <div bottom-item on-tap="_signOut" hidden$="[[!user.uid]]">
             fazer logout
           </div>
-          <div bottom-item="" on-tap="" hidden$="[[user.uid]]">
-            <a href="login">fazer login</a>
+          <div bottom-item hidden$="[[user.uid]]">
+            <a href="/login">fazer login</a>
           </div>
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
@@ -229,7 +232,11 @@ class AppShell extends PolymerElement {
       </app-drawer>
 
       <!-- Main content -->
-      <iron-pages id="pages" selected="[[page]]" attr-for-selected="name" fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged" role="main">
+      <iron-pages id="pages"
+        selected="[[page]]"
+        attr-for-selected="name"
+        fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged"
+        role="main">
           <profile-page name="profile" route="{{route}}" user="{{user}}"></profile-page>
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
@@ -238,8 +245,10 @@ class AppShell extends PolymerElement {
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
           <not-found-page name="not-found"></not-found-page>
-          <login-page name="login" id="login" user="{{user}}" route="{{route}}">
-        </login-page>
+          <login-page id="login"
+            name="login"
+            on-user-update="_onUserUpdate"
+            on-complete="_onLoginComplete"></login-page>
       </iron-pages>
     </app-drawer-layout>
 `;
@@ -262,8 +271,7 @@ class AppShell extends PolymerElement {
       route: Object,
       user: {
         type: Object,
-        observer: "_userChanged",
-        value: function() {return JSON.parse(sessionStorage.getItem("user"));}
+        value: function() { return this._getUser(); }
       }
     }
   }
@@ -304,34 +312,39 @@ class AppShell extends PolymerElement {
     this.$.drawer.open();
   }
 
-  _userChanged(e) {
-    if(this.valid_user()) {
-      sessionStorage.setItem("user", JSON.stringify(this.user));
-      this.set('route.path', '/');
-    } else {
-      console.log("[Shell] Cleaning Session");
-      sessionStorage.setItem("user", JSON.stringify({}));
-      this.set('route.path', '/login');
-    }
-  }
-
-  valid_user() {
-    return this.user != undefined
-      && this.user != null
-      && "key" in this.user
-      && "uid" in this.user
-      && "email" in this.user
-      && "photoURL" in this.user
-      && "displayName" in this.user
-      && "isAdmin" in this.user;
-  }
-
-  signOut(e) {
-    this.$.login.signOut();
-  }
-
   gotoProfile(e) {
     this.set('route.path', '/profile');
+  }
+
+  // User
+
+  _onUserUpdate(e, user) {
+    if(user.key != 0) {
+      this._saveUser(user);
+    } else {
+      this._saveUser({});
+    }
+    this.user = this._getUser();
+  }
+
+  // Login
+
+  _signOut(e) {
+    this.$.login.signOut(this.user.key);
+  }
+
+  _onLoginComplete(e) {
+    this.set('route.path', '/');
+  }
+
+  // Storage
+
+  _saveUser(user) {
+    sessionStorage.setItem("user", JSON.stringify(user));
+  }
+
+  _getUser() {
+    return JSON.parse(sessionStorage.getItem("user"));
   }
 }
 

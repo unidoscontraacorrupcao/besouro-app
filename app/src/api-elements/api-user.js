@@ -18,7 +18,7 @@ class ApiUser extends PolymerElement {
     `;
   }
 
-  static get is() { return "api-user"; }
+  static get is() { return `api-user`; }
 
   static get properties() {
     return {
@@ -30,9 +30,9 @@ class ApiUser extends PolymerElement {
   request(token, id) {
     let validation = this._validate(token, id);
     if(validation.isValid) {
-      this._url = `${this.$.constants.api.users}${id}/`
+      this._url = this.$.constants.api.user.replace(':user_id', id);
       this._headers = {
-        "authorization": `Token ${token}`
+        'authorization': `Token ${token}`
       };
       this.$.ajax.generateRequest();
     } else {
@@ -53,7 +53,7 @@ class ApiUser extends PolymerElement {
     if(displayName.indexOf(".") != -1) {
       return displayName.split(".")[1];
     } else {
-      return "Admin";
+      return 'Admin';
     }
   }
 
@@ -61,7 +61,7 @@ class ApiUser extends PolymerElement {
     let response = e.detail.xhr.response;
 
     let result = {};
-    if("id" in response) {
+    if(`id` in response) {
       result = {
         success: true,
         data: {
@@ -71,7 +71,7 @@ class ApiUser extends PolymerElement {
         }
       };
     } else {
-      console.error("api-user", response);
+      console.error(`api-user`, response);
       result = {
         success: false,
         errors: {
@@ -84,7 +84,7 @@ class ApiUser extends PolymerElement {
 
   _onError(e, iron) {
     let response = iron.request.xhr.response;
-    console.error("api-user", response);
+    console.error(`api-user`, response);
 
     let result = {
       success: false,

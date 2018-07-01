@@ -4,13 +4,13 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
-class LoginView extends PolymerElement {
+class SignUpView extends PolymerElement {
   static get template() {
     return html`
       <style>
         :host {
-          display: flex;
-          background-color: #F5F5F5;
+          display: none;
+          background-color: #f5f5f5;
           flex-direction: column;
           min-height: 100vh;
         }
@@ -38,14 +38,14 @@ class LoginView extends PolymerElement {
           padding-bottom: 0.5vh;
           color: #312783;
           font-family: Folio;
-          font-size: 50px;
+          font-size: 45px;
           line-height: 55px;
         }
         .fields {
           margin-top: 4vh;
         }
         paper-input {
-          --paper-input-container-color: #B7B8B7;
+          --paper-input-container-color: #b7b8b7;
           --paper-input-container-focus-color: #312783;
           --paper-input-container-input-color: #312783;
         }
@@ -60,7 +60,7 @@ class LoginView extends PolymerElement {
           height: auto;
           max-width: 170px;
           color: white;
-          background-color: #E6007E;
+          background-color: #e6007e;
           font-family: Folio;
           font-size: 24px;
           letter-spacing: 5px;
@@ -68,14 +68,6 @@ class LoginView extends PolymerElement {
           text-align: center;
           margin: 4vh auto 0;
           border-radius: 0;
-        }
-        .forgot-password {
-          margin-top: 1vh;
-          color: #e6007e;
-          font-size: 14px;
-          font-weight: bold;
-          line-height: 19px;
-          text-align: center;
         }
         .social {
           text-align: center;
@@ -119,17 +111,10 @@ class LoginView extends PolymerElement {
           border: 1px solid #b7b8b7;
           opacity: 0.3;
         }
-        .sign-up-text {
-          margin-top: 3.7vh;
-          text-transform: uppercase;
-          color: #312783;
-          font-family: Folio;
-          font-size: 50px;
-          line-height: 55px;
-          text-align: center;
-        }
-        .sign-up-button {
-          background-color: #009fe3;
+        .login-button {
+          border: 1px solid #009fe3;
+          background-color: #f5f5f5;
+          color: #009fe3;
           max-width: none;
           margin-bottom: 5vh;
         }
@@ -139,7 +124,7 @@ class LoginView extends PolymerElement {
           <iron-image sizing="contain" src="/images/logo.png"></iron-image>
         </div>
         <div class="main-title">
-          Faça Login
+          Cadastre-se
         </div>
         <div class="fields">
           <paper-input
@@ -151,6 +136,14 @@ class LoginView extends PolymerElement {
             {{feedback.errors.email}}
           </paper-input-error>
           <paper-input
+            label="Nome"
+            value="{{_form.name}}"
+            allowed-pattern="[A-Za-zÀ-ÿ ]"
+            required></paper-input>
+          <paper-input-error hidden$="[[!feedback.errors.name]]" invalid>
+            {{feedback.errors.name}}
+          </paper-input-error>
+          <paper-input
             label="Senha"
             type="password"
             value="{{_form.password}}"
@@ -159,16 +152,13 @@ class LoginView extends PolymerElement {
             {{feedback.errors.password}}
           </paper-input-error>
         </div>
-        <paper-button on-tap="_onLogin">
+        <paper-button on-tap="_onSignUp">
           Entrar
         </paper-button>
-        <div class="forgot-password" on-tap="_onForgotPassword">
-          esqueci minha senha
-        </div>
       </div>
       <div class="social">
         <div class="social-text">
-          Você também pode usar suas redes sociais
+        Você também pode usar suas redes sociais
         </div>
         <div class="social-buttons">
           <div class="social-button google">
@@ -181,17 +171,14 @@ class LoginView extends PolymerElement {
       </div>
       <div class="fill">
         <div class="line"></div>
-        <div class="sign-up-text">
-          Ainda não faz parte do app?
-        </div>
-        <paper-button class="sign-up-button" on-tap="_onSignUp">
-          Cadastre-se
+        <paper-button class="login-button" on-tap="_onLogin">
+          Já possuo login
         </paper-button>
       </div>
     `;
   }
 
-  static get is() { return `login-view`; }
+  static get is() { return `sign-up-view`; }
 
   static get properties() {
     return {
@@ -207,12 +194,12 @@ class LoginView extends PolymerElement {
     };
   }
 
-  _onLogin(e) {
-    this.dispatchEvent(new CustomEvent(`login`, { detail: this._form } ));
+  _onSignUp(e) {
+    this.dispatchEvent(new CustomEvent(`sign-up`, { detail: this._form } ));
   }
 
-  _onSignUp(e) {
-    this.dispatchEvent(new CustomEvent(`sign-up`));
+  _onLogin(e) {
+    this.dispatchEvent(new CustomEvent(`login`));
   }
 
   _forgotPassword(e) {
@@ -228,7 +215,7 @@ class LoginView extends PolymerElement {
   }
 
   _onFeedback(e, feedback) {
-    if(this.feedback.finished) {
+    if(this.feedback.exists && this.feedback.success) {
       this._form = this._getEmptyForm();
       this.feedback = this._getEmptyFeedback();
     }
@@ -237,15 +224,16 @@ class LoginView extends PolymerElement {
   _getEmptyForm() {
     return {
       email: ``,
+      name: ``,
       password: ``
     };
   }
 
   _getEmptyFeedback() {
     return {
-      finished: false
+      exists: false
     };
   }
 }
 
-window.customElements.define(LoginView.is, LoginView);
+window.customElements.define(SignUpView.is, SignUpView);

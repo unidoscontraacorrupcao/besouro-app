@@ -2,7 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 
 class AppConstants extends PolymerElement {
   static get template() { return html``; }
-  static get is() { return "app-constants"; }
+  static get is() { return `app-constants`; }
   static get properties() {
     return {
       api: {
@@ -10,7 +10,7 @@ class AppConstants extends PolymerElement {
         readOnly: true,
         value: function() {
           // API Constants
-          const HOSTNAME = "http://localhost:8000/";
+          const HOSTNAME = `http://localhost:8000/`;
           const V1_ENDPOINT = `${HOSTNAME}api/v1/`;
           const AUTH_ENDPOINT = `${HOSTNAME}rest-auth/`;
 
@@ -20,6 +20,8 @@ class AppConstants extends PolymerElement {
           const API_AUTH_USER = `${AUTH_ENDPOINT}user/`;
 
           const API_USERS = `${V1_ENDPOINT}users/`;
+          const API_USER = `${API_USERS}:user_id/`;
+          const API_USER_PROFILE = `${API_USER}profile/`;
 
           return {
             hostname: HOSTNAME,
@@ -29,7 +31,9 @@ class AppConstants extends PolymerElement {
             signUp: API_SIGN_UP,
             logout: API_LOGOUT,
             authUser: API_AUTH_USER,
-            users: API_USERS
+            users: API_USERS,
+            user: API_USER,
+            userProfile: API_USER_PROFILE
           }
         }
       }
