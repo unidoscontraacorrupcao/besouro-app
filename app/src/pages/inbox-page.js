@@ -56,81 +56,12 @@ class InboxPage extends PolymerElement {
         background-color: var(--default-primary-color);
         border-radius: 50%;
       }
-
-
-      #app-actions {
-        position: fixed;
-        bottom: 0;
-        background: white;
-        width: calc(100% - 256px);
-        border-top-style: solid;
-        border-top-color: #E7E7E7;
-        z-index: 1000;
-      }
-
-      #app-actions span {
-        text-transform: uppercase;
-        color: var(--light-text-color);
-        font-family: Folio;
-      }
-
-      #app-actions #actions-content {
-        width: 80%;
-        display: flex;
-        text-align: center;
-        padding-bottom: 5px;
-        padding-top: 5px;
-        margin: auto;
-      }
-
-      #app-actions #actions-content > * {flex-grow: 1;}
-
-      .icon-container {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .icon-container span { margin-top: -6px; }
-
-      .icon-container > * {
-        margin: auto;
-      }
-
-      #new-mission-btn {
-        margin-top: 20px;
-        width: 40px;
-        height: 40px;
-        background-color: var(--accent-color);
-        border-radius: 50%;
-        margin: 8px auto;
-      }
-
-      #new-mission-btn paper-icon-button {
-        width: 40px;
-        color: white;
-      }
-
-      #app-actions #new-mission-btn paper-icon-button { display: block; }
-      #app-actions #missions-btn paper-icon-button {
-        display: block;
-        padding: 0px;
-      }
-      #app-actions #notifications-btn paper-icon-button {
-        display: block;
-        padding: 0px;
-      }
-
-   @media only screen and (max-width: 640px) {
-      #app-actions { width: 100%; }
-      #actions-content {
-        width: 90%;
-        margin: auto;
-    }
   }
   }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
+    <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
 
     <app-header-layout has-scrolling-region="">
 
@@ -164,29 +95,6 @@ class InboxPage extends PolymerElement {
         <paper-spinner active=""></paper-spinner>
       </div>
 
-      <div id="app-actions">
-        <div id="actions-content">
-          <div id="missions-btn">
-            <div class="icon-container">
-              <paper-icon-button icon="app:navMissions"></paper-icon-button>
-              <span>missões</span>
-            </div>
-          </div>
-          <!--
-          <div>
-            <div id="new-mission-btn" style="display: none">
-              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
-            </div>
-          </div>
-          -->
-          <div id="notifications-btn">
-            <div class="icon-container">
-              <paper-icon-button icon="app:navNotifications"></paper-icon-button>
-              <span>notificações</span>
-            </div>
-          </div>
-        </div>
-        </div>
     </app-header-layout>
 `;
   }
@@ -286,6 +194,10 @@ class InboxPage extends PolymerElement {
     this.$.api.request().then(function(ajax) {
       this.set("userAcceptedMissions", ajax.response);
     }.bind(this));
+  }
+
+  _returnToInbox() {
+    this.set("route.path", "/");
   }
 }
 window.customElements.define(InboxPage.is, InboxPage);

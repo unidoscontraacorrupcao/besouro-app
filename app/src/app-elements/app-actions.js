@@ -8,95 +8,100 @@ import { NeonAnimatableBehavior } from '@polymer/neon-animation/neon-animatable-
 class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement) {
   static get template() {
     return html`
-    <style include="shared-styles"></style>
-    <style>
-      :host {
-        display: block;
-        --actions-height: 0;
-      }
-      .backdrop {
+  <style>
+      #app-actions {
         position: fixed;
-        left: 0; right: 0;
-        top: 0; bottom: 0;
-        background: black;
-        transition: opacity ease .35s;
-        opacity: 0;
+        bottom: 0;
+        background: white;
+        width: calc(100% - 256px);
+        border-top-style: solid;
+        border-top-color: #E7E7E7;
+        z-index: 1000;
       }
-      .animatable {
-        transition: all ease .35s;
+
+      #app-actions span {
+        text-transform: uppercase;
+        color: var(--light-text-color);
+        font-family: Folio;
       }
-      .record-form-actions,
-      .record-form-actions.fixed {
-        opacity: 0;
-        height: 0;
-        position: fixed;
-        bottom: 60px;
-        top: unset;
+
+      #app-actions #actions-content {
+        width: 80%;
+        display: flex;
+        text-align: center;
+        padding-bottom: 5px;
+        padding-top: 5px;
+        margin: auto;
+      }
+
+      #app-actions #actions-content > * {flex-grow: 1;}
+
+      .icon-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .icon-container span { margin-top: -6px; }
+
+      .icon-container > * {
+        margin: auto;
+      }
+
+      #new-mission-btn {
+        margin-top: 20px;
         width: 40px;
-        right: 19px;
-        overflow: hidden;
-        padding: 0 4px 0 120px;
-        transition: all ease .35s;
-      }
-      .record-form-actions.visible {
-        padding: 10px 4px 35px 120px;
-        height: var(--actions-height, 150px);
-        opacity: 1;
-      }
-      .record-form-actions ::slotted(paper-fab) {
-        box-shadow: var(--shadow-elevation-2dp_-_box-shadow);
-        background-color: var(--primary-background-color);
-        margin-top: 10px;
+        height: 40px;
+        background-color: var(--accent-color);
         border-radius: 50%;
-        color: var(--secondary-text-color);
+        margin: 8px auto;
       }
-      .toggle-actions {
-        position: fixed;
-        height: 60px;
-        top: unset;
-        bottom: 15px;
-        right: 15px;
-        transition: all ease .35s;
-        transform: scale(1);
+
+      #new-mission-btn paper-icon-button {
+        width: 40px;
+        color: white;
       }
-      .toggle-actions paper-fab {
-        position: absolute;
-        top: 0;
+
+      #app-actions #new-mission-btn paper-icon-button { display: block; }
+      #app-actions #missions-btn paper-icon-button {
+        display: block;
+        padding: 0px;
       }
-      .toggle-actions #toggler {
-        box-shadow: none;
-        transition: transform ease .5s;
-        position: relative;
-        background: transparent;
+      #app-actions #notifications-btn paper-icon-button {
+        display: block;
+        padding: 0px;
       }
-      paper-fab {
-        @apply --accent-gradient;
-      }
-      @media screen and (max-width: 640px) {
-        .backdrop.visible {
-          opacity: 0.3;
-        }
-      }
-      @media screen and (min-width: 961px) {
-        .toggle-actions {
-          right: calc(50% - 460px);
-        }
-        .record-form-actions,
-        .record-form-actions.fixed {
-          right: calc(50% - 455px);
-        }
-      }
-    </style>
-    <div class="backdrop" id="backdrop" style="display: none;" on-tap="_toggleActions"></div>
-    <div class="record-form-actions" id="actions">
-      <iron-selector attr-for-selected="name" selected="{{selected}}" role="navigator" fallback-selection="" on-selected-changed="_setHeight">
-        <slot id="slot" name="actions"></slot>
-      </iron-selector>
-    </div>
-    <div class="toggle-actions">
-      <paper-fab icon=""></paper-fab>
-      <paper-fab icon="[[icon]]" id="toggler" on-tap="_toggleActions"></paper-fab>
-    </div>
+
+   @media only screen and (max-width: 640px) {
+      #app-actions { width: 100%; }
+      #actions-content {
+        width: 90%;
+        margin: auto;
+    }
+  }
+  </style>
+      <div id="app-actions">
+        <div id="actions-content">
+          <div id="missions-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:navMissions" on-tap="_returnToInbox"></paper-icon-button>
+              <span>missões</span>
+            </div>
+          </div>
+          <!--
+          <div>
+            <div id="new-mission-btn" style="display: none">
+              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
+            </div>
+          </div>
+          -->
+          <div id="notifications-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:navNotifications"></paper-icon-button>
+              <span>notificações</span>
+            </div>
+          </div>
+        </div>
+        </div>
 `;
   }
 
@@ -117,70 +122,8 @@ class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement
     };
   }
 
-  ready() {
-    super.ready();
-    this.$.slot.addEventListener('slotchange', this._setHeight.bind(this));
-  }
-
-  _toggleActions(e) {
-    if(this.__visible) {
-      this._hideActions();
-    } else {
-      this._showActions();
-    }
-  }
-
-  _setHeight() {
-    const tips = this.$.slot.assignedNodes().filter(n => n.nodeName === 'PAPER-TOOLTIP');
-    const visibleTips = tips.filter(n => n.style.display !== 'none');
-    tips.forEach((tip) => {
-      tip.position = 'left';
-      tip.updatePosition();
-    });
-    this.updateStyles({ '--actions-height': `${visibleTips.length*50}px` });
-    this.__tips = tips;
-  }
-
-  _showTips() {
-    this.__tips.forEach((tip) => {
-      tip.show();
-    });
-  }
-
-  _showActions() {
-    this.__visible = true;
-    this.$.backdrop.style.display = 'block';
-    this.$.actions.classList.add('visible');
-    this.$.toggler.style.transform = 'rotate(360deg)';
-    setTimeout(() => {
-      this.$.backdrop.classList.add('visible');
-      this._showTips();
-    }, 100);
-    setTimeout(() => {
-      this.$.toggler.icon = 'app:close';
-      this.$.toggler.style.transform = 'none';
-    }, 300);
-  }
-
-  _hideActions() {
-    this.__visible = false;
-    this.$.backdrop.classList.remove('visible');
-    this.$.actions.classList.remove('visible');
-    this.$.toggler.style.transform = 'rotate(360deg)';
-    setTimeout(() => {
-      this.$.backdrop.style.display = 'none';
-      this._hideTips();
-    }, 100);
-    setTimeout(() => {
-      this.$.toggler.icon = this.icon;
-      this.$.toggler.style.transform = 'none';
-    }, 300);
-  }
-
-  _hideTips() {
-    this.__tips.forEach((tip) => {
-      tip.hide();
-    });
+  _returnToInbox() {
+    this.dispatchEvent(new CustomEvent('go-to-inbox'));
   }
 }
 customElements.define(AppActions.is, AppActions);

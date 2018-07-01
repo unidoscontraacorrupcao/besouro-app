@@ -6,6 +6,7 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
 import '../app-elements/shared-styles.js';
@@ -122,79 +123,13 @@ class ProfilePage extends PolymerElement {
         width: 0;
       }
 
-      #app-actions {
-        position: fixed;
-        bottom: 0;
-        background: white;
-        width: 85%;
-        border-top-style: solid;
-        border-top-color: #E7E7E7;
-        z-index: 1000;
-      }
-
-      #app-actions span {
-        text-transform: uppercase;
-        color: var(--light-text-color);
-        font-family: Folio;
-      }
-
-      #app-actions #actions-content {
-        width: 80%;
-        display: flex;
-        text-align: center;
-        padding-bottom: 5px;
-        padding-top: 5px;
-      }
-
-      #app-actions #actions-content > * {flex-grow: 1;}
-
-      .icon-container {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .icon-container span { margin-top: -6px; }
-
-      .icon-container > * {
-        margin: auto;
-      }
-
-      #new-mission-btn {
-        margin-top: 20px;
-        width: 40px;
-        height: 40px;
-        background-color: var(--accent-color);
-        border-radius: 50%;
-        margin: 8px auto;
-      }
-
-      #new-mission-btn paper-icon-button {
-        width: 40px;
-        color: white;
-      }
-
-      #app-actions #new-mission-btn paper-icon-button { display: block; }
-      #app-actions #missions-btn paper-icon-button {
-        display: block;
-        padding: 0px;
-      }
-      #app-actions #notifications-btn paper-icon-button {
-        display: block;
-        padding: 0px;
-      }
-
-      @media only screen and (max-width: 640px) {
-        #app-actions { width: 100%; }
-        #actions-content {
-          width: 90%;
-          margin: auto;
-        }
-      }
     </style>
 
     <app-dialog id="dialog">
       <password-dialog id="passDialog" on-confirm-password="_updatePassword"></password-dialog>
     </app-dialog>
+
+    <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
 
     <app-header-layout has-scrolling-region="">
       <app-header slot="header">
@@ -264,27 +199,6 @@ class ProfilePage extends PolymerElement {
           Contribuições
         </div>
       </iron-pages>
-      <div id="app-actions">
-        <div id="actions-content">
-          <div id="missions-btn">
-            <div class="icon-container">
-              <paper-icon-button icon="app:navMissions"></paper-icon-button>
-              <span>missões</span>
-            </div>
-          </div>
-          <div>
-            <div id="new-mission-btn" style="display: none">
-              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
-            </div>
-          </div>
-          <div id="notifications-btn">
-            <div class="icon-container">
-              <paper-icon-button icon="app:navNotifications"></paper-icon-button>
-              <span>notificações</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </app-header-layout>
 `;
   }
@@ -405,6 +319,10 @@ class ProfilePage extends PolymerElement {
     });
     valid = (valid && data && data.password === data.confirmpass);
     return valid;
+  }
+
+  _returnToInbox() {
+    this.set('route.path', '/');
   }
 }
 window.customElements.define(ProfilePage.is, ProfilePage);
