@@ -8,6 +8,7 @@ import '../api-elements/api-sign-up.js';
 import '../api-elements/api-update-user.js';
 import '../api-elements/api-user.js';
 import '../api-elements/api-user-profile.js';
+import '../api-elements/api-forgot-password.js';
 import './sign-up-view.js';
 import './login-view.js';
 import './forgot-password-view.js';
@@ -29,10 +30,13 @@ class LoginController extends PolymerElement {
         on-sign-up="_showSignUp" on-forgot-password="_showForgotPassword"></login-view>
 
       <sign-up-view id="signUp"
-        feedback="{{_signUp.feedback}}"
         on-sign-up="_requestSignUp"
         on-login="_showLogin"
         on-forgot-password="_showForgotPassword"></sign-up-view>
+
+      <forgot-password-view id="forgotPassword"
+        on-forgot-password="_requestForgotPassword"
+        on-sign-up="_showSignUp"></forgot-password-view>
 
       <paper-toast id="toast"
         text="{{_toastMessage}}"></paper-toast>
@@ -50,6 +54,8 @@ class LoginController extends PolymerElement {
         on-result="_onUserProfile"></api-user-profile>
       <api-update-user id="apiUpdateUser"
         on-result="_onUpdateUser"></api-update-user>
+      <api-forgot-password id="apiForgotPassword"
+        on-result="_onForgotPassword"></api-forgot-password>
     `;
   }
 
@@ -60,6 +66,7 @@ class LoginController extends PolymerElement {
       _toastMessage: String,
       _login: Object,
       _signUp: Object,
+      _forgotPassword: Object,
       _user: Object
     };
   }
@@ -69,6 +76,7 @@ class LoginController extends PolymerElement {
     this._toastMessage = ``;
     this._login = this._getEmptyLogin();
     this._signUp = this._getEmptySignUp();
+    this._forgotPassword = this._getEmptyForgotPassword();
     this._user = this._getEmptyUser();
   }
 
@@ -83,33 +91,57 @@ class LoginController extends PolymerElement {
   // View Events
 
   _requestLogin(e, form) {
-    this._login.form = form;
-    this.$.apiLogin.request(form.email, form.password);
+    const VALIDATION = this._validateLoginForm(form);
+    if(VALIDATION.valid) {
+      this._login.form = form;
+      this.$.apiLogin.request(form.email, form.password);
+    } else {
+      this.$.login.exposeErrors(VALIDATION.errors);
+      this._toastInvalidFields();
+    }
   }
 
   _requestSignUp(e, form) {
-    this._signUp.form = form;
-    this.$.apiSignUp.request(form.email, form.name, form.password);
+    const VALIDATION = this._validateSignUpForm(form);
+    if(VALIDATION.valid) {
+      this._signUp.form = form;
+      this.$.apiSignUp.request(form.email, form.name, form.password);
+    } else {
+      this.$.signUp.exposeErrors(VALIDATION.errors);
+      this._toastInvalidFields();
+    }
+  }
+
+  _requestForgotPassword(e, form) {
+    const VALIDATION = this._validateForgotPasswordForm(form);
+    if(VALIDATION.valid) {
+      this.$.forgotPassword.clearErrors();
+      this._forgotPassword.form = form;
+      this.$.apiForgotPassword.request(form.email);
+    } else {
+      this.$.forgotPassword.exposeErrors(VALIDATION.errors);
+      this._toastInvalidFields();
+    }
   }
 
   _showSignUp() {
     this.$.signUp.style.display = `flex`;
     this.$.login.style.display = `none`;
-    // this.$.forgotPassword.style.display = `none`;
+    this.$.forgotPassword.style.display = `none`;
     this._clearForms();
   }
 
   _showLogin() {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `flex`;
-    // this.$.forgotPassword.style.display = `none`;
+    this.$.forgotPassword.style.display = `none`;
     this._clearForms();
   }
 
   _showForgotPassword() {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `none`;
-    // this.$.forgotPassword.style.display = `flex`;
+    this.$.forgotPassword.style.display = `flex`;
     this._clearForms();
   }
 
@@ -224,11 +256,99 @@ class LoginController extends PolymerElement {
     }
   }
 
+  _onForgotPassword(e, result) {
+    if(result.success) {
+      this._toastIt(result.data.message);
+    } else {
+      let errors = result.errors;
+      if(errors.notFound) {
+        this._toastUnknownError();
+      } else {
+        this.$.forgotPassword.exposeErrors({
+          email: errors.email
+        });
+        this._toastInvalidFields();
+      }
+    }
+  }
+
   // Utility
 
   _dispatchUser() {
     this.dispatchEvent(new CustomEvent(`user-update`, { detail: this._user } ));
     this._clearForms();
+  }
+
+  _validateLoginForm(form) {
+    let result = { valid: true, errors: { email: ``, password: `` } };
+
+    result.errors.email = this._validateEmptiness(form.email);
+    result.errors.password = this._validateEmptiness(form.password);
+
+    result.valid = result.errors.email == `` && result.errors.password == ``;
+
+    return result;
+  }
+
+  _validateSignUpForm(form) {
+    let result = { valid: true, errors: { email: ``, name: ``, password: `` } };
+
+    result.errors.email = this._validateEmptiness(form.email);
+    if(result.errors.email == ``) {
+      result.errors.email = this._validateEmail(form.email);
+    }
+
+    result.errors.name = this._validateEmptiness(form.name);
+
+    result.errors.password = this._validateEmptiness(form.password);
+    if(result.errors.password == ``) {
+      result.errors.password = this._validatePassword(form.password);
+    }
+
+    result.valid = result.errors.email == ``
+      && result.errors.name == ``
+      && result.errors.password == ``;
+
+    return result;
+  }
+
+  _validateForgotPasswordForm(form) {
+    let result = { valid: true, errors: { email: `` } };
+
+    result.errors.email = this._validateEmptiness(form.email);
+    if(result.errors.email == ``) {
+      result.errors.email = this._validateEmail(form.email);
+    }
+
+    result.valid = result.errors.email == ``;
+
+    return result;
+  }
+
+  _validateEmptiness(field) {
+    let errors = ``;
+    if(field == ``) {
+      errors += `Este campo não pode ser em branco. `;
+    }
+    return errors;
+  }
+
+  _validateEmail(email) {
+    let errors = ``;
+    const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(!EMAIL_REGEX.test(email.toLowerCase())) {
+      errors += `Insira um endereço de email válido. `;
+    }
+    return errors;
+  }
+
+  _validatePassword(password) {
+    console.log(password);
+    let errors = ``;
+    if(password.length < 8) {
+      errors += `Esta senha é muito curta. Ela precisa conter pelo menos 8 caracteres. `;
+    }
+    return errors;
   }
 
   _toastIt(message) {
@@ -237,19 +357,21 @@ class LoginController extends PolymerElement {
   }
 
   _toastUnknownError() {
-    this._toastIt("Um erro aconteceu. Por favor, tente novamente mais tarde.")
+    this._toastIt(`Um erro aconteceu. Por favor, tente novamente mais tarde.`)
   }
 
   _toastInvalidFields() {
-    this._toastIt("Cadastro inválido. Consulte os erros nos campos.");
+    this._toastIt(`Formulário inválido. Consulte os erros nos campos.`);
   }
 
   _clearForms() {
     this._user = this._getEmptyUser();
     this._login = this._getEmptyLogin();
     this._signUp = this._getEmptySignUp();
+    this._forgotPassword = this._getEmptyForgotPassword();
     this.$.login.emptyForm();
     this.$.signUp.emptyForm();
+    this.$.forgotPassword.emptyForm();
   }
 
   _getEmptyUser() {
@@ -275,6 +397,10 @@ class LoginController extends PolymerElement {
   }
 
   _getEmptySignUp() {
+    return {};
+  }
+
+  _getEmptyForgotPassword() {
     return {};
   }
 }

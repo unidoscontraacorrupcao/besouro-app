@@ -216,13 +216,13 @@ class LoginView extends PolymerElement {
   emptyForm() {
     this._form = this._getEmptyForm();
     this._errors = this._getEmptyErrors();
-    this.$.email.updateValueAndPreserveCaret("");
-    this.$.password.updateValueAndPreserveCaret("");
+    this.$.email.updateValueAndPreserveCaret(``);
+    this.$.password.updateValueAndPreserveCaret(``);
   }
 
   emptyPassword() {
-    this.$.password.updateValueAndPreserveCaret("");
-    this._form.password = "";
+    this.$.password.updateValueAndPreserveCaret(``);
+    this._form.password = ``;
   }
 
   _onLogin(e) {
@@ -233,7 +233,7 @@ class LoginView extends PolymerElement {
     this.dispatchEvent(new CustomEvent(`sign-up`));
   }
 
-  _forgotPassword(e) {
+  _onForgotPassword(e) {
     this.dispatchEvent(new CustomEvent(`forgot-password`));
   }
 

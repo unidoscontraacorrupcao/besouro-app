@@ -18,6 +18,8 @@ class AppConstants extends PolymerElement {
           const API_SIGN_UP = `${AUTH_ENDPOINT}registration/`;
           const API_LOGOUT = `${AUTH_ENDPOINT}logout/`;
           const API_AUTH_USER = `${AUTH_ENDPOINT}user/`;
+          const API_FORGOT_PASSWORD = `${AUTH_ENDPOINT}password/reset/`;
+          const API_NEW_PASSWORD = `${API_FORGOT_PASSWORD}confirm/`;
 
           const API_USERS = `${V1_ENDPOINT}users/`;
           const API_USER = `${API_USERS}:user_id/`;
@@ -31,6 +33,8 @@ class AppConstants extends PolymerElement {
             signUp: API_SIGN_UP,
             logout: API_LOGOUT,
             authUser: API_AUTH_USER,
+            forgotPassword: API_FORGOT_PASSWORD,
+            newPassword: API_NEW_PASSWORD,
             users: API_USERS,
             user: API_USER,
             userProfile: API_USER_PROFILE
