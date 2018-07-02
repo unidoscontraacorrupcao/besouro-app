@@ -343,7 +343,6 @@ class LoginController extends PolymerElement {
   }
 
   _validatePassword(password) {
-    console.log(password);
     let errors = ``;
     if(password.length < 8) {
       errors += `Esta senha é muito curta. Ela precisa conter pelo menos 8 caracteres. `;

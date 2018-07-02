@@ -606,7 +606,7 @@
   dependencies:
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/iron-icon@^3.0.0-pre.21":
+"@polymer/iron-icon@^3.0.0-pre.18", "@polymer/iron-icon@^3.0.0-pre.21":
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/iron-icon/-/iron-icon-3.0.0-pre.21.tgz#5ef3e483f02823778e99c1b5e16ddac472b5dce5"
   dependencies:
@@ -614,7 +614,7 @@
     "@polymer/iron-meta" "^3.0.0-pre.21"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/iron-iconset-svg@^3.0.0-pre.15", "@polymer/iron-iconset-svg@^3.0.0-pre.21":
+"@polymer/iron-iconset-svg@^3.0.0-pre.15", "@polymer/iron-iconset-svg@^3.0.0-pre.18", "@polymer/iron-iconset-svg@^3.0.0-pre.21":
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/iron-iconset-svg/-/iron-iconset-svg-3.0.0-pre.21.tgz#1248f341837789801a9000cdd3b3453b59f91021"
   dependencies:
@@ -717,7 +717,7 @@
     "@polymer/polymer" "^3.0.2"
     lit-html "^0.10.0"
 
-"@polymer/neon-animation@^3.0.0-pre.19", "@polymer/neon-animation@^3.0.0-pre.21":
+"@polymer/neon-animation@^3.0.0-pre.18", "@polymer/neon-animation@^3.0.0-pre.19", "@polymer/neon-animation@^3.0.0-pre.21":
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/neon-animation/-/neon-animation-3.0.0-pre.21.tgz#5a179b0091b52a32b82aa7a80e6ea8ff2f7d17e8"
   dependencies:
@@ -760,6 +760,15 @@
     "@polymer/paper-styles" "^3.0.0-pre.21"
     "@polymer/polymer" "^3.0.0"
 
+"@polymer/paper-dialog@^3.0.0-pre.18":
+  version "3.0.0-pre.21"
+  resolved "https://registry.yarnpkg.com/@polymer/paper-dialog/-/paper-dialog-3.0.0-pre.21.tgz#7208f533b76e6487f0117afb937f9dd9173b3bb1"
+  dependencies:
+    "@polymer/iron-overlay-behavior" "^3.0.0-pre.21"
+    "@polymer/neon-animation" "^3.0.0-pre.21"
+    "@polymer/paper-dialog-behavior" "^3.0.0-pre.21"
+    "@polymer/polymer" "^3.0.0"
+
 "@polymer/paper-dropdown-menu@^3.0.0-pre.19":
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/paper-dropdown-menu/-/paper-dropdown-menu-3.0.0-pre.21.tgz#b41eceba3704e7d8318aa93c8c34a25d56696513"
@@ -786,7 +795,7 @@
     "@polymer/paper-styles" "^3.0.0-pre.21"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/paper-icon-button@^3.0.0-pre.15", "@polymer/paper-icon-button@^3.0.0-pre.21":
+"@polymer/paper-icon-button@^3.0.0-pre.15", "@polymer/paper-icon-button@^3.0.0-pre.18", "@polymer/paper-icon-button@^3.0.0-pre.21":
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/paper-icon-button/-/paper-icon-button-3.0.0-pre.21.tgz#09e0e3c00a1a32f0a735e5c5367ba502d639ee28"
   dependencies:
@@ -883,7 +892,7 @@
     "@polymer/paper-styles" "^3.0.0-pre.21"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/paper-toast@^3.0.0-pre.19":
+"@polymer/paper-toast@^3.0.0-pre.18", "@polymer/paper-toast@^3.0.0-pre.19":
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/paper-toast/-/paper-toast-3.0.0-pre.21.tgz#5ecea2a4f05616b2d4839e2d0ebf65b3fbf958ab"
   dependencies:
@@ -6509,6 +6518,19 @@ shady-css-parser@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/shady-css-parser/-/shady-css-parser-0.1.0.tgz#534dc79c8ca5884c5ed92a4e5a13d6d863bca428"
 
+"share-menu@git://github.com/unidoscontraacorrupcao/share-menu.git#polymer-modulizer-auto-generated":
+  version "3.0.0"
+  resolved "git://github.com/unidoscontraacorrupcao/share-menu.git#04652207fd14b48ac3854f060548c4b742fcda61"
+  dependencies:
+    "@polymer/iron-icon" "^3.0.0-pre.18"
+    "@polymer/iron-iconset-svg" "^3.0.0-pre.18"
+    "@polymer/neon-animation" "^3.0.0-pre.18"
+    "@polymer/paper-dialog" "^3.0.0-pre.18"
+    "@polymer/paper-icon-button" "^3.0.0-pre.18"
+    "@polymer/paper-toast" "^3.0.0-pre.18"
+    "@polymer/polymer" "^3.0.0"
+    web-animations-js "^2.3.1"
+
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"
@@ -7533,6 +7555,10 @@ wd@^1.2.0:
     request "2.85.0"
     underscore.string "3.3.4"
     vargs "0.1.0"
+
+web-animations-js@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/web-animations-js/-/web-animations-js-2.3.1.tgz#3a6d9bc15196377a90f8e2803fa5262165b04510"
 
 web-component-tester@^6.7.0:
   version "6.7.0"
