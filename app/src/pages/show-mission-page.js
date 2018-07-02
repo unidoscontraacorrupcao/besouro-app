@@ -12,6 +12,8 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 
+import 'share-menu/share-menu.js';
+import '../app-elements/app-actions.js';
 import '../app-elements/app-scrollable-dialog.js';
 import '../app-elements/app-form-header.js';
 import '../app-elements/app-icons.js';
@@ -86,6 +88,13 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         position: absolute;
         bottom: -3px;
         right: 5px;
+      }
+
+      #share-mission {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin-right: 10px;
       }
 
       paper-icon-button {
@@ -293,74 +302,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .card-action div { padding-top: 15px; }
 
-      #app-actions {
-        position: fixed;
-        bottom: 0;
-        background: white;
-        width: 85%;
-        border-top-style: solid;
-        border-top-color: #E7E7E7;
-        z-index: 1000;
-      }
-
-      #app-actions span {
-        text-transform: uppercase;
-        color: var(--light-text-color);
-        font-family: Folio;
-      }
-
-      #app-actions #actions-content {
-        width: 80%;
-        display: flex;
-        text-align: center;
-        padding-bottom: 5px;
-        padding-top: 5px;
-      }
-
-      #app-actions #actions-content > * {flex-grow: 1;}
-
-      .icon-container {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .icon-container span { margin-top: -6px; }
-
-      .icon-container > * {
-        margin: auto;
-      }
-
-      #new-mission-btn {
-        margin-top: 20px;
-        width: 40px;
-        height: 40px;
-        background-color: var(--accent-color);
-        border-radius: 50%;
-        margin: 8px auto;
-      }
-
-      #new-mission-btn paper-icon-button {
-        width: 40px;
-        color: white;
-      }
-
-      #app-actions #new-mission-btn paper-icon-button { display: block; }
-      #app-actions #missions-btn paper-icon-button {
-        display: block;
-        padding: 0px;
-      }
-      #app-actions #notifications-btn paper-icon-button {
-        display: block;
-        padding: 0px;
-      }
-
-   @media only screen and (max-width: 640px) {
-      #app-actions { width: 100%; }
-      #actions-content {
-        width: 90%;
-        margin: auto;
-    }
-  }
     @media only screen and (max-width: 460px) {
       .stats-content { font-size: 1.0rem; }
     }
@@ -371,7 +312,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       }
       .card-action { height: 65px;}
     }
-    dhsajkdhjahska
 
     @media only screen and (max-width: 330px) {
       .card-action span { font-size: 1.5em };
@@ -379,6 +319,9 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
+    <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
+
+    <share-menu id="shareMenu" title="{{mission.title}}" text="{{mission.description}}" url="{{address}}/{{data.key}}?shared=true" enabled-services='["telegram", "facebook", "whatsapp", "email", "twitter", "instagram"]'></share-menu>
 
     <app-route route="{{route}}" pattern="/show-mission/:key" data="{{data}}">
     </app-route>
@@ -417,6 +360,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
               <span>{{mission.remainig_days}}</span>
             </div>
           </h1>
+          <paper-icon-button on-tap="_shareMission" id="share-mission" icon="app:share"></paper-icon-button>
           <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{data.key}}">
           </mission-player>
         </app-toolbar>
@@ -472,27 +416,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
         </template>
 
-      <div id="app-actions">
-        <div id="actions-content">
-          <div id="missions-btn">
-            <div class="icon-container">
-              <paper-icon-button icon="app:navMissions"></paper-icon-button>
-              <span>missões</span>
-            </div>
-          </div>
-          <div>
-            <div id="new-mission-btn" style="display: none">
-              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
-            </div>
-          </div>
-          <div id="notifications-btn">
-            <div class="icon-container">
-              <paper-icon-button icon="app:navNotifications"></paper-icon-button>
-              <span>notificações</span>
-            </div>
-          </div>
-        </div>
-        </div>
     </app-header-layout>
 
     <div id="inboxLoading">
@@ -810,6 +733,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.shadowRoot.querySelector('#inboxLoading').setAttribute('style', 'display:none');
     }
     this.domChangeEventCount += 1;
+  }
+
+  _returnToInbox() {
+    this.set("route.path", "/");
   }
 
 }

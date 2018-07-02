@@ -3,12 +3,13 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-spinner/paper-spinner.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+
 import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
 import '../app-elements/app-besouro-api.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class InboxPage extends PolymerElement {
   static get template() {
     return html`
