@@ -16,6 +16,7 @@ push base image:
     TAG: base
     DOCKERFILE_PATH: docker/base/Dockerfile
   script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
     - docker build --cache-from $IMAGE:$TAG -t $IMAGE:$TAG -f $DOCKERFILE_PATH .
     - docker push $IMAGE:$TAG
   only:
@@ -34,6 +35,7 @@ push dev image:
     TAG: dev
     DOCKERFILE_PATH: docker/develop/Dockerfile
   script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
     - docker build --cache-from $IMAGE:$TAG -t $IMAGE:$TAG -f $DOCKERFILE_PATH .
     - docker push $IMAGE:$TAG
   only:
