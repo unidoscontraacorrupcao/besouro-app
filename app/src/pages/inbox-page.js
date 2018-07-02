@@ -9,6 +9,7 @@ import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
+import '../mission-elements/welcome-card.js';
 import '../app-elements/app-besouro-api.js';
 class InboxPage extends PolymerElement {
   static get template() {
@@ -83,6 +84,7 @@ class InboxPage extends PolymerElement {
       </app-header>
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
+          <welcome-card></welcome-card>
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
             <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox"></mission-card>
           </template>

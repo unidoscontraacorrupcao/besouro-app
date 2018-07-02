@@ -2,7 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
-import '../app-elements/app-icons.js';
+
 import '../app-elements/shared-styles.js';
 import '../mission-elements/accept-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
