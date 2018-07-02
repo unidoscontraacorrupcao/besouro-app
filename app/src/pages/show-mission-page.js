@@ -321,14 +321,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     <app-besouro-api id="api"></app-besouro-api>
     <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
 
-    <share-menu id="shareMenu" title="{{mission.title}}" text="{{mission.description}}" url="{{address}}/{{data.key}}?shared=true" enabled-services='["telegram", "facebook", "whatsapp", "email", "twitter", "instagram"]'></share-menu>
+    <share-menu id="shareMenu" title="{{mission.title}}" text="{{mission.description}}" url="{{address}}/{{data.key}}?shared=true" enabled-services='["telegram", "whatsapp"]'></share-menu>
 
     <app-route route="{{route}}" pattern="/show-mission/:key" data="{{data}}">
     </app-route>
 
 
 
-    <app-scrollable-dialog id="finishedDialog" opened="{{finishedModal}}" modal="">
+    <app-scrollable-dialog id="finishedDialog">
       <finish-mission-modal user="[[user]]" mission-id="{{data.key}}"></finish-mission-modal>
     </app-scrollable-dialog>
 
@@ -636,7 +636,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
   _dismissFinishModal() {
     this.set('currentMissionStats', 'new');
-    document.querySelector('#finishConfirmation').dismiss();
     this.$.finishedDialog.dismiss();
   }
 

@@ -23,6 +23,7 @@ class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement
         text-transform: uppercase;
         color: var(--light-text-color);
         font-family: Folio;
+        font-size: 14px;
       }
 
       #app-actions #actions-content {
@@ -61,14 +62,12 @@ class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement
         color: white;
       }
 
-      #app-actions #new-mission-btn paper-icon-button { display: block; }
-      #app-actions #missions-btn paper-icon-button {
+      #app-actions #new-mission-btn paper-icon-button,
+      #app-actions #missions-btn paper-icon-button,
+      #app-actions #notifications-btn paper-icon-button
+      {
         display: block;
-        padding: 0px;
-      }
-      #app-actions #notifications-btn paper-icon-button {
-        display: block;
-        padding: 0px;
+        padding: 3px;
       }
 
    @media only screen and (max-width: 640px) {

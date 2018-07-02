@@ -23,13 +23,14 @@ class InboxPage extends PolymerElement {
 
       app-toolbar { font-size: 35px; }
       .tabs-text {
-        font-size: 20px;
+        font-size: 18px;
         font-family: Folio;
         text-transform: uppercase;
       }
 
       .header-icon {
-        padding: 0;
+        padding: 7px;
+        margin-top: 4px;
       }
 
       [main-title] {
@@ -37,6 +38,7 @@ class InboxPage extends PolymerElement {
         margin-left: 15px;
         text-transform: uppercase;
         font-family: Folio;
+        font-size: 32px;
       }
 
       .inbox {

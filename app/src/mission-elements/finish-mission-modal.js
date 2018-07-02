@@ -267,9 +267,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     }.bind(this));
   }
 
-  _dismiss() {
-    this.dispatchEvent(new CustomEvent('close-modal'));
-  }
+  _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 
   ready() {
     super.ready();
