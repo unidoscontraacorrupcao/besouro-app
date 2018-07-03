@@ -86,7 +86,7 @@ class InboxPage extends PolymerElement {
         <div class="inbox">
           <welcome-card></welcome-card>
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox"></mission-card>
+            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-redirect-to-login="_goToLogin"></mission-card>
           </template>
         </div>
         <div class="inbox">
@@ -187,13 +187,17 @@ class InboxPage extends PolymerElement {
 
   _getInboxMissions() {
     this.$.api.method = "GET";
-    this.$.api.path = `missions/inbox/${this.user.uid}`;
+    if (!this.user)
+      this.$.api.path = `missions/`;
+    else
+      this.$.api.path = `missions/inbox/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("inboxMissions", ajax.response);
     }.bind(this));
   }
 
   _getAcceptedMissions() {
+    if (!this.user) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/accepted/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
@@ -201,8 +205,7 @@ class InboxPage extends PolymerElement {
     }.bind(this));
   }
 
-  _returnToInbox() {
-    this.set("route.path", "/");
-  }
+  _returnToInbox() { this.set("route.path", "/"); }
+  _goToLogin() { this.set("route.path", "/login"); }
 }
 window.customElements.define(InboxPage.is, InboxPage);

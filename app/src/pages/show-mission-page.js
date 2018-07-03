@@ -109,7 +109,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         font-size: 32px;
         padding-top: 10px;
         position: absolute;
-        top: 100px;
+        top: 0px;
+        line-height: 1.2;
+        white-space: unset;
+        max-width: 400px;
       }
 
       h3 {
@@ -355,11 +358,11 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         <app-toolbar class="tall">
           <h1 bottom-item="" main-title="" class="title">
             {{mission.title}}
-            <div class="timing">
-              <paper-icon-button icon="app:mission-timing"></paper-icon-button>
-              <span>{{mission.remainig_days}}</span>
-            </div>
           </h1>
+          <div class="timing">
+            <paper-icon-button icon="app:mission-timing"></paper-icon-button>
+            <span>{{mission.remainig_days}}</span>
+          </div>
           <paper-icon-button on-tap="_shareMission" id="share-mission" icon="app:share"></paper-icon-button>
           <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{data.key}}">
           </mission-player>
@@ -403,13 +406,11 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
                   </mission-comment>
               </template>
               <div class="comment">
-                <template is="dom-if" if="{{user}}">
                     <div class="message">
                       <paper-textarea id="commentInput" label="Escreva um comentário" required="" error-message="O campo não pode ser vazio.">
                       </paper-textarea>
                       <paper-button on-tap="addComment" class="plain">Enviar</paper-button>
                     </div>
-                  </template>
               </div>
             </div>
         </div>
@@ -550,6 +551,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   addComment(e) {
+    if(!this.user) {
+      this.set("route.path", "/login");
+      return;
+    }
     const input = this.shadowRoot.querySelector('#commentInput');
     if(!input.value) {
       input.invalid = true;
@@ -573,6 +578,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _acceptMission(e) {
+    if (!this.user) {
+      this.set("route.path", "/login")
+      return;
+    }
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
     this.$.api.body = {"id": this.data.key, "user_id": this.user.uid };
@@ -642,13 +651,20 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   _calcMissionStats() {
     if (!this.data) return;
     if (this.mission.id == undefined) return;
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.data.key}/user-status/${this.user.uid}`;
-    this.$.api.request().then(function(ajax) {
-      this.set("currentMissionStats", ajax.response.status);
-      this._setActionBtn();
+    if (!this.user) {
+      this.set("currentMissionStats", "new");
+      setTimeout(this._setActionBtn.bind(this), 100);
       this.hideLoading(true);
-    }.bind(this));
+    }
+    else {
+      this.$.api.method = "GET";
+      this.$.api.path = `missions/${this.data.key}/user-status/${this.user.uid}`;
+      this.$.api.request().then(function(ajax) {
+        this.set("currentMissionStats", ajax.response.status);
+        this._setActionBtn();
+        this.hideLoading(true);
+      }.bind(this));
+    }
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}/statistics`;
     this.$.api.request().then(function(ajax) {
@@ -734,9 +750,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     this.domChangeEventCount += 1;
   }
 
-  _returnToInbox() {
-    this.set("route.path", "/");
-  }
+  _returnToInbox() { this.set("route.path", "/"); }
 
 }
 window.customElements.define(ShowMissionPage.is, ShowMissionPage);

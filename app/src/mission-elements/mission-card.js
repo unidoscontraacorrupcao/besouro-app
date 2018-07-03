@@ -330,12 +330,18 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   _setMissionStats() {
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.mission.id}/user-status/${this.user.uid}`;
-    this.$.api.request().then(function(ajax) {
-      this.set("currentMissionStats", ajax.response.status);
-      this._setActionBtn();
-    }.bind(this));
+    if (!this.user) {
+      this.set("currentMissionStats", "new");
+      setTimeout(this._setActionBtn.bind(this), 100);
+    }
+    else {
+      this.$.api.method = "GET";
+      this.$.api.path = `missions/${this.mission.id}/user-status/${this.user.uid}`;
+      this.$.api.request().then(function(ajax) {
+        this.set("currentMissionStats", ajax.response.status);
+        this._setActionBtn();
+      }.bind(this));
+    }
   }
 
   _setActionBtn() {
@@ -385,6 +391,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   _acceptMission() {
+    if (!this.user) {
+      this.dispatchEvent(new CustomEvent('redirect-to-login', {}))
+      return;
+    }
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
     this.$.api.body = {"id": this.mission.id, "user_id": this.user.uid };
