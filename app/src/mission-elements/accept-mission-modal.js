@@ -107,6 +107,12 @@ class AcceptMissionModal extends PolymerElement {
       }
 
       .icon-header paper-icon-button { padding: 0; }
+
+      paper-button {
+        float: right;
+        font-size: 15px;
+        padding-bottom: 25px;
+     }
     </style>
 
     <div class="modal-header">
@@ -128,6 +134,7 @@ class AcceptMissionModal extends PolymerElement {
         </div>
       </div>
 
+        <paper-button on-tap="_dismiss">fechar</paper-button>
       </div>
     </div>
 `;
@@ -140,7 +147,11 @@ class AcceptMissionModal extends PolymerElement {
     }
   }
   _goToMission() {
-    this.dispatchEvent(new CustomEvent('modal-show-mission', { detail: { mission: this.missionId }}));
+    this.dispatchEvent(new CustomEvent('modal-show-mission', 
+      { detail: { mission: this.missionId }}
+    ));
   }
+
+  _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
 window.customElements.define(AcceptMissionModal.is, AcceptMissionModal);

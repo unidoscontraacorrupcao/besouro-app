@@ -99,8 +99,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
       }
 
       #confirmation-text {
-        margin: 115px auto 34px auto;
-        width: 80%;
+        margin: 115px 15px 34px 13px;
         text-align: center;
         color: var(--secondary-text-color);
         font-size: 24px;
@@ -156,6 +155,12 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
       .icon-header paper-icon-button { padding: 0; }
 
       paper-textarea { text-align: left; }
+
+      paper-button {
+        float: right;
+        font-size: 15px;
+        padding-bottom: 25px;
+     }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -197,6 +202,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
           <a href="#" on-tap="_sendReceipts"><span>enviar</span></a>
         </div>
       </div>
+        <paper-button on-tap="_dismiss">fechar</paper-button>
     </div>
   </div>
 `;

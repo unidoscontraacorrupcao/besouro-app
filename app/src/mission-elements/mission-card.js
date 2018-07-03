@@ -222,7 +222,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     </style>
 
     <app-dialog id="acceptedDialog">
-      <accept-mission-modal on-modal-show-mission="_modalGoToMission" mission-id="{{mission.id}}"></accept-mission-modal>
+      <accept-mission-modal on-modal-show-mission="_modalGoToMission" mission-id="{{mission.id}}" on-close-modal="_closeModal"></accept-mission-modal>
     </app-dialog>
 
     <app-scrollable-dialog id="finishedDialog">
@@ -411,18 +411,21 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this._setActionBtn();
   }
 
-  ready() {
-    super.ready();
-    this.shadowRoot.querySelector('finish-mission-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
-    this.acceptMissionFunc = this._acceptMission.bind(this);
-    this.finishMissionFunc = this._finishMission.bind(this);
-  }
 
   _dismissFinishModal() {
     this.set('currentMissionStats', 'new');
     this._setMissionStats();
     this._setActionBtn();
     this.$.finishedDialog.dismiss();
+  }
+
+  _closeModal() { this.$.acceptedDialog.dismiss(); }
+
+  ready() {
+    super.ready();
+    this.shadowRoot.querySelector('finish-mission-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
+    this.acceptMissionFunc = this._acceptMission.bind(this);
+    this.finishMissionFunc = this._finishMission.bind(this);
   }
 }
 customElements.define(MissionCard.is, MissionCard);
