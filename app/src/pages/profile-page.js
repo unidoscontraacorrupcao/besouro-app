@@ -1,11 +1,12 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
-import '@polymer/paper-spinner/paper-spinner.js';
-import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '../api-elements/api-user-profile.js';
+import '../api-elements/api-update-profile.js';
 import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
@@ -17,10 +18,13 @@ class ProfilePage extends PolymerElement {
     return html`
       <style>
         :host {
-          display: flex;
+          display: block;
           background: #f5f5f5;
           flex-direction: column;
           min-height: 100vh;
+        }
+        [hidden] {
+          display: none !important;
         }
         paper-toast {
           --paper-toast-color: white;
@@ -42,7 +46,7 @@ class ProfilePage extends PolymerElement {
         }
         app-toolbar > h1[main-title] {
           width: 100%;
-          display: flex
+          display: flex;
         }
         h1[main-title] > div.wrap-title {
           align-self: flex-end;
@@ -64,27 +68,6 @@ class ProfilePage extends PolymerElement {
           height: 100%;
           z-index: -2;
         }
-        .image-filter {
-          position: absolute;
-          background: rgba(49,39,131,0.5);
-          width: 100%;
-          height: 100%;
-          z-index: -1;
-        }
-        .tabs-text {
-          font-family: Folio;
-          text-transform: uppercase;
-          font-size: 18px;
-          line-height: 19px;
-        }
-        paper-input paper-button {
-          color: var(--accent-color);
-          border: none;
-        }
-        .fill {
-          flex: 1;
-        }
-
         .cover paper-icon-button {
           display: block;
           margin: -40px auto;
@@ -92,241 +75,675 @@ class ProfilePage extends PolymerElement {
           background: rgba(0,0,0,0.4);
           width: 100%;
         }
-        .image paper-spinner {
-          margin: -50px 60px 35px;
+        .image-filter {
+          position: absolute;
+          background: rgba(49,39,131,0.5);
+          width: 100%;
+          height: 100%;
+          z-index: -1;
         }
-        .username,
-        .notify,
-        .email {
-          max-width: 340px;
-          margin: auto;
-          padding: 0px 20px 0;
+        paper-tabs {
+          height: 63px;
+          width: 100%;
+          --paper-tabs-selection-bar: {
+            display: none;
+          };
         }
-        .email {
-          padding-top: 0;
+        paper-tab {
+          margin-bottom: 20px;
         }
-        .notify {
-          display: flex;
-          padding-top: 20px;
+        .tabs-text {
+          font-family: Folio;
+          text-transform: uppercase;
+          font-size: 18px;
+          line-height: 19px;
+          font-weight: normal;
         }
-        .notify span {
+        .iron-selected > .selected-mark {
+          position: absolute;
+          top: 55px;
+          height: 25px;
+          width: 25px;
+          transform: rotate(45deg);
+          background-color: #dddddd;
+        }
+        .fill {
           flex: 1;
-          font-size: 1.2rem;
+        }
+        iron-pages {
+          background-color: #dddddd;
+          margin-left: 10px;
+          margin-right: 10px;
+          padding: 20px;
+          height: auto;
+          min-height: 50vh;
+          margin-bottom: 50px;
+        }
+        .info-name {
+          color: #312783;
+          font-family: Folio;
+          font-size: 14px;
+          line-height: 16px;
+        }
+        .info-value {
+          color: #333333;
+          font-size: 16px;
           font-weight: bold;
+          line-height: 22px;
+          margin-bottom: 20px;
+        }
+        .form {
+          display: none;
+          width: 100%;
+        }
+        paper-input {
+          --paper-input-container-color: #333333;
+          --paper-input-container-focus-color: #312783;
+          --paper-input-container-input-color: #312783;
+        }
+        paper-dropdown-menu {
+          width: 100%;
+          --paper-input-container-color: #333333;
+          --paper-input-container-focus-color: #312783;
+          --paper-input-container-input-color: #312783;
+          --paper-input-container-label-color: #333333;
+        }
+        paper-textarea {
+          --paper-input-container-color: #333333;
+          --paper-input-container-focus-color: #312783;
+          --paper-input-container-input-color: #312783;
+          --paper-input-container-label-color: #333333;
+        }
+        paper-listbox {
+          --paper-listbox: {
+            max-height: 200px;
+          };
+        }
+
+        div.fields > paper-input-error {
+          position: relative;
+          white-space: normal;
+          word-wrap: break-word;
         }
         paper-button {
-          max-width: 340px;
-          margin: 20px auto 100px;
           display: block;
+          height: auto;
+          max-width: 170px;
+          color: white;
+          background-color: #E6007E;
+          font-family: Folio;
+          font-size: 24px;
+          letter-spacing: 5px;
+          line-height: 26px;
           text-align: center;
-          border-radius: 20px;
+          margin: 4vh auto 0;
+          border-radius: 0;
         }
-        #upload {
-          display: block;
-          height: 0;
-          width: 0;
+        input#image {
+          display: none;
         }
-
+        paper-button.flex-button {
+          width: 100%;
+          margin: 0 auto;
+          max-width: 100%;
+        }
       </style>
-
-      <app-dialog id="dialog">
-        <password-dialog id="passDialog" on-confirm-password="_updatePassword"></password-dialog>
-      </app-dialog>
-
-      <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
-
-      <app-header-layout has-scrolling-region="">
+     <app-actions on-go-to-inbox="_dispatchToInboxPressed"></app-actions>
+      <app-header-layout has-scrolling-region>
         <app-header slot="header">
           <app-toolbar>
-            <paper-icon-button class="left" icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
+            <paper-icon-button class="left" icon="app:arrow-back" on-tap="_dispatchBackPressed"></paper-icon-button>
             <h1 main-title>
               <div class="wrap-title">
                 <div class="title-name">
-                  {{user.displayName}}
+                  {{_user.displayName}}
                 </div>
                 <div class="status">
                   Status do participante
                 </div>
               </div>
             </h1>
-            <paper-icon-button class="right" icon="app:edit-profile" on-tap="uploadImage"></paper-icon-button>
-            <iron-image class="image" id="profile" src="{{user.photoURL}}" sizing="cover"></iron-image>
+            <paper-icon-button class="right" icon="app:edit-profile" on-tap="_switchInfo"></paper-icon-button>
+            <iron-image class="image" id="avatar" src="{{_user.photoURL}}" sizing="cover"></iron-image>
             <div class="image-filter"></div>
           </app-toolbar>
           <app-toolbar tab-bar>
-            <paper-tabs selected="{{tab}}" fallback-selection="0">
+            <paper-tabs selected="{{_tab}}" fallback-selection="0">
               <paper-tab>
                 <span class="tabs-text">
                   infos
                 </span>
+                <div class="selected-mark"></div>
               </paper-tab>
               <paper-tab>
                 <span class="tabs-text">
                   troféus
                 </span>
+                <div class="selected-mark"></div>
               </paper-tab>
               <paper-tab>
                 <span class="tabs-text">
                   contribuições
                 </span>
+                <div class="selected-mark"></div>
               </paper-tab>
             </paper-tabs>
           </app-toolbar>
-        </app-header>
-        <iron-pages selected="{{tab}}">
-          <div id="info">
-            <input type="file" id="upload" on-change="getPhoto" accept=".jpg, .jpeg, .png">
-            <div class="fill">
-              <div class="username">
-                <paper-input label="nome" value="{{data.displayName}}" minlength="5" auto-validate="" error-message="O nome deve ter no mínimo 5 caracteres."></paper-input>
+          <iron-pages selected="{{_tab}}">
+            <div id="info">
+              <div class="content" id="content">
+                <div class="info-name">email</div>
+                <div class="info-value">{{_info.email}}</div>
+
+                <div class="info-name">cidade</div>
+                <div class="info-value">{{_info.city}}</div>
+
+                <div class="info-name">país</div>
+                <div class="info-value">{{_info.country}}</div>
+
+                <div class="info-name">identidade de gênero</div>
+                <div class="info-value">{{_info.gender}}</div>
+
+                <div class="info-name">cor / raça</div>
+                <div class="info-value">{{_info.race}}</div>
+
+                <div class="info-name">movimento ou partido</div>
+                <div class="info-value">{{_info.politicalActivity}}</div>
+
+                <div class="info-name">mini bio</div>
+                <div class="info-value">{{_info.biography}}</div>
               </div>
-              <div class="email">
-                <paper-input label="email" type="email" value="{{data.email}}" disabled=""></paper-input>
+              <div class="form" id="form">
+                <div class="fields">
+                  <input type="file" id="image" on-change="_extractPhoto" accept=".jpg, .jpeg, .png">
+                  <paper-button class="flex-button" on-tap="_requestPhoto">Atualizar foto de perfil</paper-button>
+                  <paper-input-error
+                    hidden$=[[!_errors.image]] invalid>
+                    {{_errors.image}}
+                  </paper-input-error>
+                  <paper-input id="displayName"
+                    label="Nome"
+                    value="{{_form.displayName}}"
+                    invalid=[[_errors.displayName]]
+                    required></paper-input>
+                  <paper-input-error
+                    hidden$=[[!_errors.displayName]] invalid>
+                    {{_errors.displayName}}
+                  </paper-input-error>
+                  <paper-input id="city"
+                    label="Cidade"
+                    value="{{_form.city}}"
+                    allowed-pattern="[A-Za-zÀ-ÿ ]"
+                    invalid=[[_errors.city]]
+                    required></paper-input>
+                  <paper-input-error
+                    hidden$=[[!_errors.city]] invalid>
+                    {{_errors.city}}
+                  </paper-input-error>
+                  <paper-input id="state"
+                    label="Estado"
+                    value="{{_form.state}}"
+                    allowed-pattern="[A-Za-z]"
+                    maxlength="2"
+                    invalid=[[_errors.state]]
+                    required></paper-input>
+                  <paper-input-error
+                    hidden$=[[!_errors.state]] invalid>
+                    {{_errors.state}}
+                  </paper-input-error>
+                  <paper-input id="country"
+                    label="País"
+                    value="{{_form.country}}"
+                    allowed-pattern="[A-Za-zÀ-ÿ ]"
+                    invalid=[[_errors.country]]
+                    required></paper-input>
+                  <paper-input-error
+                    hidden$=[[!_errors.country]] invalid>
+                    {{_errors.country}}
+                  </paper-input-error>
+                  <paper-dropdown-menu label="Identidade de gênero"
+                    on-value-changed="_onGenderChanged">
+                    <paper-listbox slot="dropdown-content" selected="{{_form.gender}}">
+                      <paper-item>Não definido</paper-item>
+                      <paper-item>Feminino</paper-item>
+                      <paper-item>Masculino</paper-item>
+                      <paper-item>Feminino Cis</paper-item>
+                      <paper-item>Masculino Cis</paper-item>
+                      <paper-item>Agênero</paper-item>
+                      <paper-item>Queer</paper-item>
+                      <paper-item>Gênero fluído</paper-item>
+                      <paper-item>Gênero não conformista</paper-item>
+                      <paper-item>Gênero variante</paper-item>
+                      <paper-item>Intersex</paper-item>
+                      <paper-item>Não binário</paper-item>
+                      <paper-item>Transgênero</paper-item>
+                      <paper-item>Pangênero</paper-item>
+                      <paper-item>Mulher transexual</paper-item>
+                      <paper-item>Homem transexual</paper-item>
+                      <paper-item>Transfeminino</paper-item>
+                      <paper-item>Transmasculino</paper-item>
+                      <paper-item>Não sei</paper-item>
+                      <paper-item>Nenhum</paper-item>
+                      <paper-item>Outro</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                  <paper-input-error
+                    hidden$=[[!_errors.gender]] invalid>
+                    {{_errors.gender}}
+                  </paper-input-error>
+                  <paper-input id="genderOther"
+                    label="Especificar identidade de gênero"
+                    value="{{_form.genderOther}}"
+                    allowed-pattern="[A-Za-zÀ-ÿ ]"
+                    invalid=[[_errors.genderOther]]
+                    required></paper-input>
+                  <paper-input-error
+                    hidden$=[[!_errors.genderOther]] invalid>
+                    {{_errors.genderOther}}
+                  </paper-input-error>
+                  <paper-dropdown-menu label="Cor / raça">
+                    <paper-listbox slot="dropdown-content" selected="{{_form.race}}">
+                      <paper-item>Não definida</paper-item>
+                      <paper-item>Preto</paper-item>
+                      <paper-item>Marrom</paper-item>
+                      <paper-item>Branco</paper-item>
+                      <paper-item>Amarelo</paper-item>
+                      <paper-item>Indígena</paper-item>
+                      <paper-item>Não sei</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                  <paper-input-error
+                    hidden$=[[!_errors.race]] invalid>
+                    {{_errors.race}}
+                  </paper-input-error>
+                  <paper-input id="politicalActivity"
+                    label="Movimento ou partido"
+                    value="{{_form.politicalActivity}}"
+                    invalid=[[_errors.politicalActivity]]
+                    required></paper-input>
+                  <paper-input-error
+                    hidden$=[[!_errors.politicalActivity]] invalid>
+                    {{_errors.politicalActivity}}
+                  </paper-input-error>
+                  <paper-textarea id="biography"
+                    label="Mini bio"
+                    value="{{_form.biography}}"
+                    invalid=[[_errors.biography]]
+                    required></paper-textarea><paper-input-error
+                      hidden$=[[!_errors.biography]] invalid>
+                      {{_errors.biography}}
+                    </paper-input-error>
+                </div>
+                <paper-button class="accent" on-tap="_updateProfile">Salvar</paper-button>
               </div>
-              <div class="email">
-                <paper-input label="senha" type="password" value="{{data.password}}" minlength="8" auto-validate="" error-message="A senha deve ter no mínimo 8 caracteres." disabled="{{!passProvider}}">
-                </paper-input>
-                <paper-input label="confirmação de senha" type="password" value="{{data.confirmpass}}" disabled="{{!passProvider}}">
-                </paper-input>
-              </div>
-              <hr>
-              <div class="notify">
-                <span>Receber notificações</span> <paper-toggle-button checked=""></paper-toggle-button>
-              </div>
-              <paper-button class="accent" on-tap="saveUserData">Salvar</paper-button>
             </div>
-          </div>
-          <div id="trophies">
-            Troféus
-          </div>
-          <div id="contributions">
-            Contribuições
-          </div>
-        </iron-pages>
+            <div id="trophies">
+              Troféus
+            </div>
+            <div id="contributions">
+              Contribuições
+            </div>
+          </iron-pages>
+        </app-header>
       </app-header-layout>
+
+      <paper-toast id="toast"
+        text="{{_toastMessage}}"></paper-toast>
+
+      <api-user-profile id="apiUserProfile"
+        on-result="_onUserProfile"></api-user-profile>
+      <api-update-profile id="apiUpdateProfile"
+        on-result="_onUpdateProfile"></api-update-profile>
     `;
   }
 
-  static get is() { return 'profile-page'; }
+  static get is() { return `profile-page`; }
+
   static get properties() {
     return {
-      selected: {
-        observer: '_selectedChanged'
-      },
-      profile: {
-        observer: '_setProfile'
-      },
-      fileArray: {
-        type: Array,
-        value: []
-      },
-      user: {
+      route: {
         type: Object,
-        notify: true,
-        observer: '_setFormData'
+        observer: `_onRouteChanged`
       },
-      appUser: {
-        type: Object
-      },
-      tab: {
-        type: Object,
-        value: function() { return 0; },
-        observer: 'tabChanged'
+      _toastMessage: String,
+      _info: Object,
+      _form: Object,
+      _showGenderOther: Boolean,
+      _errors: Object,
+      _tab: {
+        type: Number,
+        observer: `_onTabChanged`
       }
     };
   }
 
-  getPhoto(e) {
-    let photo = e.target.files[0];
-    if(photo) {
-      let reader = new FileReader();
-      const img = this.$.profile;
-      reader.onload = function (e) {
-        img.src = e.target.result;
-      }
-      reader.readAsDataURL(photo);
-      this.$.photoRef.path = `/users/${this.user.uid}/photo`;
-      this.$.photoRef.put(photo).then(function(res) {
-        this.$.photoRef.path += `/${photo.name}`;
-      }.bind(this));
-    }
+  constructor() {
+    super();
+    this._toastMessage = ``;
+    this._info = this._getEmptyInfo();
+    this._form = this._getEmptyForm();
+    this._errors = this._getEmptyErrors();
+    this._tab = 0;
+    this._showGenderOther = false;
   }
 
-  _setFormData(user) {
-    if (!user) return;
-    this.data = {
-      displayName: user.displayName,
-      email: user.email,
-      password: 'samplepass',
-      confirmpass: 'samplepass'
-    };
-  }
-  _selectedChanged(selected) {}
-
-  _returnToInbox() {
-    this.set('route.path', '/');
-  }
-
-  tabChanged(e) {
-    if(this.tab == 0) {
-      this.setTabDivs('flex', 'none', 'none');
-    } else if(this.tab == 1) {
-      this.setTabDivs('none', 'flex', 'none');
+  storedUser(user) {
+    if(user != null
+      && user != undefined
+      && `key` in user
+      && `uid` in user) {
+      this._user = user;
+      this.$.apiUserProfile.request(user.key, user.uid);
     } else {
-      this.setTabDivs('none', 'none', 'flex');
+      this._dispatchAccessDenial();
     }
   }
 
-  setTabDivs(info, trophies, contributions) {
+  _onTabChanged(e) {
+    if(this._tab == 0) {
+      this._setTabDivs(`flex`, `none`, `none`);
+    } else if(this._tab == 1) {
+      this._setTabDivs(`none`, `flex`, `none`);
+    } else {
+      this._setTabDivs(`none`, `none`, `flex`);
+    }
+  }
+
+  _setTabDivs(info, trophies, contributions) {
     this.$.info.style.display = info;
     this.$.trophies.style.display = trophies;
     this.$.contributions.style.display = contributions;
   }
 
-  uploadImage(e) {
-    console.log("eai");
-    this.$.upload.click();
-  }
-
-  saveUserData(e) {
-    const data = this.data;
-
-    if (this._validateInputs(data)) {
-      this.user.updateProfile(data).then(setTimeout(function() {
-        this.notifyPath('user.displayName');
-        this.notifyPath('user.photoURL');
-        this.set('appUser.photoURL', data.photoURL);
-        this.set('appUser.displayName', data.displayName);
-      }.bind(this), 1000));
-      if(data.password !== 'samplepass' && this.passProvider) {
-        this.$.dialog.present();
-      }
+  _updateProfile(e) {
+    const VALIDATION = this._validateForm();
+    if(VALIDATION.valid) {
+      this.$.apiUpdateProfile.request(this._user.key, this._user.uid, this._form);
+    } else {
+      this._errors = VALIDATION.errors;
+      this._toastInvalidFields();
     }
   }
 
-  _updatePassword(e) {
-    const password = e.detail.password;
-    this.$.auth.signInWithEmailAndPassword(this.user.email, password)
-      .then(function(res) {
-        // use app-notify to display success message
-        this.user.updatePassword(this.data.password);
-        this.$.dialog.dismiss();
-      }.bind(this))
-      .catch(function(err) {
-        this.$.passDialog.passInvalid = true;
-      }.bind(this));
-  }
-  _validateInputs(data) {
-    let valid = true;
-    Array.from(this.shadowRoot.querySelectorAll('paper-input')).forEach((input) => {
-      valid = !input.invalid;
-    });
-    valid = (valid && data && data.password === data.confirmpass);
-    return valid;
+  _validateForm() {
+    return { valid: true };
   }
 
-  _returnToInbox() {
-    this.set('route.path', '/');
+  _requestPhoto() {
+    this.$.image.click();
+  }
+
+  _extractPhoto(e) {
+    let photo = e.target.files[0];
+    if(photo) {
+      let reader = new FileReader();
+      let avatar = this.$.avatar;
+      let apiUpdateProfile = this.$.apiUpdateProfile
+      let key = this._user.key;
+      let uid = this._user.uid;
+      apiUpdateProfile.imageRequest(key, uid, photo);
+      reader.onload = function(e) {
+        avatar.src = e.target.result;
+      }
+      reader.readAsDataURL(photo);
+      this._form.image = photo;
+    }
+  }
+
+  _onRouteChanged() {
+    if(this.route.path == `/profile`) {
+      this._requestUser();
+    }
+  }
+
+  _onGenderChanged(e, gender) {
+    if(gender.value == `Outro`) {
+      this.$.genderOther.style.display = `block`;
+    } else {
+      this.$.genderOther.style.display = `none`;
+    }
+  }
+
+  _dispatchUser() {
+    this.dispatchEvent(new CustomEvent(`user-update`, { detail: this._user } ));
+  }
+
+  _dispatchAccessDenial() {
+    this.dispatchEvent(new CustomEvent(`access-denial`));
+  }
+
+  _dispatchBackPressed() {
+    this.dispatchEvent(new CustomEvent(`back-pressed`));
+  }
+
+  _dispatchToInboxPressed() {
+    this.dispatchEvent(new CustomEvent(`to-inbox-pressed`));
+  }
+
+  _requestUser() {
+    this.dispatchEvent(new CustomEvent(`request-user`));
+  }
+
+  _switchInfo() {
+    this._tab = 0;
+    if(this.$.content.style.display == `none`) {
+      this.$.content.style.display = `block`;
+      this.$.form.style.display = `none`;
+    } else {
+      this.$.content.style.display = `none`;
+      this.$.form.style.display = `block`;
+    }
+  }
+
+  _onUserProfile(e, result) {
+    if(result.success) {
+      this._extractUserInfo(result.data);
+      this._updateForm(result.data, this._user.displayName);
+      this._user.state = result.data.state;
+      this._user.country = result.data.country;
+      this._user.gender = result.data.gender;
+      this._user.race = result.data.race;
+      this._user.politicalActivity = result.data.politicalActivity;
+      this._user.biography = result.data.biography;
+      this._user.photoURL = result.data.image;
+      this._dispatchUser();
+    } else {
+      this._toastUnknownError();
+    }
+  }
+
+  _onUpdateProfile(e, result) {
+    if(result.success) {
+      this._extractUserInfo(result.data);
+      this._updateForm(result.data, this._user.displayName);
+      this._user.state = result.data.state;
+      this._user.country = result.data.country;
+      this._user.gender = result.data.gender;
+      this._user.race = result.data.race;
+      this._user.politicalActivity = result.data.politicalActivity;
+      this._user.biography = result.data.biography;
+      this._user.photoURL = result.data.image;
+      this._dispatchUser();
+    } else {
+      let errors = result.errors;
+      if(errors.notFound) {
+        this._toastUnknownError();
+      } else {
+        this._errors = {
+          image: errors.image,
+          displayName: errors.display_name,
+          city: errors.city,
+          state: errors.state,
+          country: errors.country,
+          gender: errors.gender,
+          genderOther: errors.gender_other,
+          race: errors.race,
+          politicalActivity: errors.political_activity,
+          biography: errors.biography
+        };
+      }
+      this._toastUnknownError();
+    }
+  }
+
+  _updateForm(user, displayName) {
+    let form = {
+      image: user.image,
+      displayName: displayName,
+      city: user.city,
+      state: user.state,
+      country: user.country,
+      gender: user.gender,
+      genderOther: user.genderOther,
+      race: user.race,
+      politicalActivity: user.politicalActivity,
+      biography: user.biography
+    };
+    this._form = form;
+  }
+
+  _extractUserInfo(user) {
+    let info = this._getEmptyInfo();
+
+    info.email = this._user.email;
+
+    if(user.city != ``) {
+      info.city = user.city;
+      if(user.state != ``) {
+        info.city += ` - ` + user.state;
+      }
+    } else {
+      info.city = `Não definida`;
+    }
+
+    if(user.country != ``) {
+      info.country = user.country;
+    } else {
+      info.country = `Não definido`;
+    }
+
+    if(user.gender != 0) {
+      info.gender = this._getGenderText(user.gender);
+      if(user.genderOther != ``) {
+        info.gender += `: ` + user.genderOther;
+      }
+    } else {
+      info.gender = `Não definida`;
+    }
+
+    if(user.race != 0) {
+      info.race = this._getRaceText(user.race);
+    } else {
+      info.race = `Não definida`;
+    }
+
+    if(user.politicalActivity != ``) {
+      info.politicalActivity = user.politicalActivity;
+    } else {
+      info.politicalActivity = `Não definido`;
+    }
+
+    if(user.biography != ``) {
+      info.biography = user.biography;
+    } else {
+      info.biography = `Não definida`;
+    }
+
+    this._info = info;
+  }
+
+  _getGenderText(genderId) {
+    switch(genderId) {
+      case 1: return `Feminino`;
+      case 2: return `Masculino`;
+      case 3: return `Feminino Cis`;
+      case 4: return `Masculino Cis`;
+      case 5: return `Agênero`;
+      case 6: return `Queer`;
+      case 7: return `Gênero fluído`;
+      case 8: return `Gênero não conformista`;
+      case 9: return `Gênero variante`;
+      case 10: return `Intersex`;
+      case 11: return `Não binário`;
+      case 12: return `Transgênero`;
+      case 13: return `Pangênero`;
+      case 14: return `Mulher transexual`;
+      case 15: return `Homem transexual`;
+      case 16: return `Transfeminino`;
+      case 17: return `Transmasculino`;
+      case 18: return `Não sei`;
+      case 19: return `Nenhum`;
+      case 20: return `Outro`;
+      default: return ``;
+    }
+  }
+
+  _getRaceText(raceId) {
+    switch(raceId) {
+      case 1: return `Preto`;
+      case 2: return `Marrom`;
+      case 3: return `Branco`;
+      case 4: return `Amarelo`;
+      case 5: return `Indígena`;
+      case 6: return `Não sei`;
+      default: return ``;
+    }
+  }
+
+  _getEmptyInfo() {
+    return {
+      email: ``,
+      city: ``,
+      country: ``,
+      gender: ``,
+      genderOther: ``,
+      race: ``,
+      politicalActivity: ``,
+      biography: ``
+    };
+  }
+
+  _getEmptyForm() {
+    return {
+      image: ``,
+      displayName: ``,
+      city: ``,
+      state: ``,
+      country: ``,
+      gender: ``,
+      genderOther: ``,
+      race: ``,
+      politicalActivity: ``,
+      biography: ``
+    }
+  }
+
+  _getEmptyErrors() {
+    return {
+      image: ``,
+      displayName: ``,
+      city: ``,
+      state: ``,
+      country: ``,
+      gender: ``,
+      genderOther: ``,
+      race: ``,
+      politicalActivity: ``,
+      biography: ``
+    }
+  }
+
+  _toastIt(message) {
+    this._toastMessage = message;
+    this.$.toast.open();
+  }
+
+  _toastUnknownError() {
+    this._toastIt(`Um erro aconteceu. Por favor, tente novamente mais tarde.`)
+  }
+
+  _toastInvalidFields() {
+    this._toastIt(`Formulário inválido. Consulte os erros nos campos.`);
   }
 }
 window.customElements.define(ProfilePage.is, ProfilePage);

@@ -2,7 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '../app-elements/app-constants.js';
 
-class ApiUserProfile extends PolymerElement {
+class ApiUpdateProfile extends PolymerElement {
   static get template() {
     return html`
     <app-constants id="constants"></app-constants>
@@ -10,29 +10,50 @@ class ApiUserProfile extends PolymerElement {
       id="ajax"
       content-type="application/json"
       handle-as="json"
-      method="GET"
+      method="PUT"
       url="{{_url}}"
       headers={{_headers}}
+      body='{{_body}}'
+      on-response="_onResponse"
+      on-error="_onError"></iron-ajax>
+
+    <iron-ajax
+      id="imageAjax"
+      method="PUT"
+      url="{{_url}}"
+      headers={{_imageHeaders}}
       on-response="_onResponse"
       on-error="_onError"></iron-ajax>
     `;
   }
 
-  static get is() { return `api-user-profile`; }
+  static get is() { return `api-update-profile`; }
 
   static get properties() {
     return {
       _url: String,
-      _headers: Object
+      _headers: Object,
+      _body: Object,
+      _imageHeaders: Object
     };
   }
 
-  request(token, id) {
-    let validation = this._validate(token, id);
+  request(token, id, data) {
+    let validation = this._validate(token, id, data);
     if(validation.isValid) {
-      this._url = this.$.constants.api.userProfile.replace(`:user_id`, id);
+      this._url = this.$.constants.api.profile.replace(`:profile_id`, id);
       this._headers = {
         'Authorization': `Token ${token}`
+      };
+      this._body = {
+        race: data.race,
+        gender: data.gender,
+        gender_other: data.gender == 20 ? data.genderOther : ``,
+        country: data.country,
+        state: data.state,
+        city: data.city,
+        biography: data.biography,
+        political_activity: data.politicalActivity
       };
       this.$.ajax.generateRequest();
     } else {
@@ -40,7 +61,29 @@ class ApiUserProfile extends PolymerElement {
     }
   }
 
-  _validate(token, id) {
+  imageRequest(token, id, image) {
+    let validation = this._validate(token, id);
+    if(validation.isValid) {
+      this._url = this.$.constants.api.profile.replace(`:profile_id`, id);
+      this._imageHeaders = {
+        'Authorization': `Token ${token}`,
+        'Accept': `application/json`
+      };
+      let formData = new FormData();
+      formData.append('image', image);
+      this.$.imageAjax.body = formData;
+      this.$.imageAjax.generateRequest();
+    } else {
+      this._dispatch(validation.errors);
+    }
+  }
+
+  _validate(token, id, data) {
+    // TODO: Create validation
+    return { isValid: true };
+  }
+
+  _validateImage(token, id, image) {
     // TODO: Create validation
     return { isValid: true };
   }
@@ -61,7 +104,7 @@ class ApiUserProfile extends PolymerElement {
     if (data in response) {
       return true;
     } else {
-      console.error(`api-user-profile`, `${data} not found`);
+      console.error(`api-update-profile`, `${data} not found`);
     }
   }
 
@@ -70,6 +113,7 @@ class ApiUserProfile extends PolymerElement {
   }
 
   _onResponse(e) {
+    console.log(e.detail.xhr.response);
     let response = e.detail.xhr.response;
 
     let result = {};
@@ -89,7 +133,7 @@ class ApiUserProfile extends PolymerElement {
         }
       };
     } else {
-      console.error(`api-user-profile`, response);
+      console.error(`api-update-profile`, response);
       result = {
         success: false,
         errors: {
@@ -102,15 +146,17 @@ class ApiUserProfile extends PolymerElement {
 
   _onError(e, iron) {
     let response = iron.request.xhr.response;
-    console.error(`api-user-profile`, response);
+    console.error(`api-update-profile`, response);
 
     let result = {
       success: false,
-      errors: {}
+      errors: {
+        image: "image" in response ? response.image.join("\n") : ``
+      }
     };
 
     this._dispatch(result);
   }
 }
 
-customElements.define(ApiUserProfile.is, ApiUserProfile);
+customElements.define(ApiUpdateProfile.is, ApiUpdateProfile);

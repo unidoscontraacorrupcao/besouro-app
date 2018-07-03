@@ -25,6 +25,9 @@ class AppConstants extends PolymerElement {
           const API_USER = `${API_USERS}:user_id/`;
           const API_USER_PROFILE = `${API_USER}profile/`;
 
+          const API_PROFILES = `${V1_ENDPOINT}profiles/`;
+          const API_PROFILE = `${API_PROFILES}:profile_id/`;
+
           return {
             hostname: HOSTNAME,
             v1: V1_ENDPOINT,
@@ -37,7 +40,8 @@ class AppConstants extends PolymerElement {
             newPassword: API_NEW_PASSWORD,
             users: API_USERS,
             user: API_USER,
-            userProfile: API_USER_PROFILE
+            userProfile: API_USER_PROFILE,
+            profile: API_PROFILE
           }
         }
       }

@@ -238,7 +238,6 @@ class AppShell extends PolymerElement {
         attr-for-selected="name"
         fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged"
         role="main">
-          <profile-page name="profile" route="{{route}}" user="{{user}}"></profile-page>
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
@@ -250,8 +249,17 @@ class AppShell extends PolymerElement {
             name="login"
             on-user-update="_onUserUpdate"
             on-complete="_onLoginComplete"></login-page>
+          <profile-page id="profile"
+            name="profile"
+            route="{{route}}"
+            on-request-user="_onRequestUser"
+            on-user-update="_onUserUpdate"
+            on-access-denial="_onProfileAccessDenial"
+            on-to-inbox-pressed="_goToInbox"
+            on-back-pressed="_goToInbox"></profile-page>
       </iron-pages>
     </app-drawer-layout>
+    <script src="node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
 `;
   }
 
@@ -269,11 +277,11 @@ class AppShell extends PolymerElement {
         value: function() { return {}; }
       },
       subroute: Object,
-      route: Object,
-      user: {
+      route: {
         type: Object,
-        value: function() { return this._getUser(); }
-      }
+      },
+      user: Object,
+      _afterLogin: String
     }
   }
 
@@ -281,6 +289,12 @@ class AppShell extends PolymerElement {
     return [
       '_routePageChanged(routeData.page)',
     ];
+  }
+
+  constructor() {
+    super();
+    this._afterLogin = `/`;
+    this.user = this._getUser();
   }
 
   _routePageChanged(page) {
@@ -317,7 +331,15 @@ class AppShell extends PolymerElement {
     this.set('route.path', '/profile');
   }
 
+  _goToInbox() {
+    this.set(`route.path`, `/`)
+  }
+
   // User
+
+  _onRequestUser(e) {
+    this.$[e.target.id].storedUser(this.user);
+  }
 
   _onUserUpdate(e, user) {
     if(user.key != 0) {
@@ -335,7 +357,15 @@ class AppShell extends PolymerElement {
   }
 
   _onLoginComplete(e) {
-    this.set('route.path', '/');
+    this.set('route.path', this._afterLogin);
+    this._afterLogin = `/`;
+  }
+
+  // Profile
+
+  _onProfileAccessDenial(e) {
+    this._afterLogin = `/profile`;
+    this.set(`route.path`, `/login`);
   }
 
   // Storage

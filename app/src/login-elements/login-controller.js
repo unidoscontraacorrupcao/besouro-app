@@ -223,6 +223,7 @@ class LoginController extends PolymerElement {
       this._user.state = result.data.state;
       this._user.country = result.data.country;
       this._user.gender = result.data.gender;
+      this._user.genderOther = result.data.genderOther;
       this._user.race = result.data.race;
       this._user.politicalActivity = result.data.politicalActivity;
       this._user.biography = result.data.biography;
@@ -380,6 +381,7 @@ class LoginController extends PolymerElement {
       country: ``,
       displayName: ``,
       gender: ``,
+      genderOther: ``,
       email: ``,
       isAdmin: false,
       key: ``,
