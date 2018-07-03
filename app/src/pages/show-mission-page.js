@@ -79,8 +79,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       app-header[shadow] .tall .actions { display: none; }
 
       app-toolbar {
-        width: 93%;
+        width: 90%;
         margin: auto;
+        padding: 0;
+      }
+
+      app-toolbar.short {
+        height: 45px;
+        z-index: 2;
       }
       .tall { height: 175px; }
 
@@ -93,7 +99,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       #share-mission {
         position: absolute;
         right: 0;
-        bottom: 0;
+        bottom: -20px;
         margin-right: 10px;
       }
 
@@ -102,17 +108,16 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         color: white;
       }
 
-      h1.title[main-title] {
+      p.title[main-title] {
         color: white;
         text-transform: uppercase;
         font-family: Folio;
         font-size: 32px;
         padding-top: 10px;
-        position: absolute;
-        top: 0px;
         line-height: 1.2;
         white-space: unset;
         max-width: 400px;
+        margin-bottom: 20px;
       }
 
       h3 {
@@ -122,18 +127,24 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .dark { color: black; }
 
-      .timing {
-        font-size: 19px;
-        margin-top: 15px;
-        text-transform: none;
-        position: absolute;
-        top: 30px;
+      .timing { font-size: 19px; }
+
+      .timing paper-icon-button { top: -16px; }
+      .timing span { top: -12px; }
+      .timing paper-icon-button, .timing span { position: absolute; }
+
+      .timing paper-icon-button {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 6px;
       }
 
-      .timing paper-icon-button { padding: 5px; }
       .timing span {
-        position: absolute;
-        left: 28px;
+        left: 30px;
+        color: white;
+        font-family: opensans-bold;
+        font-size: 14px;
       }
 
       .progress {
@@ -349,17 +360,17 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
     <app-header-layout has-scrolling-region="">
       <app-header slot="header" fixed="" condenses="" effects="waterfall resize-title blend-background parallax-background">
-        <app-toolbar>
+        <app-toolbar class="short">
           <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
           <h1 condensed-title="" class="main-title">{{mission.title}}</h1>
           <!-- <paper-icon-button icon="app:mission-edit"></paper-icon-button> -->
         </app-toolbar>
 
         <app-toolbar class="tall">
-          <h1 bottom-item="" main-title="" class="title">
+          <p bottom-item main-title="" class="title">
             {{mission.title}}
-          </h1>
-          <div class="timing">
+          </p>
+          <div bottom-item class="timing">
             <paper-icon-button icon="app:mission-timing"></paper-icon-button>
             <span>{{mission.remainig_days}}</span>
           </div>

@@ -29,6 +29,11 @@ $_documentContainer.innerHTML = `<custom-style>
         src:url("fonts/Helvetica/HelveticaNeueLTStd-ThCn.otf");
       }
 
+      @font-face {
+        font-family: opensans-bold;
+        src:url("fonts/opensans/OpenSans-Bold.ttf");
+      }
+
     :root { 
       --default-primary-color: #FFFFFF;
       --dark-primary-color: #646A74;
