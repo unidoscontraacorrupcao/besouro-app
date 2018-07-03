@@ -21,7 +21,9 @@ class LoginController extends PolymerElement {
         paper-toast {
           --paper-toast-color: white;
           --paper-toast-background-color: #e7007e;
-          left: auto !important;
+          text-align: center;
+          min-height: 100px;
+          width: 100%;
         }
       </style>
 
@@ -105,7 +107,7 @@ class LoginController extends PolymerElement {
     const VALIDATION = this._validateSignUpForm(form);
     if(VALIDATION.valid) {
       this._signUp.form = form;
-      this.$.apiSignUp.request(form.email, form.name, form.password);
+      this.$.apiSignUp.request(form.email, form.password);
     } else {
       this.$.signUp.exposeErrors(VALIDATION.errors);
       this._toastInvalidFields();

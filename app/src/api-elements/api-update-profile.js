@@ -113,7 +113,6 @@ class ApiUpdateProfile extends PolymerElement {
   }
 
   _onResponse(e) {
-    console.log(e.detail.xhr.response);
     let response = e.detail.xhr.response;
 
     let result = {};

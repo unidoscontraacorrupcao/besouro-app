@@ -7,6 +7,7 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '../api-elements/api-user-profile.js';
 import '../api-elements/api-update-profile.js';
+import '../api-elements/api-update-user.js';
 import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
@@ -29,7 +30,10 @@ class ProfilePage extends PolymerElement {
         paper-toast {
           --paper-toast-color: white;
           --paper-toast-background-color: #e7007e;
-          left: auto !important;
+          margin-bottom: 65px;
+          text-align: center;
+          min-height: 100px;
+          width: 100%;
         }
         app-header {
           --app-form-header-background: white;
@@ -394,6 +398,8 @@ class ProfilePage extends PolymerElement {
         on-result="_onUserProfile"></api-user-profile>
       <api-update-profile id="apiUpdateProfile"
         on-result="_onUpdateProfile"></api-update-profile>
+      <api-update-user id="apiUpdateUser"
+        on-result="_onUpdateUser"></api-update-user>
     `;
   }
 
@@ -481,12 +487,11 @@ class ProfilePage extends PolymerElement {
       let apiUpdateProfile = this.$.apiUpdateProfile
       let key = this._user.key;
       let uid = this._user.uid;
-      apiUpdateProfile.imageRequest(key, uid, photo);
       reader.onload = function(e) {
         avatar.src = e.target.result;
       }
       reader.readAsDataURL(photo);
-      this._form.image = photo;
+      apiUpdateProfile.imageRequest(key, uid, photo);
     }
   }
 
@@ -554,17 +559,9 @@ class ProfilePage extends PolymerElement {
 
   _onUpdateProfile(e, result) {
     if(result.success) {
-      this._extractUserInfo(result.data);
-      this._updateForm(result.data, this._user.displayName);
-      this._user.state = result.data.state;
-      this._user.country = result.data.country;
-      this._user.gender = result.data.gender;
-      this._user.race = result.data.race;
-      this._user.politicalActivity = result.data.politicalActivity;
-      this._user.biography = result.data.biography;
-      this._user.photoURL = result.data.image;
-      this._dispatchUser();
+      this.$.apiUpdateUser.request(this._user.key, this._user.uid, this._form.displayName);
     } else {
+      this.$.avatar.src = this._user.photoURL;
       let errors = result.errors;
       if(errors.notFound) {
         this._toastUnknownError();
@@ -583,6 +580,25 @@ class ProfilePage extends PolymerElement {
         };
       }
       this._toastUnknownError();
+    }
+  }
+
+  _onUpdateUser(e, result) {
+    if(result.success) {
+      this._user.displayName = result.data.displayName;
+      this._dispatchUser();
+      this._requestUser();
+      this._toastIt(`Perfil atualizado com sucesso!`);
+    } else {
+      let errors = result.errors;
+      if(errors.notFound) {
+        this._toastUnknownError();
+      } else {
+        let formErrors = this._errors;
+        formErrors.displayName = errors.displayName;
+        this._errors = formErrors;
+        this._toastInvalidFields();
+      }
     }
   }
 
@@ -647,6 +663,10 @@ class ProfilePage extends PolymerElement {
       info.biography = user.biography;
     } else {
       info.biography = `Não definida`;
+    }
+
+    if(user.image != ``) {
+      this.$.avatar.src = user.image;
     }
 
     this._info = info;

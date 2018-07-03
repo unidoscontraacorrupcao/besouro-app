@@ -259,7 +259,7 @@ class AppShell extends PolymerElement {
             on-back-pressed="_goToInbox"></profile-page>
       </iron-pages>
     </app-drawer-layout>
-    <script src="node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
+    <script src="/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
 `;
   }
 
