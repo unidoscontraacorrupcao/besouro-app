@@ -5,6 +5,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
+import '@polymer/app-layout/app-grid/app-grid-style.js';
 import '../api-elements/api-user-profile.js';
 import '../api-elements/api-update-profile.js';
 import '../api-elements/api-update-user.js';
@@ -17,8 +18,9 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class ProfilePage extends PolymerElement {
   static get template() {
     return html`
-      <style>
+      <style include="app-grid-style">
         :host {
+          --app-grid-columns: 2;
           display: block;
           background: #f5f5f5;
           flex-direction: column;
@@ -163,7 +165,6 @@ class ProfilePage extends PolymerElement {
             max-height: 200px;
           };
         }
-
         div.fields > paper-input-error {
           position: relative;
           white-space: normal;
@@ -190,6 +191,68 @@ class ProfilePage extends PolymerElement {
           width: 100%;
           margin: 0 auto;
           max-width: 100%;
+        }
+        ul.app-grid {
+          width: 100%;
+          padding: 0;
+          margin: 5px 0;
+          list-style: none;
+        }
+        div#trophies > ul.app-grid {
+           margin-bottom: 60px;
+        }
+        ul.app-grid > li.item {
+          padding: 20px 2.5vw;
+          text-align: center;
+        }
+        .trophy-icon {
+          border-radius: 50%;
+          background-color: white;
+          height: 13vh;
+          width: 13vh;
+          padding: 2vh;
+          margin: auto;
+        }
+        .trophy-icon > iron-image {
+          height: 13vh;
+          width: 13vh;
+          border-radius: 50%;
+        }
+        .trophy-name {
+          margin-top: 5px;
+          color: #312783;
+          font-family: Folio;
+          font-size: 16px;
+          line-height: 18px;
+        }
+        .trophy-more {
+          margin-top: 10px;
+          color: #e7007e;
+          font-family: Folio;
+          font-size: 16px;
+          text-transform: uppercase;
+          line-height: 18px;
+        }
+        .contribution-value {
+          color: #312783;
+          font-family: Folio;
+          font-size: 50px;
+          line-height: 55px;
+        }
+        .contribution-value.special {
+          text-align: center;
+          color: #e6007e;
+        }
+        .contribution-description {
+          text-align: center;
+          color: #312783;
+          font-family: Folio;
+          font-size: 16px;
+          line-height: 18px;
+        }
+        .contribution-total {
+          margin-top: 20px;
+          margin-bottom: 60px;
         }
       </style>
      <app-actions on-go-to-inbox="_dispatchToInboxPressed"></app-actions>
@@ -382,10 +445,112 @@ class ProfilePage extends PolymerElement {
               </div>
             </div>
             <div id="trophies">
-              Troféus
+              <ul class="app-grid">
+                <li class="item">
+                  <div class="trophy-icon">
+                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
+                  </div>
+                  <div class="trophy-name">
+                    Ativista de WhatsApp
+                  </div>
+                  <div class="trophy-more">
+                    Ver missão
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="trophy-icon">
+                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
+                  </div>
+                  <div class="trophy-name">
+                  Ativista de WhatsApp
+                  </div>
+                  <div class="trophy-more">
+                  Ver missão
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="trophy-icon">
+                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
+                  </div>
+                  <div class="trophy-name">
+                  Ativista de WhatsApp
+                  </div>
+                  <div class="trophy-more">
+                  Detalhes
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="trophy-icon">
+                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
+                  </div>
+                  <div class="trophy-name">
+                  Ativista de WhatsApp
+                  </div>
+                  <div class="trophy-more">
+                  Desbloqueie!
+                  </div>
+                </li>
+              </ul>
             </div>
             <div id="contributions">
-              Contribuições
+              <ul class="app-grid">
+                <li class="item">
+                  <div class="contribution-value">
+                    {{_contributions.missions_pending}}
+                  </div>
+                  <div class="contribution-description">
+                    Missões pendentes
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="contribution-value">
+                    {{_contributions.missions_complete}}
+                  </div>
+                  <div class="contribution-description">
+                    Missões completas
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="contribution-value">
+                    {{_contributions.missions_total}}
+                  </div>
+                  <div class="contribution-description">
+                    Total de missões
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="contribution-value">
+                    {{_contributions.votes_total}}
+                  </div>
+                  <div class="contribution-description">
+                    Total de votos
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="contribution-value">
+                    {{_contributions.shares_total}}
+                  </div>
+                  <div class="contribution-description">
+                    Total de compartilhamentos
+                  </div>
+                </li>
+                <li class="item">
+                  <div class="contribution-value">
+                    {{_contributions.trophies_total}}
+                  </div>
+                  <div class="contribution-description">
+                    Total de troféus
+                  </div>
+                </li>
+              </ul>
+              <div class="contribution-total">
+                <div class="contribution-value special">
+                  {{_contributions.score}}
+                </div>
+                <div class="contribution-description">
+                  Total de pontos
+                </div>
+              </div>
             </div>
           </iron-pages>
         </app-header>
@@ -411,25 +576,29 @@ class ProfilePage extends PolymerElement {
         type: Object,
         observer: `_onRouteChanged`
       },
-      _toastMessage: String,
-      _info: Object,
-      _form: Object,
-      _showGenderOther: Boolean,
+      _contributions: Object,
       _errors: Object,
+      _form: Object,
+      _info: Object,
       _tab: {
         type: Number,
         observer: `_onTabChanged`
-      }
+      },
+      _toastMessage: String,
+      _trophies: Array,
+      _showGenderOther: Boolean
     };
   }
 
   constructor() {
     super();
-    this._toastMessage = ``;
-    this._info = this._getEmptyInfo();
-    this._form = this._getEmptyForm();
+    this._contributions = this._getEmptyContributions();
     this._errors = this._getEmptyErrors();
+    this._form = this._getEmptyForm();
+    this._info = this._getEmptyInfo();
     this._tab = 0;
+    this._toastMessage = ``;
+    this._trophies = [];
     this._showGenderOther = false;
   }
 
@@ -447,11 +616,21 @@ class ProfilePage extends PolymerElement {
 
   _onTabChanged(e) {
     if(this._tab == 0) {
-      this._setTabDivs(`flex`, `none`, `none`);
+      this._setTabDivs(`block`, `none`, `none`);
     } else if(this._tab == 1) {
-      this._setTabDivs(`none`, `flex`, `none`);
+      this._setTabDivs(`none`, `block`, `none`);
     } else {
-      this._setTabDivs(`none`, `none`, `flex`);
+      this._setTabDivs(`none`, `none`, `block`);
+      // TODO: Change to API request
+      this._contributions = {
+        missions_pending: 32,
+        missions_complete: 23,
+        missions_total: 55,
+        votes_total: 2332,
+        shares_total: 34,
+        trophies_total: 12,
+        score: 235223
+      };
     }
   }
 
@@ -735,7 +914,7 @@ class ProfilePage extends PolymerElement {
       race: ``,
       politicalActivity: ``,
       biography: ``
-    }
+    };
   }
 
   _getEmptyErrors() {
@@ -750,7 +929,19 @@ class ProfilePage extends PolymerElement {
       race: ``,
       politicalActivity: ``,
       biography: ``
-    }
+    };
+  }
+
+  _getEmptyContributions() {
+    return {
+      missions_pending: 0,
+      missions_complete: 0,
+      missions_total: 0,
+      votes_total: 0,
+      shares_total: 0,
+      trophies_total: 0,
+      score: 0
+    };
   }
 
   _toastIt(message) {
