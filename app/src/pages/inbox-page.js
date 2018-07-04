@@ -10,6 +10,7 @@ import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
 import '../mission-elements/welcome-card.js';
+import '../mission-elements/empty-card.js';
 import '../app-elements/app-besouro-api.js';
 class InboxPage extends PolymerElement {
   static get template() {
@@ -90,6 +91,7 @@ class InboxPage extends PolymerElement {
           </template>
         </div>
         <div class="inbox">
+          <empty-card id="emptyMessage" on-select-inbox="_selectInbox"></empty-card>
           <template is="dom-repeat" items="{{userAcceptedMissions}}" as="acceptedMissions">
             <mission-card user="{{user}}" mission="{{acceptedMissions}}" on-show-mission="_goToMission">
             </mission-card>
@@ -122,10 +124,6 @@ class InboxPage extends PolymerElement {
         type: String,
         value: 'MISSÕES'
       },
-      acceptedMissions: {
-        type: Array,
-        value: []
-      },
       inboxMissions: {
         type: Array
       },
@@ -149,6 +147,7 @@ class InboxPage extends PolymerElement {
         type: Array,
         value: []
       },
+      inboxtab: Number
     }
   }
 
@@ -195,10 +194,15 @@ class InboxPage extends PolymerElement {
     this.$.api.path = `missions/accepted/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("userAcceptedMissions", ajax.response);
+      if (this.userAcceptedMissions.length > 0)
+        this.$.emptyMessage.setAttribute("style", "display: none");
+      else
+        this.$.emptyMessage.setAttribute("style", "display: block");
     }.bind(this));
   }
 
   _returnToInbox() { this.set("route.path", "/"); }
+  _selectInbox() { this.set("inboxtab", 0); }
   _goToLogin() { this.set("route.path", "/login"); }
 }
 window.customElements.define(InboxPage.is, InboxPage);
