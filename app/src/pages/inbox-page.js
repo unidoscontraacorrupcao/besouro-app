@@ -158,13 +158,9 @@ class InboxPage extends PolymerElement {
     this._getAcceptedMissions();
   }
 
-  openDrawer() {
-    this.dispatchEvent(new CustomEvent('open-drawer'));
-  }
+  openDrawer() { this.dispatchEvent(new CustomEvent('open-drawer')); }
 
-  _openMissionForm() {
-    this.set('route.path', '/mission');
-  }
+  _openMissionForm() { this.set('route.path', '/mission'); }
 
   _goToMission(e) {
     let mission = e.detail.mission;
@@ -186,18 +182,15 @@ class InboxPage extends PolymerElement {
   }
 
   _getInboxMissions() {
-    this.$.api.method = "GET";
-    if (!this.user)
-      this.$.api.path = `missions/`;
-    else
-      this.$.api.path = `missions/inbox/${this.user.uid}`;
+    this.$.api.path = `missions/`;
     this.$.api.request().then(function(ajax) {
       this.set("inboxMissions", ajax.response);
     }.bind(this));
   }
 
   _getAcceptedMissions() {
-    if (!this.user) return;
+    console.log(this.user);
+    if (!this.user || Object.keys(this.user).length == 0) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/accepted/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {

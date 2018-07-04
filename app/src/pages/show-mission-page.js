@@ -535,14 +535,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     }
   }
 
-  _returnToInbox() {
-    console.log("return to inbox");
-    this.set('currentMissionStats', 'new');
-    this.set('acceptedMissionStats', 0);
-    this.set('mission.content.usersFinished', []);
-    this.set('mission.content.usersPending', []);
-    this.set('route.path', '/');
-  }
+  _returnToInbox() { this.set('route.path', '/'); }
 
   _editMission() {
     this.set("route.data", {missionID: this.data.key});
@@ -550,7 +543,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   addComment(e) {
-    if(!this.user) {
+    if (!this.user || Object.keys(this.user).length == 0) {
       this.set("route.path", "/login");
       return;
     }
@@ -577,7 +570,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _acceptMission(e) {
-    if (!this.user) {
+    if (!this.user || Object.keys(this.user).length == 0) {
       this.set("route.path", "/login")
       return;
     }
@@ -649,7 +642,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   _calcMissionStats() {
     if (!this.data) return;
     if (this.mission.id == undefined) return;
-    if (!this.user) {
+    if (!this.user || Object.keys(this.user).length == 0) {
       this.set("currentMissionStats", "new");
       setTimeout(this._setActionBtn.bind(this), 100);
       this.hideLoading(true);
@@ -658,8 +651,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.$.api.method = "GET";
       this.$.api.path = `missions/${this.data.key}/user-status/${this.user.uid}`;
       this.$.api.request().then(function(ajax) {
-        console.log("eaeeee");
-        console.log(this.route);
         this.set("currentMissionStats", ajax.response.status);
         this._setActionBtn();
         this.hideLoading(true);
@@ -668,8 +659,6 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}/statistics`;
     this.$.api.request().then(function(ajax) {
-      console.log("eaeeee2");
-      console.log(this.route);
       this.set("acceptedMissionCount", ajax.response.accepted);
       this.set("concludedMissionCount", ajax.response.realized);
       this.set("pendingMissionCount", ajax.response.pending);
@@ -719,12 +708,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.route["shared"] = this.data.key;
       this.route.__queryParams = {};
     }
-    console.log("mission changed first");
     this._missionChanged();
   }
 
   _missionChanged() {
-    console.log("mission changed");
     if (!this.data) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}`;

@@ -301,9 +301,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     }
   }
 
-  constructor() {
-    super();
-  }
+  constructor() { super(); }
 
   _goToMission() {
     this.dispatchEvent(new CustomEvent('show-mission', { detail: { mission: this.mission.id } }))
@@ -313,9 +311,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this.$.acceptedDialog.dismiss();
   }
 
-  _reloadInbox() {
-    this.dispatchEvent(new CustomEvent('reload-inbox', { detail: {} }))
-  }
+  _reloadInbox() { this.dispatchEvent(new CustomEvent('reload-inbox', { detail: {} })) }
 
   setMissionData(mission) {
     this._setMissionStats();
@@ -330,7 +326,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   _setMissionStats() {
-    if (!this.user) {
+    if (!this.user || Object.keys(this.user).length == 0) {
       this.set("currentMissionStats", "new");
       setTimeout(this._setActionBtn.bind(this), 100);
     }
@@ -351,19 +347,19 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     link.removeEventListener("tap", this.finishMissionFunc, false);
 
     if (this.currentMissionStats == "realized") {
-      this.set('btnAction', 'Missão concluida');
+      this.set('btnAction', 'Concluida');
       cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
       this.$.btnText.setAttribute("id", "card-action-bg");
     }
 
     if (this.currentMissionStats == "new") {
-      this.set('btnAction', 'Aceitar missão');
+      this.set('btnAction', 'Aceitar');
       link.addEventListener('tap', this.acceptMissionFunc);
       cardAction.setAttribute("style", "background-color: rgba(216, 28, 136, 0.8);");
     }
 
     if (this.currentMissionStats == "started") {
-      this.set('btnAction', 'Concluir missão');
+      this.set('btnAction', 'Concluir');
       link.addEventListener('tap', this.finishMissionFunc);
       cardAction.setAttribute("style", "background-color: rgba(31, 163, 208, 0.8);");
     }
@@ -375,7 +371,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     }
 
     if (this.currentMissionStats == "rejected") {
-      this.set("btnAction", "Avaliação rejeitada");
+      this.set("btnAction", "rejeitada");
       cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
       this.$.btnText.setAttribute("class", "card-action-bg");
     }
@@ -391,7 +387,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   _acceptMission() {
-    if (!this.user) {
+    if (!this.user || Object.keys(this.user).length == 0) {
       this.dispatchEvent(new CustomEvent('redirect-to-login', {}))
       return;
     }
