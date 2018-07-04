@@ -240,7 +240,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       </div>
       <div class="card-content">
         <h1> {{mission.title}} </h1>
-        <p> {{mission.description}} </p>
+        <p id="missionDescription">{{getDescription()}}</p>
       </div>
 
       <iron-image sizing="cover" preload="" fade="" src="{{missionImage}}"></iron-image>
@@ -422,6 +422,11 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this.shadowRoot.querySelector('finish-mission-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
     this.acceptMissionFunc = this._acceptMission.bind(this);
     this.finishMissionFunc = this._finishMission.bind(this);
+  }
+
+  getDescription() {
+   var d1 = this.$.missionDescription;
+   d1.insertAdjacentHTML('afterbegin', this.mission.description);
   }
 }
 customElements.define(MissionCard.is, MissionCard);
