@@ -393,7 +393,6 @@ class MissionPage extends PolymerElement {
   }
 
   routePathChanged(page) {
-    console.log("hdjakshdjkahdsjkahdjkah");
     const btn = this.$.saveBtn;
     btn.removeEventListener("tap", this.editMissionFunc, false);
     btn.removeEventListener("tap", this.saveMissionFunc, false);
