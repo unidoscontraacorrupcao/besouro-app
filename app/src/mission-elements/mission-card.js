@@ -90,7 +90,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       }
 
       .card-content p {
-        font-size: 1.5em;
+        font-size: 1.2em;
         flex-grow: 1;
         max-height: 6em;
         overflow: hidden;

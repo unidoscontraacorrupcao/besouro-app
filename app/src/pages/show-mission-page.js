@@ -408,7 +408,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
           <p>{{mission.description}}</p>
 
           <h2>recompensa</h2>
-          <p>Recompensa da missão</p>
+          <p>{{mission.reward}}</p>
 
             <div class="comments">
               <h2>Comentários</h2>
