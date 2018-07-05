@@ -7,6 +7,8 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/app-layout/app-grid/app-grid-style.js';
 import '../api-elements/api-user-profile.js';
+import '../api-elements/api-user-trophies.js';
+import '../api-elements/api-trophies.js';
 import '../api-elements/api-update-profile.js';
 import '../api-elements/api-update-user.js';
 import '../app-elements/app-actions.js';
@@ -446,50 +448,19 @@ class ProfilePage extends PolymerElement {
             </div>
             <div id="trophies">
               <ul class="app-grid">
-                <li class="item">
-                  <div class="trophy-icon">
-                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
-                  </div>
-                  <div class="trophy-name">
-                    Ativista de WhatsApp
-                  </div>
-                  <div class="trophy-more">
-                    Ver missão
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="trophy-icon">
-                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
-                  </div>
-                  <div class="trophy-name">
-                  Ativista de WhatsApp
-                  </div>
-                  <div class="trophy-more">
-                  Ver missão
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="trophy-icon">
-                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
-                  </div>
-                  <div class="trophy-name">
-                  Ativista de WhatsApp
-                  </div>
-                  <div class="trophy-more">
-                  Detalhes
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="trophy-icon">
-                    <iron-image src="https://iconscout.com/iconscout_logo-1024x1024.png" sizing="cover"></iron-image>
-                  </div>
-                  <div class="trophy-name">
-                  Ativista de WhatsApp
-                  </div>
-                  <div class="trophy-more">
-                  Desbloqueie!
-                  </div>
-                </li>
+                <template id="trophyList" is="dom-repeat" items="{{_trophies}}" as="trophy">
+                  <li class="item">
+                    <div class="trophy-icon">
+                      <iron-image src="{{trophy.data.icon_not_started}}" sizing="cover"></iron-image>
+                    </div>
+                    <div class="trophy-name">
+                      {{trophy.data.name}}
+                    </div>
+                    <div class="trophy-more">
+                      Detalhes
+                    </div>
+                  </li>
+                </template>
               </ul>
             </div>
             <div id="contributions">
@@ -559,8 +530,12 @@ class ProfilePage extends PolymerElement {
       <paper-toast id="toast"
         text="{{_toastMessage}}"></paper-toast>
 
+      <api-trophies id="apiTrophies"
+      on-result="_onTrophies"></api-trophies>
       <api-user-profile id="apiUserProfile"
         on-result="_onUserProfile"></api-user-profile>
+      <api-user-trophies id="apiUserTrophies"
+        on-result="_onUserTrophies"></api-user-trophies>
       <api-update-profile id="apiUpdateProfile"
         on-result="_onUpdateProfile"></api-update-profile>
       <api-update-user id="apiUpdateUser"
@@ -586,6 +561,7 @@ class ProfilePage extends PolymerElement {
       },
       _toastMessage: String,
       _trophies: Array,
+      _data: Array,
       _showGenderOther: Boolean
     };
   }
@@ -619,6 +595,9 @@ class ProfilePage extends PolymerElement {
       this._setTabDivs(`block`, `none`, `none`);
     } else if(this._tab == 1) {
       this._setTabDivs(`none`, `block`, `none`);
+      if(this._trophies.length == 0) {
+        this.$.apiUserTrophies.request(this._user.key, this._user.uid);
+      }
     } else {
       this._setTabDivs(`none`, `none`, `block`);
       // TODO: Change to API request
@@ -778,6 +757,31 @@ class ProfilePage extends PolymerElement {
         this._errors = formErrors;
         this._toastInvalidFields();
       }
+    }
+  }
+
+  _onUserTrophies(e, result) {
+    if(result.success) {
+      this._data = result.data;
+      this.$.apiTrophies.request(this._user.key);
+    } else {
+      this._toastUnknownError();
+    }
+  }
+
+  _onTrophies(e, result) {
+    if(result.success) {
+      for(let index in this._data) {
+        for(let dataIndex in result.data) {
+          if(this._data[index].trophy == result.data[dataIndex].key) {
+            this._data[index].data = result.data[dataIndex];
+            break;
+          }
+        }
+      }
+      this._trophies = this._data;
+    } else {
+      this._toastUnknownError();
     }
   }
 

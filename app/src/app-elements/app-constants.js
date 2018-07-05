@@ -24,9 +24,14 @@ class AppConstants extends PolymerElement {
           const API_USERS = `${V1_ENDPOINT}users/`;
           const API_USER = `${API_USERS}:user_id/`;
           const API_USER_PROFILE = `${API_USER}profile/`;
+          const API_USER_TROPHIES= `${API_USER}trophies/`;
+          const API_USER_TROPHY = `${API_USER_TROPHIES}?trophy=:trophy_key`;
 
           const API_PROFILES = `${V1_ENDPOINT}profiles/`;
           const API_PROFILE = `${API_PROFILES}:profile_id/`;
+
+          const API_TROPHIES = `${V1_ENDPOINT}trophies/`;
+          const API_TROPHY = `${V1_ENDPOINT}:trophy_key/`;
 
           return {
             hostname: HOSTNAME,
@@ -41,7 +46,11 @@ class AppConstants extends PolymerElement {
             users: API_USERS,
             user: API_USER,
             userProfile: API_USER_PROFILE,
-            profile: API_PROFILE
+            userTrophies: API_USER_TROPHIES,
+            userTrophy: API_USER_TROPHY,
+            profile: API_PROFILE,
+            trophies: API_TROPHIES,
+            trophy: API_TROPHY
           }
         }
       }
