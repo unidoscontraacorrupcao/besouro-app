@@ -11,6 +11,7 @@ import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
 import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
+import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-besouro-api.js';
 class InboxPage extends PolymerElement {
   static get template() {
@@ -67,6 +68,9 @@ class InboxPage extends PolymerElement {
 
     <app-besouro-api id="api"></app-besouro-api>
     <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
+    <app-dialog id="unauthorizedDialog">
+      <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
+    </app-dialog>
 
     <app-header-layout has-scrolling-region="">
 
@@ -87,7 +91,7 @@ class InboxPage extends PolymerElement {
         <div class="inbox">
           <welcome-card></welcome-card>
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-redirect-to-login="_goToLogin"></mission-card>
+            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-open-restrict-modal="_openRestrictModal"></mission-card>
           </template>
         </div>
         <div class="inbox">
@@ -147,8 +151,11 @@ class InboxPage extends PolymerElement {
         type: Array,
         value: []
       },
-      inboxtab: Number
+      inboxtab: {
+        type: Number,
+        observer: "_tabChanged"
     }
+  }
   }
 
   _selectedChanged(selected) {
@@ -188,7 +195,6 @@ class InboxPage extends PolymerElement {
   }
 
   _getAcceptedMissions() {
-    console.log(this.user);
     if (!this.user || Object.keys(this.user).length == 0) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/accepted/${this.user.uid}`;
@@ -203,6 +209,21 @@ class InboxPage extends PolymerElement {
 
   _returnToInbox() { this.set("route.path", "/"); }
   _selectInbox() { this.set("inboxtab", 0); }
-  _goToLogin() { this.set("route.path", "/login"); }
+  _openRestrictModal() { this.$.unauthorizedDialog.present(); }
+  _goToLogin() {
+    this.$.unauthorizedDialog.dismiss();
+    this.set("route.path", "/login");
+  }
+
+  _dismissUnauthorizedModal() {this.$.unauthorizedDialog.dismiss();}
+
+    _tabChanged() {
+      if (this.inboxtab == 1) {
+        if (!this.user || Object.keys(this.user).length == 0){
+          this.$.emptyMessage.setAttribute("style", "display: none");
+          this.$.unauthorizedDialog.present();
+        }
+      }
+    }
 }
 window.customElements.define(InboxPage.is, InboxPage);

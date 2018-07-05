@@ -388,7 +388,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   _acceptMission() {
     if (!this.user || Object.keys(this.user).length == 0) {
-      this.dispatchEvent(new CustomEvent('redirect-to-login', {}))
+      this.dispatchEvent(new CustomEvent('open-restrict-modal', {}))
       return;
     }
     this.$.api.method = "POST";

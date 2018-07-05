@@ -13,6 +13,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 
 import 'share-menu/share-menu.js';
+import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-actions.js';
 import '../app-elements/app-scrollable-dialog.js';
 import '../app-elements/app-form-header.js';
@@ -334,6 +335,9 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
     <app-besouro-api id="api"></app-besouro-api>
     <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
+    <app-dialog id="unauthorizedDialog">
+      <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
+    </app-dialog>
 
     <share-menu id="shareMenu" title="{{mission.title}}" text="{{mission.description}}" url="{{address}}/{{data.key}}?shared=true" enabled-services='["telegram", "whatsapp"]'></share-menu>
 
@@ -544,7 +548,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
   addComment(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
-      this.set("route.path", "/login");
+      this.$.unauthorizedDialog.present();
       return;
     }
     const input = this.shadowRoot.querySelector('#commentInput');
@@ -571,7 +575,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
   _acceptMission(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
-      this.set("route.path", "/login")
+      this.$.unauthorizedDialog.present();
       return;
     }
     this.$.api.method = "POST";
@@ -737,6 +741,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   }
 
   _returnToInbox() { this.set("route.path", "/"); }
-
+  _dismissUnauthorizedModal() {this.$.unauthorizedDialog.dismiss();}
+  _goToLogin() {
+    this.$.unauthorizedDialog.dismiss();
+    this.set("route.path", "/login");
+  }
 }
 window.customElements.define(ShowMissionPage.is, ShowMissionPage);
