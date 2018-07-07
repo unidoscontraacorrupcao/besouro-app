@@ -91,7 +91,7 @@ class InboxPage extends PolymerElement {
         <div class="inbox">
           <welcome-card></welcome-card>
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-open-restrict-modal="_openRestrictModal"></mission-card>
+            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-open-restrict-modal="_openRestrictModal" on-check-user-trophies="_checkUserTrophies"></mission-card>
           </template>
         </div>
         <div class="inbox">
@@ -188,7 +188,10 @@ class InboxPage extends PolymerElement {
   }
 
   _getInboxMissions() {
-    this.$.api.path = `missions/`;
+    if (!this.user || Object.keys(this.user).length == 0)
+      this.$.api.path = `missions/`;
+    else
+      this.$.api.path = `missions/inbox/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
       this.set("inboxMissions", ajax.response);
     }.bind(this));
@@ -225,5 +228,8 @@ class InboxPage extends PolymerElement {
         }
       }
     }
+
+  _checkUserTrophies() {
+  }
 }
 window.customElements.define(InboxPage.is, InboxPage);

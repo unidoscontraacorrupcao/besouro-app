@@ -194,6 +194,40 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       font-size: 1.5rem !important;
     }
 
+    .card-blocked {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 35%;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 90%;
+      text-align: center;
+    }
+
+    .card-blocked > * {
+      margin-bottom: 20px;
+      font-family: Folio;
+    }
+
+    #blockedText {
+      font-size: 32px;
+      text-transform: uppercase;
+      color: var(--light-text-color);
+      letter-spacing: 5px;
+    }
+
+    #blockedDetail {
+      color: var(--accent-color);
+      font-size: 24px;
+    }
+
+    .card-blocked paper-icon-button {
+      width: 105px;
+      height: 105px;
+    }
 
     @media only screen and (max-width: 460px) {
       .card-footer .stats {
@@ -222,40 +256,82 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     </style>
 
     <app-dialog id="acceptedDialog">
-      <accept-mission-modal on-modal-show-mission="_modalGoToMission" mission-id="{{mission.id}}" on-close-modal="_closeModal"></accept-mission-modal>
+      <accept-mission-modal
+        on-modal-show-mission="_modalGoToMission"
+        mission-id="{{mission.id}}"
+        on-close-modal="_closeModal">
+      </accept-mission-modal>
     </app-dialog>
 
     <app-scrollable-dialog id="finishedDialog">
-      <finish-mission-modal user="[[user]]" mission-id="{{mission.id}}"></finish-mission-modal>
+      <finish-mission-modal
+        user="[[user]]"
+        mission-id="{{mission.id}}">
+      </finish-mission-modal>
     </app-scrollable-dialog>
 
     <app-besouro-api id="api"></app-besouro-api>
+
     <div class="card mission-card">
+
       <div class="card-header">
-          <iron-image sizing="cover" class="campaign" src="{{candidatePhoto}}"></iron-image>
-          <span class="author">{{missionOwner()}}</span>
-          <p class="timing"> <iron-icon icon="app:mission-timing-card"></iron-icon> <span id="remaining-time">{{mission.remainig_days}}</span> </p>
-        </a>
-        <paper-icon-button class="go" on-tap="_goToMission" icon="app:arrow-forward"></paper-icon-button>
+        <iron-image
+          sizing="cover"
+          class="campaign"
+          src="{{candidatePhoto}}">
+        </iron-image>
+        <span class="author">{{missionOwner()}}</span>
+        <p class="timing">
+          <iron-icon icon="app:mission-timing-card"></iron-icon>
+          <span id="remaining-time">{{mission.remainig_days}}</span>
+        </p>
+        <paper-icon-button
+          class="go"
+          on-tap="_goToMission"
+          icon="app:arrow-forward">
+        </paper-icon-button>
       </div>
+
       <div class="card-content">
         <h1> {{mission.title}} </h1>
         <p> {{mission.description}} </p>
       </div>
 
-      <iron-image sizing="cover" preload="" fade="" src="{{missionImage}}"></iron-image>
-        <div class="card-action">
-          <a href="#" id="btnLink"><span id="btnText">{{btnAction}}</span></a>
+      <div id="card-image">
+        <iron-image
+          sizing="cover"
+          preload="" fade=""
+          src="{{missionImage}}">
+        </iron-image>
+      <div class="card-blocked">
+        <div>
+          <paper-icon-button icon="app:mission-blocked"></paper-icon-button>
         </div>
+        <span id="blockedText"> missão bloqueada </span>
+        <a id="btnLink" on-tap="openBlockedModal"><span id="blockedDetail">detalhes</span></a>
+      </div>
+      </div>
+
+      <div class="card-action">
+        <a href="#" id="btnLink"><span id="btnText">{{btnAction}}</span></a>
+      </div>
+
+
 
       <div class="card-footer">
         <div class="stats">
           <div>
-           <span><span class="stats-number">{{accepted}} </span>aceitaram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
+           <span>
+              <span class="stats-number">{{accepted}} </span>
+              aceitaram <span class="space">&nbsp;&verbar;&nbsp;</span>
+            </span>
           </div>
 
           <div>
-           <span><span class="stats-number">{{concluded}}</span> concluiram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
+            <span>
+              <span class="stats-number">{{concluded}}</span>
+              concluiram <span class="space">&nbsp;&verbar;&nbsp;</span>
+            </span>
           </div>
 
           <div>
@@ -269,7 +345,12 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
         </div>
       </div>
-      <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{key}}">
+
+      <mission-player
+        id="player"
+        mission-image="{{missionImage}}"
+        mission="{{mission}}"
+        mission-key="{{key}}">
       </mission-player>
     </div>
 `;
@@ -331,12 +412,18 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       setTimeout(this._setActionBtn.bind(this), 100);
     }
     else {
-      this.$.api.method = "GET";
-      this.$.api.path = `missions/${this.mission.id}/user-status/${this.user.uid}`;
-      this.$.api.request().then(function(ajax) {
-        this.set("currentMissionStats", ajax.response.status);
-        this._setActionBtn();
-      }.bind(this));
+      if (this.mission.blocked) {
+        this.set("currentMissionStats", "blocked");
+        setTimeout(this._setActionBtn.bind(this), 100);
+      }
+      else{
+        this.$.api.method = "GET";
+        this.$.api.path = `missions/${this.mission.id}/user-status/${this.user.uid}`;
+        this.$.api.request().then(function(ajax) {
+          this.set("currentMissionStats", ajax.response.status);
+          this._setActionBtn();
+        }.bind(this));
+      }
     }
   }
 
@@ -345,6 +432,17 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     const link = this.$.btnLink;
     link.removeEventListener("tap", this.acceptMissionFunc, false);
     link.removeEventListener("tap", this.finishMissionFunc, false);
+
+    if (this.currentMissionStats == "blocked") {
+      const cardBlocked = this.shadowRoot.querySelector(".card-blocked");
+      cardAction.setAttribute("style", "display: none;");
+      cardBlocked.setAttribute("style", "display: flex;");
+      var image = this.shadowRoot.querySelector("#card-image iron-image");
+      var sizedImgDiv = image.shadowRoot.querySelector("#sizedImgDiv")
+      let backgroundImage = sizedImgDiv.style.backgroundImage;
+      sizedImgDiv.style.backgroundImage= `linear-gradient(to right, rgba(49,39,131,0.85), rgba(49,39,131,0.85)), ${backgroundImage}`;
+      this.set('btnAction', 'Concluida');
+    }
 
     if (this.currentMissionStats == "realized") {
       this.set('btnAction', 'Concluida');
@@ -413,6 +511,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     this._setMissionStats();
     this._setActionBtn();
     this.$.finishedDialog.dismiss();
+    this.dispatchEvent(new CustomEvent('check-user-trophies'));
   }
 
   _closeModal() { this.$.acceptedDialog.dismiss(); }

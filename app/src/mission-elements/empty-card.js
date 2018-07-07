@@ -15,6 +15,8 @@ class EmptyCard extends PolymerElement {
       .empty-card {
         display: block;
         max-width: 500px;
+        width: 90%;
+        margin: auto;
         margin-top: 60px;
         background-color: #eeeeee
       }
