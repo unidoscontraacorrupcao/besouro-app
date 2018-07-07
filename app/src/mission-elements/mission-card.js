@@ -5,6 +5,7 @@ import '@polymer/iron-image/iron-image.js';
 
 import '../app-elements/shared-styles.js';
 import '../mission-elements/accept-mission-modal.js';
+import '../mission-elements/blocked-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import './mission-player.js';
@@ -205,6 +206,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       margin: auto;
       width: 90%;
       text-align: center;
+      line-height: 1.2;
     }
 
     .card-blocked > * {
@@ -263,6 +265,13 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       </accept-mission-modal>
     </app-dialog>
 
+    <app-dialog id="blockedDialog">
+      <blocked-mission-modal
+        mission-id="{{mission.id}}"
+        on-close-modal="_closeModal">
+      </blocked-mission-modal>
+    </app-dialog>
+
     <app-scrollable-dialog id="finishedDialog">
       <finish-mission-modal
         user="[[user]]"
@@ -275,16 +284,20 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     <div class="card mission-card">
 
       <div class="card-header">
+
         <iron-image
           sizing="cover"
           class="campaign"
           src="{{candidatePhoto}}">
         </iron-image>
+
         <span class="author">{{missionOwner()}}</span>
+
         <p class="timing">
           <iron-icon icon="app:mission-timing-card"></iron-icon>
           <span id="remaining-time">{{mission.remainig_days}}</span>
         </p>
+
         <paper-icon-button
           class="go"
           on-tap="_goToMission"
@@ -298,17 +311,19 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       </div>
 
       <div id="card-image">
+
         <iron-image
           sizing="cover"
           preload="" fade=""
           src="{{missionImage}}">
         </iron-image>
+
       <div class="card-blocked">
         <div>
           <paper-icon-button icon="app:mission-blocked"></paper-icon-button>
         </div>
         <span id="blockedText"> missão bloqueada </span>
-        <a id="btnLink" on-tap="openBlockedModal"><span id="blockedDetail">detalhes</span></a>
+        <a id="btnLink" on-tap="_openBlockedMissionModal"><span id="blockedDetail">detalhes</span></a>
       </div>
       </div>
 
@@ -515,6 +530,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   _closeModal() { this.$.acceptedDialog.dismiss(); }
+  _openBlockedMissionModal() { this.$.blockedDialog.present(); }
 
   ready() {
     super.ready();
