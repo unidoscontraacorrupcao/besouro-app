@@ -31,7 +31,8 @@ class AppBesouroApi extends PolymerElement {
         value: "http://localhost:8000"
       },
       method: {
-        type: String
+        type: String,
+        value: "GET"
       },
       path: {
         type: String,
@@ -49,7 +50,7 @@ class AppBesouroApi extends PolymerElement {
   }
 
   request() {
-    if (this.method == "POST")
+    if (this.method == "POST" || this.method == "PATCH")
       this.$.ajax.headers = this.getHeaders();
     else
       this.$.ajax.headers = {};

@@ -2,7 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-class BlockedMissionModal extends PolymerElement {
+class AcquiredTrophyModal extends PolymerElement {
   static get template() {
     return html`
     <style include="shared-styles">
@@ -108,55 +108,49 @@ class BlockedMissionModal extends PolymerElement {
 
       .icon-header paper-icon-button { padding: 0; }
 
-      #blocked-icon { text-align: center; }
-      #blocked-icon-border {
-        border-radius: 50% 50%;
-        border-style: solid;
-        width: 104px;
-        border-color: grey;
-        margin: 40px auto 40px auto;
-        border-width: 1px;
-      }
-      #blocked-icon-border paper-icon-button {
-        width: 100px;
-        height: 100px;
-      }
+      paper-button {
+        float: right;
+        font-size: 15px;
+        padding-bottom: 25px;
+     }
     </style>
 
     <div class="modal-header">
       <div class="header-content">
-        <div id="header-text"><span>troféu bloqueado</span></div>
+        <div id="header-text"><span>você ganhou um troféu</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:splash-blocked"></paper-icon-button>
         </div>
       </div>
       <div id="confirmation-text">
-        <span>esse troféu possui prerequesitos</span>
-        <div class="blocked-icon">
-          <div id="blocked-icon-border">
-            <paper-icon-button icon="app:mission-blocked-circle"></paper-icon-button>
-          </div>
-        </div>
+        <span>Sua participação está rendendo frutos!</span>
         <p>
-          Para o usuário ter acesso a esse troféu, requer possuir "Troféu Super Ativista".
+        {{trophyData.full_description}}
         </p>
+      <div class="card-action">
+        <div>
+          <a href="#" on-tap="_goToMission" ><span>ver troféus</span></a>
+        </div>
+      </div>
+
+        <paper-button on-tap="_dismiss">fechar</paper-button>
       </div>
     </div>
 `;
   }
 
-  static get is() { return 'blocked-mission-modal'; }
+  static get is() { return 'acquired-trophy-modal'; }
   static get properties() {
     return {
-      missionId: String
+      trophyData: Object
     }
   }
   _goToMission() {
-    this.dispatchEvent(new CustomEvent('modal-show-mission',
+    this.dispatchEvent(new CustomEvent('modal-show-mission', 
       { detail: { mission: this.missionId }}
     ));
   }
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
-window.customElements.define(BlockedMissionModal.is, BlockedMissionModal);
+window.customElements.define(AcquiredTrophyModal.is, AcquiredTrophyModal);

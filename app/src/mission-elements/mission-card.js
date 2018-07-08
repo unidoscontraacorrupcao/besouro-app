@@ -5,7 +5,7 @@ import '@polymer/iron-image/iron-image.js';
 
 import '../app-elements/shared-styles.js';
 import '../mission-elements/accept-mission-modal.js';
-import '../mission-elements/blocked-mission-modal.js';
+import '../trophy-elements/blocked-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import './mission-player.js';

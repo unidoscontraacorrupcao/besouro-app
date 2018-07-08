@@ -11,6 +11,7 @@ import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
 import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
+import '../trophy-elements/acquired-trophy-modal.js';
 import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-besouro-api.js';
 class InboxPage extends PolymerElement {
@@ -70,6 +71,10 @@ class InboxPage extends PolymerElement {
     <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
+    </app-dialog>
+
+    <app-dialog id="trophyDialog">
+      <acquired-trophy-modal trophy-data={{trophyData}} on-close-modal="_dismissUnauthorizedModal"></acquired-trophy-modal>
     </app-dialog>
 
     <app-header-layout has-scrolling-region="">
@@ -154,14 +159,20 @@ class InboxPage extends PolymerElement {
       inboxtab: {
         type: Number,
         observer: "_tabChanged"
-    }
+      },
+      trophyData: {
+        type: Object,
+        value: {}
+      }
   }
   }
 
   _selectedChanged(selected) {
     if(!selected) return;
     this._getInboxMissions();
+    if (!this.user || Object.keys(this.user).length == 0) return;
     this._getAcceptedMissions();
+    this._getUserTrophies();
   }
 
   openDrawer() { this.dispatchEvent(new CustomEvent('open-drawer')); }
@@ -184,7 +195,9 @@ class InboxPage extends PolymerElement {
 
   _reloadInbox() {
     this._getInboxMissions();
+    if (!this.user || Object.keys(this.user).length == 0) return;
     this._getAcceptedMissions();
+    this._getUserTrophies();
   }
 
   _getInboxMissions() {
@@ -197,8 +210,39 @@ class InboxPage extends PolymerElement {
     }.bind(this));
   }
 
+  _getUserTrophies() {
+    this.$.api.path= `users/${this.user.uid}/trophies/`
+    this.$.api.request().then(function(ajax){
+      var trophies = ajax.response;
+      var index;
+      for (index in trophies) {
+        let trophy = trophies[index];
+        if (trophy.percentage == 100 && trophy.notified == false) {
+          //updates trophy notified variable.
+          this.$.api.path = `users/${this.user.uid}/trophies?trophy=${trophy.trophy}`
+          this.$.api.request().then(function(ajax){
+            var _self = ajax.response[0].links.self;
+            var user_trophy_path = _self.split("/")[_self.split("/").length - 3];
+            var user_trophy_id = _self.split("/")[_self.split("/").length - 2];
+            this.$.api.path = `${user_trophy_path}/${user_trophy_id}/`;
+            this.$.api.method = "PATCH";
+            this.$.api.user = this.user;
+            this.$.api.body = {"notified": true};
+            this.$.api.request().then(function(ajax){
+              //show trophy modal
+              this.$.api.path= `trophies/${trophy.trophy}/`
+              this.$.api.request().then(function(ajax){
+                this.set("trophyData", ajax.response);
+                this.$.trophyDialog.present();
+              }.bind(this));
+            }.bind(this));
+          }.bind(this));
+        }
+      }
+    }.bind(this));
+  }
+
   _getAcceptedMissions() {
-    if (!this.user || Object.keys(this.user).length == 0) return;
     this.$.api.method = "GET";
     this.$.api.path = `missions/accepted/${this.user.uid}`;
     this.$.api.request().then(function(ajax) {
