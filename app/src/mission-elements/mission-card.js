@@ -309,8 +309,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       </div>
 
       <div class="card-content">
-        <h1> {{mission.title}} </h1>
-        <p> {{mission.description}} </p>
+        <a on-tap="_goToMission">
+          <h1> {{mission.title}} </h1>
+          <p> {{mission.description}} </p>
+        </a>
       </div>
 
       <div id="card-image">
