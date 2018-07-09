@@ -454,6 +454,8 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     link.removeEventListener("tap", this.finishMissionFunc, false);
 
     if (this.currentMissionStats == "blocked") {
+      var goToMissionBtn = this.shadowRoot.querySelector(".go");
+      goToMissionBtn.disabled = true;
       const cardBlocked = this.shadowRoot.querySelector(".card-blocked");
       cardAction.setAttribute("style", "display: none;");
       cardBlocked.setAttribute("style", "display: flex;");
