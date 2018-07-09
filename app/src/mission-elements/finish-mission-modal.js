@@ -51,7 +51,14 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
       text-transform: uppercase;
     }
 
-    .description { margin-bottom: 20px; }
+    .description { margin-bottom: 30px; }
+    .description h3 {
+      text-align: left;
+      text-transform: uppercase;
+      margin: 0;
+      font-size: 18px;
+      font-family: folio;
+    }
 
     paper-button {
       float: right;
@@ -179,32 +186,32 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
       </div>
       <div id="confirmation-text">
         <span>agradecemos seu engajamento! <3</span>
-        <p>Agora é hora de pedir para o comitê de campanha validar sua missão e oferecer a sua recompensa. Pra isso basta enviar a comprovação solicitada na missão fazendo o upload ou descrevendo
-          a sua solução.</p>
+        <p>Agora é hora de pedir para o comitê de campanha validar sua missão e oferecer a sua recompensa, caso tenha. Pra isso basta enviar a comprovação solicitada na missão descrevendo sua solução e, se necessário,
+        fazendo o upload de imagens e/ou arquivos.</p>
+        <div class="description">
+          <h3>Descrição<h3>
+          <paper-textarea value="{{description}}" max-rows="4" rows="2" maxlength="1000" placeholder="Uma breve descrição da comprovação pode ser escrita aqui" no-label-float></paper-textarea>
+        </div>
+        <div class="buttons">
+          <div class="input-file-container">
+            <paper-icon-button id="uploadIcon" slot="suffix" icon="app:receipt-upload" on-tap="_openInput"><paper-input id="input" type="file"></paper-input></paper-icon-button>
+            <div class="btn-text">
+              <h3>Enviar arquivo</h3>
 
-      <div class="buttons">
-        <div class="input-file-container">
-          <paper-icon-button id="uploadIcon" slot="suffix" icon="app:receipt-upload" on-tap="_openInput"><paper-input id="input" type="file"></paper-input></paper-icon-button>
-          <div class="btn-text">
-            <h3>Enviar arquivo</h3>
-
-            <h4 id="file-name">
-              {{fileName}}
-            </h4>
+              <h4 id="file-name">
+                {{fileName}}
+              </h4>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="description">
-        <paper-textarea value="{{description}}" max-rows="4" maxlength="1000" char-counter="" label="Uma breve descrição da comprovação pode ser escrita aqui"></paper-textarea>
-      </div>
-      <div class="card-action">
-        <div>
-          <a href="#" on-tap="_sendReceipts"><span>enviar</span></a>
+        <div class="card-action">
+          <div>
+            <a href="#" on-tap="_sendReceipts"><span>enviar</span></a>
+          </div>
         </div>
-      </div>
         <paper-button on-tap="_dismiss">fechar</paper-button>
+      </div>
     </div>
-  </div>
 `;
   }
 

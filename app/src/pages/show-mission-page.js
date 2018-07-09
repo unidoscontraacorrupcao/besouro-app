@@ -578,6 +578,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.$.unauthorizedDialog.present();
       return;
     }
+    this.$.api.user = this.user;
     this.$.api.method = "POST";
     this.$.api.path = `missions/accept`;
     this.$.api.body = {"id": this.data.key, "user_id": this.user.uid };
