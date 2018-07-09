@@ -2,3 +2,6 @@ build/
 .cache/
 .config/
 node_modules/
+Vagrantfile
+.vagrant/
+ubuntu*

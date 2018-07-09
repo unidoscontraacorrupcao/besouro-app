@@ -83,6 +83,9 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         font-family: Folio;
         font-weight: bold;
         text-transform: uppercase;
+        text-overflow: unset;
+        white-space: unset;
+        overflow: unset;
       }
 
       .author {
