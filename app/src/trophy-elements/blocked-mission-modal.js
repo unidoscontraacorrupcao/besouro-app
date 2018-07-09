@@ -140,7 +140,7 @@ class BlockedMissionModal extends PolymerElement {
           </div>
         </div>
         <p>
-          Para o usuário ter acesso a esse troféu, requer possuir "Troféu Super Ativista".
+          Para o usuário ter acesso a esse troféu, requer possuir "{{preReqName}}".
         </p>
       </div>
     </div>
@@ -150,16 +150,29 @@ class BlockedMissionModal extends PolymerElement {
   static get is() { return 'blocked-mission-modal'; }
   static get properties() {
     return {
-      missionId: String
+      trophyId: {
+        type: String,
+        observer: "_getTrophyPreReqs"
+      },
+      preReqName: String
     }
   }
+
   _goToMission() {
     this.dispatchEvent(new CustomEvent('modal-show-mission',
       { detail: { mission: this.missionId }}
     ));
   }
 
-  _getTrophyPreReqs() { }
+  _getTrophyPreReqs() {
+    //TODO: move this endpoint to a better place. This hack was necessary
+    //because boogie is not exposing the required_trophies variable on
+    //trophies endpoint.
+    this.$.api.path = `users/1/required_trophies/?trophy=${this.trophyId}`;
+    this.$.api.request().then(function(ajax) {
+      this.set("preReqName",ajax.response[0].name);
+    }.bind(this));
+  }
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }

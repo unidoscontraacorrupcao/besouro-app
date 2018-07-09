@@ -130,7 +130,7 @@ class AcceptMissionModal extends PolymerElement {
         </p>
       <div class="card-action">
         <div>
-          <a href="#" on-tap="_goToMission" ><span>ver missão</span></a>
+          <a on-tap="_goToMission" ><span>ver missão</span></a>
         </div>
       </div>
 

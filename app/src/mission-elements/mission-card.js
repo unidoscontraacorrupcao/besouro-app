@@ -263,14 +263,14 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     <app-dialog id="acceptedDialog">
       <accept-mission-modal
         on-modal-show-mission="_modalGoToMission"
-        mission-id="{{mission.id}}"
+        trophy="{{mission.id}}"
         on-close-modal="_closeModal">
       </accept-mission-modal>
     </app-dialog>
 
     <app-dialog id="blockedDialog">
       <blocked-mission-modal
-        mission-id="{{mission.id}}"
+        trophy-id="{{mission.trophy}}"
         on-close-modal="_closeModal">
       </blocked-mission-modal>
     </app-dialog>
