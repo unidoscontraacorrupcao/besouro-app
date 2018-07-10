@@ -6,6 +6,8 @@ import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/app-layout/app-grid/app-grid-style.js';
+
+import '../trophy-elements/blocked-mission-modal.js';
 import '../api-elements/api-user-profile.js';
 import '../api-elements/api-user-trophies.js';
 import '../api-elements/api-trophies.js';
@@ -15,6 +17,7 @@ import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
 import '../profile-elements/password-dialog.js';
+import '../app-elements/app-besouro-api.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 class ProfilePage extends PolymerElement {
@@ -269,6 +272,15 @@ class ProfilePage extends PolymerElement {
           --iron-icon-stroke-color: var(--secondary-text-color);
         }
       </style>
+
+    <app-besouro-api id="api"></app-besouro-api>
+    <app-dialog id="blockedDialog">
+      <blocked-mission-modal
+        trophy-id="{{trophyId}}"
+        on-close-modal="_closeModal">
+      </blocked-mission-modal>
+    </app-dialog>
+
      <app-actions on-go-to-inbox="_dispatchToInboxPressed"></app-actions>
       <app-header-layout has-scrolling-region>
         <app-header slot="header">
@@ -475,13 +487,13 @@ class ProfilePage extends PolymerElement {
                 <template id="trophyList" is="dom-repeat" items="{{_trophies}}" as="trophy">
                   <li class="item">
                     <div class="trophy-icon">
-                      <iron-image src="{{trophy.data.icon_not_started}}" sizing="cover"></iron-image>
+                      <iron-image src="{{trophy.icon_not_started}}" sizing="cover"></iron-image>
                     </div>
                     <div class="trophy-name">
-                      {{trophy.data.name}}
+                      {{trophy.name}}
                     </div>
                     <div class="trophy-more">
-                      Detalhes
+                      <a on-tap="_triggerTrophyAction">{{trophy.label}}</a>
                     </div>
                   </li>
                 </template>
@@ -793,15 +805,15 @@ class ProfilePage extends PolymerElement {
 
   _onTrophies(e, result) {
     if(result.success) {
-      for(let index in this._data) {
-        for(let dataIndex in result.data) {
-          if(this._data[index].trophy == result.data[dataIndex].key) {
-            this._data[index].data = result.data[dataIndex];
-            break;
-          }
+      for(let dataIndex in result.data) {
+        for(let index in this._data) {
+          if(result.data[dataIndex].key == this._data[index].trophy && this._data[index].percentage == 100)
+            result.data[dataIndex]["label"] = "ver missão";
+          else
+            result.data[dataIndex]["label"] = "detalhes";
         }
       }
-      this._trophies = this._data;
+      this._trophies = result.data;
     } else {
       this._toastUnknownError();
     }
@@ -982,5 +994,22 @@ class ProfilePage extends PolymerElement {
   _toastInvalidFields() {
     this._toastIt(`Formulário inválido. Consulte os erros nos campos.`);
   }
+
+  _triggerTrophyAction(e) {
+    var  trophy = e.model.trophy;
+    var linkText = e.target.text;
+    if (linkText == "ver missão")
+    {
+      var reference_link = trophy.reference_link;
+      var missionId = reference_link.split("/")[reference_link.split("/").length - 1];
+      this.set("route.path", `/show-mission/${missionId}`);
+    }
+    if (linkText == "detalhes"){
+      this.set("trophyId", trophy.key);
+      this.$.blockedDialog.present();
+    }
+  }
+
+  _openBlockedTrophyModal() { this.$.blockedDialog.present(); }
 }
 window.customElements.define(ProfilePage.is, ProfilePage);
