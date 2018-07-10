@@ -128,7 +128,7 @@ class ProfilePage extends PolymerElement {
           margin-bottom: 50px;
         }
         .info-name {
-          color: #312783;
+          color: var(--secondary-text-color);
           font-family: Folio;
           font-size: 14px;
           line-height: 16px;
@@ -146,20 +146,20 @@ class ProfilePage extends PolymerElement {
         }
         paper-input {
           --paper-input-container-color: #333333;
-          --paper-input-container-focus-color: #312783;
-          --paper-input-container-input-color: #312783;
+          --paper-input-container-focus-color: var(--secondary-text-color);
+          --paper-input-container-input-color: var(--secondary-text-color);
         }
         paper-dropdown-menu {
           width: 100%;
           --paper-input-container-color: #333333;
-          --paper-input-container-focus-color: #312783;
-          --paper-input-container-input-color: #312783;
+          --paper-input-container-focus-color: var(--secondary-text-color);
+          --paper-input-container-input-color: var(--secondary-text-color);
           --paper-input-container-label-color: #333333;
         }
         paper-textarea {
           --paper-input-container-color: #333333;
-          --paper-input-container-focus-color: #312783;
-          --paper-input-container-input-color: #312783;
+          --paper-input-container-focus-color: var(--secondary-text-color);
+          --paper-input-container-input-color: var(--secondary-text-color);
           --paper-input-container-label-color: #333333;
         }
         paper-listbox {
@@ -172,7 +172,8 @@ class ProfilePage extends PolymerElement {
           white-space: normal;
           word-wrap: break-word;
         }
-        paper-button {
+        .fields paper-button,
+        .form paper-button {
           display: block;
           height: auto;
           max-width: 170px;
@@ -222,7 +223,7 @@ class ProfilePage extends PolymerElement {
         }
         .trophy-name {
           margin-top: 5px;
-          color: #312783;
+          color: var(--secondary-text-color);
           font-family: Folio;
           font-size: 16px;
           line-height: 18px;
@@ -236,7 +237,7 @@ class ProfilePage extends PolymerElement {
           line-height: 18px;
         }
         .contribution-value {
-          color: #312783;
+          color: var(--secondary-text-color);
           font-family: Folio;
           font-size: 50px;
           line-height: 55px;
@@ -247,7 +248,7 @@ class ProfilePage extends PolymerElement {
         }
         .contribution-description {
           text-align: center;
-          color: #312783;
+          color: var(--secondary-text-color);
           font-family: Folio;
           font-size: 16px;
           line-height: 18px;
@@ -255,6 +256,17 @@ class ProfilePage extends PolymerElement {
         .contribution-total {
           margin-top: 20px;
           margin-bottom: 60px;
+        }
+        .footer-edit {
+          text-align: right;
+          color: var(--secondary-text-color);
+        }
+        .footer-edit paper-button {
+          font-family: Folio;
+          text-transform: unset;
+        }
+        .footer-edit iron-icon {
+          --iron-icon-stroke-color: var(--secondary-text-color);
         }
       </style>
      <app-actions on-go-to-inbox="_dispatchToInboxPressed"></app-actions>
@@ -321,6 +333,10 @@ class ProfilePage extends PolymerElement {
                 
                 <div class="info-name">Idade</div>
                 <div class="info-value">{{_info.age}}</div>
+
+                <div class="footer-edit">
+                  <paper-button on-tap="_switchInfo"><iron-icon icon="app:edit-profile"></iron-icon>Editar perfil</paper-button>
+                </div>
 
               </div>
               <div class="form" id="form">
