@@ -46,7 +46,7 @@ class AppShell extends PolymerElement {
       }
 
       app-drawer:not([persistent]) {
-        --app-drawer-width: 90%;
+        --app-drawer-width: 80%;
       }
 
       app-drawer[persistent] {
@@ -109,16 +109,15 @@ class AppShell extends PolymerElement {
 
       app-toolbar > div[bottom-item] {
         margin: 10px 0 15px 30px;
-        opacity: 0.5;
         color: white;
         font-family: Folio;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 16px;
         cursor: pointer;
       }
 
       div[bottom-item] > a {
-        color: white;
+        color: #312783;
         text-decoration: none;
       }
 
@@ -173,13 +172,10 @@ class AppShell extends PolymerElement {
       data="{{routeData}}"
       tail="{{subroute}}"></app-route>
 
-    <app-drawer-layout fullbleed="" narrow="{{narrow}}">
+    <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
-          <div top-item="" hidden$="[[!narrow]]">
-            <paper-icon-button icon="app:menu" drawer-toggle></paper-icon-button>
-          </div>
           <iron-image src="{{user.photoURL}}" sizing="cover" hidden$="[[!user.uid]]"></iron-image>
           <iron-image src="/images/default_avatar.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
           <div main-title>
@@ -194,7 +190,7 @@ class AppShell extends PolymerElement {
             </div>
           </div>
           <div bottom-item on-tap="_signOut" hidden$="[[!user.uid]]">
-            fazer logout
+            <a>fazer logout</a>
           </div>
           <div bottom-item hidden$="[[user.uid]]">
             <a href="/login">fazer login</a>

@@ -179,18 +179,18 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       }
 
       .card-action span {
-       font-family: Folio;
-       text-transform: uppercase;
-       font-size: 2em;
-       color: white;
-       position: absolute;
-       width: 250px;
-       top: 28px;
-       left: 0;
-       right: 0;
-       bottom: 0;
-       margin: auto;
-       letter-spacing: 3px;
+        font-family: Folio;
+        text-transform: uppercase;
+        font-size: 2em;
+        color: white;
+        position: absolute;
+        width: 250px;
+        top: 28px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        letter-spacing: 3px;
       }
 
     .card-action-bg {
@@ -286,33 +286,27 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
     <div class="card mission-card">
 
-      <div class="card-header">
-
+      <div class="card-header" on-tap="_goToMission">
         <iron-image
-          sizing="cover"
-          class="campaign"
-          src="{{candidatePhoto}}">
+        sizing="cover"
+        class="campaign"
+        src="{{candidatePhoto}}">
         </iron-image>
-
-        <span class="author">{{missionOwner()}}</span>
-
-        <p class="timing">
-          <iron-icon icon="app:mission-timing-card"></iron-icon>
-          <span id="remaining-time">{{mission.remainig_days}}</span>
-        </p>
-
-        <paper-icon-button
+          <span class="author">{{missionOwner()}}</span>
+          <p class="timing">
+            <iron-icon icon="app:mission-timing-card"></iron-icon>
+            <span id="remaining-time">{{mission.remainig_days}}</span>
+          </p>
+          <paper-icon-button
           class="go"
           on-tap="_goToMission"
           icon="app:arrow-forward">
         </paper-icon-button>
       </div>
 
-      <div class="card-content">
-        <a on-tap="_goToMission">
-          <h1> {{mission.title}} </h1>
-          <p> {{mission.description}} </p>
-        </a>
+      <div class="card-content" on-tap="_goToMission">
+        <h1> {{mission.title}} </h1>
+        <p> {{mission.description}} </p>
       </div>
 
       <div id="card-image">
