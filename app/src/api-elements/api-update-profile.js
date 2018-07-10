@@ -52,8 +52,8 @@ class ApiUpdateProfile extends PolymerElement {
         country: data.country,
         state: data.state,
         city: data.city,
-        biography: data.biography,
-        political_activity: data.politicalActivity
+        phone: data.phone,
+        age: data.age
       };
       this.$.ajax.generateRequest();
     } else {
@@ -95,8 +95,8 @@ class ApiUpdateProfile extends PolymerElement {
       this._hasRequiredData(response, `gender`) &&
       this._hasRequiredData(response, `gender_other`) &&
       this._hasRequiredData(response, `race`) &&
-      this._hasRequiredData(response, `political_activity`) &&
-      this._hasRequiredData(response, `biography`) &&
+      this._hasRequiredData(response, `phone`) &&
+      this._hasRequiredData(response, `age`) &&
       this._hasRequiredData(response, `image`);
   }
 
@@ -126,8 +126,8 @@ class ApiUpdateProfile extends PolymerElement {
           gender: response.gender,
           genderOther: response.gender_other,
           race: response.race,
-          politicalActivity: response.political_activity,
-          biography: response.biography,
+          phone: response.phone,
+          age: response.age,
           image: response.image != null ? response.image : `/images/default_avatar.png`
         }
       };

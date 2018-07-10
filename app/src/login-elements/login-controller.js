@@ -227,8 +227,8 @@ class LoginController extends PolymerElement {
       this._user.gender = result.data.gender;
       this._user.genderOther = result.data.genderOther;
       this._user.race = result.data.race;
-      this._user.politicalActivity = result.data.politicalActivity;
-      this._user.biography = result.data.biography;
+      this._user.phone = result.data.phone;
+      this._user.age = result.data.age;
       this._user.photoURL = result.data.image;
       this.$.login.emptyForm();
       this._dispatchUser();
@@ -378,7 +378,7 @@ class LoginController extends PolymerElement {
 
   _getEmptyUser() {
     return {
-      biography: ``,
+      phone: ``,
       city: ``,
       country: ``,
       displayName: ``,
@@ -388,7 +388,7 @@ class LoginController extends PolymerElement {
       isAdmin: false,
       key: ``,
       photoURL: ``,
-      politicalActivity: ``,
+      age: ``,
       race: ``,
       state: ``,
       uid: 0

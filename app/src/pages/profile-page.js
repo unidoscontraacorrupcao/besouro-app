@@ -315,12 +315,13 @@ class ProfilePage extends PolymerElement {
 
                 <div class="info-name">cor / raça</div>
                 <div class="info-value">{{_info.race}}</div>
+                
+                <div class="info-name">Telefone/WhatsApp</div>
+                <div class="info-value">{{_info.phone}}</div>
+                
+                <div class="info-name">Idade</div>
+                <div class="info-value">{{_info.age}}</div>
 
-                <div class="info-name">movimento ou partido</div>
-                <div class="info-value">{{_info.politicalActivity}}</div>
-
-                <div class="info-name">mini bio</div>
-                <div class="info-value">{{_info.biography}}</div>
               </div>
               <div class="form" id="form">
                 <div class="fields">
@@ -373,7 +374,7 @@ class ProfilePage extends PolymerElement {
                   <paper-dropdown-menu label="Identidade de gênero"
                     on-value-changed="_onGenderChanged">
                     <paper-listbox slot="dropdown-content" selected="{{_form.gender}}">
-                      <paper-item>Não definido</paper-item>
+                      <paper-item>Não informado</paper-item>
                       <paper-item>Feminino</paper-item>
                       <paper-item>Masculino</paper-item>
                       <paper-item>Feminino Cis</paper-item>
@@ -412,7 +413,7 @@ class ProfilePage extends PolymerElement {
                   </paper-input-error>
                   <paper-dropdown-menu label="Cor / raça">
                     <paper-listbox slot="dropdown-content" selected="{{_form.race}}">
-                      <paper-item>Não definida</paper-item>
+                      <paper-item>Não informada</paper-item>
                       <paper-item>Preto</paper-item>
                       <paper-item>Marrom</paper-item>
                       <paper-item>Branco</paper-item>
@@ -425,23 +426,30 @@ class ProfilePage extends PolymerElement {
                     hidden$=[[!_errors.race]] invalid>
                     {{_errors.race}}
                   </paper-input-error>
-                  <paper-input id="politicalActivity"
-                    label="Movimento ou partido"
-                    value="{{_form.politicalActivity}}"
-                    invalid=[[_errors.politicalActivity]]
-                    required></paper-input>
+                  <paper-input id="phone"
+                    label="Telefone/WhatsApp"
+                    value="{{_form.phone}}"
+                    allowed-pattern="[0-9]"
+                    pattern="[0-9]"
+                    invalid=[[_errors.phone]]>
+                  </paper-input>
                   <paper-input-error
-                    hidden$=[[!_errors.politicalActivity]] invalid>
-                    {{_errors.politicalActivity}}
+                    hidden$=[[!_errors.phone]] invalid>
+                    {{_errors.phone}}
                   </paper-input-error>
-                  <paper-textarea id="biography"
-                    label="Mini bio"
-                    value="{{_form.biography}}"
-                    invalid=[[_errors.biography]]
-                    required></paper-textarea><paper-input-error
-                      hidden$=[[!_errors.biography]] invalid>
-                      {{_errors.biography}}
-                    </paper-input-error>
+                  <paper-input id="age"
+                    type="number"
+                    label="Idade"
+                    value="{{_form.age}}"
+                    allowed-pattern="[0-9]"
+                    pattern="[0-9]"
+                    maxlength="3"
+                    invalid=[[_errors.age]]>
+                  </paper-input>
+                  <paper-input-error
+                    hidden$=[[!_errors.age]] invalid>
+                    {{_errors.age}}
+                  </paper-input-error>
                 </div>
                 <paper-button class="accent" on-tap="_updateProfile">Salvar</paper-button>
               </div>
@@ -706,8 +714,6 @@ class ProfilePage extends PolymerElement {
       this._user.country = result.data.country;
       this._user.gender = result.data.gender;
       this._user.race = result.data.race;
-      this._user.politicalActivity = result.data.politicalActivity;
-      this._user.biography = result.data.biography;
       this._user.photoURL = result.data.image;
       this._dispatchUser();
     } else {
@@ -733,8 +739,8 @@ class ProfilePage extends PolymerElement {
           gender: errors.gender,
           genderOther: errors.gender_other,
           race: errors.race,
-          politicalActivity: errors.political_activity,
-          biography: errors.biography
+          phone: errors.phone,
+          age: errors.age
         };
       }
       this._toastUnknownError();
@@ -795,8 +801,8 @@ class ProfilePage extends PolymerElement {
       gender: user.gender,
       genderOther: user.genderOther,
       race: user.race,
-      politicalActivity: user.politicalActivity,
-      biography: user.biography
+      phone: user.phone,
+      age: user.age
     };
     this._form = form;
   }
@@ -812,13 +818,13 @@ class ProfilePage extends PolymerElement {
         info.city += ` - ` + user.state;
       }
     } else {
-      info.city = `Não definida`;
+      info.city = `Não informada`;
     }
 
     if(user.country != ``) {
       info.country = user.country;
     } else {
-      info.country = `Não definido`;
+      info.country = `Não informado`;
     }
 
     if(user.gender != 0) {
@@ -827,25 +833,25 @@ class ProfilePage extends PolymerElement {
         info.gender += `: ` + user.genderOther;
       }
     } else {
-      info.gender = `Não definida`;
+      info.gender = `Não informado`;
     }
 
     if(user.race != 0) {
       info.race = this._getRaceText(user.race);
     } else {
-      info.race = `Não definida`;
+      info.race = `Não informada`;
     }
 
-    if(user.politicalActivity != ``) {
-      info.politicalActivity = user.politicalActivity;
+    if (user.phone) {
+      info.phone = user.phone;
     } else {
-      info.politicalActivity = `Não definido`;
+      info.phone = `Não informado`;
     }
 
-    if(user.biography != ``) {
-      info.biography = user.biography;
+    if (user.age) {
+      info.age = user.age;
     } else {
-      info.biography = `Não definida`;
+      info.age = `Não informada`;
     }
 
     if(user.image != ``) {
@@ -901,8 +907,8 @@ class ProfilePage extends PolymerElement {
       gender: ``,
       genderOther: ``,
       race: ``,
-      politicalActivity: ``,
-      biography: ``
+      phone: ``,
+      age: ``
     };
   }
 
@@ -916,8 +922,8 @@ class ProfilePage extends PolymerElement {
       gender: ``,
       genderOther: ``,
       race: ``,
-      politicalActivity: ``,
-      biography: ``
+      phone: ``,
+      age: ``
     };
   }
 
@@ -931,8 +937,8 @@ class ProfilePage extends PolymerElement {
       gender: ``,
       genderOther: ``,
       race: ``,
-      politicalActivity: ``,
-      biography: ``
+      phone: ``,
+      age: ``
     };
   }
 
