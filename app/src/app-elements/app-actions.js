@@ -5,7 +5,10 @@ import './app-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { NeonAnimatableBehavior } from '@polymer/neon-animation/neon-animatable-behavior.js';
-class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement) {
+class AppActions extends mixinBehaviors(
+  [NeonAnimatableBehavior],
+  PolymerElement
+) {
   static get template() {
     return html`
   <style>
@@ -64,7 +67,8 @@ class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement
 
       #app-actions #new-mission-btn paper-icon-button,
       #app-actions #missions-btn paper-icon-button,
-      #app-actions #notifications-btn paper-icon-button
+      #app-actions #notifications-btn paper-icon-button,
+      #app-actions #profile-btn paper-icon-button
       {
         display: block;
         padding: 3px;
@@ -93,36 +97,48 @@ class AppActions extends mixinBehaviors([NeonAnimatableBehavior], PolymerElement
             </div>
           </div>
           -->
-          <div id="notifications-btn">
+          <!-- <div id="notifications-btn">
             <div class="icon-container">
               <paper-icon-button icon="app:navNotifications"></paper-icon-button>
               <span>notificações</span>
             </div>
+          </div> -->
+          <div id="profile-btn">
+            <div class="icon-container">
+              <paper-icon-button icon="app:profile" on-tap="_goToProfile"></paper-icon-button>
+              <span>perfil</span>
+            </div>
           </div>
         </div>
-        </div>
+      </div>
 `;
   }
 
-  static get is() { return 'app-actions'; }
+  static get is() {
+    return "app-actions";
+  }
   static get properties() {
     return {
       // collapsed reflects the header state
       collapsed: {
         type: Boolean,
-        observer: '_setcollapsedStyle'
+        observer: "_setcollapsedStyle"
       },
       icon: String,
       selected: {
         type: String,
         notify: true,
-        observer: '_hideActions'
+        observer: "_hideActions"
       }
     };
   }
 
   _returnToInbox() {
-    this.dispatchEvent(new CustomEvent('go-to-inbox'));
+    this.dispatchEvent(new CustomEvent("go-to-inbox"));
+  }
+
+  _goToProfile() {
+    this.dispatchEvent(new CustomEvent("go-to-profile"));
   }
 }
 customElements.define(AppActions.is, AppActions);

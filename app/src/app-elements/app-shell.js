@@ -12,6 +12,7 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-toast/paper-toast.js';
+import "share-menu/share-menu.js";
 import '../pages/login-page.js';
 import '../pages/inbox-page.js';
 import '../pages/profile-page.js';
@@ -172,6 +173,8 @@ class AppShell extends PolymerElement {
       data="{{routeData}}"
       tail="{{subroute}}"></app-route>
 
+    <share-menu id="shareMenu" dialog-title="Divulgue esta causa!" title="Conheça as Novas Medidas Contra a Corrupção e faça parte da maior união anticorrupção que o país já viu #UnidosContraaCorrupção" url="http://www.unidoscontraacorrupcao.org.br/" enabled-services='["telegram", "whatsapp"]'></share-menu>
+
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -205,10 +208,10 @@ class AppShell extends PolymerElement {
             <paper-icon-button icon="app:profile" drawer-toggle></paper-icon-button>
             Perfil
           </a>
-          <a name="notifications" href="" hidden$="[[!user.uid]]">
+          <!-- <a name="notifications" href="" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navNotifications" drawer-toggle></paper-icon-button>
             Notificações
-          </a>
+          </a> -->
           <hr hidden$="[[!user.uid]]">
           <a name="rules" href="" disabled>
             Regras
@@ -221,7 +224,7 @@ class AppShell extends PolymerElement {
               Assine
             </span>
           </a>
-          <a name="rules" class="drawer-item" href="">
+          <a name="rules" class="drawer-item" on-tap="_shareLink">
             Divulgue
           </a>
           <hr>
@@ -373,6 +376,18 @@ class AppShell extends PolymerElement {
   _getUser() {
     return JSON.parse(sessionStorage.getItem("user"));
   }
+
+  _shareLink(e) {
+    const shareLinkNode = this.shadowRoot.querySelector("#shareMenu");
+    const clonedNode = shareLinkNode.cloneNode(true);
+    //TODO: make clonedNode a property, to be able to remove it later.
+    shareLinkNode.addEventListener('iron-overlay-closed', function () {
+      document.body.removeChild(clonedNode);
+    }.bind(this));
+    document.body.appendChild(clonedNode);
+    clonedNode.share();
+  }
+
 }
 
 window.customElements.define(AppShell.is, AppShell);

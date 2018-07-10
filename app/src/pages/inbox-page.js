@@ -68,7 +68,7 @@ class InboxPage extends PolymerElement {
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
-    <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
+    <app-actions on-go-to-inbox="_returnToInbox" on-go-to-profile="_goToProfile"></app-actions>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
     </app-dialog>
@@ -115,23 +115,25 @@ class InboxPage extends PolymerElement {
 `;
   }
 
-  static get is() { return 'inbox-page'; }
+  static get is() {
+    return "inbox-page";
+  }
   static get properties() {
     return {
       inboxAction: {
         type: String,
-        value: ''
+        value: ""
       },
       route: {
         type: Object,
         notify: true
       },
       selected: {
-        observer: '_selectedChanged'
+        observer: "_selectedChanged"
       },
       pageTitle: {
         type: String,
-        value: 'MISSÕES'
+        value: "MISSÕES"
       },
       inboxMissions: {
         type: Array
@@ -164,31 +166,40 @@ class InboxPage extends PolymerElement {
         type: Object,
         value: {}
       }
-  }
+    };
   }
 
   _selectedChanged(selected) {
-    if(!selected) return;
+    if (!selected) return;
     this._getInboxMissions();
     if (!this.user || Object.keys(this.user).length == 0) return;
     this._getAcceptedMissions();
     this._getUserTrophies();
   }
 
-  openDrawer() { this.dispatchEvent(new CustomEvent('open-drawer')); }
+  openDrawer() {
+    this.dispatchEvent(new CustomEvent("open-drawer"));
+  }
 
-  _openMissionForm() { this.set('route.path', '/mission'); }
+  _openMissionForm() {
+    this.set("route.path", "/mission");
+  }
 
   _goToMission(e) {
     let mission = e.detail.mission;
-    this.set('route.path', `/show-mission/${mission}`);
+    this.set("route.path", `/show-mission/${mission}`);
   }
 
-  hideLoading(force=false) {
+  hideLoading(force = false) {
     // the load is complete.
-    if (force) this.shadowRoot.querySelector('#inboxLoading').setAttribute('style', 'display:none');
+    if (force)
+      this.shadowRoot
+        .querySelector("#inboxLoading")
+        .setAttribute("style", "display:none");
     if (this.domChangeEventCount == 1) {
-      this.shadowRoot.querySelector('#inboxLoading').setAttribute('style', 'display:none');
+      this.shadowRoot
+        .querySelector("#inboxLoading")
+        .setAttribute("style", "display:none");
     }
     this.domChangeEventCount += 1;
   }
@@ -203,77 +214,104 @@ class InboxPage extends PolymerElement {
   _getInboxMissions() {
     if (!this.user || Object.keys(this.user).length == 0)
       this.$.api.path = `missions/`;
-    else
-      this.$.api.path = `missions/inbox/${this.user.uid}`;
-    this.$.api.request().then(function(ajax) {
-      this.set("inboxMissions", ajax.response);
-    }.bind(this));
+    else this.$.api.path = `missions/inbox/${this.user.uid}`;
+    this.$.api.request().then(
+      function(ajax) {
+        this.set("inboxMissions", ajax.response);
+      }.bind(this)
+    );
   }
 
   _getUserTrophies() {
-    this.$.api.path= `users/${this.user.uid}/trophies/`
-    this.$.api.request().then(function(ajax){
-      var trophies = ajax.response;
-      var index;
-      for (index in trophies) {
-        let trophy = trophies[index];
-        if (trophy.percentage == 100 && trophy.notified == false) {
-          //updates trophy notified variable.
-          this.$.api.path = `users/${this.user.uid}/trophies?trophy=${trophy.trophy}`
-          this.$.api.request().then(function(ajax){
-            var _self = ajax.response[0].links.self;
-            var user_trophy_path = _self.split("/")[_self.split("/").length - 3];
-            var user_trophy_id = _self.split("/")[_self.split("/").length - 2];
-            this.$.api.path = `${user_trophy_path}/${user_trophy_id}/`;
-            this.$.api.method = "PATCH";
-            this.$.api.user = this.user;
-            this.$.api.body = {"notified": true};
-            this.$.api.request().then(function(ajax){
-              //show trophy modal
-              this.$.api.path= `trophies/${trophy.trophy}/`
-              this.$.api.request().then(function(ajax){
-                this.set("trophyData", ajax.response);
-                this.$.trophyDialog.present();
-              }.bind(this));
-            }.bind(this));
-          }.bind(this));
+    this.$.api.path = `users/${this.user.uid}/trophies/`;
+    this.$.api.request().then(
+      function(ajax) {
+        var trophies = ajax.response;
+        var index;
+        for (index in trophies) {
+          let trophy = trophies[index];
+          if (trophy.percentage == 100 && trophy.notified == false) {
+            //updates trophy notified variable.
+            this.$.api.path = `users/${this.user.uid}/trophies?trophy=${
+              trophy.trophy
+            }`;
+            this.$.api.request().then(
+              function(ajax) {
+                var _self = ajax.response[0].links.self;
+                var user_trophy_path = _self.split("/")[
+                  _self.split("/").length - 3
+                ];
+                var user_trophy_id = _self.split("/")[
+                  _self.split("/").length - 2
+                ];
+                this.$.api.path = `${user_trophy_path}/${user_trophy_id}/`;
+                this.$.api.method = "PATCH";
+                this.$.api.user = this.user;
+                this.$.api.body = { notified: true };
+                this.$.api.request().then(
+                  function(ajax) {
+                    //show trophy modal
+                    this.$.api.path = `trophies/${trophy.trophy}/`;
+                    this.$.api.request().then(
+                      function(ajax) {
+                        this.set("trophyData", ajax.response);
+                        this.$.trophyDialog.present();
+                      }.bind(this)
+                    );
+                  }.bind(this)
+                );
+              }.bind(this)
+            );
+          }
         }
-      }
-    }.bind(this));
+      }.bind(this)
+    );
   }
 
   _getAcceptedMissions() {
     this.$.api.method = "GET";
     this.$.api.path = `missions/accepted/${this.user.uid}`;
-    this.$.api.request().then(function(ajax) {
-      this.set("userAcceptedMissions", ajax.response);
-      if (this.userAcceptedMissions.length > 0)
-        this.$.emptyMessage.setAttribute("style", "display: none");
-      else
-        this.$.emptyMessage.setAttribute("style", "display: block");
-    }.bind(this));
+    this.$.api.request().then(
+      function(ajax) {
+        this.set("userAcceptedMissions", ajax.response);
+        if (this.userAcceptedMissions.length > 0)
+          this.$.emptyMessage.setAttribute("style", "display: none");
+        else this.$.emptyMessage.setAttribute("style", "display: block");
+      }.bind(this)
+    );
   }
 
-  _returnToInbox() { this.set("route.path", "/"); }
-  _selectInbox() { this.set("inboxtab", 0); }
-  _openRestrictModal() { this.$.unauthorizedDialog.present(); }
+  _returnToInbox() {
+    this.set("route.path", "/");
+  }
+  _selectInbox() {
+    this.set("inboxtab", 0);
+  }
+  _openRestrictModal() {
+    this.$.unauthorizedDialog.present();
+  }
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
     this.set("route.path", "/login");
   }
 
-  _dismissUnauthorizedModal() {this.$.unauthorizedDialog.dismiss();}
+  _dismissUnauthorizedModal() {
+    this.$.unauthorizedDialog.dismiss();
+  }
 
-    _tabChanged() {
-      if (this.inboxtab == 1) {
-        if (!this.user || Object.keys(this.user).length == 0){
-          this.$.emptyMessage.setAttribute("style", "display: none");
-          this.$.unauthorizedDialog.present();
-        }
+  _tabChanged() {
+    if (this.inboxtab == 1) {
+      if (!this.user || Object.keys(this.user).length == 0) {
+        this.$.emptyMessage.setAttribute("style", "display: none");
+        this.$.unauthorizedDialog.present();
       }
     }
+  }
 
-  _checkUserTrophies() {
+  _checkUserTrophies() {}
+
+  _goToProfile() {
+    this.set("route.path", "/profile");
   }
 }
 window.customElements.define(InboxPage.is, InboxPage);
