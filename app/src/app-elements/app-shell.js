@@ -20,6 +20,7 @@ import '../pages/mission-page.js';
 import '../pages/show-mission-page.js';
 import '../pages/mission-receipts-page.js';
 import '../pages/not-found-page.js';
+import '../pages/privacy-page.js';
 import './app-icons.js';
 import './app-theme.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
@@ -131,7 +132,7 @@ class AppShell extends PolymerElement {
 
       .drawer-list a {
         display: block;
-        margin-top: 30px;
+        margin-top: 25px;
         padding: 0 16px;
         text-transform: uppercase;
         text-decoration: none;
@@ -139,6 +140,11 @@ class AppShell extends PolymerElement {
         font-family: Folio;
         font-size: 24px;
         line-height: 26px;
+      }
+
+      .drawer-list a[name="sign_it"],
+      .drawer-list a[name="rules"] {
+        margin-top: 30px;
       }
 
       .drawer-list a[disabled] {
@@ -227,6 +233,12 @@ class AppShell extends PolymerElement {
           <a name="rules" class="drawer-item" on-tap="_shareLink">
             Divulgue
           </a>
+          <a name="privacy" class="drawer-item" on-tap="_redirectToPrivacy">
+            Privacidade
+          </a>
+          <a name="help" class="drawer-item">
+            Ajuda
+          </a>
           <hr>
         </iron-selector>
       </app-drawer>
@@ -243,6 +255,7 @@ class AppShell extends PolymerElement {
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
+          <privacy-page name="privacy"></privacy-page>
           <not-found-page name="not-found"></not-found-page>
           <login-page id="login"
             name="login"
@@ -262,32 +275,34 @@ class AppShell extends PolymerElement {
 `;
   }
 
-  static get is() { return 'app-shell'; }
+  static get is() {
+    return "app-shell";
+  }
 
   static get properties() {
     return {
       page: {
         type: String,
         reflectToAttribute: true,
-        observer: '_pageChanged',
+        observer: "_pageChanged"
       },
       routeData: {
         type: Object,
-        value: function() { return {}; }
+        value: function() {
+          return {};
+        }
       },
       subroute: Object,
       route: {
-        type: Object,
+        type: Object
       },
       user: Object,
       _afterLogin: String
-    }
+    };
   }
 
   static get observers() {
-    return [
-      '_routePageChanged(routeData.page)',
-    ];
+    return ["_routePageChanged(routeData.page)"];
   }
 
   constructor() {
@@ -299,7 +314,7 @@ class AppShell extends PolymerElement {
   _routePageChanged(page) {
     // If no page was found in the route data, page will be an empty string.
     // Default to 'inbox' in that case.
-    this.page = page || 'inbox';
+    this.page = page || "inbox";
     // Close a non-persistent drawer when the page & route are changed.
     if (!this.$.drawer.persistent) {
       this.$.drawer.close();
@@ -308,18 +323,20 @@ class AppShell extends PolymerElement {
 
   _pageChanged(page) {
     // Load page import on demand. Show 404 page if fails
-    import(`../pages/${page}-page.js`).catch((reason) => {
+    import(`../pages/${page}-page.js`).catch(reason => {
       console.log("MyView1 failed to load", reason);
     });
   }
 
   _selectedPageChanged(e) {
     const pages = this.$.pages.items;
-    pages.forEach((p) => { p.selected = p === e.detail.value; });
+    pages.forEach(p => {
+      p.selected = p === e.detail.value;
+    });
   }
 
   _showPage404() {
-    this.page = 'not-found';
+    this.page = "not-found";
   }
 
   _openDrawer(e) {
@@ -327,11 +344,15 @@ class AppShell extends PolymerElement {
   }
 
   gotoProfile(e) {
-    this.set('route.path', '/profile');
+    this.set("route.path", "/profile");
   }
 
   _goToInbox() {
-    this.set(`route.path`, `/`)
+    this.set(`route.path`, `/`);
+  }
+
+  _redirectToPrivacy() {
+    this.set('route.path', '/privacy');
   }
 
   // User
@@ -341,7 +362,7 @@ class AppShell extends PolymerElement {
   }
 
   _onUserUpdate(e, user) {
-    if(user.key != 0) {
+    if (user.key != 0) {
       this._saveUser(user);
     } else {
       this._saveUser({});
@@ -356,7 +377,7 @@ class AppShell extends PolymerElement {
   }
 
   _onLoginComplete(e) {
-    this.set('route.path', this._afterLogin);
+    this.set("route.path", this._afterLogin);
     this._afterLogin = `/`;
   }
 
@@ -381,13 +402,15 @@ class AppShell extends PolymerElement {
     const shareLinkNode = this.shadowRoot.querySelector("#shareMenu");
     const clonedNode = shareLinkNode.cloneNode(true);
     //TODO: make clonedNode a property, to be able to remove it later.
-    shareLinkNode.addEventListener('iron-overlay-closed', function () {
-      document.body.removeChild(clonedNode);
-    }.bind(this));
+    shareLinkNode.addEventListener(
+      "iron-overlay-closed",
+      function() {
+        document.body.removeChild(clonedNode);
+      }.bind(this)
+    );
     document.body.appendChild(clonedNode);
     clonedNode.share();
   }
-
 }
 
 window.customElements.define(AppShell.is, AppShell);
