@@ -314,12 +314,12 @@ class ProfilePage extends PolymerElement {
                 </span>
                 <div class="selected-mark"></div>
               </paper-tab>
-              <paper-tab>
+              <!-- <paper-tab>
                 <span class="tabs-text">
                   contribuições
                 </span>
                 <div class="selected-mark"></div>
-              </paper-tab>
+              </paper-tab> -->
             </paper-tabs>
           </app-toolbar>
           <iron-pages selected="{{_tab}}">
@@ -499,7 +499,7 @@ class ProfilePage extends PolymerElement {
                 </template>
               </ul>
             </div>
-            <div id="contributions">
+            <!-- <div id="contributions">
               <ul class="app-grid">
                 <li class="item">
                   <div class="contribution-value">
@@ -558,7 +558,7 @@ class ProfilePage extends PolymerElement {
                   Total de pontos
                 </div>
               </div>
-            </div>
+            </div> -->
           </iron-pages>
         </app-header>
       </app-header-layout>
@@ -616,9 +616,9 @@ class ProfilePage extends PolymerElement {
     this._errors = this._getEmptyErrors();
     this._form = this._getEmptyForm();
     this._info = this._getEmptyInfo();
-    this._tab = 0;
-    this._toastMessage = ``;
     this._trophies = [];
+    this._tab = 1;
+    this._toastMessage = ``;
     this._showGenderOther = false;
   }
 
@@ -629,6 +629,7 @@ class ProfilePage extends PolymerElement {
       && `uid` in user) {
       this._user = user;
       this.$.apiUserProfile.request(user.key, user.uid);
+      this.$.apiUserTrophies.request(this._user.key, this._user.uid);
     } else {
       this._dispatchAccessDenial();
     }
@@ -639,9 +640,6 @@ class ProfilePage extends PolymerElement {
       this._setTabDivs(`block`, `none`, `none`);
     } else if(this._tab == 1) {
       this._setTabDivs(`none`, `block`, `none`);
-      if(this._trophies.length == 0) {
-        this.$.apiUserTrophies.request(this._user.key, this._user.uid);
-      }
     } else {
       this._setTabDivs(`none`, `none`, `block`);
       // TODO: Change to API request
@@ -660,7 +658,7 @@ class ProfilePage extends PolymerElement {
   _setTabDivs(info, trophies, contributions) {
     this.$.info.style.display = info;
     this.$.trophies.style.display = trophies;
-    this.$.contributions.style.display = contributions;
+    // this.$.contributions.style.display = contributions;
   }
 
   _updateProfile(e) {
