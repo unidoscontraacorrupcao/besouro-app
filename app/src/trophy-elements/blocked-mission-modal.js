@@ -58,10 +58,11 @@ class BlockedMissionModal extends PolymerElement {
 
       #confirmation-text p {
         font-family: helvetica-neue;
-        font-size: 16px;
+        font-size: 20px;
         color: #333333;
         margin: 34px auto 40px auto;
         width: 90%;
+        line-height: 1.3;
       }
 
       iron-icon {

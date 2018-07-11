@@ -65,20 +65,10 @@ class ApiUserTrophies extends PolymerElement {
     let response = e.detail.xhr.response;
 
     let result = {};
-    if(this._hasAllRequiredData(response)) {
       result = {
         success: true,
         data: response
       };
-    } else {
-      console.error(`api-user-trophies`, response);
-      result = {
-        success: false,
-        errors: {
-          notFound: true
-        }
-      };
-    }
     this._dispatch(result);
   }
 

@@ -805,19 +805,67 @@ class ProfilePage extends PolymerElement {
 
   _onTrophies(e, result) {
     if(result.success) {
-      for(let dataIndex in result.data) {
-        for(let index in this._data) {
-          if(result.data[dataIndex].key == this._data[index].trophy && this._data[index].percentage == 100)
-            result.data[dataIndex]["label"] = "ver missão";
-          else
-            result.data[dataIndex]["label"] = "detalhes";
-        }
+      var userTrophies = this._data;
+      var allTrophies = result.data;
+      for(let dataIndex in allTrophies) {
+        var trophyKey = allTrophies[dataIndex].key;
+        this.$.api.path = `users/1/required_trophies/?trophy=${trophyKey}`;
+
+        this.$.api.request().then(function(ajax) {
+          var requiredTrophies = ajax.response;
+          if (requiredTrophies.length == 0)
+            allTrophies[dataIndex]["label"] = "ver missão";
+
+          if (requiredTrophies.length > userTrophies.length) {
+            allTrophies[dataIndex]["label"] = "detalhes";
+            var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
+            this.$.api.path = `missions/${mid}`;
+            this.$.api.request().then(function (ajax) {
+              allTrophies[dataIndex]["name"] = ajax.response.title;
+            }.bind(this));
+          }
+
+          else{
+            for(let index in requiredTrophies) {
+              if (this.userHavePreReqs(userTrophies, requiredTrophies, index)) {
+                allTrophies[dataIndex]["label"] = "ver missão";
+                var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
+                this.$.api.path = `missions/${mid}`;
+                this.$.api.request().then(function (ajax) {
+                  allTrophies[dataIndex]["name"] = ajax.response.title;
+                }.bind(this));
+              }
+              else
+                allTrophies[dataIndex]["label"] = "detalhes";
+            }
+          }
+        }.bind(this));
       }
-      this._trophies = result.data;
+      setTimeout(function () {
+        this._trophies = result.data;
+      }.bind(this), 400);
     } else {
       this._toastUnknownError();
     }
   }
+
+
+  missionIdFromTrophy(trophy) {
+    var reference_link = trophy["reference_link"];
+    var missionId = reference_link.split("/")[reference_link.split("/").length - 1];
+    return missionId;
+  }
+
+  userHavePreReqs(userTrophies, requiredTrophies, index) {
+    var filteredTrophies = userTrophies.filter(function(trophy) {
+      return trophy.trophy == requiredTrophies[index].key
+        && trophy.percentage == 100;
+    });
+    return filteredTrophies.length == requiredTrophies.length;
+  }
+
+
+
 
   _updateForm(user, displayName) {
     let form = {
