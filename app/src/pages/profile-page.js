@@ -339,10 +339,10 @@ class ProfilePage extends PolymerElement {
 
                 <div class="info-name">cor / raça</div>
                 <div class="info-value">{{_info.race}}</div>
-                
+
                 <div class="info-name">Telefone/WhatsApp</div>
                 <div class="info-value">{{_info.phone}}</div>
-                
+
                 <div class="info-name">Idade</div>
                 <div class="info-value">{{_info.age}}</div>
 
@@ -598,7 +598,15 @@ class ProfilePage extends PolymerElement {
       _toastMessage: String,
       _trophies: Array,
       _data: Array,
-      _showGenderOther: Boolean
+      _showGenderOther: Boolean,
+      _blockedTrophy: {
+        type: String,
+        value: "detalhes"
+      },
+      _availableTrophy: {
+        type: String,
+        value: "ver missão"
+      }
     };
   }
 
@@ -803,21 +811,22 @@ class ProfilePage extends PolymerElement {
     }
   }
 
+  //TODO: Move this to besouro backend as an api endpoint.
   _onTrophies(e, result) {
     if(result.success) {
       var userTrophies = this._data;
       var allTrophies = result.data;
       for(let dataIndex in allTrophies) {
         var trophyKey = allTrophies[dataIndex].key;
-        this.$.api.path = `users/1/required_trophies/?trophy=${trophyKey}`;
 
+        this.$.api.path = `users/1/required_trophies/?trophy=${trophyKey}`;
         this.$.api.request().then(function(ajax) {
           var requiredTrophies = ajax.response;
           if (requiredTrophies.length == 0)
-            allTrophies[dataIndex]["label"] = "ver missão";
+            allTrophies[dataIndex]["label"] = this._availableTrophy;
 
           if (requiredTrophies.length > userTrophies.length) {
-            allTrophies[dataIndex]["label"] = "detalhes";
+            allTrophies[dataIndex]["label"] = this._blockedTrophy;
             var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
             this.$.api.path = `missions/${mid}`;
             this.$.api.request().then(function (ajax) {
@@ -827,16 +836,16 @@ class ProfilePage extends PolymerElement {
 
           else{
             for(let index in requiredTrophies) {
-              if (this.userHavePreReqs(userTrophies, requiredTrophies, index)) {
-                allTrophies[dataIndex]["label"] = "ver missão";
+              if (this.userHavePreReqs(userTrophies, requiredTrophies, index))
+                allTrophies[dataIndex]["label"] = this._availableTrophy;
+              else {
+                allTrophies[dataIndex]["label"] = this._blockedTrophy;
                 var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
                 this.$.api.path = `missions/${mid}`;
                 this.$.api.request().then(function (ajax) {
                   allTrophies[dataIndex]["name"] = ajax.response.title;
                 }.bind(this));
               }
-              else
-                allTrophies[dataIndex]["label"] = "detalhes";
             }
           }
         }.bind(this));
@@ -1046,13 +1055,13 @@ class ProfilePage extends PolymerElement {
   _triggerTrophyAction(e) {
     var  trophy = e.model.trophy;
     var linkText = e.target.text;
-    if (linkText == "ver missão")
+    if (linkText == this._availableTrophy)
     {
       var reference_link = trophy.reference_link;
       var missionId = reference_link.split("/")[reference_link.split("/").length - 1];
       this.set("route.path", `/show-mission/${missionId}`);
     }
-    if (linkText == "detalhes"){
+    if (linkText == this._blockedTrophy){
       this.set("trophyId", trophy.key);
       this.$.blockedDialog.present();
     }
