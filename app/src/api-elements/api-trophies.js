@@ -70,14 +70,6 @@ class ApiTrophies extends PolymerElement {
         success: true,
         data: response.results
       };
-    } else {
-      console.error(`api-trophies`, response);
-      result = {
-        success: false,
-        errors: {
-          notFound: true
-        }
-      };
     }
     this._dispatch(result);
   }
