@@ -198,6 +198,35 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       font-size: 1.5rem !important;
     }
 
+      .mission-started {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 35%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 90%;
+        text-align: center;
+        line-height: 1.2;
+        height: 300px;
+      }
+
+      .mission-started span {
+        position: absolute;
+        top: 100px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        font-family: folio;
+        font-size: 32px;
+        color: white;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
     .card-blocked {
       display: none;
       flex-direction: column;
@@ -210,6 +239,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       width: 90%;
       text-align: center;
       line-height: 1.2;
+      height: 300px;
     }
 
     .card-blocked > * {
@@ -321,9 +351,14 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         <div>
           <paper-icon-button icon="app:mission-blocked"></paper-icon-button>
         </div>
-        <span id="blockedText"> missão bloqueada </span>
+        <span id="blockedText"> {{btnAction}} </span>
         <a id="btnLink" on-tap="_openBlockedMissionModal"><span id="blockedDetail">detalhes</span></a>
       </div>
+
+      <div class="mission-started">
+        <span> {{btnAction}} </span>
+      </div>
+
       </div>
 
       <div class="card-action">
@@ -451,37 +486,35 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       var goToMissionBtn = this.shadowRoot.querySelector(".go");
       goToMissionBtn.disabled = true;
       const cardBlocked = this.shadowRoot.querySelector(".card-blocked");
-      cardAction.setAttribute("style", "display: none;");
-      cardBlocked.setAttribute("style", "display: flex;");
-      var image = this.shadowRoot.querySelector("#card-image iron-image");
-      var sizedImgDiv = image.shadowRoot.querySelector("#sizedImgDiv")
-      let backgroundImage = sizedImgDiv.style.backgroundImage;
-      sizedImgDiv.style.backgroundImage= `linear-gradient(to right, rgba(49,39,131,0.85), rgba(49,39,131,0.85)), ${backgroundImage}`;
-      this.set('btnAction', 'Concluida');
+      this._setCardImageGradient("rgba(49,39,131,0.85)", "rgba(49,39,131,0.85)", cardBlocked);
+      this.set('btnAction', 'missão bloqueada');
     }
 
     if (this.currentMissionStats == "realized") {
-      this.set('btnAction', 'Concluida');
-      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      const card = this.shadowRoot.querySelector(".mission-started");
+      this._setCardImageGradient("rgba(173, 174, 178, 0.8)", "rgba(173, 174, 178, 0.8)", card);
       this.$.btnText.setAttribute("id", "card-action-bg");
+      this.set('btnAction', 'missão concluida');
     }
 
     if (this.currentMissionStats == "new") {
-      this.set('btnAction', 'Aceitar');
       link.addEventListener('tap', this.acceptMissionFunc);
       cardAction.setAttribute("style", "background-color: rgba(216, 28, 136, 0.8);");
+      this.set('btnAction', 'aceitar');
     }
 
     if (this.currentMissionStats == "started") {
-      this.set('btnAction', 'Concluir');
+      this.set('btnAction', 'missão aceita');
+      const card = this.shadowRoot.querySelector(".mission-started");
+      this._setCardImageGradient("rgba(216, 28, 136, 0.8)", "rgba(216, 28, 136, 0.8)", card);
       link.addEventListener('tap', this.finishMissionFunc);
-      cardAction.setAttribute("style", "background-color: rgba(31, 163, 208, 0.8);");
     }
 
     if (this.currentMissionStats == "pending") {
-      this.set("btnAction", "Avaliação pendente");
-      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
+      const card = this.shadowRoot.querySelector(".mission-started");
+      this._setCardImageGradient("rgba(173, 174, 178, 0.8)", "rgba(173, 174, 178, 0.8)", card);
       this.$.btnText.setAttribute("class", "card-action-bg");
+      this.set("btnAction", "avaliação pendente");
     }
 
     if (this.currentMissionStats == "rejected") {
@@ -489,6 +522,16 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
       this.$.btnText.setAttribute("class", "card-action-bg");
     }
+  }
+
+  _setCardImageGradient(firstColor, secondColor, card) {
+      const cardAction = this.shadowRoot.querySelector(".card-action");
+      cardAction.setAttribute("style", "display: none;");
+      card.setAttribute("style", "display: flex;");
+      var image = this.shadowRoot.querySelector("#card-image iron-image");
+      var sizedImgDiv = image.shadowRoot.querySelector("#sizedImgDiv")
+      let backgroundImage = sizedImgDiv.style.backgroundImage;
+      sizedImgDiv.style.backgroundImage= `linear-gradient(to right,${firstColor}, ${secondColor}), ${backgroundImage}`;
   }
 
   missionOwner() {
