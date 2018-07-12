@@ -149,10 +149,7 @@ class BlockedMissionModal extends PolymerElement {
           </div>
         </div>
         <p>
-        Para o usuário ter acesso a esse troféu, requer possuir "
-      <template is="dom-repeat" items="{{preReqNames}}">
-        {{item}},
-      </template>"
+        Para o usuário ter acesso a esse troféu, requer possuir {{preReqNames}}
         </p>
       </div>
     </div>
@@ -166,7 +163,7 @@ class BlockedMissionModal extends PolymerElement {
         type: String,
         observer: "_getTrophyPreReqs"
       },
-      preReqNames: Array
+      preReqNames: String
     }
   }
 
@@ -182,7 +179,9 @@ class BlockedMissionModal extends PolymerElement {
     //trophies endpoint.
     this.$.api.path = `users/1/required_trophies/?trophy=${this.trophyId}`;
     this.$.api.request().then(function(ajax) {
-      var preReqNames = ajax.response.map(x => x.name);
+      let preReqNames = "";
+      ajax.response.map(x => preReqNames += x.name + ',');
+      preReqNames = preReqNames.substring(0,  preReqNames.length - 1); 
       this.set("preReqNames", preReqNames);
     }.bind(this));
   }
