@@ -113,17 +113,20 @@ class UnauthorizedModal extends PolymerElement {
         font-size: 15px;
         padding-bottom: 25px;
      }
+     .icon-header paper-icon-button {
+       color: var(--secondary-text-color);
+     }
     </style>
 
     <div class="modal-header">
       <div class="header-content">
         <div id="header-text"><span>acesso restrito</span></div>
         <div class="icon-header">
-          <paper-icon-button slot="suffix" icon="app:restrict"></paper-icon-button>
+          <paper-icon-button slot="suffix" icon="app:unauthorized"></paper-icon-button>
         </div>
       </div>
       <div id="confirmation-text">
-        <span><Você precisar fazer login para acessar essa área/span>
+        <span>Você precisar fazer login para acessar essa área</span>
         <p>
           Cadastre-se no app e aproveite todos os nossos recursos, sem limites!
         </p>
