@@ -606,8 +606,16 @@ class ProfilePage extends PolymerElement {
       _availableTrophy: {
         type: String,
         value: "ver missão"
+      },
+      selected: {
+        observer: "_selectedChanged"
       }
     };
+  }
+
+  _selectedChanged(selected) {
+    if(!selected) return;
+    this._requestUser();
   }
 
   constructor() {

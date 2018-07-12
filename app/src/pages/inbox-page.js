@@ -311,7 +311,11 @@ class InboxPage extends PolymerElement {
   _checkUserTrophies() {}
 
   _goToProfile() {
-    this.set("route.path", "/profile");
+    if(!this.user || Object.keys(this.user).length == 0) {
+      this.$.unauthorizedDialog.present();
+    } else {
+      this.set("route.path", "/profile");
+    }
   }
 }
 window.customElements.define(InboxPage.is, InboxPage);
