@@ -54,7 +54,7 @@ class MissionComment extends PolymerElement {
     </style>
     <div class="card mission-comment">
         <div class="author-photo">
-          <iron-image sizing="contain"></iron-image>
+          <iron-image src="{{comment.ownerPhoto}}" sizing="cover"></iron-image>
         </div>
       <div class="card-content">
         <h3> {{userName()}} </h3>

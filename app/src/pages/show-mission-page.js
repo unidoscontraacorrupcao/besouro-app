@@ -28,6 +28,7 @@ import '../mission-elements/mission-receipt.js';
 import '../app-elements/app-besouro-api.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { resolveCss } from '@polymer/polymer/lib/utils/resolve-url';
 class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   static get template() {
     return html`
@@ -460,9 +461,9 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
             <div class="comments">
               <h2>Comentários</h2>
-              <template is="dom-repeat" items="{{mission.comment_set}}" as="comment">
-                  <mission-comment comment="{{comment}}">
-                  </mission-comment>
+              <template is="dom-repeat" items="{{missionComments}}" as="comment" >
+                <mission-comment comment="{{comment}}">
+                </mission-comment>
               </template>
               <div class="comment">
                     <div class="message">
@@ -534,7 +535,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         notify: true
       },
       receipts: {
-        type: Array,
+        type: Array
       },
       acceptedMissionCount: {
         type: Number,
@@ -570,6 +571,9 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       ownerName: {
         type: String,
         value: ""
+      },
+      missionComments: {
+        type: Array
       }
     };
   }
@@ -772,7 +776,26 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     this.$.api.request().then(function(ajax) {
       this.set("mission", ajax.response);
       this._calcMissionStats();
+      this._setComments();
     }.bind(this));
+  }
+
+  _setComments() {
+    if(!this.mission) return;
+    const comments = this.mission.comment_set;
+    if(!comments) return;
+    const promises = comments.map(comment => {
+      this.$.api.method = "GET";
+      this.$.api.path = `profiles/${comment.user.id}`;
+      return this.$.api.request().then(function (ajax) {
+        if(ajax.response != null) {
+          comment.ownerPhoto = ajax.response.image;
+        }
+        return comment;
+      }.bind(this));
+    });
+    Promise.all(promises).then(result => this.set('missionComments', result));
+    return true;
   }
 
   _shareMission(e) {

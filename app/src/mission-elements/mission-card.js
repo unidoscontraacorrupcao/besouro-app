@@ -453,6 +453,18 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       this.set("concluded", ajax.response.realized);
       this.set("pending", ajax.response.pending);
     }.bind(this));
+    this._setOwnerPhoto();
+  }
+
+  _setOwnerPhoto() {
+    const ownerId = this.mission.owner.id;
+    this.$.api.method = "GET";
+    this.$.api.path = `profiles/${ownerId}`;
+    this.$.api.request().then(function (ajax) {
+      if(ajax.response.image) {
+        this.set('candidatePhoto', ajax.response.image);
+      }
+    }.bind(this));
   }
 
   _setMissionStats() {
