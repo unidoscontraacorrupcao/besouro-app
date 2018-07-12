@@ -317,6 +317,32 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .card-action div { padding-top: 15px; }
 
+    #mission-finished, #mission-accepted {
+      display: none;
+      flex-direction: column;
+    }
+
+    #mission-finished span,
+    #mission-finished paper-icon-button {
+      color: rgba(183,184,183,1);
+    }
+
+    #mission-accepted span { color: var(--accent-color); }
+    #mission-accepted div:first-child {
+      border-color: var(--accent-color);
+      border-width: 1.5px;
+      border-style: solid;
+      padding: 10px 10px 10px 10px;
+    }
+
+    #mission-accepted div:nth-child(2) {
+      display: block;
+      font-size: 7px;
+    }
+
+    #mission-accepted div:nth-child(2) span { letter-spacing: 0; }
+    #mission-accepted div:nth-child(2) a { text-decoration: underline; }
+
     @media only screen and (max-width: 460px) {
       .stats-content { font-size: 1.0rem; }
     }
@@ -403,6 +429,24 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       <div class="card-action">
         <div>
           <a id="btnLink"><span id="btnText">{{btnAction}}</span></a>
+        </div>
+      </div>
+
+      <div class="card-action" id="mission-finished">
+        <div>
+          <paper-icon-button disabled icon="app:accept-mission-intern"></paper-icon-button>
+        </div>
+        <span>missão concluida</span>
+      </div>
+
+      <div class="card-action" id="mission-accepted">
+        <div>
+          <a id="btnLink"><span id="btnText">missão aceita</span></a>
+        </div>
+        <div>
+          <span>já realizou a missão?
+            <a id="finishMission">acesse aqui para concluir</a>
+          </span>
         </div>
       </div>
 
@@ -673,14 +717,18 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
   _setActionBtn() {
     const cardAction = this.shadowRoot.querySelector(".card-action");
+    const missionAccepted = this.shadowRoot.querySelector("#mission-accepted");
+    const missionFinished = this.shadowRoot.querySelector("#mission-finished");
+    cardAction.style.display = "none";
+    missionAccepted.style.display = "none";
+    missionFinished.style.display = "none";
     const link = this.$.btnLink;
     link.removeEventListener("tap", this.acceptMissionFunc, false);
     link.removeEventListener("tap", this.finishMissionFunc, false);
 
     if (this.currentMissionStats == "realized") {
-      this.set('btnAction', 'Missão concluida');
-      cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
-      this.$.btnText.setAttribute("style", "width: 300px;");
+      cardAction.style.display = "none";
+      missionFinished.style.display = "flex";
     }
 
     if (this.currentMissionStats == "new") {
@@ -690,9 +738,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     }
 
     if (this.currentMissionStats == "started") {
-      this.set('btnAction', 'Concluir missão');
-      link.addEventListener('tap', this.finishMissionFunc);
-      cardAction.setAttribute("style", "background-color: rgba(31, 163, 208, 0.8);");
+      var finishLink = this.shadowRoot.querySelector("#finishMission");
+      cardAction.style.display = "none";
+      missionAccepted.style.display = "flex";
+      finishLink.addEventListener('tap', this.finishMissionFunc);
     }
 
     if (this.currentMissionStats == "pending") {
