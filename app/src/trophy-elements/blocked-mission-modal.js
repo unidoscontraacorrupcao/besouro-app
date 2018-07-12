@@ -108,6 +108,13 @@ class BlockedMissionModal extends PolymerElement {
       }
 
       .icon-header paper-icon-button { padding: 0; }
+      .icon-header #closeModal {
+        position: absolute;
+        right: 0;
+        top: -15px;
+        color: white;
+        padding: 10px;
+      }
 
       #blocked-icon { text-align: center; }
       #blocked-icon-border {
@@ -131,6 +138,7 @@ class BlockedMissionModal extends PolymerElement {
         <div id="header-text"><span>troféu bloqueado</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:splash-blocked"></paper-icon-button>
+          <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
         </div>
       </div>
       <div id="confirmation-text">

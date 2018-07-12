@@ -277,7 +277,7 @@ class ProfilePage extends PolymerElement {
     <app-dialog id="blockedDialog">
       <blocked-mission-modal
         trophy-id="{{trophyId}}"
-        on-close-modal="_closeModal">
+        on-close-modal="_dismissBlockedTrophy">
       </blocked-mission-modal>
     </app-dialog>
 
@@ -1073,6 +1073,7 @@ class ProfilePage extends PolymerElement {
     }
   }
 
+  _dismissBlockedTrophy() { this.$.blockedDialog.dismiss(); }
   _openBlockedTrophyModal() { this.$.blockedDialog.present(); }
 }
 window.customElements.define(ProfilePage.is, ProfilePage);

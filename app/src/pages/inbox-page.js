@@ -74,7 +74,7 @@ class InboxPage extends PolymerElement {
     </app-dialog>
 
     <app-dialog id="trophyDialog">
-      <acquired-trophy-modal trophy-data={{trophyData}} on-close-modal="_dismissUnauthorizedModal"></acquired-trophy-modal>
+      <acquired-trophy-modal trophy-data={{trophyData}} on-close-modal="_dismissTrophyModal"></acquired-trophy-modal>
     </app-dialog>
 
     <app-header-layout has-scrolling-region="">
@@ -295,9 +295,8 @@ class InboxPage extends PolymerElement {
     this.set("route.path", "/login");
   }
 
-  _dismissUnauthorizedModal() {
-    this.$.unauthorizedDialog.dismiss();
-  }
+  _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
+  _dismissTrophyModal() { this.$.trophyDialog.dismiss(); }
 
   _tabChanged() {
     if (this.inboxtab == 1) {

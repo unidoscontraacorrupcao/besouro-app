@@ -108,6 +108,14 @@ class AcceptMissionModal extends PolymerElement {
       }
 
       .icon-header paper-icon-button { padding: 0; }
+      .icon-header #closeModal {
+        position: absolute;
+        right: 0;
+        top: -15px;
+        color: white;
+        padding: 10px;
+      }
+
 
       paper-button {
         float: right;
@@ -121,6 +129,7 @@ class AcceptMissionModal extends PolymerElement {
         <div id="header-text"><span>missão aceita!</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:accept-mission"></paper-icon-button>
+          <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
         </div>
       </div>
       <div id="confirmation-text">
@@ -134,8 +143,6 @@ class AcceptMissionModal extends PolymerElement {
           <a on-tap="_goToMission" ><span>ver missão</span></a>
         </div>
       </div>
-
-        <paper-button on-tap="_dismiss">fechar</paper-button>
       </div>
     </div>
 `;
@@ -148,7 +155,7 @@ class AcceptMissionModal extends PolymerElement {
     }
   }
   _goToMission() {
-    this.dispatchEvent(new CustomEvent('modal-show-mission', 
+    this.dispatchEvent(new CustomEvent('modal-show-mission',
       { detail: { mission: this.missionId }}
     ));
   }

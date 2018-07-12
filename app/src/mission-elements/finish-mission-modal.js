@@ -161,6 +161,14 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
 
       .icon-header paper-icon-button { padding: 0; }
 
+      .icon-header #closeModal {
+        position: absolute;
+        right: 0;
+        top: -15px;
+        color: white;
+        padding: 10px;
+      }
+
       paper-textarea { text-align: left; }
 
       paper-button {
@@ -182,6 +190,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
         <div id="header-text"><span>concluir missão</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:end-mission"></paper-icon-button>
+          <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
         </div>
       </div>
       <div id="confirmation-text">
@@ -209,7 +218,6 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
             <a href="#" on-tap="_sendReceipts"><span>enviar</span></a>
           </div>
         </div>
-        <paper-button on-tap="_dismiss">fechar</paper-button>
       </div>
     </div>
 `;

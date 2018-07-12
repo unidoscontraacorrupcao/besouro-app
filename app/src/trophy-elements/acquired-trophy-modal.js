@@ -108,6 +108,14 @@ class AcquiredTrophyModal extends PolymerElement {
 
       .icon-header paper-icon-button { padding: 0; }
 
+      .icon-header #closeModal {
+        position: absolute;
+        right: 0;
+        top: -15px;
+        color: white;
+        padding: 10px;
+      }
+
       paper-button {
         float: right;
         font-size: 15px;
@@ -120,6 +128,7 @@ class AcquiredTrophyModal extends PolymerElement {
         <div id="header-text"><span>você ganhou um troféu</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:splash-blocked"></paper-icon-button>
+          <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
         </div>
       </div>
       <div id="confirmation-text">
@@ -132,8 +141,6 @@ class AcquiredTrophyModal extends PolymerElement {
           <a href="#" on-tap="_goToMission" ><span>ver troféus</span></a>
         </div>
       </div>
-
-        <paper-button on-tap="_dismiss">fechar</paper-button>
       </div>
     </div>
 `;

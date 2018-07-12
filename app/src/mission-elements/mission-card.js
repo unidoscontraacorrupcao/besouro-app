@@ -301,7 +301,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     <app-dialog id="blockedDialog">
       <blocked-mission-modal
         trophy-id="{{mission.trophy}}"
-        on-close-modal="_closeModal">
+        on-close-modal="_closeBlockedModal">
       </blocked-mission-modal>
     </app-dialog>
 
@@ -592,6 +592,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   }
 
   _closeModal() { this.$.acceptedDialog.dismiss(); }
+  _closeBlockedModal() { this.$.blockedDialog.dismiss(); }
   _openBlockedMissionModal() { this.$.blockedDialog.present(); }
 
   ready() {
