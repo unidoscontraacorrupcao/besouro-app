@@ -573,7 +573,8 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         value: ""
       },
       missionComments: {
-        type: Array
+        type: Array,
+        value: []
       }
     };
   }
@@ -784,18 +785,18 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     if(!this.mission) return;
     const comments = this.mission.comment_set;
     if(!comments) return;
-    const promises = comments.map(comment => {
+    const promises = comments.map(function(comment) {
       this.$.api.method = "GET";
-      this.$.api.path = `profiles/${comment.user.id}`;
+      this.$.api.path = `profiles/${comment.user.id}/`;
       return this.$.api.request().then(function (ajax) {
         if(ajax.response != null) {
           comment.ownerPhoto = ajax.response.image;
         }
         return comment;
       }.bind(this));
-    });
-    Promise.all(promises).then(result => this.set('missionComments', result));
-    return true;
+    }.bind(this));
+      Promise.all(promises).then(result => this.set('missionComments', result));
+      return true;
   }
 
   _shareMission(e) {

@@ -459,7 +459,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   _setOwnerPhoto() {
     const ownerId = this.mission.owner.id;
     this.$.api.method = "GET";
-    this.$.api.path = `profiles/${ownerId}`;
+    this.$.api.path = `profiles/${ownerId}/`;
     this.$.api.request().then(function (ajax) {
       if(ajax.response.image) {
         this.set('candidatePhoto', ajax.response.image);
