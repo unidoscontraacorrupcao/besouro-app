@@ -530,8 +530,14 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       card.setAttribute("style", "display: flex;");
       var image = this.shadowRoot.querySelector("#card-image iron-image");
       var sizedImgDiv = image.shadowRoot.querySelector("#sizedImgDiv")
-      let backgroundImage = sizedImgDiv.style.backgroundImage;
-      sizedImgDiv.style.backgroundImage= `linear-gradient(to right,${firstColor}, ${secondColor}), ${backgroundImage}`;
+      var backgroundImage = sizedImgDiv.style.backgroundImage;
+      var imageAsArray = backgroundImage.split(",");
+      if (imageAsArray.length == 0)
+        sizedImgDiv.style.backgroundImage = `linear-gradient(to right,${firstColor}, ${secondColor}), ${imageAsArray[0]}`;
+    else {
+        var imageArrayUrl = imageAsArray[imageAsArray.length - 1]
+        sizedImgDiv.style.backgroundImage = `linear-gradient(to right,${firstColor}, ${secondColor}), ${imageArrayUrl}`;
+    }
   }
 
   missionOwner() {
