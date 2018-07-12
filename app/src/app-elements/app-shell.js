@@ -21,6 +21,7 @@ import '../pages/show-mission-page.js';
 import '../pages/mission-receipts-page.js';
 import '../pages/not-found-page.js';
 import '../pages/privacy-page.js';
+import '../pages/help-page.js';
 import './app-icons.js';
 import './app-theme.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
@@ -219,8 +220,11 @@ class AppShell extends PolymerElement {
             Notificações
           </a> -->
           <hr hidden$="[[!user.uid]]">
-          <a name="rules" href="" disabled>
-            Regras
+          <a name="rules" on-tap="_redirectToHelp" disabled>
+            Ajuda
+          </a>
+          <a name="privacy" on-tap="_redirectToPrivacy" disabled>
+            Privacidade
           </a>
           <a name="back" class="drawer-item" href="http://www.unidoscontraacorrupcao.org.br" target="_blank">
             Voltar às novas medidas
@@ -232,12 +236,6 @@ class AppShell extends PolymerElement {
           </a>
           <a name="rules" class="drawer-item" on-tap="_shareLink">
             Divulgue
-          </a>
-          <a name="privacy" class="drawer-item" on-tap="_redirectToPrivacy">
-            Privacidade
-          </a>
-          <a name="help" class="drawer-item">
-            Ajuda
           </a>
           <hr>
         </iron-selector>
@@ -255,7 +253,8 @@ class AppShell extends PolymerElement {
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
-          <privacy-page name="privacy"></privacy-page>
+          <privacy-page name="privacy" route="{{route}}"></privacy-page>
+          <help-page name="help" route="{{route}}"></help-page>
           <not-found-page name="not-found"></not-found-page>
           <login-page id="login"
             name="login"
@@ -352,7 +351,11 @@ class AppShell extends PolymerElement {
   }
 
   _redirectToPrivacy() {
-    this.set('route.path', '/privacy');
+    this.set("route.path", "/privacy");
+  }
+
+  _redirectToHelp() {
+    this.set("route.path", "/help");
   }
 
   // User

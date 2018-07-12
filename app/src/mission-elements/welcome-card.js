@@ -58,7 +58,6 @@ Que legal que você quer mobilizar o Brasil contra a corrupção!
 
 Aqui você encontra diferentes missões de mobilização e pode se tornar ativista para conseguirmos unir o máximo possível de pessoas e eleger candidatos e candidatas comprometidos com o fim da corrupção!
         </p>
-        <span> Ver regras </span>
       </div>
     </div>
 
