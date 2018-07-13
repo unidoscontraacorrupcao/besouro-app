@@ -90,13 +90,31 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         height: 45px;
         z-index: 2;
       }
-      .tall { height: 175px; }
+      
+      app-header[shadow] .tall .actions,
+      app-header[shadow] .tall .timing { 
+        display: none; 
+      }
+
+      app-header[shadow] paper-icon-button[icon="app:arrow-back"] {
+        color: black;
+      }
+
+      p[bottom-item],
+      div[bottom-item] {
+        position: absolute;
+        right: 0;
+        bottom: 10px;
+        left: 0;
+      }
 
       .tall .actions {
         position: absolute;
-        bottom: -3px;
-        right: 5px;
+        bottom: 10px;
+        right: 0;
       }
+      .tall { height: 175px; }
+
 
       #share-mission {
         position: absolute;
@@ -127,9 +145,16 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         margin: 5px 0;
       }
 
+      h1[condensed-title] {
+        font-family: Folio;
+        text-transform: uppercase;
+      }
+
       .dark { color: black; }
 
-      .timing { font-size: 19px; }
+      .timing {
+        font-size: 19px;
+      }
 
       .timing paper-icon-button { top: -16px; }
       .timing span { top: -12px; }
@@ -391,23 +416,25 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
     <app-header-layout has-scrolling-region="">
       <app-header slot="header" fixed="" condenses="" effects="waterfall resize-title blend-background parallax-background">
-        <app-toolbar class="short">
+        <app-toolbar>
           <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
-          <h1 condensed-title="" class="main-title">{{mission.title}}</h1>
+          <h1 condensed-title class="dark title">{{mission.title}}</h1>
           <!-- <paper-icon-button icon="app:mission-edit"></paper-icon-button> -->
         </app-toolbar>
 
         <app-toolbar class="tall">
           <p bottom-item main-title="" class="title">
             {{mission.title}}
+            <div bottom-item class="timing">
+              <paper-icon-button icon="app:mission-timing"></paper-icon-button>
+              <span>{{mission.remainig_days}}</span>
+            </div>
           </p>
-          <div bottom-item class="timing">
-            <paper-icon-button icon="app:mission-timing"></paper-icon-button>
-            <span>{{mission.remainig_days}}</span>
-          </div>
-          <paper-icon-button on-tap="_shareMission" id="share-mission" icon="app:share"></paper-icon-button>
           <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{data.key}}">
           </mission-player>
+          <div class="actions">
+            <paper-icon-button on-tap="_shareMission" id="share-mission" icon="app:share"></paper-icon-button>
+          </div>
         </app-toolbar>
       </app-header>
 
