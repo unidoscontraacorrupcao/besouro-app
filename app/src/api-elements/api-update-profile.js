@@ -128,7 +128,7 @@ class ApiUpdateProfile extends PolymerElement {
           race: response.race,
           phone: response.phone,
           age: response.age,
-          image: response.image != null ? response.image : `/images/default_avatar.png`
+          image: response.image != null ? response.image : `/images/avatar_default-perfil.png`
         }
       };
     } else {

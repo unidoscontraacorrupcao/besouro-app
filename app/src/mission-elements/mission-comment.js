@@ -3,6 +3,7 @@ import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
+import '../app-elements/app-besouro-api.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class MissionComment extends PolymerElement {
   static get template() {
@@ -52,12 +53,14 @@ class MissionComment extends PolymerElement {
       }
 
     </style>
+    <app-besouro-api id="api"></app-besouro-api>
+
     <div class="card mission-comment">
         <div class="author-photo">
-          <iron-image src="{{comment.ownerPhoto}}" sizing="cover"></iron-image>
+          <iron-image src="{{userPhoto}}" sizing="cover"></iron-image>
         </div>
       <div class="card-content">
-        <h3> {{userName()}} </h3>
+        <h3> {{userName(comment)}} </h3>
         <p> {{comment.comment}} </p>
       </div>
     </div>
@@ -76,12 +79,28 @@ class MissionComment extends PolymerElement {
     }
   }
 
-  userName() {
-    var name = this.comment.user.display_name.split(".")[1];
+  userName(comment) {
+    this.requestPhoto(comment);
+    var name = comment.user.display_name.split(".")[1];
     if (name != undefined)
-      return this.comment.user.display_name.split(".")[1];
+      return comment.user.display_name.split(".")[1];
     else
-      return this.comment.user.name;
+      return comment.user.name;
   }
+
+  requestPhoto(comment) {
+    setTimeout(function(){
+      this.$.api.method = "GET";
+      this.$.api.path = `profiles/${comment.user.id}/`;
+      this.$.api.request().then(function(ajax) {
+        if (ajax.response.image != null) {
+          this.userPhoto = ajax.response.image;
+        } else {
+          this.userPhoto = '/images/avatar_default-thumb.png';
+        }
+      }.bind(this));
+    }.bind(this), 100);
+  }
+
 }
 customElements.define(MissionComment.is, MissionComment);
