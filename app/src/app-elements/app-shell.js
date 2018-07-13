@@ -229,7 +229,7 @@ class AppShell extends PolymerElement {
           <a name="back" class="drawer-item" href="http://www.unidoscontraacorrupcao.org.br" target="_blank">
             Voltar às novas medidas
           </a>
-          <a name="sign_it" href="http://www.unidoscontraacorrupcao.org.br/#assine">
+          <a name="sign_it" href="http://www.unidoscontraacorrupcao.org.br/#assine" target="_blank">
             <span class="drawer-item-block">
               Assine
             </span>
