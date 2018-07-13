@@ -10,19 +10,14 @@ class AcquiredTrophyModal extends PolymerElement {
         display: block;
       }
 
-      confirmation-icon,
-      .confirmation-text {
-        margin: auto;
-        text-align: center;
-      }
-
-      .confirmation-icon {
-        width: 100%;
-        text-align: center;
-      }
-
       .modal-header {
         width: 100%;
+      }
+
+      #trophy-image { margin-top: 35px; }
+      #trophy-image iron-image {
+        width: 70px;
+        height: 70px;
       }
 
       .header-content {
@@ -54,13 +49,15 @@ class AcquiredTrophyModal extends PolymerElement {
         text-align: center;
         color: var(--secondary-text-color);
         font-size: 24px;
+        display: flex;
+        flex-direction: column;
       }
 
       #confirmation-text p {
         font-family: helvetica-neue;
         font-size: 16px;
         color: #333333;
-        margin: 34px auto 40px auto;
+        margin: 15px auto 20px auto;
         width: 90%;
       }
 
@@ -75,8 +72,6 @@ class AcquiredTrophyModal extends PolymerElement {
         height: 64px;
         margin: auto;
         text-align: center;
-        margin-top: 60px;
-        margin-bottom: 60px;
         background-color:#009FE3;
       }
 
@@ -133,12 +128,15 @@ class AcquiredTrophyModal extends PolymerElement {
       </div>
       <div id="confirmation-text">
         <span>Sua participação está rendendo frutos!</span>
+        <div id="trophy-image">
+          <iron-image src="{{trophyData.icon_complete}}" sizing="cover"></iron-image>
+        </div>
         <p>
         {{trophyData.full_description}}
         </p>
       <div class="card-action">
         <div>
-          <a href="#" on-tap="_goToMission" ><span>ver troféus</span></a>
+          <a on-tap="_goToTrophies" ><span>ver troféus</span></a>
         </div>
       </div>
       </div>
@@ -152,8 +150,8 @@ class AcquiredTrophyModal extends PolymerElement {
       trophyData: Object
     }
   }
-  _goToMission() {
-    this.dispatchEvent(new CustomEvent('modal-show-mission', 
+  _goToTrophies() {
+    this.dispatchEvent(new CustomEvent('show-trophies',
       { detail: { mission: this.missionId }}
     ));
   }

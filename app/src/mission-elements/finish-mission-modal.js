@@ -16,7 +16,6 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     <style>
       :host {
         display: block;
-        height: 100vh;
       }
 
       .icon-bg paper-icon-button { margin-top: 3px; }

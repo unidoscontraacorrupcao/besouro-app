@@ -74,7 +74,11 @@ class InboxPage extends PolymerElement {
     </app-dialog>
 
     <app-dialog id="trophyDialog">
-      <acquired-trophy-modal trophy-data={{trophyData}} on-close-modal="_dismissTrophyModal"></acquired-trophy-modal>
+      <acquired-trophy-modal
+        trophy-data={{trophyData}}
+        on-close-modal="_dismissTrophyModal"
+        on-show-trophies="_showTrophies">
+      </acquired-trophy-modal>
     </app-dialog>
 
     <app-header-layout has-scrolling-region="">
@@ -96,7 +100,7 @@ class InboxPage extends PolymerElement {
         <div class="inbox">
           <welcome-card></welcome-card>
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-open-restrict-modal="_openRestrictModal" on-check-user-trophies="_checkUserTrophies"></mission-card>
+            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-open-restrict-modal="_openRestrictModal"></mission-card>
           </template>
         </div>
         <div class="inbox">
@@ -307,8 +311,6 @@ class InboxPage extends PolymerElement {
     }
   }
 
-  _checkUserTrophies() {}
-
   _goToProfile() {
     if(!this.user || Object.keys(this.user).length == 0) {
       this.$.unauthorizedDialog.present();
@@ -316,5 +318,12 @@ class InboxPage extends PolymerElement {
       this.set("route.path", "/profile");
     }
   }
+
+  _showTrophies() {
+    this.set("route.path", "/profile");
+    this.$.trophyDialog.dismiss();
+  }
+
+
 }
 window.customElements.define(InboxPage.is, InboxPage);
