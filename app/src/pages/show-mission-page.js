@@ -378,7 +378,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     </app-scrollable-dialog>
 
     <app-dialog id="acceptedDialog">
-      <accept-mission-modal></accept-mission-modal>
+      <accept-mission-modal on-close-modal="_closeAcceptModal"></accept-mission-modal>
     </app-dialog>
 
     <app-dialog id="rejectedDialog" opened="{{rejectedModal}}">
@@ -429,7 +429,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       <div class="card-action">
         <div>
-          <a id="btnLink"><span id="btnText">{{btnAction}}</span></a>
+          <a><span id="btnText">{{btnAction}}</span></a>
         </div>
       </div>
 
@@ -706,7 +706,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.$.api.path = `missions/${this.data.key}/user-status/${this.user.uid}`;
       this.$.api.request().then(function(ajax) {
         this.set("currentMissionStats", ajax.response.status);
-        this._setActionBtn();
+        setTimeout(this._setActionBtn.bind(this), 100);
         this.hideLoading(true);
       }.bind(this));
     }
@@ -727,7 +727,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     cardAction.style.display = "none";
     missionAccepted.style.display = "none";
     missionFinished.style.display = "none";
-    const link = this.$.btnLink;
+    const link = this.shadowRoot.querySelector(".card-action a");
     link.removeEventListener("tap", this.acceptMissionFunc, false);
     link.removeEventListener("tap", this.finishMissionFunc, false);
 
@@ -816,6 +816,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
   _returnToInbox() { this.set("route.path", "/"); }
   _dismissUnauthorizedModal() {this.$.unauthorizedDialog.dismiss();}
+  _closeAcceptModal() { this.$.acceptedDialog.dismiss(); }
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
     this.set("route.path", "/login");
