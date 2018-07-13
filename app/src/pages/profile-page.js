@@ -487,7 +487,7 @@ class ProfilePage extends PolymerElement {
                 <template id="trophyList" is="dom-repeat" items="{{_trophies}}" as="trophy">
                   <li class="item">
                     <div class="trophy-icon">
-                      <iron-image src="{{trophy.icon_not_started}}" sizing="cover"></iron-image>
+                      <iron-image src="{{trophy.icon}}" sizing="cover"></iron-image>
                     </div>
                     <div class="trophy-name">
                       {{trophy.name}}
@@ -827,6 +827,7 @@ class ProfilePage extends PolymerElement {
 
         this.$.api.path = `users/1/required_trophies/?trophy=${trophyKey}`;
         this.$.api.request().then(function(ajax) {
+
           var requiredTrophies = ajax.response;
           if (requiredTrophies.length == 0)
             allTrophies[dataIndex]["label"] = this._availableTrophy;
@@ -842,7 +843,7 @@ class ProfilePage extends PolymerElement {
 
           else{
             for(let index in requiredTrophies) {
-              if (this.userHavePreReqs(userTrophies, requiredTrophies, index))
+              if (this.userHavePreReqs(userTrophies, requiredTrophies))
                 allTrophies[dataIndex]["label"] = this._availableTrophy;
               else {
                 allTrophies[dataIndex]["label"] = this._blockedTrophy;
@@ -857,13 +858,28 @@ class ProfilePage extends PolymerElement {
         }.bind(this));
       }
       setTimeout(function () {
-        this._trophies = result.data;
+        this._trophies = [];
+        let userIdx;
+        let allIdx;
+        for (userIdx in userTrophies) {
+          for (allIdx in allTrophies) {
+            if(allTrophies[allIdx].key == userTrophies[userIdx].trophy) {
+              if (userTrophies[userIdx].percentage == 100)
+                allTrophies[allIdx].icon = allTrophies[allIdx].icon_complete;
+              else
+                allTrophies[allIdx].icon = allTrophies[allIdx].icon_not_started;
+            }
+            else
+              allTrophies[allIdx].icon = allTrophies[allIdx].icon_not_started;
+}
+        }
+        this._trophies = allTrophies;
       }.bind(this), 400);
-    } else {
+    }
+    else {
       this._toastUnknownError();
     }
   }
-
 
   missionIdFromTrophy(trophy) {
     var reference_link = trophy["reference_link"];
@@ -871,11 +887,15 @@ class ProfilePage extends PolymerElement {
     return missionId;
   }
 
-  userHavePreReqs(userTrophies, requiredTrophies, index) {
-    var filteredTrophies = userTrophies.filter(function(trophy) {
-      return trophy.trophy == requiredTrophies[index].key
-        && trophy.percentage == 100;
-    });
+  userHavePreReqs(userTrophies, requiredTrophies) {
+    let idx;
+    var filteredTrophies = [];
+    for (idx in requiredTrophies) {
+      filteredTrophies.push(userTrophies.filter(function(trophy) {
+        return trophy.trophy == requiredTrophies[idx].key
+          && trophy.percentage == 100;
+      }).filter(el => el.length > 0));
+    }
     return filteredTrophies.length == requiredTrophies.length;
   }
 
@@ -1075,5 +1095,12 @@ class ProfilePage extends PolymerElement {
 
   _dismissBlockedTrophy() { this.$.blockedDialog.dismiss(); }
   _openBlockedTrophyModal() { this.$.blockedDialog.present(); }
+
+  _setTrophyIcon(item) {
+    this.$.api.path = `users/${this._user.uid}/trophies?key=${item.key}/`
+    promise = this.$.api.request().then(function (ajax) {
+    });
+    return promise;
+  }
 }
 window.customElements.define(ProfilePage.is, ProfilePage);
