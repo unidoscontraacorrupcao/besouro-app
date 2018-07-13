@@ -857,7 +857,6 @@ class ProfilePage extends PolymerElement {
           }
         }.bind(this));
       }
-      setTimeout(function () {
         this._trophies = [];
         let userIdx;
         let allIdx;
@@ -874,7 +873,6 @@ class ProfilePage extends PolymerElement {
 }
         }
         this._trophies = allTrophies;
-      }.bind(this), 400);
     }
     else {
       this._toastUnknownError();

@@ -9,6 +9,7 @@ import '../api-elements/api-update-user.js';
 import '../api-elements/api-user.js';
 import '../api-elements/api-user-profile.js';
 import '../api-elements/api-forgot-password.js';
+import '../app-elements/app-besouro-api.js';
 import './sign-up-view.js';
 import './login-view.js';
 import './forgot-password-view.js';
@@ -27,6 +28,7 @@ class LoginController extends PolymerElement {
         }
       </style>
 
+      <app-besouro-api id="api"></app-besouro-api>
       <login-view id="login"
         on-login="_requestLogin",
         on-sign-up="_showSignUp" on-forgot-password="_showForgotPassword"></login-view>
@@ -96,7 +98,11 @@ class LoginController extends PolymerElement {
     const VALIDATION = this._validateLoginForm(form);
     if(VALIDATION.valid) {
       this._login.form = form;
-      this.$.apiLogin.request(form.email, form.password);
+      let base = this.$.api.baseUrl;
+      this.$.api.url = `${base}/reset`;
+      this.$.api.request().then(function() {
+        this.$.apiLogin.request(form.email, form.password);
+      }.bind(this));
     } else {
       this.$.login.exposeErrors(VALIDATION.errors);
       this._toastInvalidFields();
@@ -151,6 +157,7 @@ class LoginController extends PolymerElement {
 
   _onLogin(e, result) {
     if(result.success) {
+      console.log(result);
       this._user.key = result.data.key;
       this.$.apiAuthUser.request(this._user.key);
     } else {
