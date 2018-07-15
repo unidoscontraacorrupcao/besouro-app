@@ -8,7 +8,7 @@ class AppBesouroApi extends PolymerElement {
     return html`
     <iron-ajax
     id="ajax"
-    url={{baseUrl}}/api/v1/{{path}}
+    url="{{baseUrl}}/api/v1/{{path}}"
     body='{{body}}'
     params={{params}}
     headers="{{getHeaders()}}"
@@ -54,6 +54,8 @@ class AppBesouroApi extends PolymerElement {
       this.$.ajax.headers = this.getHeaders();
     else
       this.$.ajax.headers = {};
+    if (this.url == `${this.baseUrl}/reset/`)
+      this.$.ajax.url = `${this.baseUrl}/reset/`;
     return this.$.ajax.generateRequest().completes;
   }
 

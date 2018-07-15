@@ -99,8 +99,8 @@ class LoginController extends PolymerElement {
     if(VALIDATION.valid) {
       this._login.form = form;
       let base = this.$.api.baseUrl;
-      this.$.api.url = `${base}/reset`;
-      this.$.api.request().then(function() {
+      this.$.api.set("url",  `${base}/reset/`);
+      this.$.api.request().then(function(ajax) {
         this.$.apiLogin.request(form.email, form.password);
       }.bind(this));
     } else {
