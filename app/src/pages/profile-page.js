@@ -868,9 +868,6 @@ class ProfilePage extends PolymerElement {
         if (requiredTrophies.length == 0)
           resolve(this.setTrophyToAvailable(allTrophies, dataIndex));
 
-        if (requiredTrophies.length > userTrophies.length)
-          resolve(this.setTrophyToBlocked(allTrophies, dataIndex));
-
         else {
           for(let index in requiredTrophies) {
             if (this.userHavePreReqs(userTrophies, requiredTrophies))
