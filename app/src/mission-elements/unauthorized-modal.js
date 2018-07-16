@@ -75,8 +75,8 @@ class UnauthorizedModal extends PolymerElement {
         height: 64px;
         margin: auto;
         text-align: center;
-        margin-top: 60px;
-        margin-bottom: 60px;
+        margin-top: 45px;
+        margin-bottom: 45px;
         background-color:#009FE3;
       }
 
@@ -105,6 +105,13 @@ class UnauthorizedModal extends PolymerElement {
         bottom: 0;
         text-align: center;
       }
+      .icon-header #closeModal {
+        position: absolute;
+        right: 0;
+        top: -15px;
+        color: white;
+        padding: 10px;
+      }
 
       .icon-header paper-icon-button { padding: 0; }
 
@@ -123,6 +130,7 @@ class UnauthorizedModal extends PolymerElement {
         <div id="header-text"><span>acesso restrito</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:unauthorized"></paper-icon-button>
+          <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
         </div>
       </div>
       <div id="confirmation-text">
@@ -130,13 +138,11 @@ class UnauthorizedModal extends PolymerElement {
         <p>
           Cadastre-se no app e aproveite todos os nossos recursos, sem limites!
         </p>
-      <div class="card-action">
-        <div>
-          <a on-tap="_goToRegister" ><span>cadastre-se</span></a>
+        <div class="card-action">
+          <div>
+            <a on-tap="_goToRegister" ><span>login</span></a>
+          </div>
         </div>
-      </div>
-
-        <paper-button on-tap="_dismiss">fechar</paper-button>
       </div>
     </div>
 `;
