@@ -890,10 +890,13 @@ class ProfilePage extends PolymerElement {
     let idx;
     var filteredTrophies = [];
     for (idx in requiredTrophies) {
-      filteredTrophies.push(userTrophies.filter(function(trophy) {
+      var filtered = (userTrophies.filter(function(trophy) {
         return trophy.trophy == requiredTrophies[idx].key
           && trophy.percentage == 100;
-      }).filter(el => el.length > 0));
+      }));
+
+      if (filtered.length > 0)
+        filteredTrophies.push(filtered);
     }
     return filteredTrophies.length == requiredTrophies.length;
   }
