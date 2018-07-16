@@ -386,7 +386,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
-    <app-actions on-go-to-inbox="_returnToInbox"></app-actions>
+    <app-actions on-go-to-inbox="_returnToInbox" on-go-to-profile="_goToProfile"></app-actions>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
     </app-dialog>
@@ -822,6 +822,14 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
     this.set("route.path", "/login");
+  }
+
+  _goToProfile() {
+    if(!this.user || Object.keys(this.user).length == 0) {
+      this.$.unauthorizedDialog.present();
+    } else {
+      this.set("route.path", "/profile");
+    }
   }
 }
 window.customElements.define(ShowMissionPage.is, ShowMissionPage);
