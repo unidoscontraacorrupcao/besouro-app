@@ -63,8 +63,6 @@ class InboxPage extends PolymerElement {
         background-color: var(--default-primary-color);
         border-radius: 50%;
       }
-  }
-  }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -75,7 +73,7 @@ class InboxPage extends PolymerElement {
 
     <app-dialog id="trophyDialog">
       <acquired-trophy-modal
-        trophy-data={{trophyData}}
+        trophy-data="{{trophyData}}"
         on-close-modal="_dismissTrophyModal"
         on-show-trophies="_showTrophies">
       </acquired-trophy-modal>

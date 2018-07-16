@@ -6,6 +6,7 @@ import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/app-layout/app-grid/app-grid-style.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 
 import '../trophy-elements/blocked-mission-modal.js';
 import '../api-elements/api-user-profile.js';
@@ -271,6 +272,21 @@ class ProfilePage extends PolymerElement {
         .footer-edit iron-icon {
           --iron-icon-stroke-color: var(--secondary-text-color);
         }
+
+      #loading {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%);
+      }
+
+      paper-spinner {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+        background-color: var(--default-primary-color);
+        border-radius: 50%;
+      }
       </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -483,6 +499,9 @@ class ProfilePage extends PolymerElement {
               </div>
             </div>
             <div id="trophies">
+              <div id="loading">
+                <paper-spinner active=""></paper-spinner>
+              </div>
               <ul class="app-grid">
                 <template id="trophyList" is="dom-repeat" items="{{_trophies}}" as="trophy">
                   <li class="item">
@@ -822,61 +841,46 @@ class ProfilePage extends PolymerElement {
     if(result.success) {
       var userTrophies = this._data;
       var allTrophies = result.data;
+      var promises = [];
       for(let dataIndex in allTrophies) {
-        var trophyKey = allTrophies[dataIndex].key;
 
-        this.$.api.path = `users/1/required_trophies/?trophy=${trophyKey}`;
-        this.$.api.request().then(function(ajax) {
-
-          var requiredTrophies = ajax.response;
-          if (requiredTrophies.length == 0)
-            allTrophies[dataIndex]["label"] = this._availableTrophy;
-
-          if (requiredTrophies.length > userTrophies.length) {
-            allTrophies[dataIndex]["label"] = this._blockedTrophy;
-            var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
-            this.$.api.path = `missions/${mid}`;
-            this.$.api.request().then(function (ajax) {
-              allTrophies[dataIndex]["name"] = ajax.response.title;
-            }.bind(this));
-          }
-
-          else{
-            for(let index in requiredTrophies) {
-              if (this.userHavePreReqs(userTrophies, requiredTrophies))
-                allTrophies[dataIndex]["label"] = this._availableTrophy;
-              else {
-                allTrophies[dataIndex]["label"] = this._blockedTrophy;
-                var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
-                this.$.api.path = `missions/${mid}`;
-                this.$.api.request().then(function (ajax) {
-                  allTrophies[dataIndex]["name"] = ajax.response.title;
-                }.bind(this));
-              }
-            }
-          }
+        var promise = new Promise(function(resolve, reject){
+          var trophyKey = allTrophies[dataIndex].key;
+          resolve(this.setTrophyStatus(allTrophies, dataIndex, userTrophies, trophyKey));
         }.bind(this));
+        promises.push(promise);
       }
-        this._trophies = [];
-        let userIdx;
-        let allIdx;
-        for (userIdx in userTrophies) {
-          for (allIdx in allTrophies) {
-            if(allTrophies[allIdx].key == userTrophies[userIdx].trophy) {
-              if (userTrophies[userIdx].percentage == 100)
-                allTrophies[allIdx].icon = allTrophies[allIdx].icon_complete;
-              else
-                allTrophies[allIdx].icon = allTrophies[allIdx].icon_not_started;
-            }
-            else
-              allTrophies[allIdx].icon = allTrophies[allIdx].icon_not_started;
-}
-        }
-        this._trophies = allTrophies;
+      Promise.all(promises).then(function(trophies) {
+        this.setTrophiesBadges(trophies, userTrophies);
+        this.hideLoading();
+      }.bind(this));
     }
     else {
       this._toastUnknownError();
     }
+  }
+
+  setTrophyStatus(allTrophies, dataIndex, userTrophies, trophyKey) {
+    return new Promise(function(resolve, reject){
+      this.$.api.path = `users/1/required_trophies/?trophy=${trophyKey}`;
+      this.$.api.request().then(function(ajax) {
+        var requiredTrophies = ajax.response;
+        if (requiredTrophies.length == 0)
+          resolve(this.setTrophyToAvailable(allTrophies, dataIndex));
+
+        if (requiredTrophies.length > userTrophies.length)
+          resolve(this.setTrophyToBlocked(allTrophies, dataIndex));
+
+        else {
+          for(let index in requiredTrophies) {
+            if (this.userHavePreReqs(userTrophies, requiredTrophies))
+              resolve(this.setTrophyToAvailable(allTrophies, dataIndex));
+            else
+              resolve(this.setTrophyToBlocked(allTrophies, dataIndex));
+          }
+        }
+      }.bind(this));
+    }.bind(this));
   }
 
   missionIdFromTrophy(trophy) {
@@ -897,8 +901,47 @@ class ProfilePage extends PolymerElement {
     return filteredTrophies.length == requiredTrophies.length;
   }
 
+  getMissionName(mid) {
+    return new Promise(function (resolve, reject) {
+      this.$.api.path = `missions/${mid}`;
+      this.$.api.request().then(function (ajax) {
+        resolve(ajax.response.title);
+      }.bind(this));
+    }.bind(this));
+  }
 
+  setTrophyToBlocked(allTrophies, dataIndex) {
+    allTrophies[dataIndex]["label"] = this._blockedTrophy;
+    var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
+    return this.getMissionName(mid)
+      .then(function(value){
+        allTrophies[dataIndex]["name"] = value;
+        return allTrophies[dataIndex];
+      });
+  }
 
+  setTrophyToAvailable(allTrophies, dataIndex) {
+    allTrophies[dataIndex]["label"] = this._availableTrophy;
+    return allTrophies[dataIndex];
+  }
+
+    setTrophiesBadges(trophies, userTrophies) {
+      let index;
+      for (index in trophies) {
+        let _index;
+        trophies[index].icon = trophies[index].icon_not_started;
+        var trophy = trophies[index];
+        for (_index in userTrophies) {
+          var userTrophy = userTrophies[_index];
+          if (userTrophy.trophy == trophy.key)
+            if (userTrophy.percentage == 100)
+              trophies[index].icon = trophies[index].icon_complete;
+          else
+            trophies[index].icon = trophies[index].icon_not_started;
+        }
+      }
+      this._trophies = trophies;
+    }
 
   _updateForm(user, displayName) {
     let form = {
@@ -1094,11 +1137,9 @@ class ProfilePage extends PolymerElement {
   _dismissBlockedTrophy() { this.$.blockedDialog.dismiss(); }
   _openBlockedTrophyModal() { this.$.blockedDialog.present(); }
 
-  _setTrophyIcon(item) {
-    this.$.api.path = `users/${this._user.uid}/trophies?key=${item.key}/`
-    promise = this.$.api.request().then(function (ajax) {
-    });
-    return promise;
+  hideLoading() {
+      this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
   }
+
 }
 window.customElements.define(ProfilePage.is, ProfilePage);
