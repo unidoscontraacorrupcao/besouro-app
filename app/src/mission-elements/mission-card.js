@@ -365,8 +365,6 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         <a href="#" id="btnLink"><span id="btnText">{{btnAction}}</span></a>
       </div>
 
-
-
       <div class="card-footer">
         <div class="stats">
           <div>
@@ -493,6 +491,8 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
   _setActionBtn() {
     const cardAction = this.shadowRoot.querySelector(".card-action");
     const link = this.$.btnLink;
+    this.set('btnAction', '');
+    this._unsetCardImageGradient();
     link.removeEventListener("tap", this.acceptMissionFunc, false);
     link.removeEventListener("tap", this.finishMissionFunc, false);
 
@@ -553,6 +553,22 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
         sizedImgDiv.style.backgroundImage = `linear-gradient(to right,${firstColor}, ${secondColor}), ${imageArrayUrl}`;
     }
   }
+
+  _unsetCardImageGradient() {
+      this.shadowRoot.querySelector(".card-blocked").style.display = "none";
+      this.shadowRoot.querySelector(".mission-started").style.display = "none";
+      var image = this.shadowRoot.querySelector("#card-image iron-image");
+      var sizedImgDiv = image.shadowRoot.querySelector("#sizedImgDiv")
+      var backgroundImage = sizedImgDiv.style.backgroundImage;
+      var imageAsArray = backgroundImage.split(",");
+      if (imageAsArray.length == 0)
+        sizedImgDiv.style.backgroundImage = `${imageAsArray[0]}`;
+    else {
+        var imageArrayUrl = imageAsArray[imageAsArray.length - 1]
+        sizedImgDiv.style.backgroundImage = `${imageArrayUrl}`;
+    }
+  }
+
 
   missionOwner() {
     if (!this.mission.owner) return;
