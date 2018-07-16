@@ -703,6 +703,7 @@ class ProfilePage extends PolymerElement {
     const VALIDATION = this._validateForm();
     if(VALIDATION.valid) {
       this.$.apiUpdateProfile.request(this._user.key, this._user.uid, this._form);
+      this._switchInfo();
     } else {
       this._errors = VALIDATION.errors;
       this._toastInvalidFields();
