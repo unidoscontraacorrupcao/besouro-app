@@ -269,7 +269,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
   _sendReceipts() {
     var formData = new FormData();
     formData.append("userName", this.user.displayName);
-    formData.append("userEmail", "david@mail.com");
+    formData.append("userEmail", this.user.email);
     formData.append("uid", this.user.uid);
     formData.append("status", "pending");
     formData.append("description", this.description);
@@ -282,8 +282,11 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
       body: formData
     };
     this.$.api.user = this.user;
-    this.$.api.xhrRequest().then(function(response){
+    this.$.api.xhrRequest().then(function(response) {
         this._dismiss();
+        this.$.input.value = '';
+        this.set('description', '');
+        this.set('fileName', 'Nenhum arquivo selecionado');
     }.bind(this));
   }
 
