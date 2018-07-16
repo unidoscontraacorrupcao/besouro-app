@@ -191,9 +191,6 @@ class ProfilePage extends PolymerElement {
           margin: 4vh auto 0;
           border-radius: 0;
         }
-        input#image {
-          display: none;
-        }
         paper-button.flex-button {
           width: 100%;
           margin: 0 auto;
@@ -287,6 +284,18 @@ class ProfilePage extends PolymerElement {
         background-color: var(--default-primary-color);
         border-radius: 50%;
       }
+      .file-upload {
+        position: relative;
+      }
+      .file-upload input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 100;
+      }
       </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -369,12 +378,14 @@ class ProfilePage extends PolymerElement {
               </div>
               <div class="form" id="form">
                 <div class="fields">
-                  <input type="file" id="image" on-change="_extractPhoto" accept=".jpg, .jpeg, .png">
-                  <paper-button class="flex-button" on-tap="_requestPhoto">Atualizar foto de perfil</paper-button>
-                  <paper-input-error
-                    hidden$=[[!_errors.image]] invalid>
-                    {{_errors.image}}
-                  </paper-input-error>
+                  <div class="file-upload">
+                    <input type="file" id="image" on-change="_extractPhoto" accept=".jpg, .jpeg, .png">
+                    <paper-button class="flex-button" on-tap="_requestPhoto">Atualizar foto de perfil</paper-button>
+                    <paper-input-error
+                      hidden$=[[!_errors.image]] invalid>
+                      {{_errors.image}}
+                    </paper-input-error>
+                  </div>
                   <paper-input id="displayName"
                     label="Nome"
                     value="{{_form.displayName}}"
@@ -702,10 +713,6 @@ class ProfilePage extends PolymerElement {
     return { valid: true };
   }
 
-  _requestPhoto() {
-    this.$.image.click();
-  }
-
   _extractPhoto(e) {
     let photo = e.target.files[0];
     if(photo) {
@@ -714,11 +721,11 @@ class ProfilePage extends PolymerElement {
       let apiUpdateProfile = this.$.apiUpdateProfile
       let key = this._user.key;
       let uid = this._user.uid;
+      apiUpdateProfile.imageRequest(key, uid, photo);
       reader.onload = function(e) {
         avatar.src = e.target.result;
       }
       reader.readAsDataURL(photo);
-      apiUpdateProfile.imageRequest(key, uid, photo);
     }
   }
 
