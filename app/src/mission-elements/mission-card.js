@@ -462,7 +462,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       if(ajax.response.image) {
         this.set('candidatePhoto', ajax.response.image);
       } else {
-        this.set('candidatePhoto', '/images/avatar_default-thumb.png');
+        this.set('candidatePhoto', '/images/generic/avatar_default-thumb.png');
       }
     }.bind(this));
   }

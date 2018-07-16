@@ -96,7 +96,7 @@ class MissionComment extends PolymerElement {
         if (ajax.response.image != null) {
           this.userPhoto = ajax.response.image;
         } else {
-          this.userPhoto = '/images/avatar_default-thumb.png';
+          this.userPhoto = '/images/generic/avatar_default-thumb.png';
         }
       }.bind(this));
     }.bind(this), 100);

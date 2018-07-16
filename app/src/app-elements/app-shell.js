@@ -187,7 +187,7 @@ class AppShell extends PolymerElement {
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
           <iron-image src="{{user.photoURL}}" sizing="cover" hidden$="[[!user.uid]]"></iron-image>
-          <iron-image src="/images/avatar_default-menu.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
+      <iron-image src="/images/generic/avatar_default-menu.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
           <div main-title>
             <div class="username" hidden$="[[!user.uid]]">
               {{user.displayName}}

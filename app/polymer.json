@@ -2,7 +2,8 @@
   "entrypoint": "index.html",
   "shell": "src/app-elements/app-shell.js",
   "sources": [
-    "images/**/*"
+    "images/**/*",
+    "fonts/**/*"
   ],
   "extraDependencies": [
     "manifest.json",

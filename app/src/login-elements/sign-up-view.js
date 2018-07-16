@@ -120,7 +120,7 @@ class SignUpView extends PolymerElement {
       </style>
       <div class="fill">
         <div class="image">
-          <iron-image sizing="contain" src="/images/logo.png"></iron-image>
+      <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
         </div>
         <div class="main-title">
           Cadastre-se
