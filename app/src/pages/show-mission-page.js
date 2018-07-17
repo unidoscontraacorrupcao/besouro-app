@@ -90,10 +90,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         height: 45px;
         z-index: 2;
       }
-      
+
       app-header[shadow] .tall .actions,
-      app-header[shadow] .tall .timing { 
-        display: none; 
+      app-header[shadow] .tall .timing {
+        display: none;
       }
 
       app-header[shadow] paper-icon-button[icon="app:arrow-back"] {
@@ -403,7 +403,10 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     </app-scrollable-dialog>
 
     <app-dialog id="acceptedDialog">
-      <accept-mission-modal on-close-modal="_closeAcceptModal"></accept-mission-modal>
+      <accept-mission-modal
+        redirect-to-mission="[[_disableModalRedirect()]]"
+        on-close-modal="_closeAcceptModal">
+      </accept-mission-modal>
     </app-dialog>
 
     <app-dialog id="rejectedDialog" opened="{{rejectedModal}}">
@@ -505,7 +508,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
         </template>
 
     </app-header-layout>
-    
+
     <template is="dom-if" if="{{!mission.id}}">
       <div id="inboxLoading">
           <div class="progress">
@@ -831,5 +834,7 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       this.set("route.path", "/profile");
     }
   }
+
+  _disableModalRedirect() { return false; }
 }
 window.customElements.define(ShowMissionPage.is, ShowMissionPage);

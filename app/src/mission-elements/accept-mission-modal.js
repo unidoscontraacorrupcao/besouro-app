@@ -151,13 +151,20 @@ class AcceptMissionModal extends PolymerElement {
   static get is() { return 'accept-mission-modal'; }
   static get properties() {
     return {
-      missionId: String
+      missionId: String,
+      redirectToMission: {
+        type: Boolean,
+        value: true
     }
   }
+  }
   _goToMission() {
-    this.dispatchEvent(new CustomEvent('modal-show-mission',
-      { detail: { mission: this.missionId }}
-    ));
+    if (this.redirectToMission)
+      this.dispatchEvent(new CustomEvent('modal-show-mission',
+        { detail: { mission: this.missionId }}));
+    else
+      this.dispatchEvent(new CustomEvent('close-modal',
+        { detail: {}}));
   }
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
