@@ -72,7 +72,7 @@ class ApiUpdateProfile extends PolymerElement {
       let formData = new FormData();
       formData.append('image', image);
       this.$.imageAjax.body = formData;
-      this.$.imageAjax.generateRequest();
+      return this.$.imageAjax.generateRequest().completes;
     } else {
       this._dispatch(validation.errors);
     }

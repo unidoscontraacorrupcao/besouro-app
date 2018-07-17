@@ -270,11 +270,16 @@ class ProfilePage extends PolymerElement {
           --iron-icon-stroke-color: var(--secondary-text-color);
         }
 
-      #loading {
+      #loading,
+      #photoload {
         position: absolute;
         top: 50%;
         right: 50%;
         transform: translate(50%);
+      }
+
+      #photoload {
+        display: none;
       }
 
       paper-spinner {
@@ -321,6 +326,9 @@ class ProfilePage extends PolymerElement {
                 </div>
               </div>
             </h1>
+            <div id="photoload">
+              <paper-spinner active=""></paper-spinner>
+            </div>
             <paper-icon-button class="right" icon="app:edit-profile" on-tap="_switchInfo"></paper-icon-button>
             <iron-image class="image" id="avatar" src="{{_user.photoURL}}" sizing="cover"></iron-image>
             <div class="image-filter"></div>
@@ -380,7 +388,7 @@ class ProfilePage extends PolymerElement {
                 <div class="fields">
                   <div class="file-upload">
                     <input type="file" id="image" on-change="_extractPhoto" accept=".jpg, .jpeg, .png">
-                    <paper-button class="flex-button" on-tap="_requestPhoto">Atualizar foto de perfil</paper-button>
+                    <paper-button class="flex-button" on-tap="">Atualizar foto de perfil</paper-button>
                     <paper-input-error
                       hidden$=[[!_errors.image]] invalid>
                       {{_errors.image}}
@@ -717,17 +725,15 @@ class ProfilePage extends PolymerElement {
   _extractPhoto(e) {
     let photo = e.target.files[0];
     if(photo) {
-      let reader = new FileReader();
-      let avatar = this.$.avatar;
+      this.photoLoading(true);
       let apiUpdateProfile = this.$.apiUpdateProfile
       let key = this._user.key;
       let uid = this._user.uid;
-      apiUpdateProfile.imageRequest(key, uid, photo);
-      reader.onload = function(e) {
-        avatar.src = e.target.result;
-      }
-      reader.readAsDataURL(photo);
+      apiUpdateProfile.imageRequest(key, uid, photo).then(function(ajax) {
+        this.photoLoading(false);
+      }.bind(this));
     }
+      
   }
 
   _onRouteChanged() {
@@ -1146,7 +1152,15 @@ class ProfilePage extends PolymerElement {
   _openBlockedTrophyModal() { this.$.blockedDialog.present(); }
 
   hideLoading() {
-      this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
+    this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
+  }
+
+  photoLoading(load) {
+    if(load) {
+      this.shadowRoot.querySelector("#photoload").setAttribute("style", "display:block");
+    } else {
+      this.shadowRoot.querySelector("#photoload").setAttribute("style", "display:none");
+    }
   }
 
 }
