@@ -270,8 +270,7 @@ class ProfilePage extends PolymerElement {
           --iron-icon-stroke-color: var(--secondary-text-color);
         }
 
-      #loading,
-      #photoload {
+      #loading {
         position: absolute;
         top: 50%;
         right: 50%;
@@ -280,6 +279,10 @@ class ProfilePage extends PolymerElement {
 
       #photoload {
         display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
 
       paper-spinner {
@@ -302,7 +305,7 @@ class ProfilePage extends PolymerElement {
         z-index: 100;
       }
       .button-disclaimer {
-        margin: 0;
+        margin: 0 0 5px 0;
         font-size: 12px;
         text-align: center;
       }
