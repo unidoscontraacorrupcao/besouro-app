@@ -937,16 +937,22 @@ class ProfilePage extends PolymerElement {
 
   setTrophyToBlocked(allTrophies, dataIndex) {
     allTrophies[dataIndex]["label"] = this._blockedTrophy;
-    var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
-    return this.getMissionName(mid)
-      .then(function(value){
-        allTrophies[dataIndex]["name"] = value;
-        return allTrophies[dataIndex];
-      });
+    if (!allTrophies[dataIndex]["complete_on_required_satisfied"]){
+      var mid = this.missionIdFromTrophy(allTrophies[dataIndex]);
+      return this.getMissionName(mid)
+        .then(function(value){
+          allTrophies[dataIndex]["name"] = value;
+          return allTrophies[dataIndex];
+        });
+    }
+    return allTrophies[dataIndex];
   }
 
   setTrophyToAvailable(allTrophies, dataIndex) {
-    allTrophies[dataIndex]["label"] = this._availableTrophy;
+    if (!allTrophies[dataIndex]["complete_on_required_satisfied"])
+      allTrophies[dataIndex]["label"] = this._availableTrophy;
+    else
+      allTrophies[dataIndex]["label"] = '';
     return allTrophies[dataIndex];
   }
 

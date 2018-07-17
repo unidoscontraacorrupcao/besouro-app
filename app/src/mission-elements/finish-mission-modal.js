@@ -286,7 +286,6 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
         this._dismiss();
         this.$.input.value = '';
         this.set('description', '');
-        this.set('fileName', 'Nenhum arquivo selecionado');
     }.bind(this));
   }
 
