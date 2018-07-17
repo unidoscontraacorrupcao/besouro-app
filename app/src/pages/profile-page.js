@@ -301,6 +301,11 @@ class ProfilePage extends PolymerElement {
         opacity: 0;
         z-index: 100;
       }
+      .button-disclaimer {
+        margin: 0;
+        font-size: 12px;
+        text-align: center;
+      }
       </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -389,6 +394,9 @@ class ProfilePage extends PolymerElement {
                   <div class="file-upload">
                     <input type="file" id="image" on-change="_extractPhoto" accept=".jpg, .jpeg, .png">
                     <paper-button class="flex-button" on-tap="">Atualizar foto de perfil</paper-button>
+                    <p class="button-disclaimer">
+                      Se for tirar uma foto nova, deite o celular.
+                    </p>
                     <paper-input-error
                       hidden$=[[!_errors.image]] invalid>
                       {{_errors.image}}
