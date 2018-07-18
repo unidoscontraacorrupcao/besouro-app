@@ -44,6 +44,19 @@ class ApiAuthUser extends PolymerElement {
     }
   }
 
+  requestAsPromise(token) {
+    let validation = this._validate(token);
+    if(validation.isValid) {
+      this._headers = {
+        "authorization": `Token ${token}`
+      };
+      return this.$.ajax.generateRequest().completes;
+    } else {
+      this._dispatch(validation.errors);
+    }
+  }
+
+
   _validate(token) {
     // TODO: Create validation
     return { isValid: true };

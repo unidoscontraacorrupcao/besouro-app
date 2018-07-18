@@ -56,6 +56,8 @@ class AppBesouroApi extends PolymerElement {
       this.$.ajax.headers = {};
     if (this.url == `${this.baseUrl}/reset/`)
       this.$.ajax.url = `${this.baseUrl}/reset/`;
+    if (this.url == `${this.baseUrl}/rest-auth/facebook/`)
+      this.$.ajax.url = `${this.baseUrl}/rest-auth/facebook/`;
     return this.$.ajax.generateRequest().completes;
   }
 

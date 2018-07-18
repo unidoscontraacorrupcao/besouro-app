@@ -31,6 +31,7 @@ class LoginController extends PolymerElement {
       <app-besouro-api id="api"></app-besouro-api>
       <login-view id="login"
         on-login="_requestLogin",
+        on-auth-facebook="_requestFacebookLogin"
         on-sign-up="_showSignUp" on-forgot-password="_showForgotPassword"></login-view>
 
       <sign-up-view id="signUp"
@@ -157,7 +158,6 @@ class LoginController extends PolymerElement {
 
   _onLogin(e, result) {
     if(result.success) {
-      console.log(result);
       this._user.key = result.data.key;
       this.$.apiAuthUser.request(this._user.key);
     } else {
@@ -412,6 +412,68 @@ class LoginController extends PolymerElement {
 
   _getEmptyForgotPassword() {
     return {};
+  }
+
+
+  _initializeFBSDK() {
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId            : '270821273677451',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v3.0'
+      });
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  }
+
+  _requestFacebookLogin() {
+    // get user fb authorization
+    window.FB.login(function(response) {
+      if (response.authResponse) {
+        let accessToken = response.authResponse.accessToken;
+        // get user fb data
+        FB.api('/v3.0/me', function(response) {
+          var fbProfileData = response;
+          let baseUrl = this.$.api.baseUrl;
+          //get django access token.
+          this.$.api.url = `${baseUrl}/rest-auth/facebook/`;
+          this.$.api.method = "POST";
+          this.$.api.body = {"access_token": accessToken};
+          this.$.api.request().then(function(ajax){
+            var userToken = ajax.response.key;
+            //get user id using user token.
+            this.$.apiAuthUser.requestAsPromise(userToken)
+              .then(function(ajax){
+                var result = {}
+                //set user data necessary to login on besouro app.
+                result["success"] = true;
+                result["data"] = {};
+                result["data"]["displayName"] = fbProfileData.name;
+                result["data"]["email"] = fbProfileData.email;
+                result["data"]["isAdmin"] = false;
+                this._user.uid = ajax.response.pk;
+                this._user.key = userToken;
+                this._onUser({}, result);
+              }.bind(this));
+          }.bind(this));
+        }.bind(this), {fields: "picture, email, name"});
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    }.bind(this), {"scope": "email,public_profile"});
+  }
+
+  ready() {
+    super.ready();
+    this._initializeFBSDK();
   }
 }
 
