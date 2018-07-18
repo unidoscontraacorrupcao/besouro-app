@@ -431,15 +431,21 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
   constructor() { super(); }
 
-  _goToMission() {
-    this.dispatchEvent(new CustomEvent('show-mission', { detail: { mission: this.mission.id } }))
+  _goToMission(e) {
+    if (!(this.currentMissionStats == "blocked"))
+      this.dispatchEvent(new CustomEvent('show-mission',
+        { detail: { mission: this.mission.id } }));
   }
+
   _modalGoToMission() {
-    this.dispatchEvent(new CustomEvent('modal-show-mission', { detail: { mission: this.mission.id } }))
+    this.dispatchEvent(new CustomEvent('modal-show-mission',
+      { detail: { mission: this.mission.id } }));
     this.$.acceptedDialog.dismiss();
   }
 
-  _reloadInbox() { this.dispatchEvent(new CustomEvent('reload-inbox', { detail: {} })) }
+  _reloadInbox() {
+    this.dispatchEvent(new CustomEvent('reload-inbox', { detail: {} }));
+  }
 
   setMissionData(mission) {
     this._setMissionStats();
@@ -497,8 +503,6 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
     link.removeEventListener("tap", this.finishMissionFunc, false);
 
     if (this.currentMissionStats == "blocked") {
-      var goToMissionBtn = this.shadowRoot.querySelector(".go");
-      goToMissionBtn.disabled = true;
       const cardBlocked = this.shadowRoot.querySelector(".card-blocked");
       this._setCardImageGradient("rgba(49,39,131,0.85)", "rgba(49,39,131,0.85)", cardBlocked);
       this.set('btnAction', 'missão bloqueada');
