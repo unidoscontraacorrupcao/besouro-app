@@ -343,13 +343,15 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       .card-action div { padding-top: 15px; }
 
-    #mission-finished, #mission-accepted {
+    #mission-finished, #mission-accepted, #mission-blocked {
       display: none;
       flex-direction: column;
     }
 
     #mission-finished span,
-    #mission-finished paper-icon-button {
+    #mission-finished paper-icon-button,
+    #mission-blocked span,
+    #mission-blocked  paper-icon-button {
       color: rgba(183,184,183,1);
     }
 
@@ -465,10 +467,21 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
 
       <div class="card-action" id="mission-finished">
         <div>
-          <paper-icon-button disabled icon="app:accept-mission-intern"></paper-icon-button>
+          <paper-icon-button
+            disabled
+            icon="app:accept-mission-intern">
+          </paper-icon-button>
         </div>
         <span>missão concluida</span>
       </div>
+
+      <div class="card-action" id="mission-blocked">
+        <div>
+          <paper-icon-button disabled icon="app:mission-blocked"></paper-icon-button>
+        </div>
+        <span>missão bloqueada</span>
+      </div>
+
 
       <div class="card-action" id="mission-accepted">
         <div>
@@ -750,12 +763,18 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     const cardAction = this.shadowRoot.querySelector(".card-action");
     const missionAccepted = this.shadowRoot.querySelector("#mission-accepted");
     const missionFinished = this.shadowRoot.querySelector("#mission-finished");
+    const missionBlocked = this.shadowRoot.querySelector("#mission-blocked");
     cardAction.style.display = "none";
     missionAccepted.style.display = "none";
     missionFinished.style.display = "none";
     const link = this.shadowRoot.querySelector(".card-action a");
     link.removeEventListener("tap", this.acceptMissionFunc, false);
     link.removeEventListener("tap", this.finishMissionFunc, false);
+
+    if (this.currentMissionStats == "blocked") {
+      cardAction.style.display = "none";
+      missionBlocked.style.display = "flex";
+    }
 
     if (this.currentMissionStats == "realized") {
       cardAction.style.display = "none";
