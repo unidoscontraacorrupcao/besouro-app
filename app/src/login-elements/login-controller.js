@@ -445,49 +445,55 @@ class LoginController extends PolymerElement {
         FB.api('/v3.0/me', function(response) {
           var fbProfileData = response;
           let baseUrl = this.$.api.baseUrl;
-          //get django access token.
-          this.$.api.url = `${baseUrl}/rest-auth/facebook/`;
-          this.$.api.method = "POST";
-          this.$.api.body = {"access_token": accessToken};
-          this.$.api.request().then(function(ajax){
-            var userToken = ajax.response.key;
-            //get user id using user token.
-            this._user.key = userToken;
-            this.$.apiAuthUser.requestAsPromise(userToken)
-              .then(function(ajax){
-                var user_id = ajax.response.pk;
 
-                //fetch user facebook photo and store as a blob
-                let _fbPhotoUrl = `https://graph.facebook.com/${fbProfileData.id}/picture?type=large`;
-                fetch(_fbPhotoUrl).then(function(response){
-                  return response.blob();
-                })
-                // send facebook photo to django. If we need to store more user
-                // infos on ej, use this promise.
-                .then(function(blob){
-                  var fbPhoto = new File([blob], "facebook_photo.jpeg");
-                  var formData = new FormData();
-                  formData.append("image", fbPhoto);
-                  this.$.api.user = {"key": userToken};
-                  this.$.api.xhrData = { method: "put",
-                    url: `${this.$.api.baseUrl}/api/v1/profiles/${user_id}/`,
-                    body: formData };
-                  return this.$.api.xhrRequest();
-                }.bind(this))
-                  .then(function(){
-                    this._user.email = fbProfileData.email;
-                    this.$.api.user = {"key": userToken};
-                    this.$.api.method = "PATCH";
-                    this.$.api.body = {"email": fbProfileData.email};
-                    this.$.api.path = `users/${user_id}/`;
-                    this.$.api.url = `${this.$.api.baseUrl}/api/v1/${this.$.api.path}`;
-                    return this.$.api.request();
-                  }.bind(this))
-                .then(function(ajax){
-                  this._user.uid = user_id;
-                }.bind(this));
+          // reset csrf token
+          let base = this.$.api.baseUrl;
+          this.$.api.set("url",  `${base}/reset/`);
+          this.$.api.request()
+            .then(function(ajax) {
+              this.$.api.url = `${baseUrl}/rest-auth/facebook/`;
+              this.$.api.method = "POST";
+              this.$.api.body = {"access_token": accessToken};
+              this.$.api.request().then(function(ajax) {
+                var userToken = ajax.response.key;
+                //get user id using user token.
+                this._user.key = userToken;
+                this.$.apiAuthUser.requestAsPromise(userToken)
+                  .then(function(ajax){
+                    var user_id = ajax.response.pk;
+
+                    //fetch user facebook photo and store as a blob
+                    let _fbPhotoUrl = `https://graph.facebook.com/${fbProfileData.id}/picture?type=large`;
+                    fetch(_fbPhotoUrl).then(function(response){
+                      return response.blob();
+                    })
+                    // send facebook photo to django. If we need to store more user
+                    // infos on ej, use this promise.
+                      .then(function(blob){
+                        var fbPhoto = new File([blob], "facebook_photo.jpeg");
+                        var formData = new FormData();
+                        formData.append("image", fbPhoto);
+                        this.$.api.user = {"key": userToken};
+                        this.$.api.xhrData = { method: "put",
+                          url: `${this.$.api.baseUrl}/api/v1/profiles/${user_id}/`,
+                          body: formData };
+                        return this.$.api.xhrRequest();
+                      }.bind(this))
+                      .then(function(){
+                        this._user.email = fbProfileData.email;
+                        this.$.api.user = {"key": userToken};
+                        this.$.api.method = "PATCH";
+                        this.$.api.body = {"email": fbProfileData.email};
+                        this.$.api.path = `users/${user_id}/`;
+                        this.$.api.url = `${this.$.api.baseUrl}/api/v1/${this.$.api.path}`;
+                        return this.$.api.request();
+                      }.bind(this))
+                      .then(function(ajax){
+                        this._user.uid = user_id;
+                      }.bind(this));
+                  }.bind(this));
               }.bind(this));
-          }.bind(this));
+            }.bind(this));
         }.bind(this), {fields: "picture, email, name"});
       } else {
         console.log('User cancelled login or did not fully authorize.');
