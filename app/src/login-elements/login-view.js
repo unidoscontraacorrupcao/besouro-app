@@ -99,12 +99,6 @@ class LoginView extends PolymerElement {
           justify-content: center;
           border-radius: 50%;
         }
-        .social-button.google {
-          height: 67px;
-          width: 67px;
-          border: 1px solid #b7b7b7;
-          background-color: white;
-        }
         .social-button.facebook {
           margin-left: 2.35vw;
           height: 66px;
@@ -185,9 +179,6 @@ class LoginView extends PolymerElement {
           Você também pode usar suas redes sociais
         </div>
         <div class="social-buttons">
-          <div class="social-button google">
-            <paper-icon-button icon="app:google" on-tap="_onAuthGoogle"></paper-icon-button>
-          </div>
           <div class="social-button facebook">
             <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
