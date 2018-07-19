@@ -2,6 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 class LoginView extends PolymerElement {
@@ -98,12 +99,6 @@ class LoginView extends PolymerElement {
           justify-content: center;
           border-radius: 50%;
         }
-        .social-button.google {
-          height: 67px;
-          width: 67px;
-          border: 1px solid #b7b7b7;
-          background-color: white;
-        }
         .social-button.facebook {
           margin-left: 2.35vw;
           height: 66px;
@@ -132,7 +127,18 @@ class LoginView extends PolymerElement {
           max-width: none;
           margin-bottom: 5vh;
         }
+
+        #loading {
+          position: absolute;
+          top: 50%;
+          right: 50%;
+          transform: translate(50%);
+        }
+
       </style>
+      <div id="loading">
+        <paper-spinner active=""></paper-spinner>
+      </div>
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
@@ -173,9 +179,6 @@ class LoginView extends PolymerElement {
           Você também pode usar suas redes sociais
         </div>
         <div class="social-buttons">
-          <div class="social-button google">
-            <paper-icon-button icon="app:google" on-tap="_onAuthGoogle"></paper-icon-button>
-          </div>
           <div class="social-button facebook">
             <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
@@ -238,6 +241,7 @@ class LoginView extends PolymerElement {
   }
 
   _onAuthFacebook(e) {
+    this.showLoading();
     this.dispatchEvent(new CustomEvent(`auth-facebook`));
   }
 
@@ -257,6 +261,18 @@ class LoginView extends PolymerElement {
       email: ``,
       password: ``
     };
+  }
+  hideLoading() {
+    this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
+  }
+
+  showLoading() {
+    this.shadowRoot.querySelector("#loading").setAttribute("style", "display:block");
+  }
+
+  ready() {
+    super.ready();
+    this.hideLoading();
   }
 }
 

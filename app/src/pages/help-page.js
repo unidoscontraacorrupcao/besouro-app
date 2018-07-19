@@ -28,23 +28,34 @@ class HelpPage extends PolymerElement {
           height: 100vh;
         }
         p {
-          color: black;
+          font-family: helvetica-neue;
+          font-size: 16px;
+          color: #333333;
+          text-transform: uppercase;
         }
         app-header {
-          color: black;
+          color: var(--default-primary-color);
+          background-color: var(--accent-color);
+        }
+        div[main-title] {
+          margin-left: 10px;
+          font-family: Folio;
+          font-size: 30px;
+          text-transform: uppercase;
+        }
+        strong {
+          color: var(--secondary-text-color);
+          font-family: Folio;
         }
         .content {
           padding: 10px 20px;
-        }
-        h2 {
-          margin: 0;
         }
     </style>
     
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
         <app-toolbar>
-          <paper-icon-button class="header-icon" icon="app:close" drawer-toggle on-tap="_redirectToInbox"></paper-icon-button>
+          <paper-icon-button class="header-icon" icon="app:arrow-back" drawer-toggle on-tap="_redirectToInbox"></paper-icon-button>
           <div main-title >Ajuda</div>
           <!-- <paper-icon-button class="header-icon" icon="app:search"></paper-icon-button> -->
         </app-toolbar>

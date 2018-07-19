@@ -744,7 +744,6 @@ class ProfilePage extends PolymerElement {
         this.photoLoading(false);
       }.bind(this));
     }
-      
   }
 
   _onRouteChanged() {
@@ -1037,9 +1036,8 @@ class ProfilePage extends PolymerElement {
       info.age = `Não informada`;
     }
 
-    if(user.image != ``) {
+    if(user.image != ``)
       this.$.avatar.src = user.image;
-    }
 
     this._info = info;
   }

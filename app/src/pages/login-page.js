@@ -18,7 +18,7 @@ class LoginPage extends PolymerElement {
 
   signOut(key) {
     this.$.login.signOut(key);
-    this.dispatchEvent(new CustomEvent(`complete`));
+    this.dispatchEvent(new CustomEvent(`logout-complete`));
   }
 
   _onUserUpdate(e, user) {
