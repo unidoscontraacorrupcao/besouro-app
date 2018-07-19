@@ -1,6 +1,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
+
 import '../api-elements/api-auth-user.js';
 import '../api-elements/api-login.js';
 import '../api-elements/api-logout.js';
@@ -218,6 +219,8 @@ class LoginController extends PolymerElement {
       this._user.email = result.data.email;
       this._user.displayName = result.data.displayName;
       this._user.isAdmin = result.data.isAdmin;
+      console.log(this._user.key);
+      console.log(this._user.uid);
       this.$.apiUserProfile.request(this._user.key, this._user.uid);
     } else {
       this.$.login.emptyPassword();
@@ -450,6 +453,7 @@ class LoginController extends PolymerElement {
           this.$.api.request().then(function(ajax){
             var userToken = ajax.response.key;
             //get user id using user token.
+            this._user.key = userToken;
             this.$.apiAuthUser.requestAsPromise(userToken)
               .then(function(ajax){
                 var user_id = ajax.response.pk;
@@ -471,18 +475,18 @@ class LoginController extends PolymerElement {
                     body: formData };
                   return this.$.api.xhrRequest();
                 }.bind(this))
+                  .then(function(){
+                    this._user.email = fbProfileData.email;
+                    this.$.api.user = {"key": userToken};
+                    this.$.api.method = "PATCH";
+                    this.$.api.body = {"email": fbProfileData.email};
+                    this.$.api.path = `users/${user_id}/`;
+                    this.$.api.url = `${this.$.api.baseUrl}/api/v1/${this.$.api.path}`;
+                    return this.$.api.request();
+                  }.bind(this))
                 .then(function(ajax){
-                  var result = {}
-                  //set user data necessary to login on besouro app.
-                  result.success = true;
-                  result.data = {};
-                  result.data.displayName = fbProfileData.name;
-                  result.data.email = fbProfileData.email;
-                  result.data.isAdmin = false;
-                  this._user.uid = ajax.response.pk;
-                  this._user.key = userToken;
-                  this._onUser({}, result);
-                });
+                  this._user.uid = user_id;
+                }.bind(this));
               }.bind(this));
           }.bind(this));
         }.bind(this), {fields: "picture, email, name"});

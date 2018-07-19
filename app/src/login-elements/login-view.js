@@ -2,6 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 class LoginView extends PolymerElement {
@@ -132,7 +133,18 @@ class LoginView extends PolymerElement {
           max-width: none;
           margin-bottom: 5vh;
         }
+
+        #loading {
+          position: absolute;
+          top: 50%;
+          right: 50%;
+          transform: translate(50%);
+        }
+
       </style>
+      <div id="loading">
+        <paper-spinner active=""></paper-spinner>
+      </div>
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
@@ -238,6 +250,7 @@ class LoginView extends PolymerElement {
   }
 
   _onAuthFacebook(e) {
+    this.showLoading();
     this.dispatchEvent(new CustomEvent(`auth-facebook`));
   }
 
@@ -257,6 +270,18 @@ class LoginView extends PolymerElement {
       email: ``,
       password: ``
     };
+  }
+  hideLoading() {
+    this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
+  }
+
+  showLoading() {
+    this.shadowRoot.querySelector("#loading").setAttribute("style", "display:block");
+  }
+
+  ready() {
+    super.ready();
+    this.hideLoading();
   }
 }
 
