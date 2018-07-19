@@ -481,10 +481,11 @@ class LoginController extends PolymerElement {
                       }.bind(this))
                       .then(function(){
                         this._user.email = fbProfileData.email;
+                        this._user.displayName = `.${fbProfileData.name}`;
                         this.$.api.user = {"key": userToken};
                         this.$.api.method = "PATCH";
                         this.$.api.body = {"email": fbProfileData.email,
-                          "display_name": `.${fbProfileData.name}}`};
+                          "display_name": `.${fbProfileData.name}`};
                         this.$.api.path = `users/${user_id}/`;
                         this.$.api.url = `${this.$.api.baseUrl}/api/v1/${this.$.api.path}`;
                         return this.$.api.request();
