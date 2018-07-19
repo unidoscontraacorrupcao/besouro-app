@@ -452,16 +452,37 @@ class LoginController extends PolymerElement {
             //get user id using user token.
             this.$.apiAuthUser.requestAsPromise(userToken)
               .then(function(ajax){
-                var result = {}
-                //set user data necessary to login on besouro app.
-                result["success"] = true;
-                result["data"] = {};
-                result["data"]["displayName"] = fbProfileData.name;
-                result["data"]["email"] = fbProfileData.email;
-                result["data"]["isAdmin"] = false;
-                this._user.uid = ajax.response.pk;
-                this._user.key = userToken;
-                this._onUser({}, result);
+                var user_id = ajax.response.pk;
+
+                //fetch user facebook photo and store as a blob
+                let _fbPhotoUrl = `https://graph.facebook.com/${fbProfileData.id}/picture?type=large`;
+                fetch(_fbPhotoUrl).then(function(response){
+                  return response.blob();
+                })
+                // send facebook photo to django. If we need to store more user
+                // infos on ej, use this promise.
+                .then(function(blob){
+                  var fbPhoto = new File([blob], "facebook_photo.jpeg");
+                  var formData = new FormData();
+                  formData.append("image", fbPhoto);
+                  this.$.api.user = {"key": userToken};
+                  this.$.api.xhrData = { method: "put",
+                    url: `${this.$.api.baseUrl}/api/v1/profiles/${user_id}/`,
+                    body: formData };
+                  return this.$.api.xhrRequest();
+                }.bind(this))
+                .then(function(ajax){
+                  var result = {}
+                  //set user data necessary to login on besouro app.
+                  result.success = true;
+                  result.data = {};
+                  result.data.displayName = fbProfileData.name;
+                  result.data.email = fbProfileData.email;
+                  result.data.isAdmin = false;
+                  this._user.uid = ajax.response.pk;
+                  this._user.key = userToken;
+                  this._onUser({}, result);
+                });
               }.bind(this));
           }.bind(this));
         }.bind(this), {fields: "picture, email, name"});
