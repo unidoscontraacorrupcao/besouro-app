@@ -219,8 +219,6 @@ class LoginController extends PolymerElement {
       this._user.email = result.data.email;
       this._user.displayName = result.data.displayName;
       this._user.isAdmin = result.data.isAdmin;
-      console.log(this._user.key);
-      console.log(this._user.uid);
       this.$.apiUserProfile.request(this._user.key, this._user.uid);
     } else {
       this.$.login.emptyPassword();
@@ -242,6 +240,7 @@ class LoginController extends PolymerElement {
       this._user.photoURL = result.data.image;
       this.$.login.emptyForm();
       this._dispatchUser();
+      this.$.login.hideLoading();
     } else {
       this.$.login.emptyPassword();
       this.$.signUp.emptyPassword();

@@ -259,7 +259,9 @@ class AppShell extends PolymerElement {
           <login-page id="login"
             name="login"
             on-user-update="_onUserUpdate"
-            on-complete="_onLoginComplete"></login-page>
+            on-complete="_onLoginComplete"
+            on-logout-complete="_onLogoutComplete">
+          </login-page>
           <profile-page id="profile"
             name="profile"
             route="{{route}}"
@@ -382,6 +384,14 @@ class AppShell extends PolymerElement {
   _onLoginComplete(e) {
     this.set("route.path", this._afterLogin);
     this._afterLogin = `/`;
+  }
+
+  _onLogoutComplete(e) {
+    //this reload is necessary because facebook api is returning an
+    //invalid access token, when the user login with facebook, logout, and
+    //try to login with facebook again.
+    location.reload();
+    this.set("route.path", `/login`);
   }
 
   // Profile
