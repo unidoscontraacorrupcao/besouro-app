@@ -391,7 +391,7 @@ class AppShell extends PolymerElement {
     //invalid access token, when the user login with facebook, logout, and
     //try to login with facebook again.
     location.reload();
-    this.set("route.path", `/login`);
+    this.set("route.path", `/`);
   }
 
   // Profile
