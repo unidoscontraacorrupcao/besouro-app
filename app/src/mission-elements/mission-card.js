@@ -25,14 +25,12 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         display: block;
       }
 
-
       .mission-card {
-        display: block;
         padding: 0px;
         line-height: 0.7;
         position: relative;
         max-width: 500px;
-        margin: 20px auto;
+        margin: 10px auto 0px auto;
       }
 
       .mission-card iron-image {
@@ -102,7 +100,7 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         font-family: Folio;
-        margin: 15px 0 15px 0;
+        margin: 15px 0 0 0;
         line-height: 1;
       }
 
@@ -133,6 +131,7 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         right: 10px;
       }
 
+      #card-image { margin-top: 10px; }
       .card-footer { height: 60px; }
 
       .card-footer .stats {
@@ -140,7 +139,7 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         padding-top: 22px;
         display: flex;
         width: 90%;
-        margin: auto;
+        margin: 0px auto 0px auto;
         color: var(--light-text-color);
         font-size: 1.2rem;
       }
@@ -153,9 +152,11 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         text-transform: none;
         margin-top: -11px;
       }
-      .card-footer .actions iron-icon {
-        margin-right: 5px;
+
+      .card-footer .stats div {
+        margin: 0;
       }
+
       .message {
         color: var(--accent-color);
         font-weight: bold;
