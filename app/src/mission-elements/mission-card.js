@@ -179,12 +179,13 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         text-align: center;
       }
 
+      .card-action a { text-decoration: none; }
       .card-action span {
         font-family: Folio;
         text-transform: uppercase;
         font-size: 2em;
         color: white;
-        position: absolute;
+        position: relative;
         width: 250px;
         top: 28px;
         left: 0;
