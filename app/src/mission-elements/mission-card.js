@@ -7,16 +7,16 @@ import '../app-elements/shared-styles.js';
 import '../mission-elements/accept-mission-modal.js';
 import '../trophy-elements/blocked-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
-import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import './mission-player.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 /**
  * @polymer
  * @MissionCard
- * @appliesMixin MissionDurationMixin
+ * @appliesMixin CommonBehaviorsMixin
  */
-class MissionCard extends MissionDurationMixin(PolymerElement) {
+class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -336,7 +336,8 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
 
       <div class="card-content" on-tap="_goToMission">
         <h1> {{mission.title}} </h1>
-        <p> {{mission.description}} </p>
+        <!-- description field is inserted by the insertDescriptionHtml method -->
+        <p></p>
       </div>
 
       <div id="card-image">
@@ -425,6 +426,10 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       btnAction: String,
       finishMissionFunc: Function,
       acceptMissionFunc: Function,
+      decriptionAsHtml: {
+        type: String,
+        value: ''
+      },
       user: Object
     }
   }
@@ -458,6 +463,7 @@ class MissionCard extends MissionDurationMixin(PolymerElement) {
       this.set("pending", ajax.response.pending);
     }.bind(this));
     this._setOwnerPhoto();
+    this.insertDescriptionHtml(".card-content p");
   }
 
   _setOwnerPhoto() {
