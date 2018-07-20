@@ -21,6 +21,8 @@ import '../pages/show-mission-page.js';
 import '../pages/mission-receipts-page.js';
 import '../pages/not-found-page.js';
 import '../pages/privacy-page.js';
+import '../pages/notifications-page.js';
+import '../pages/settings-page.js';
 import '../pages/help-page.js';
 import './app-icons.js';
 import './app-theme.js';
@@ -253,6 +255,8 @@ class AppShell extends PolymerElement {
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
+          <notifications-page name="notifications" route="{{route}}"></notifications-page>
+          <settings-page name="settings" route="{{route}}"></settings-page>
           <privacy-page name="privacy" route="{{route}}"></privacy-page>
           <help-page name="help" route="{{route}}"></help-page>
           <not-found-page name="not-found"></not-found-page>
