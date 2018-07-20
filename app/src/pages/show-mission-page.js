@@ -12,6 +12,7 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import 'share-menu/share-menu.js';
 import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-actions.js';
@@ -29,7 +30,7 @@ import '../app-elements/app-besouro-api.js';
 import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { resolveCss } from '@polymer/polymer/lib/utils/resolve-url';
-class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
+class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -497,10 +498,12 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
       <template is="dom-if" if="{{mission}}">
         <div class="content">
           <h2>Entenda a missão</h2>
-          <p>{{mission.description}}</p>
+          <!-- description field is inserted by the insertDescriptionHtml method -->
+          <p></p>
 
           <h2>recompensa</h2>
-          <p>{{mission.reward}}</p>
+          <!-- reward field is inserted by the insertDescriptionHtml method -->
+          <p></p>
 
             <div class="comments">
               <h2>Comentários</h2>
@@ -822,6 +825,8 @@ class ShowMissionPage extends MissionDurationMixin(PolymerElement) {
     this.$.api.path = `missions/${this.data.key}`;
     this.$.api.request().then(function(ajax) {
       this.set("mission", ajax.response);
+      this.insertDescriptionHtml(".content p");
+      this.insertRewardHtml(".content p:nth-child(4)");
       this._calcMissionStats();
     }.bind(this));
   }
