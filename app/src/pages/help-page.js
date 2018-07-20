@@ -38,7 +38,7 @@ class HelpPage extends PolymerElement {
           background-color: var(--accent-color);
         }
         div[main-title] {
-          margin-left: 10px;
+          margin-left: 20px;
           font-family: Folio;
           font-size: 30px;
           text-transform: uppercase;
@@ -55,7 +55,7 @@ class HelpPage extends PolymerElement {
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
         <app-toolbar>
-          <paper-icon-button class="header-icon" icon="app:arrow-back" drawer-toggle on-tap="_redirectToInbox"></paper-icon-button>
+          <paper-icon-button class="header-icon" icon="app:arrow-back" on-tap="_redirectToInbox"></paper-icon-button>
           <div main-title >Ajuda</div>
           <!-- <paper-icon-button class="header-icon" icon="app:search"></paper-icon-button> -->
         </app-toolbar>

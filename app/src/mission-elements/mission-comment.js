@@ -27,8 +27,9 @@ class MissionComment extends PolymerElement {
         margin: 10px;
       }
       .card-content {
-        flex: 1;
         margin-top: -22px;
+        display: flex;
+        flex-direction: column;
       }
       .card-content h3 {
         color: rgba(51,51,51,1);
