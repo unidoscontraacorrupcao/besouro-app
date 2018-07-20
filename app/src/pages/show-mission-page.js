@@ -394,7 +394,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
     </app-dialog>
 
-    <share-menu id="shareMenu" title="{{mission.title}}" text="{{mission.description}}" url="{{address}}/{{data.key}}?shared=true" enabled-services='["telegram", "whatsapp"]'></share-menu>
+    <share-menu id="shareMenu" title="{{mission.title}}" text="{{stripHtmlTags(mission.description)}}" url="{{address}}/{{data.key}}?shared=true" enabled-services='["telegram", "whatsapp"]'></share-menu>
 
     <app-route route="{{route}}" pattern="/show-mission/:key" data="{{data}}">
     </app-route>
