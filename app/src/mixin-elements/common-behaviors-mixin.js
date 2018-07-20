@@ -19,6 +19,12 @@ let behaviors = function(superClass) {
       element.innerHTML = '';
       element.insertAdjacentHTML('afterbegin', this.mission.reward);
     }
+
+    stripHtmlTags(html) {
+      var tmp = document.createElement("div");
+      tmp.innerHTML = html;
+     return tmp.textContent || tmp.innerText || "";
+    }
   }
 }
 
