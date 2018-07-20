@@ -34,15 +34,8 @@ class NotificationsPage extends PolymerElement {
           text-transform: uppercase;
         }
         app-header {
-          color: var(--accent-color);
           background-color: var(--default-primary-color);
-        }
-        app-toolbar {
-          display: flex;
-          padding-right: 0;
-        }
-        .header-box {
-          flex: 1;
+          color: var(--accent-color);
         }
         div[main-title] {
           margin-left: 20px;
@@ -58,15 +51,13 @@ class NotificationsPage extends PolymerElement {
         }
         .icon-box {
           height: 100%;
-          background-color: var(--secondary-text-color);
           width: 60px;
           text-align: center;
         }
         .config-icon {
-          background-color: var(--secondary-text-color);
           height: inherit;
           width: 42px;
-          color: var(--default-primary-color);
+          color: var(--secondary-text-color);
         }
         @media screen and (max-width: 300px) {
           div[main-title] {
@@ -78,12 +69,9 @@ class NotificationsPage extends PolymerElement {
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
         <app-toolbar>
-          <paper-icon-button class="header-icon" icon="app:arrow-back"  on-tap="_redirectToInbox"></paper-icon-button>
+          <paper-icon-button class="header-icon" icon="app:arrow-back" on-tap="_redirectToInbox"></paper-icon-button>
           <div main-title >Notificações</div>
-          <div class="header-space"></div>
-          <div class="icon-box">
-            <paper-icon-button class="config-icon" icon="app:settings" on-tap="_redirectToConfig"></paper-icon-button>
-          </div>
+          <paper-icon-button class="header-icon" icon="app:settings" on-tap="_redirectToNotifications"></paper-icon-button>
         </app-toolbar>
       </app-header>
         <div class="content">
@@ -109,8 +97,8 @@ class NotificationsPage extends PolymerElement {
     this.set("route.path", `/`);
   }
 
-  _redirectToConfig() {
-    this.set('route.path', '/settings');
+  _redirectToNotifications() {
+    this.set("route.path", `/settings`);
   }
 }
 

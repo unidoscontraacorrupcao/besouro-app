@@ -27,15 +27,23 @@ class SettingsPage extends PolymerElement {
         app-header-layout {
           height: 100vh;
         }
-        p {
-          font-family: helvetica-neue;
-          font-size: 16px;
-          color: #333333;
-          text-transform: uppercase;
-        }
         app-header {
-          background-color: var(--default-primary-color);
           color: var(--accent-color);
+          background-color: var(--default-primary-color);
+        }
+        app-toolbar {
+          display: flex;
+          padding-right: 0;
+        }
+        .header-box {
+          flex: 1;
+        }
+        h5 {
+          color: var(--paragraph-color);
+          font-size: 18px;
+          font-family: Folio;
+          text-transform: uppercase;
+          margin: 10px 0;
         }
         div[main-title] {
           margin-left: 20px;
@@ -51,13 +59,27 @@ class SettingsPage extends PolymerElement {
         }
         .icon-box {
           height: 100%;
+          background-color: var(--secondary-text-color);
           width: 60px;
           text-align: center;
         }
         .config-icon {
+          background-color: var(--secondary-text-color);
           height: inherit;
           width: 42px;
+          color: var(--default-primary-color);
+        }
+        .page-heading {
+          text-align: center;
+          text-transform: uppercase;
+          font-size: 20px;
+          font-family: Folio;
           color: var(--secondary-text-color);
+          padding: 0 20px;
+        }
+        .categories {
+          background-color: var(--default-primary-color);
+          padding: 10px 20px;
         }
         @media screen and (max-width: 300px) {
           div[main-title] {
@@ -69,13 +91,20 @@ class SettingsPage extends PolymerElement {
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
         <app-toolbar>
-          <paper-icon-button class="header-icon" icon="app:arrow-back" on-tap="_redirectToNotifications"></paper-icon-button>
+          <paper-icon-button class="header-icon" icon="app:arrow-back"  on-tap="_redirectToNotifications"></paper-icon-button>
           <div main-title >Notificações</div>
-          <paper-icon-button class="header-icon" icon="app:settings"></paper-icon-button>
+          <div class="header-space"></div>
+          <div class="icon-box">
+            <paper-icon-button class="config-icon" icon="app:settings"></paper-icon-button>
+          </div>
         </app-toolbar>
       </app-header>
-        <div class="content">
-        </div>
+      <div class="page-heading">
+        <p>Você pode editar as configurações das notificações a qualquer momento.</p>
+      </div>
+      <div class="categories">
+        <h5>Notificações por categorias:</h5>
+      </div>
     </app-header-layout>    
 `;
   }
@@ -96,6 +125,7 @@ class SettingsPage extends PolymerElement {
   _redirectToNotifications() {
     this.set("route.path", `/notifications`);
   }
+
 }
 
 window.customElements.define(SettingsPage.is, SettingsPage);
