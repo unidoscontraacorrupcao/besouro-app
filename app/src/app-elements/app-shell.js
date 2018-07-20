@@ -408,11 +408,11 @@ class AppShell extends PolymerElement {
   // Storage
 
   _saveUser(user) {
-    sessionStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   _getUser() {
-    return JSON.parse(sessionStorage.getItem("user"));
+    return JSON.parse(localStorage.getItem("user"));
   }
 
   _shareLink(e) {
