@@ -13,6 +13,7 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-toast/paper-toast.js';
 import "share-menu/share-menu.js";
+import './app-actions.js';
 import '../pages/login-page.js';
 import '../pages/inbox-page.js';
 import '../pages/not-found-page.js';
@@ -176,6 +177,10 @@ class AppShell extends PolymerElement {
 
     <share-menu id="shareMenu" dialog-title="Divulgue esta causa!" title="Conheça as Novas Medidas Contra a Corrupção e faça parte da maior união anticorrupção que o país já viu #UnidosContraaCorrupção" url="http://www.unidoscontraacorrupcao.org.br/" enabled-services='["telegram", "whatsapp"]'></share-menu>
 
+    <app-dialog id="unauthorizedDialog">
+      <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
+    </app-dialog>
+
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -248,8 +253,8 @@ class AppShell extends PolymerElement {
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
           <notifications-page name="notifications" route="{{route}}"></notifications-page>
-          <settings-page name="settings" route="{{route}}"></settings-page>
-          <privacy-page name="privacy" route="{{route}}"></privacy-page>
+          <settings-page name="settings" route="{{route}}" user="{{user}}"></settings-page>
+          <privacy-page name="privacy" route="{{route}}" user="{{user}}"></privacy-page>
           <help-page name="help" route="{{route}}"></help-page>
           <not-found-page name="not-found"></not-found-page>
           <login-page id="login"
@@ -267,6 +272,9 @@ class AppShell extends PolymerElement {
             on-to-inbox-pressed="_goToInbox"
             on-back-pressed="_goToInbox"></profile-page>
       </iron-pages>
+      <template is="dom-if" if="{{canShowBottomBar}}">
+        <app-actions on-go-to-inbox="_goToInbox" on-go-to-profile="_goToProfile"></app-actions>
+      </template>
     </app-drawer-layout>
     <script src="/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
 `;
@@ -294,7 +302,12 @@ class AppShell extends PolymerElement {
         type: Object
       },
       user: Object,
-      _afterLogin: String
+      _afterLogin: String,
+      canShowBottomBar: Boolean,
+      noBottomBarList: {
+        type: Array,
+        value: ['privacy', 'help', 'not-found', 'login']
+      }
     };
   }
 
@@ -316,6 +329,7 @@ class AppShell extends PolymerElement {
     if (!this.$.drawer.persistent) {
       this.$.drawer.close();
     }
+    this.canShowBottomBar = !this.noBottomBarList.includes(this.page);
   }
 
   _pageChanged(page) {
@@ -355,6 +369,16 @@ class AppShell extends PolymerElement {
   _redirectToHelp() {
     this.set("route.path", "/help");
   }
+
+  _goToProfile() {
+    if(!this.user || Object.keys(this.user).length == 0) {
+      this.$.unauthorizedDialog.present();
+    } else {
+      this.set("route.path", "/profile");
+    }
+  }
+
+  _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
 
   // User
 

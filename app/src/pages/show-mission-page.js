@@ -15,7 +15,6 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import 'share-menu/share-menu.js';
 import '../mission-elements/unauthorized-modal.js';
-import '../app-elements/app-actions.js';
 import '../app-elements/app-scrollable-dialog.js';
 import '../app-elements/app-form-header.js';
 import '../app-elements/app-icons.js';
@@ -389,7 +388,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
-    <app-actions on-go-to-inbox="_returnToInbox" on-go-to-profile="_goToProfile"></app-actions>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
     </app-dialog>
@@ -850,14 +848,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
     this.set("route.path", "/login");
-  }
-
-  _goToProfile() {
-    if(!this.user || Object.keys(this.user).length == 0) {
-      this.$.unauthorizedDialog.present();
-    } else {
-      this.set("route.path", "/profile");
-    }
   }
 
   _disableModalRedirect() { return false; }

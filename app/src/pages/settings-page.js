@@ -8,8 +8,10 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 import { PolymerElement } from "@polymer/polymer/polymer-element.js";
+import '@polymer/app-layout/app-grid/app-grid-style.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '@polymer/paper-checkbox/paper-checkbox.js';
 
-import "@polymer/app-layout/app-grid/app-grid-style.js";
 import { html } from "@polymer/polymer/lib/utils/html-tag.js";
 class SettingsPage extends PolymerElement {
   static get template() {
@@ -43,7 +45,7 @@ class SettingsPage extends PolymerElement {
           font-size: 18px;
           font-family: Folio;
           text-transform: uppercase;
-          margin: 10px 0;
+          margin: 10px 0 20px;
         }
         div[main-title] {
           margin-left: 20px;
@@ -77,9 +79,60 @@ class SettingsPage extends PolymerElement {
           color: var(--secondary-text-color);
           padding: 0 20px;
         }
-        .categories {
+        .categories,
+        .general,
+        .share {
           background-color: var(--default-primary-color);
           padding: 10px 20px;
+          border-bottom: 1px solid var(--disabled-text-color);
+        }
+        .row {
+          display: flex;
+        }
+        .category {
+          flex: 1;
+          margin-bottom: 20px;
+          position: relative;
+        }
+        .category-icon,
+        .category paper-toggle-button {
+          width: calc(50% - 5px);
+          display: inline-block;
+          text-align: center;
+        }
+        .category paper-toggle-button {
+          position: absolute;
+          top: 50%;
+          right: 0;
+          transform: translate(0%, -50%) scale(1.2);
+          --paper-toggle-button-checked-bar-color: var(--secondary-text-color);
+          --paper-toggle-button-checked-button-color: var(--default-primary-color);
+          --paper-toggle-button-checked-bar: {
+            opacity: 1;
+          }
+        }
+        .category iron-icon {
+          --iron-icon-height: 35px;
+          --iron-icon-width: 40px;
+          --iron-icon-fill-color: var(--secondary-text-color);
+        }
+        .category-icon span {
+          font-family: Folio;
+          text-transform: uppercase;
+          color: var(--secondary-text-color);
+        }
+        paper-checkbox {
+          margin-bottom: 20px;
+          padding: 0 10px;
+          --paper-checkbox-checked-color: var(--secondary-text-color);
+          --paper-checkbox-checked-ink-color: var(--secondary-text-color);
+          --paper-checkbox-label-color: var(--secondary-text-color);
+          --paper-checkbox-label-checked-color: var(--secondary-text-color);
+          --paper-checkbox-label:{
+            width: 275px;
+            font-family: Folio;
+            
+          }
         }
         @media screen and (max-width: 300px) {
           div[main-title] {
@@ -104,7 +157,70 @@ class SettingsPage extends PolymerElement {
       </div>
       <div class="categories">
         <h5>Notificações por categorias:</h5>
+        <div class="row">
+          <div class="category">
+            <div class="category-icon">
+              <iron-icon icon="app:navMissions"></iron-icon>
+              <span>Missões</span>
+            </div>
+            <paper-toggle-button></paper-toggle-button>      
+          </div>
+          <div class="category">
+            <div class="category-icon">
+              <iron-icon icon="app:volume-up"></iron-icon>
+              <span>Alertas</span>
+            </div>
+            <paper-toggle-button></paper-toggle-button>      
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="category">
+            <div class="category-icon">
+              <iron-icon icon="app:splash-blocked"></iron-icon>
+              <span>Troféus</span>
+            </div>
+            <paper-toggle-button></paper-toggle-button>      
+          </div>
+          <div class="category">
+            <div class="category-icon">
+              <iron-icon icon="app:thumb-up"></iron-icon>
+              <span>Aprovados</span>
+            </div>
+            <paper-toggle-button></paper-toggle-button>      
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="category">
+            <div class="category-icon">
+              <iron-icon icon="app:assignment"></iron-icon>
+              <span>Opiniões</span>
+            </div>
+            <paper-toggle-button></paper-toggle-button>      
+          </div>
+          <div class="category">
+            <div class="category-icon">
+              <iron-icon icon="app:thumb-down"></iron-icon>
+              <span>Reprovados</span>
+            </div>
+            <paper-toggle-button></paper-toggle-button>      
+          </div>
+        </div>
       </div>
+
+      <div class="general">
+        <h5>Notificações gerais:</h5>
+        <paper-checkbox>permito que a campanha me envie notificações aqui no app</paper-checkbox>
+        <paper-checkbox>permito que a campanha me envie emails</paper-checkbox>
+      </div>
+
+      <div class="share">
+        <h5>Compartilhamento de dados:</h5>
+        <paper-checkbox>aceito compartilhar minhas informações de perfil com a campanha, para uso exclusivo na campanha</paper-checkbox>
+      </div>
+
+      <div></div>
     </app-header-layout>    
 `;
   }
@@ -118,7 +234,9 @@ class SettingsPage extends PolymerElement {
         type: Object,
         notify: true
       },
-      rootPath: String
+      rootPath: String,
+      user: Object,
+      settings: Object
     };
   }
 
