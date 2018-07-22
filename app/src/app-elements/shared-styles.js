@@ -109,6 +109,27 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         padding: 8px;
       }
 
+      .pink-button {
+        display: block;
+        height: auto;
+        max-width: 170px;
+        color: white;
+        background-color: #E6007E;
+        font-family: Folio;
+        font-size: 24px;
+        letter-spacing: 5px;
+        line-height: 26px;
+        text-align: center;
+        margin: 4vh auto 0;
+        border-radius: 0;
+      }
+
+      paper-button.flex-button {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 100%;
+      }
+
       app-drawer-layout:-webkit-full-screen-ancestor app-header,
       app-header-layout:-webkit-full-screen-ancestor app-header,
       app-drawer-layout:-webkit-full-screen-ancestor app-drawer {

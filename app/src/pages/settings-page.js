@@ -11,6 +11,7 @@ import { PolymerElement } from "@polymer/polymer/polymer-element.js";
 import '@polymer/app-layout/app-grid/app-grid-style.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
+import '@polymer/paper-button/paper-button.js';
 
 import { html } from "@polymer/polymer/lib/utils/html-tag.js";
 class SettingsPage extends PolymerElement {
@@ -86,6 +87,11 @@ class SettingsPage extends PolymerElement {
           padding: 10px 20px;
           border-bottom: 1px solid var(--disabled-text-color);
         }
+        .save {
+          background-color: var(--default-primary-color);
+          padding: 50px 30px;
+          margin-bottom: 64px;
+        }
         .row {
           display: flex;
         }
@@ -104,7 +110,7 @@ class SettingsPage extends PolymerElement {
           position: absolute;
           top: 50%;
           right: 0;
-          transform: translate(0%, -50%) scale(1.2);
+          transform: translate(0%, -50%) scale(1.1);
           --paper-toggle-button-checked-bar-color: var(--secondary-text-color);
           --paper-toggle-button-checked-button-color: var(--default-primary-color);
           --paper-toggle-button-checked-bar: {
@@ -120,6 +126,7 @@ class SettingsPage extends PolymerElement {
           font-family: Folio;
           text-transform: uppercase;
           color: var(--secondary-text-color);
+          display: block;
         }
         paper-checkbox {
           margin-bottom: 20px;
@@ -131,9 +138,10 @@ class SettingsPage extends PolymerElement {
           --paper-checkbox-label:{
             width: 275px;
             font-family: Folio;
-            
           }
         }
+       
+
         @media screen and (max-width: 300px) {
           div[main-title] {
             margin-left: 10px;
@@ -157,6 +165,7 @@ class SettingsPage extends PolymerElement {
       </div>
       <div class="categories">
         <h5>Notificações por categorias:</h5>
+        
         <div class="row">
           <div class="category">
             <div class="category-icon">
@@ -220,6 +229,10 @@ class SettingsPage extends PolymerElement {
         <paper-checkbox>aceito compartilhar minhas informações de perfil com a campanha, para uso exclusivo na campanha</paper-checkbox>
       </div>
 
+      <div class="save">
+        <paper-button class="flex-button pink-button" on-tap="_updateSettings">Salvar Edições</paper-button>
+      </div>
+
       <div></div>
     </app-header-layout>    
 `;
@@ -242,6 +255,10 @@ class SettingsPage extends PolymerElement {
 
   _redirectToNotifications() {
     this.set("route.path", `/notifications`);
+  }
+
+  _updateSettings() {
+    console.log('eae');
   }
 
 }
