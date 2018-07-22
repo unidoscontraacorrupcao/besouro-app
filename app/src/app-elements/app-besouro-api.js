@@ -50,7 +50,7 @@ class AppBesouroApi extends PolymerElement {
   }
 
   request() {
-    if (this.method == "POST" || this.method == "PATCH")
+    if (this.method == "POST" || this.method == "PATCH" || this.method == "PUT")
       this.$.ajax.headers = this.getHeaders();
     else
       this.$.ajax.headers = {};

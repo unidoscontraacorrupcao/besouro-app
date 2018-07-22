@@ -5,6 +5,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/app-layout/app-grid/app-grid-style.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 

@@ -12,7 +12,10 @@ import '@polymer/app-layout/app-grid/app-grid-style.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 
+import '../app-elements/app-besouro-api.js';
 import { html } from "@polymer/polymer/lib/utils/html-tag.js";
 class SettingsPage extends PolymerElement {
   static get template() {
@@ -140,7 +143,6 @@ class SettingsPage extends PolymerElement {
             font-family: Folio;
           }
         }
-       
 
         @media screen and (max-width: 300px) {
           div[main-title] {
@@ -148,6 +150,9 @@ class SettingsPage extends PolymerElement {
           }
         }
     </style>
+
+    <app-besouro-api id="api"></app-besouro-api>
+    <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
     
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
@@ -160,81 +165,90 @@ class SettingsPage extends PolymerElement {
           </div>
         </app-toolbar>
       </app-header>
-      <div class="page-heading">
-        <p>Você pode editar as configurações das notificações a qualquer momento.</p>
-      </div>
-      <div class="categories">
-        <h5>Notificações por categorias:</h5>
-        
-        <div class="row">
-          <div class="category">
-            <div class="category-icon">
-              <iron-icon icon="app:navMissions"></iron-icon>
-              <span>Missões</span>
+
+      <template is="dom-if" if="{{settings}}">
+        <div class="page-heading">
+          <p>Você pode editar as configurações das notificações a qualquer momento.</p>
+        </div>
+        <div class="categories">
+          <h5>Notificações por categorias:</h5>
+          
+          <div class="row">
+            <div class="category">
+              <div class="category-icon">
+                <iron-icon icon="app:navMissions"></iron-icon>
+                <span>Missões</span>
+              </div>
+              <paper-toggle-button checked="{{settings.mission_notifications}}"></paper-toggle-button>      
             </div>
-            <paper-toggle-button></paper-toggle-button>      
+            <div class="category">
+              <div class="category-icon">
+                <iron-icon icon="app:volume-up"></iron-icon>
+                <span>Alertas</span>
+              </div>
+              <paper-toggle-button checked="{{settings.admin_notifications}}"></paper-toggle-button>      
+            </div>
           </div>
-          <div class="category">
-            <div class="category-icon">
-              <iron-icon icon="app:volume-up"></iron-icon>
-              <span>Alertas</span>
+
+          <div class="row">
+            <div class="category">
+              <div class="category-icon">
+                <iron-icon icon="app:splash-blocked"></iron-icon>
+                <span>Troféus</span>
+              </div>
+              <paper-toggle-button checked="{{settings.trophy_notifications}}"></paper-toggle-button>      
             </div>
-            <paper-toggle-button></paper-toggle-button>      
+            <div class="category">
+              <div class="category-icon">
+                <iron-icon icon="app:thumb-up"></iron-icon>
+                <span>Aprovados</span>
+              </div>
+              <paper-toggle-button checked="{{settings.approved_notifications}}"></paper-toggle-button>      
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="category">
+              <div class="category-icon">
+                <iron-icon icon="app:assignment"></iron-icon>
+                <span>Opiniões</span>
+              </div>
+              <paper-toggle-button checked="{{settings.conversation_notifications}}"></paper-toggle-button>      
+            </div>
+            <div class="category">
+              <div class="category-icon">
+                <iron-icon icon="app:thumb-down"></iron-icon>
+                <span>Reprovados</span>
+              </div>
+              <paper-toggle-button checked="{{settings.disapproved_notifications}}"></paper-toggle-button>      
+            </div>
           </div>
         </div>
 
-        <div class="row">
-          <div class="category">
-            <div class="category-icon">
-              <iron-icon icon="app:splash-blocked"></iron-icon>
-              <span>Troféus</span>
-            </div>
-            <paper-toggle-button></paper-toggle-button>      
-          </div>
-          <div class="category">
-            <div class="category-icon">
-              <iron-icon icon="app:thumb-up"></iron-icon>
-              <span>Aprovados</span>
-            </div>
-            <paper-toggle-button></paper-toggle-button>      
-          </div>
+        <div class="general">
+          <h5>Notificações gerais:</h5>
+          <paper-checkbox checked="{{settings.campaign_app_notifications}}">permito que a campanha me envie notificações aqui no app</paper-checkbox>
+          <paper-checkbox checked="{{settings.campaign_email}}">permito que a campanha me envie emails</paper-checkbox>
         </div>
 
-        <div class="row">
-          <div class="category">
-            <div class="category-icon">
-              <iron-icon icon="app:assignment"></iron-icon>
-              <span>Opiniões</span>
-            </div>
-            <paper-toggle-button></paper-toggle-button>      
-          </div>
-          <div class="category">
-            <div class="category-icon">
-              <iron-icon icon="app:thumb-down"></iron-icon>
-              <span>Reprovados</span>
-            </div>
-            <paper-toggle-button></paper-toggle-button>      
-          </div>
+        <div class="share">
+          <h5>Compartilhamento de dados:</h5>
+          <paper-checkbox checked="{{settings.share_data}}">aceito compartilhar minhas informações de perfil com a campanha, para uso exclusivo na campanha</paper-checkbox>
         </div>
-      </div>
 
-      <div class="general">
-        <h5>Notificações gerais:</h5>
-        <paper-checkbox>permito que a campanha me envie notificações aqui no app</paper-checkbox>
-        <paper-checkbox>permito que a campanha me envie emails</paper-checkbox>
-      </div>
+        <div class="save">
+          <paper-button class="flex-button pink-button" on-tap="_updateSettings">Salvar Edições</paper-button>
+        </div>
+      </template>  
+      
+    </app-header-layout>
 
-      <div class="share">
-        <h5>Compartilhamento de dados:</h5>
-        <paper-checkbox>aceito compartilhar minhas informações de perfil com a campanha, para uso exclusivo na campanha</paper-checkbox>
+    <template is="dom-if" if="{{!settings}}">
+      <div class="page-loading">
+        <paper-spinner active></paper-spinner>
       </div>
+    </template>
 
-      <div class="save">
-        <paper-button class="flex-button pink-button" on-tap="_updateSettings">Salvar Edições</paper-button>
-      </div>
-
-      <div></div>
-    </app-header-layout>    
 `;
   }
 
@@ -247,18 +261,52 @@ class SettingsPage extends PolymerElement {
         type: Object,
         notify: true
       },
+      selected: {
+        observer: "_selectedChanged"
+      },
       rootPath: String,
       user: Object,
-      settings: Object
+      settings: Object,
+      _toastMessage: String
     };
+  }
+
+  _selectedChanged(selected) {
+    if(!selected) return;
+    this._requestSettings();
   }
 
   _redirectToNotifications() {
     this.set("route.path", `/notifications`);
   }
 
+  _requestSettings() {
+    if(!this.user) return;
+    this.$.api.method = "GET";
+    this.$.api.path = `settings/${this.user.uid}/`;
+    this.$.api.request().then((ajax) => {
+      this.set('settings', ajax.response)
+    }, (error) => {
+      this._showToast('Ocorreu um problema ao requisitar suas configurações. Tente novamente.');
+    });
+  }
+  
   _updateSettings() {
-    console.log('eae');
+    this.$.api.method = "PUT";
+    this.$.api.path = `settings/${this.user.uid}/`;
+    this.$.api.body = this.settings;
+    this.$.api.user = this.user;
+    this.$.api.request().then((ajax) => {
+      this._showToast('Configurações atualizadas!');
+    }, (error) => {
+      this._showToast('Erro ao atualizar as configurações');
+    });
+  }
+
+  //Utility functions
+  _showToast(message) {
+    this._toastMessage = message;
+    this.$.toast.open();
   }
 
 }

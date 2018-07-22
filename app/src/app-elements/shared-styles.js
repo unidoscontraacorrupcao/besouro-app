@@ -130,6 +130,30 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         max-width: 100%;
       }
 
+      .page-loading {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%);
+      }
+
+      .page-loading paper-spinner {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+        background-color: var(--default-primary-color);
+        border-radius: 50%;
+      }
+
+      paper-toast.error {
+        --paper-toast-color: white;
+        --paper-toast-background-color: #e7007e;
+        margin-bottom: 65px;
+        text-align: center;
+        min-height: 100px;
+        width: 100%;
+      }
+
       app-drawer-layout:-webkit-full-screen-ancestor app-header,
       app-header-layout:-webkit-full-screen-ancestor app-header,
       app-drawer-layout:-webkit-full-screen-ancestor app-drawer {
