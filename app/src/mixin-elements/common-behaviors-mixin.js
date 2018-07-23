@@ -14,6 +14,7 @@ let behaviors = function(superClass) {
       element.innerHTML = '';
       element.insertAdjacentHTML('afterbegin', this.mission.description);
     }
+
     insertRewardHtml(selector) {
       var element = this.shadowRoot.querySelector(selector);
       element.innerHTML = '';
@@ -24,6 +25,14 @@ let behaviors = function(superClass) {
       var tmp = document.createElement("div");
       tmp.innerHTML = html;
      return tmp.textContent || tmp.innerText || "";
+    }
+
+    hideLoading() {
+      this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
+    }
+
+    showLoading() {
+      this.shadowRoot.querySelector("#loading").setAttribute("style", "display:block");
     }
   }
 }

@@ -4,6 +4,8 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
 
 import '../app-elements/shared-styles.js';
+import '../app-elements/app-dialog.js';
+import '../app-elements/app-scrollable-dialog.js';
 import '../mission-elements/accept-mission-modal.js';
 import '../trophy-elements/blocked-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
@@ -450,10 +452,6 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
     this.$.acceptedDialog.dismiss();
   }
 
-  _reloadInbox() {
-    this.dispatchEvent(new CustomEvent('reload-inbox', { detail: {} }));
-  }
-
   setMissionData(mission) {
     this._setMissionStats();
     this.set("missionImage", `${this.$.api.baseUrl}${mission.image}`)
@@ -601,9 +599,10 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.body = {"id": this.mission.id, "user_id": this.user.uid };
     this.$.api.user = this.user;
     this.$.api.request().then(function(ajax) {
-      this._reloadInbox();
+      this.currentMissionStats = "started";
+      this._setActionBtn();
+      this.$.acceptedDialog.present();
     }.bind(this));
-   this.$.acceptedDialog.present();
   }
 
   _finishMission(e) {

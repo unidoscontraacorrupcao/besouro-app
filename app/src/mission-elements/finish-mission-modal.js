@@ -2,14 +2,19 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-textarea.js';
-import '../app-elements/app-icons.js';
-import '../app-elements/app-dialog.js';
-import '../app-elements/shared-styles.js';
-import './finish-confirmation-modal.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { PaperInputBehavior } from '@polymer/paper-input/paper-input-behavior.js';
-class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerElement) {
+
+import '../app-elements/app-icons.js';
+import '../app-elements/app-dialog.js';
+import '../app-elements/shared-styles.js';
+import '../app-elements/styles/modal-shared-styles.js';
+import './finish-confirmation-modal.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+
+class FinishMissionModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInputBehavior], PolymerElement)) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -175,6 +180,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
         font-size: 15px;
         padding-bottom: 25px;
      }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -212,9 +218,12 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
             </div>
           </div>
         </div>
+        <div id="loading">
+          <paper-spinner active=""></paper-spinner>
+        </div>
         <div class="card-action">
           <div>
-            <a href="#" on-tap="_sendReceipts"><span>enviar</span></a>
+            <a on-tap="_sendReceipts"><span>enviar</span></a>
           </div>
         </div>
       </div>
@@ -267,6 +276,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
   }
 
   _sendReceipts() {
+    this.showLoading();
     var formData = new FormData();
     formData.append("userName", this.user.displayName);
     formData.append("userEmail", this.user.email);
@@ -283,9 +293,10 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     };
     this.$.api.user = this.user;
     this.$.api.xhrRequest().then(function(response) {
-        this._dismiss();
         this.$.input.value = '';
         this.set('description', '');
+        this.hideLoading();
+        this._dismiss();
     }.bind(this));
   }
 
@@ -296,6 +307,7 @@ class FinishMissionModal extends mixinBehaviors([PaperInputBehavior], PolymerEle
     var receiptPaperIcon = this.$.uploadIcon;
     var ironIcon = receiptPaperIcon.shadowRoot.querySelector("iron-icon");
     ironIcon.setAttribute("style", "width: 40px; height: 40px;");
+    this.hideLoading();
   }
 }
 customElements.define(FinishMissionModal.is, FinishMissionModal);
