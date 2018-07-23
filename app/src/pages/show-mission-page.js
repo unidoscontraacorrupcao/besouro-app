@@ -413,8 +413,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     <app-scrollable-dialog id="finishedDialog">
       <finish-mission-modal
         user="[[user]]"
-        mission-id="{{data.key}}"
-        on-open-conversation="_openConversationModal">
+        mission-id="{{data.key}}">
       </finish-mission-modal>
     </app-scrollable-dialog>
 
@@ -423,8 +422,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
         user="[[user]]"
         mission-id="{{data.key}}"
         on-close-modal="_dismissConversationModal"
-        on-change-modal-bg="_changeConversationModalBg"
-        on-restore-modal-bg="_restoreConversationModalBg">
+      >
       </conversation-modal>
     </app-scrollable-dialog>
 
@@ -555,31 +553,39 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       </div>
     </div>
 
-      <template is="dom-if" if="{{mission}}">
-        <div class="content">
-          <h2>Entenda a missão</h2>
-          <!-- description field is inserted by the insertDescriptionHtml method -->
-          <p id="ckDescription"></p>
+    <template is="dom-if" if="{{mission}}">
+      <div class="content">
+        <h2>Entenda a missão</h2>
 
-          <h2>recompensa</h2>
-          <!-- reward field is inserted by the insertDescriptionHtml method -->
-          <p id="ckReward"></p>
+        <!-- description field is inserted by the insertDescriptionHtml method -->
+        <p></p>
 
-            <div class="comments">
-              <h2>Comentários</h2>
-              <template is="dom-repeat" items="{{mission.comment_set}}" as="comment" >
-                <mission-comment comment="{{comment}}">
-                </mission-comment>
-              </template>
-              <div class="comment">
-                    <div class="message">
-                      <paper-textarea id="commentInput" label="Escreva um comentário" required="" error-message="O campo não pode ser vazio.">
-                      </paper-textarea>
-                      <paper-button on-tap="_addComment" class="plain">Enviar</paper-button>
-                    </div>
-              </div>
+        <h2>recompensa</h2>
+
+        <!-- reward field is inserted by the insertDescriptionHtml method -->
+        <p></p>
+
+        <div class="comments">
+          <h2>Comentários</h2>
+          <template is="dom-repeat" items="{{mission.comment_set}}" as="comment" >
+            <mission-comment comment="{{comment}}"></mission-comment>
+          </template>
+          <div class="comment">
+            <div class="message">
+              <paper-textarea
+                id="commentInput"
+                label="Escreva um comentário"
+                required=""
+                error-message="O campo não pode ser vazio.">
+              </paper-textarea>
+              <paper-button
+                on-tap="_addComment"
+                class="plain">Enviar
+              </paper-button>
             </div>
           </div>
+        </div>
+      </div>
     </template>
     </app-header-layout>
 
@@ -698,32 +704,37 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _addComment(e) {
-    if (!this.user || Object.keys(this.user).length == 0) {
-      this.$.unauthorizedDialog.present();
-      return;
-    }
-    const input = this.shadowRoot.querySelector('#commentInput');
-    if(!input.value) {
-      input.invalid = true;
-      return;
-    } else {
-      input.invalid = false;
-    }
+    //if (!this.user || Object.keys(this.user).length == 0) {
+    //  this.$.unauthorizedDialog.present();
+    //  return;
+    //}
+    //const input = this.shadowRoot.querySelector('#commentInput');
+    //if(!input.value) {
+    //  input.invalid = true;
+    //  return;
+    //} else {
+    //  input.invalid = false;
+    //}
 
-    const content = {
-      user_id: this.user.uid,
-      comment: input.value
-    };
-    this.$.api.method = "POST";
-    this.$.api.path = `missions/${this.data.key}/comment/`;
-    this.$.api.user = this.user;
-    this.$.api.body = content;
-    this.$.api.request().then(function(ajax) {
-      this._missionChanged().then(function(){
-        this._openConversationModal();
-      }.bind(this));
-    }.bind(this));
-    input.value = "";
+    //const content = {
+    //  user_id: this.user.uid,
+    //  comment: input.value
+    //};
+    //this.$.api.method = "POST";
+    //this.$.api.path = `missions/${this.data.key}/comment/`;
+    //this.$.api.user = this.user;
+    //this.$.api.body = content;
+    //this.$.api.request().then(function(ajax) {
+    //  this._missionChanged();
+    //}.bind(this));
+    //input.value = "";
+    this._openConversationModal();
+  }
+
+  _openConversationModal() {
+    const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
+    conversationComponent.getConversation(this.mission);
+    this.$.conversationDialog.present();
   }
 
 _openConversationModal() {

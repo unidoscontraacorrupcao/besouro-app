@@ -116,11 +116,6 @@ class ConversationModal extends PolymerElement {
       font-family: folio;
     }
 
-    #voteMore { display: none; }
-    #voteMore a, #voteMore span { color: white; }
-    #voteMore a { text-decoration: underline; }
-    #voteMore span { text-transform: none; }
-
     </style>
     <app-besouro-api id="api"></app-besouro-api>
 
@@ -142,32 +137,22 @@ class ConversationModal extends PolymerElement {
       </div>
       <div id="confirmation-text">
       <span>
-          {{confirmationText}}
+            Vote e nos ajude a identificar ideias e ações
+            importantes para melhorar a campanha.
       </span>
       <div id="comment">
         {{currentComment.content}}
       </div>
-      <div id="voteMore">
-        <a on-tap="_voteMore"><span>vote em mais 3 opiniões</span></a>
-      </div>
       <div id="vote">
         <div class="voteContainer">
           <div>
-            <paper-icon-button
-              id="agree"
-              on-tap="_agreeVote"
-              icon="app:agree">
-            </paper-icon-button>
+            <paper-icon-button id="agree" icon="app:agree"></paper-icon-button>
           </div>
           <span>concordo</span>
         </div>
         <div class="voteContainer">
           <div>
-            <paper-icon-button
-              id="skip"
-              on-tap="_skipVote"
-              icon="app:skip">
-            </paper-icon-button>
+            <paper-icon-button id="pass" icon="app:pass"></paper-icon-button>
           </div>
           <span>passo</span>
         </div>
@@ -193,26 +178,19 @@ class ConversationModal extends PolymerElement {
   static get is() { return 'conversation-modal'; }
   static get properties() {
     return {
-      mission: Object,
+      missionId: String,
       redirectToMission: {
         type: Boolean,
         value: true
       },
-      comments:  Array,
-      currentCommentIdx: Number,
-      currentComment: Object,
-      headerText:{
-        type: String,
-        value: "queremos ouvir sua opinião"
+      comments: {
+        type: Array,
+        observer: '_getComment'
       },
-      confirmationText:{
-        type: String,
-        value: "Vote e nos ajude a identificar ideias e ações \
-      importantes para melhorar a campanha."
-      }
+      currentCommentIdx: Number,
+      currentComment: Object
     }
   }
-
   _goToMission() {
     if (this.redirectToMission)
       this.dispatchEvent(new CustomEvent('modal-show-mission',
@@ -223,12 +201,8 @@ class ConversationModal extends PolymerElement {
   }
 
   getConversation(mission) {
-    this.set("mission",  mission);
-    this._startConversation();
-    var conversations = mission.pending_conversations;
-    if (conversations.length == 0) return;
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${mission.id}/conversations/${conversations[0]}/comments`;
+    if (mission.conversations.length == 0) return;
+    this.$.api.path = `missions/${mission.id}/conversations/${mission.conversations[0]}/comments`;
     this.$.api.request().then(function(ajax) {
       this.set("comments", ajax.response);
       this.set("currentCommentIdx", 1);
@@ -243,67 +217,9 @@ class ConversationModal extends PolymerElement {
       this.set('currentComment', this.comments[this.currentCommentIdx - 1]);
     }
     else {
-      this._finishConversation();
+      //show final content.
     }
   }
-
-  _finishConversation() {
-    this.dispatchEvent(new CustomEvent('change-modal-bg', { detail: {}}));
-    this.headerText = "parabéns!";
-    this.confirmationText = "";
-    this.set("currentComment.content", "Suas opiniões são muito importantes \
-      para identificar quais informações são de seu interesse, medir a \
-      importância que o combate à corrupção tem no Brasil e melhorar as \
-      estratégias da campanha!");
-    this.$.voteMore.style.display = "block";
-    this.$.comment.style.color = "white";
-    this.$.vote.style.display = "none";
-    this.shadowRoot.querySelector("#comment-count").style.display = "none";
-    if (this.mission.pending_conversations.length == 1) {
-      this.$.voteMore.style.display = "none";
-    }
-  }
-
-    _startConversation() {
-      this.dispatchEvent(new CustomEvent('restore-modal-bg', { detail: {}}));
-      this.headerText = "queremos ouvir sua opinião";
-      this.confirmationText = "Vote e nos ajude a identificar ideias e ações \
-        importantes para melhorar a campanha.";
-      this.$.voteMore.style.display = "none";
-      this.$.comment.style.color = "rgba(51,51,51,1)";
-      this.$.vote.style.display = "flex";
-      this.shadowRoot.querySelector("#comment-count").style.display = "block";
-    }
-
-  _vote(choice) {
-    var user = JSON.parse(localStorage.getItem("user"));
-    this.$.api.body = {"comment": this.currentComment.id,
-      "choice": choice, "author": user.uid};
-    this.$.api.path = `votes/`;
-    this.$.api.user = user;
-    this.$.api.method = "POST";
-    this.$.api.request().then(function (ajax) {
-      this._nextComment();
-    }.bind(this));
-  }
-
-  _agreeVote() { this._vote(1) };
-  _disagreeVote() { this._vote(-1) };
-  _skipVote() { this._vote(0) };
-
-  _voteMore() {
-    this._getMission().then(function (ajax) {
-      var mission = ajax.response;
-      this.getConversation(mission);
-    }.bind(this));
-  }
-
-  _getMission() {
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.mission.id}`;
-    return this.$.api.request();
-  }
-
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
