@@ -140,7 +140,11 @@ class ConversationModal extends PolymerElement {
       <div id="vote">
         <div class="voteContainer">
           <div>
-            <paper-icon-button id="agree" icon="app:agree"></paper-icon-button>
+            <paper-icon-button
+              id="agree"
+              on-tap="_agreeVote"
+              icon="app:agree">
+            </paper-icon-button>
           </div>
           <span>concordo</span>
         </div>
@@ -209,6 +213,17 @@ class ConversationModal extends PolymerElement {
     else {
       //show final content.
     }
+  }
+
+  _agreeVote() {
+    var user = JSON.parse(localStorage.getItem("user"));
+    this.$.api.body = {"comment": this.currentComment.id, "choice": 1, "author": user.uid};
+    this.$.api.path = `votes/`;
+    this.$.api.user = user;
+    this.$.api.method = "POST";
+    this.$.api.request().then(function (ajax) {
+      this._nextComment();
+    }.bind(this));
   }
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
