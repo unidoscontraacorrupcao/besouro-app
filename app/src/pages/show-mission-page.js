@@ -735,6 +735,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   _dismissFinishModal() {
     this.set('currentMissionStats', 'new');
     this.$.finishedDialog.dismiss();
+    this._missionChanged();
   }
 
   _calcMissionStats() {

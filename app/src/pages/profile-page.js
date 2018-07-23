@@ -270,13 +270,6 @@ class ProfilePage extends PolymerElement {
           --iron-icon-stroke-color: var(--secondary-text-color);
         }
 
-      #loading {
-        position: absolute;
-        top: 50%;
-        right: 50%;
-        transform: translate(50%);
-      }
-
       #photoload {
         display: none;
         position: absolute;
@@ -292,6 +285,14 @@ class ProfilePage extends PolymerElement {
         background-color: var(--default-primary-color);
         border-radius: 50%;
       }
+
+      #loading {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%);
+      }
+
       .file-upload {
         position: relative;
       }
