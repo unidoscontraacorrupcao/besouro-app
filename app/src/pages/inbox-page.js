@@ -5,14 +5,14 @@ import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
+import '../trophy-elements/acquired-trophy-modal.js';
+import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-card.js';
 import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
-import '../trophy-elements/acquired-trophy-modal.js';
-import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-besouro-api.js';
 class InboxPage extends PolymerElement {
   static get template() {
@@ -98,7 +98,7 @@ class InboxPage extends PolymerElement {
         <div class="inbox">
           <welcome-card></welcome-card>
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
-            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-reload-inbox="_reloadInbox" on-open-restrict-modal="_openRestrictModal"></mission-card>
+            <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-open-restrict-modal="_openRestrictModal"></mission-card>
           </template>
         </div>
         <div class="inbox">
@@ -204,13 +204,6 @@ class InboxPage extends PolymerElement {
         .setAttribute("style", "display:none");
     }
     this.domChangeEventCount += 1;
-  }
-
-  _reloadInbox() {
-    this._getInboxMissions();
-    if (!this.user || Object.keys(this.user).length == 0) return;
-    this._getAcceptedMissions();
-    this._getUserTrophies();
   }
 
   _getInboxMissions() {

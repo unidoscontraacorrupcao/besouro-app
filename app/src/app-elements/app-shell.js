@@ -15,15 +15,7 @@ import '@polymer/paper-toast/paper-toast.js';
 import "share-menu/share-menu.js";
 import '../pages/login-page.js';
 import '../pages/inbox-page.js';
-import '../pages/profile-page.js';
-import '../pages/mission-page.js';
-import '../pages/show-mission-page.js';
-import '../pages/mission-receipts-page.js';
 import '../pages/not-found-page.js';
-import '../pages/privacy-page.js';
-import '../pages/notifications-page.js';
-import '../pages/settings-page.js';
-import '../pages/help-page.js';
 import './app-icons.js';
 import './app-theme.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
@@ -329,7 +321,7 @@ class AppShell extends PolymerElement {
   _pageChanged(page) {
     // Load page import on demand. Show 404 page if fails
     import(`../pages/${page}-page.js`).catch(reason => {
-      console.log("MyView1 failed to load", reason);
+      console.log(`"${page} failed to load"`, reason);
     });
   }
 
