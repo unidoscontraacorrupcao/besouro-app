@@ -206,7 +206,7 @@ $_documentContainer.innerHTML = `<iron-iconset-svg size="24" name="app">
 </g>
 </g>
 </g>
-<g id="pass" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" viewBox="0 0 43 43">
+<g id="skip" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" viewBox="0 0 43 43">
 <g id="Mobile-Portrait-Frases" transform="translate(-137.000000, -414.000000)">
 <g id="Group" transform="translate(29.000000, 414.000000)">
 <g id="button_pass" transform="translate(108.000000, 0.000000)">

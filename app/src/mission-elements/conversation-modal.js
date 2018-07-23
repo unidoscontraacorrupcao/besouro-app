@@ -150,13 +150,21 @@ class ConversationModal extends PolymerElement {
         </div>
         <div class="voteContainer">
           <div>
-            <paper-icon-button id="pass" icon="app:pass"></paper-icon-button>
+            <paper-icon-button
+              id="skip"
+              on-tap="_skipVote"
+              icon="app:skip">
+            </paper-icon-button>
           </div>
           <span>passo</span>
         </div>
         <div class="voteContainer">
           <div>
-            <paper-icon-button id="disagree" icon="app:disagree"></paper-icon-button>
+            <paper-icon-button
+              id="disagree"
+              on-tap="_disagreeVote"
+              icon="app:disagree">
+            </paper-icon-button>
           </div>
           <span>discordo</span>
         </div>
@@ -177,10 +185,7 @@ class ConversationModal extends PolymerElement {
         type: Boolean,
         value: true
       },
-      comments: {
-        type: Array,
-        observer: '_getComment'
-      },
+      comments:  Array,
       currentCommentIdx: Number,
       currentComment: Object
     }
@@ -215,9 +220,10 @@ class ConversationModal extends PolymerElement {
     }
   }
 
-  _agreeVote() {
+  _vote(choice) {
     var user = JSON.parse(localStorage.getItem("user"));
-    this.$.api.body = {"comment": this.currentComment.id, "choice": 1, "author": user.uid};
+    this.$.api.body = {"comment": this.currentComment.id,
+      "choice": choice, "author": user.uid};
     this.$.api.path = `votes/`;
     this.$.api.user = user;
     this.$.api.method = "POST";
@@ -225,6 +231,10 @@ class ConversationModal extends PolymerElement {
       this._nextComment();
     }.bind(this));
   }
+
+  _agreeVote() { this._vote(1) };
+  _disagreeVote() { this._vote(-1) };
+  _skipVote() { this._vote(0) };
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
