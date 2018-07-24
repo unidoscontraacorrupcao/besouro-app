@@ -224,10 +224,10 @@ class ConversationModal extends PolymerElement {
 
   getConversation(mission) {
     this._startConversation();
-    if (mission.conversations.length == 0) return;
-    console.log(mission);
+    var conversations = mission.pending_conversations;
+    if (conversations.length == 0) return;
     this.$.api.method = "GET";
-    this.$.api.path = `missions/${mission.id}/conversations/${mission.conversations[0]}/comments`;
+    this.$.api.path = `missions/${mission.id}/conversations/${conversations[0]}/comments`;
     this.$.api.request().then(function(ajax) {
       this.set("comments", ajax.response);
       this.set("currentCommentIdx", 1);

@@ -729,7 +729,10 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       this._missionChanged();
     }.bind(this));
     input.value = "";
-    this._openConversationModal();
+    this._getMission().then(function (ajax) {
+      this.set("mission", ajax.response);
+      this._openConversationModal();
+    }.bind(this));
   }
 
   _openConversationModal() {
@@ -893,15 +896,19 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _missionChanged() {
     if (!this.data) return;
-    this.set("mission", {});
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.data.key}`;
-    this.$.api.request().then(function(ajax) {
+    this._getMission().then(function(ajax) {
       this.set("mission", ajax.response);
       this.insertDescriptionHtml(".content p");
       this.insertRewardHtml(".content p:nth-child(4)");
       this._calcMissionStats();
     }.bind(this));
+  }
+
+  _getMission() {
+    this.set("mission", {});
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.data.key}`;
+    return this.$.api.request();
   }
 
   _shareMission(e) {
