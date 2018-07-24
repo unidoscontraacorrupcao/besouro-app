@@ -712,31 +712,34 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _addComment(e) {
-    //if (!this.user || Object.keys(this.user).length == 0) {
-    //  this.$.unauthorizedDialog.present();
-    //  return;
-    //}
-    //const input = this.shadowRoot.querySelector('#commentInput');
-    //if(!input.value) {
-    //  input.invalid = true;
-    //  return;
-    //} else {
-    //  input.invalid = false;
-    //}
+    if (!this.user || Object.keys(this.user).length == 0) {
+      this.$.unauthorizedDialog.present();
+      return;
+    }
+    const input = this.shadowRoot.querySelector('#commentInput');
+    if(!input.value) {
+      input.invalid = true;
+      return;
+    } else {
+      input.invalid = false;
+    }
 
-    //const content = {
-    //  user_id: this.user.uid,
-    //  comment: input.value
-    //};
-    //this.$.api.method = "POST";
-    //this.$.api.path = `missions/${this.data.key}/comment/`;
-    //this.$.api.user = this.user;
-    //this.$.api.body = content;
-    //this.$.api.request().then(function(ajax) {
-    //  this._missionChanged();
-    //}.bind(this));
-    //input.value = "";
-    this._openConversationModal();
+    const content = {
+      user_id: this.user.uid,
+      comment: input.value
+    };
+    this.$.api.method = "POST";
+    this.$.api.path = `missions/${this.data.key}/comment/`;
+    this.$.api.user = this.user;
+    this.$.api.body = content;
+    this.$.api.request().then(function(ajax) {
+      this._missionChanged();
+    }.bind(this));
+    input.value = "";
+    this._getMission().then(function (ajax) {
+      this.set("mission", ajax.response);
+      this._openConversationModal();
+    }.bind(this));
   }
 
   _openConversationModal() {
@@ -900,15 +903,19 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _missionChanged() {
     if (!this.data) return;
-    this.set("mission", {});
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.data.key}`;
-    this.$.api.request().then(function(ajax) {
+    this._getMission().then(function(ajax) {
       this.set("mission", ajax.response);
       this.insertDescriptionHtml(".content p");
       this.insertRewardHtml(".content p:nth-child(4)");
       this._calcMissionStats();
     }.bind(this));
+  }
+
+  _getMission() {
+    this.set("mission", {});
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.data.key}`;
+    return this.$.api.request();
   }
 
   _shareMission(e) {
