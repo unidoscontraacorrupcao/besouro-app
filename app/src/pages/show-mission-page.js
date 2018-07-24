@@ -733,20 +733,20 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.user = this.user;
     this.$.api.body = content;
     this.$.api.request().then(function(ajax) {
-      this._missionChanged();
+      this._missionChanged().then(function(){
+        this._openConversationModal();
+      }.bind(this));
     }.bind(this));
     input.value = "";
-    this._getMission().then(function (ajax) {
-      this.set("mission", ajax.response);
-      this._openConversationModal();
-    }.bind(this));
   }
 
-  _openConversationModal() {
+_openConversationModal() {
+  if (this.mission.pending_conversations.length > 0) {
     const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
     conversationComponent.getConversation(this.mission);
     this.$.conversationDialog.present();
   }
+}
 
   _acceptMission(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
@@ -903,7 +903,8 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _missionChanged() {
     if (!this.data) return;
-    this._getMission().then(function(ajax) {
+    this.set("mission", {});
+    return this._getMission().then(function(ajax) {
       this.set("mission", ajax.response);
       this.insertDescriptionHtml(".content p");
       this.insertRewardHtml(".content p:nth-child(4)");
@@ -912,7 +913,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _getMission() {
-    this.set("mission", {});
     this.$.api.method = "GET";
     this.$.api.path = `missions/${this.data.key}`;
     return this.$.api.request();
