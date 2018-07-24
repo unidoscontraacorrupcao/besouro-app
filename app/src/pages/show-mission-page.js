@@ -429,7 +429,8 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
         user="[[user]]"
         mission-id="{{data.key}}"
         on-close-modal="_dismissConversationModal"
-      >
+        on-change-modal-bg="_changeConversationModalBg"
+        on-restore-modal-bg="_restoreConversationModalBg">
       </conversation-modal>
     </app-scrollable-dialog>
 
@@ -937,6 +938,20 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     } else {
       this.set("route.path", "/profile");
     }
+  }
+
+  _changeConversationModalBg() {
+    const scrollableDialog = this.$.conversationDialog;
+    const paperDialog = scrollableDialog.shadowRoot.querySelector("#scroll");
+    console.log(paperDialog);
+    paperDialog.style.background = "var(--secondary-text-color)";
+  }
+
+  _restoreConversationModalBg() {
+    const scrollableDialog = this.$.conversationDialog;
+    const paperDialog = scrollableDialog.shadowRoot.querySelector("#scroll");
+    console.log(paperDialog);
+    paperDialog.style.background = "white";
   }
 
   _disableModalRedirect() { return false; }
