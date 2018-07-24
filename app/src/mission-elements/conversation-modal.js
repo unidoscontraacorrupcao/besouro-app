@@ -193,7 +193,7 @@ class ConversationModal extends PolymerElement {
   static get is() { return 'conversation-modal'; }
   static get properties() {
     return {
-      missionId: String,
+      mission: Object,
       redirectToMission: {
         type: Boolean,
         value: true
@@ -223,6 +223,7 @@ class ConversationModal extends PolymerElement {
   }
 
   getConversation(mission) {
+    this.set("mission",  mission);
     this._startConversation();
     var conversations = mission.pending_conversations;
     if (conversations.length == 0) return;
@@ -258,6 +259,9 @@ class ConversationModal extends PolymerElement {
     this.$.comment.style.color = "white";
     this.$.vote.style.display = "none";
     this.shadowRoot.querySelector("#comment-count").style.display = "none";
+    if (this.mission.pending_conversations.length == 1) {
+      this.$.voteMore.style.display = "none";
+    }
   }
 
     _startConversation() {
@@ -286,6 +290,20 @@ class ConversationModal extends PolymerElement {
   _agreeVote() { this._vote(1) };
   _disagreeVote() { this._vote(-1) };
   _skipVote() { this._vote(0) };
+
+  _voteMore() {
+    this._getMission().then(function (ajax) {
+      var mission = ajax.response;
+      this.getConversation(mission);
+    }.bind(this));
+  }
+
+  _getMission() {
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.mission.id}`;
+    return this.$.api.request();
+  }
+
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
