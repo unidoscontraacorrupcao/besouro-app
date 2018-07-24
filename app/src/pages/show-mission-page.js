@@ -413,7 +413,8 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     <app-scrollable-dialog id="finishedDialog">
       <finish-mission-modal
         user="[[user]]"
-        mission-id="{{data.key}}">
+        mission-id="{{data.key}}"
+        on-open-conversation="_openConversationModal">
       </finish-mission-modal>
     </app-scrollable-dialog>
 
@@ -734,11 +735,14 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
 _openConversationModal() {
-  if (this.mission.pending_conversations.length > 0) {
-    const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
-    conversationComponent.getConversation(this.mission);
-    this.$.conversationDialog.present();
-  }
+  this._getMission().then(function(ajax) {
+    var mission = ajax.response;
+    if (mission.pending_conversations.length > 0) {
+      const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
+      conversationComponent.getConversation(mission);
+      this.$.conversationDialog.present();
+    }
+  }.bind(this));
 }
 
   _acceptMission(e) {
