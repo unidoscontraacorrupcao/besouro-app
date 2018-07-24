@@ -422,7 +422,8 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
         user="[[user]]"
         mission-id="{{data.key}}"
         on-close-modal="_dismissConversationModal"
-      >
+        on-change-modal-bg="_changeConversationModalBg"
+        on-restore-modal-bg="_restoreConversationModalBg">
       </conversation-modal>
     </app-scrollable-dialog>
 

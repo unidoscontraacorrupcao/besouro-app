@@ -116,6 +116,11 @@ class ConversationModal extends PolymerElement {
       font-family: folio;
     }
 
+    #voteMore { display: none; }
+    #voteMore a, #voteMore span { color: white; }
+    #voteMore a { text-decoration: underline; }
+    #voteMore span { text-transform: none; }
+
     </style>
     <app-besouro-api id="api"></app-besouro-api>
 
@@ -137,11 +142,13 @@ class ConversationModal extends PolymerElement {
       </div>
       <div id="confirmation-text">
       <span>
-            Vote e nos ajude a identificar ideias e ações
-            importantes para melhorar a campanha.
+          {{confirmationText}}
       </span>
       <div id="comment">
         {{currentComment.content}}
+      </div>
+      <div id="voteMore">
+        <a on-tap="_voteMore"><span>vote em mais 3 opiniões</span></a>
       </div>
       <div id="vote">
         <div class="voteContainer">
@@ -188,9 +195,19 @@ class ConversationModal extends PolymerElement {
         observer: '_getComment'
       },
       currentCommentIdx: Number,
-      currentComment: Object
+      currentComment: Object,
+      headerText:{
+        type: String,
+        value: "queremos ouvir sua opinião"
+      },
+      confirmationText:{
+        type: String,
+        value: "Vote e nos ajude a identificar ideias e ações \
+      importantes para melhorar a campanha."
+      }
     }
   }
+
   _goToMission() {
     if (this.redirectToMission)
       this.dispatchEvent(new CustomEvent('modal-show-mission',
@@ -201,7 +218,10 @@ class ConversationModal extends PolymerElement {
   }
 
   getConversation(mission) {
+    this._startConversation();
     if (mission.conversations.length == 0) return;
+    console.log(mission);
+    this.$.api.method = "GET";
     this.$.api.path = `missions/${mission.id}/conversations/${mission.conversations[0]}/comments`;
     this.$.api.request().then(function(ajax) {
       this.set("comments", ajax.response);
@@ -217,9 +237,50 @@ class ConversationModal extends PolymerElement {
       this.set('currentComment', this.comments[this.currentCommentIdx - 1]);
     }
     else {
-      //show final content.
+      this._finishConversation();
     }
   }
+
+  _finishConversation() {
+    this.dispatchEvent(new CustomEvent('change-modal-bg', { detail: {}}));
+    this.headerText = "parabéns!";
+    this.confirmationText = "";
+    this.set("currentComment.content", "Suas opiniões são muito importantes \
+      para identificar quais informações são de seu interesse, medir a \
+      importância que o combate à corrupção tem no Brasil e melhorar as \
+      estratégias da campanha!");
+    this.$.voteMore.style.display = "block";
+    this.$.comment.style.color = "white";
+    this.$.vote.style.display = "none";
+    this.shadowRoot.querySelector("#comment-count").style.display = "none";
+  }
+
+    _startConversation() {
+      this.dispatchEvent(new CustomEvent('restore-modal-bg', { detail: {}}));
+      this.headerText = "queremos ouvir sua opinião";
+      this.confirmationText = "Vote e nos ajude a identificar ideias e ações \
+        importantes para melhorar a campanha.";
+      this.$.voteMore.style.display = "none";
+      this.$.comment.style.color = "rgba(51,51,51,1)";
+      this.$.vote.style.display = "flex";
+      this.shadowRoot.querySelector("#comment-count").style.display = "block";
+    }
+
+  _vote(choice) {
+    var user = JSON.parse(localStorage.getItem("user"));
+    this.$.api.body = {"comment": this.currentComment.id,
+      "choice": choice, "author": user.uid};
+    this.$.api.path = `votes/`;
+    this.$.api.user = user;
+    this.$.api.method = "POST";
+    this.$.api.request().then(function (ajax) {
+      this._nextComment();
+    }.bind(this));
+  }
+
+  _agreeVote() { this._vote(1) };
+  _disagreeVote() { this._vote(-1) };
+  _skipVote() { this._vote(0) };
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
