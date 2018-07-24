@@ -300,7 +300,10 @@ class FinishMissionModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInput
     }.bind(this));
   }
 
-  _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
+  _dismiss() {
+    this.dispatchEvent(new CustomEvent('close-modal'));
+    this.dispatchEvent(new CustomEvent('open-conversation'));
+  }
 
   ready() {
     super.ready();
