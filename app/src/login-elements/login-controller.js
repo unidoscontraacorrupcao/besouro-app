@@ -115,7 +115,11 @@ class LoginController extends PolymerElement {
     const VALIDATION = this._validateSignUpForm(form);
     if(VALIDATION.valid) {
       this._signUp.form = form;
-      this.$.apiSignUp.request(form.email, form.password);
+      let base = this.$.api.baseUrl;
+      this.$.api.set("url",  `${base}/reset/`);
+      this.$.api.request().then(function(ajax) {
+        this.$.apiSignUp.request(form.email, form.password);
+      }.bind(this));
     } else {
       this.$.signUp.exposeErrors(VALIDATION.errors);
       this._toastInvalidFields();
