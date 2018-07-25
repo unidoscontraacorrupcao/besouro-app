@@ -178,7 +178,7 @@ class AppShell extends PolymerElement {
     <share-menu id="shareMenu" dialog-title="Divulgue esta causa!" title="Conheça as Novas Medidas Contra a Corrupção e faça parte da maior união anticorrupção que o país já viu #UnidosContraaCorrupção" url="http://www.unidoscontraacorrupcao.org.br/" enabled-services='["telegram", "whatsapp"]'></share-menu>
 
     <app-dialog id="unauthorizedDialog">
-      <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
+      <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToRegister"></unauthorized-modal>
     </app-dialog>
 
     <app-drawer-layout fullbleed narrow="{{narrow}}">
@@ -368,6 +368,11 @@ class AppShell extends PolymerElement {
 
   _redirectToHelp() {
     this.set("route.path", "/help");
+  }
+
+  _goToRegister() {
+    this.set('route.path', '/login');
+    this._dismissUnauthorizedModal();
   }
 
   _goToNotifications() {

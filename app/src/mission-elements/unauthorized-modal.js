@@ -140,7 +140,7 @@ class UnauthorizedModal extends PolymerElement {
         </p>
         <div class="card-action">
           <div>
-            <a on-tap="_goToRegister" ><span>login</span></a>
+            <a on-tap="_goToRegister"><span>login</span></a>
           </div>
         </div>
       </div>
