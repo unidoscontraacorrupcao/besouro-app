@@ -8,8 +8,11 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 import { PolymerElement } from "@polymer/polymer/polymer-element.js";
-
+import '@polymer/paper-toast/paper-toast.js';
 import "@polymer/app-layout/app-grid/app-grid-style.js";
+
+import '../app-elements/app-besouro-api.js';
+import '../notifications-elements/notification-card.js';
 import { html } from "@polymer/polymer/lib/utils/html-tag.js";
 class NotificationsPage extends PolymerElement {
   static get template() {
@@ -47,7 +50,7 @@ class NotificationsPage extends PolymerElement {
           color: var(--secondary-text-color);
         }
         .content {
-          padding: 10px 20px;
+          padding: 10px 0;
         }
         .icon-box {
           height: 100%;
@@ -66,6 +69,9 @@ class NotificationsPage extends PolymerElement {
         }
     </style>
     
+    <app-besouro-api id="api"></app-besouro-api>
+    <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
+
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
         <app-toolbar>
@@ -75,6 +81,9 @@ class NotificationsPage extends PolymerElement {
         </app-toolbar>
       </app-header>
         <div class="content">
+          <template is="dom-repeat" items="{{notifications}}" as="notification" >
+              <notification-card notification="{{notification}}"></notification-card>
+            </template>
         </div>
     </app-header-layout>    
 `;
@@ -89,8 +98,21 @@ class NotificationsPage extends PolymerElement {
         type: Object,
         notify: true
       },
+      selected: {
+        observer: "_selectedChanged"
+      },
+      notifications: {
+        type: Array,
+        value: []
+      },
       rootPath: String
+      
     };
+  }
+
+  _selectedChanged(selected) {
+    if(!selected) return;
+    this._requestNotifications();
   }
 
   _redirectToInbox() {
@@ -100,6 +122,24 @@ class NotificationsPage extends PolymerElement {
   _redirectToNotifications() {
     this.set("route.path", `/settings`);
   }
+
+  _requestNotifications() {
+    if(!this.user) return;
+    this.$.api.method = "GET";
+    this.$.api.path = `notifications/user/${this.user.uid}/`;
+    this.$.api.request().then((ajax) => {
+      this.set('notifications', ajax.response)
+    }, (error) => {
+      this._showToast('Ocorreu um problema ao requisitar suas notificações. Tente novamente.');
+    });
+  }
+
+  //Utility functions
+  _showToast(message) {
+    this._toastMessage = message;
+    this.$.toast.open();
+  }
+
 }
 
 window.customElements.define(NotificationsPage.is, NotificationsPage);

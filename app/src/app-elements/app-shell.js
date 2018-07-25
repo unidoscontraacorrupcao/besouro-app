@@ -252,7 +252,7 @@ class AppShell extends PolymerElement {
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
           <mission-accepted-page name="mission-accepted" route-data="{{routeData}}" route="{{route}}"></mission-accepted-page>
           <mission-finished-page name="mission-finished" route-data="{{routeData}}" route="{{route}}"></mission-finished-page>
-          <notifications-page name="notifications" route="{{route}}"></notifications-page>
+          <notifications-page name="notifications" route="{{route}}" user="{{user}}"></notifications-page>
           <settings-page name="settings" route="{{route}}" user="{{user}}"></settings-page>
           <privacy-page name="privacy" route="{{route}}" user="{{user}}"></privacy-page>
           <help-page name="help" route="{{route}}"></help-page>
@@ -273,7 +273,7 @@ class AppShell extends PolymerElement {
             on-back-pressed="_goToInbox"></profile-page>
       </iron-pages>
       <template is="dom-if" if="{{canShowBottomBar}}">
-        <app-actions on-go-to-inbox="_goToInbox" on-go-to-profile="_goToProfile"></app-actions>
+        <app-actions on-go-to-inbox="_goToInbox" on-go-to-notifications="_goToNotifications"></app-actions>
       </template>
     </app-drawer-layout>
     <script src="/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
@@ -370,11 +370,11 @@ class AppShell extends PolymerElement {
     this.set("route.path", "/help");
   }
 
-  _goToProfile() {
+  _goToNotifications() {
     if(!this.user || Object.keys(this.user).length == 0) {
       this.$.unauthorizedDialog.present();
     } else {
-      this.set("route.path", "/profile");
+      this.set("route.path", "/notifications");
     }
   }
 
