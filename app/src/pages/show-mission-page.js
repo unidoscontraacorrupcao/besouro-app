@@ -555,36 +555,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       </div>
     </div>
 
-    <template is="dom-if" if="{{mission}}">
-      <div class="content">
-        <h2>Entenda a missão</h2>
-
-        <!-- description field is inserted by the insertDescriptionHtml method -->
-        <p></p>
-
-        <h2>recompensa</h2>
-
-        <!-- reward field is inserted by the insertDescriptionHtml method -->
-        <p></p>
-
-        <div class="comments">
-          <h2>Comentários</h2>
-          <template is="dom-repeat" items="{{mission.comment_set}}" as="comment" >
-            <mission-comment comment="{{comment}}"></mission-comment>
-          </template>
-          <div class="comment">
-            <div class="message">
-              <paper-textarea
-                id="commentInput"
-                label="Escreva um comentário"
-                required=""
-                error-message="O campo não pode ser vazio.">
-              </paper-textarea>
-              <paper-button
-                on-tap="_addComment"
-                class="plain">Enviar
-              </paper-button>
-
       <template is="dom-if" if="{{mission}}">
         <div class="content">
           <h2>Entenda a missão</h2>
@@ -605,13 +575,11 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
                     <div class="message">
                       <paper-textarea id="commentInput" label="Escreva um comentário" required="" error-message="O campo não pode ser vazio.">
                       </paper-textarea>
-                      <paper-button on-tap="addComment" class="plain">Enviar</paper-button>
+                      <paper-button on-tap="_addComment" class="plain">Enviar</paper-button>
                     </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
     </template>
     </app-header-layout>
 
