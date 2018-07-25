@@ -499,11 +499,11 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
         <div class="content">
           <h2>Entenda a missão</h2>
           <!-- description field is inserted by the insertDescriptionHtml method -->
-          <p></p>
+          <p id="ckDescription"></p>
 
           <h2>recompensa</h2>
           <!-- reward field is inserted by the insertDescriptionHtml method -->
-          <p></p>
+          <p id="ckReward"></p>
 
             <div class="comments">
               <h2>Comentários</h2>
@@ -826,8 +826,8 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.path = `missions/${this.data.key}`;
     this.$.api.request().then(function(ajax) {
       this.set("mission", ajax.response);
-      this.insertDescriptionHtml(".content p");
-      this.insertRewardHtml(".content p:nth-child(4)");
+      this.insertDescriptionHtml("#ckDescription");
+      this.insertRewardHtml("#ckReward");
       this._calcMissionStats();
     }.bind(this));
   }

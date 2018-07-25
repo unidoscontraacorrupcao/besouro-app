@@ -93,7 +93,8 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         font-family: Folio;
       }
 
-      .card-content p {
+      .card-content p  > p { display: none; }
+      .card-content p:nth-child(1) {
         font-size: 1.2em;
         flex-grow: 1;
         max-height: 6em;
