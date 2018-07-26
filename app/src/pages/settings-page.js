@@ -292,6 +292,8 @@ class SettingsPage extends PolymerElement {
   }
   
   _updateSettings() {
+    if(!this.user) return;
+    this._updateUserChannels();
     this.$.api.method = "PUT";
     this.$.api.path = `settings/${this.user.uid}/`;
     this.$.api.body = this.settings;
@@ -303,10 +305,86 @@ class SettingsPage extends PolymerElement {
     });
   }
 
+  _updateUserChannels() {
+    if(!this.user) return;
+    //update mission channel
+    if(!this.settings.mission_notifications) {
+      this._removeFromMissionChannel();
+    } else {
+      this._addToMissionChannel();
+    }
+    //update trophy channel
+    if(!this.settings.trophy_notifications) {
+      this._removeFromTrophyChannel();
+    } else {
+      this._addToTrophyChannel();
+    }
+  }
+
   //Utility functions
   _showToast(message) {
     this._toastMessage = message;
     this.$.toast.open();
+  }
+
+  //Functions to andd and remove from channels
+  //TODO generate a component from this 
+  _removeFromMissionChannel() {
+    const data = {
+      user_id: this.user.uid
+    }
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/2/remove-from-general-channel`;
+    this.$.api.body = data;
+    this.$.api.user = this.user;
+    this.$.api.request().then((ajax) => {
+    }, (error) => {
+      this._showToast('Erro ao atualizar as configurações');
+    });
+  }
+
+  _addToMissionChannel() {
+    const data = {
+      user_id: this.user.uid
+    }
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/2/add-to-general-channel`;
+    this.$.api.body = data;
+    this.$.api.user = this.user;
+    this.$.api.request().then((ajax) => {
+    }, (error) => {
+      this._showToast('Erro ao atualizar as configurações');
+    });
+  }
+
+  _removeFromTrophyChannel() {
+    const data = {
+      user_id: this.user.uid,
+      sort: "trophy"
+    }
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/remove-from-individual-channel`;
+    this.$.api.body = data;
+    this.$.api.user = this.user;
+    this.$.api.request().then((ajax) => {
+    }, (error) => {
+      this._showToast('Erro ao atualizar as configurações');
+    });
+  }
+
+  _addToTrophyChannel() {
+    const data = {
+      user_id: this.user.uid,
+      sort: "trophy"
+    }
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/add-to-individual-channel`;
+    this.$.api.body = data;
+    this.$.api.user = this.user;
+    this.$.api.request().then((ajax) => {
+    }, (error) => {
+      this._showToast('Erro ao atualizar as configurações');
+    });
   }
 
 }

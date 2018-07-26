@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 import { PolymerElement } from "@polymer/polymer/polymer-element.js";
 import '@polymer/paper-toast/paper-toast.js';
 import "@polymer/app-layout/app-grid/app-grid-style.js";
+import '@polymer/paper-spinner/paper-spinner.js';
 
 import '../app-elements/app-besouro-api.js';
 import '../notifications-elements/notification-card.js';
@@ -50,7 +51,8 @@ class NotificationsPage extends PolymerElement {
           color: var(--secondary-text-color);
         }
         .content {
-          padding: 10px 0;
+          padding: 10px 0 0;
+          margin-bottom: 64px;
         }
         .icon-box {
           height: 100%;
@@ -85,7 +87,13 @@ class NotificationsPage extends PolymerElement {
               <notification-card notification="{{notification}}"></notification-card>
             </template>
         </div>
-    </app-header-layout>    
+    </app-header-layout>   
+
+    <template is="dom-if" if="{{!notifications.length}}">
+      <div class="page-loading">
+        <paper-spinner active></paper-spinner>
+      </div>
+    </template> 
 `;
   }
 
