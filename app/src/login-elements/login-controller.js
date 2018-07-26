@@ -498,7 +498,11 @@ class LoginController extends PolymerElement {
                         this._user.uid = user_id;
                       }.bind(this));
                   }.bind(this));
-              }.bind(this));
+              }.bind(this))
+                .catch(function(error){
+                  this.$.login._errors = {"email": "email do facebook já cadastrado na plataforma."};
+                  this.$.login.hideLoading();
+                }.bind(this));
             }.bind(this));
         }.bind(this), {fields: "picture, email, name"});
       } else {
