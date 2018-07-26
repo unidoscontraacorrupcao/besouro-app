@@ -74,6 +74,7 @@ class ApiUserProfile extends PolymerElement {
 
     let result = {};
     if(this._hasAllRequiredData(response)) {
+      var profile_id = this._getProfile(response.links.self);
       result = {
         success: true,
         data: {
@@ -85,6 +86,7 @@ class ApiUserProfile extends PolymerElement {
           race: response.race,
           phone: response.phone,
           age: response.age,
+          profile_id: profile_id,
           image: response.image != null ? response.image : `/images/generic/avatar_default-perfil.png`
         }
       };
@@ -98,6 +100,10 @@ class ApiUserProfile extends PolymerElement {
       };
     }
     this._dispatch(result);
+  }
+
+  _getProfile(profile_url) {
+    return profile_url.split("/")[profile_url.split("/").length - 2]
   }
 
   _onError(e, iron) {
