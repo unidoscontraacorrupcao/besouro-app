@@ -92,7 +92,7 @@ class MissionComment extends PolymerElement {
   requestPhoto(comment) {
     setTimeout(function(){
       this.$.api.method = "GET";
-      this.$.api.path = `profiles/${comment.user.id}/`;
+      this.$.api.path = `profiles/${comment.user.profile_id}/`;
       this.$.api.request().then(function(ajax) {
         if (ajax.response.image != null) {
           this.userPhoto = ajax.response.image;

@@ -722,7 +722,7 @@ class ProfilePage extends PolymerElement {
   _updateProfile(e) {
     const VALIDATION = this._validateForm();
     if(VALIDATION.valid) {
-      this.$.apiUpdateProfile.request(this._user.key, this._user.uid, this._form);
+      this.$.apiUpdateProfile.request(this._user.key, this._user.profile_id, this._form);
       this._switchInfo();
     } else {
       this._errors = VALIDATION.errors;
@@ -740,7 +740,7 @@ class ProfilePage extends PolymerElement {
       this.photoLoading(true);
       let apiUpdateProfile = this.$.apiUpdateProfile
       let key = this._user.key;
-      let uid = this._user.uid;
+      let uid = this._user.profile_id;
       apiUpdateProfile.imageRequest(key, uid, photo).then(function(ajax) {
         this.photoLoading(false);
       }.bind(this));
@@ -801,6 +801,7 @@ class ProfilePage extends PolymerElement {
       this._user.gender = result.data.gender;
       this._user.race = result.data.race;
       this._user.photoURL = result.data.image;
+      this._user.profile_id = result.data.profile_id;
       this._dispatchUser();
     } else {
       this._toastUnknownError();
