@@ -84,7 +84,7 @@ class NotificationsPage extends PolymerElement {
       </app-header>
         <div class="content">
           <template is="dom-repeat" items="{{notifications}}" as="notification" >
-              <notification-card notification="{{notification}}"></notification-card>
+              <notification-card notification="{{notification}}" on-tap="_checkRead"></notification-card>
             </template>
         </div>
     </app-header-layout>   
@@ -140,6 +140,24 @@ class NotificationsPage extends PolymerElement {
     }, (error) => {
       this._showToast('Ocorreu um problema ao requisitar suas notificações. Tente novamente.');
     });
+  }
+
+  _checkRead(e) {
+    const notification = e.model.get('notification');
+    if(!notification.read) {
+      const data = {
+        notification_id: notification.id,
+        read: true
+      }
+      this.$.api.method = "PUT";
+      this.$.api.user = this.user;
+      this.$.api.path = `notifications/update-read`;
+      this.$.api.body = data;
+      this.$.api.request().then((ajax) => {
+      }, (error) => {
+        this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
+      });
+    }
   }
 
   //Utility functions

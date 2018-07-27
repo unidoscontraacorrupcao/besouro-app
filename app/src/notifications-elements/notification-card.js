@@ -123,5 +123,6 @@ class NotificationCard extends PolymerElement {
         return "";
     } 
   }
+
 }
 customElements.define(NotificationCard.is, NotificationCard);
