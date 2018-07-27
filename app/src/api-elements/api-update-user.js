@@ -36,7 +36,7 @@ class ApiUpdateUser extends PolymerElement {
       this._headers = {
         "authorization": `Token ${token}`
       };
-      this._displayName = `${id}.${displayName}`;
+      this._displayName = `${displayName}`;
       this.$.ajax.generateRequest();
     } else {
       this._dispatch(validation.errors);
@@ -56,7 +56,7 @@ class ApiUpdateUser extends PolymerElement {
     if(displayName.indexOf(".") != -1) {
       return displayName.split(".")[1];
     } else {
-      return "Admin";
+      return displayName;
     }
   }
 

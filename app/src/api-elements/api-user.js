@@ -53,7 +53,7 @@ class ApiUser extends PolymerElement {
     if(displayName.indexOf(".") != -1) {
       return displayName.split(".")[1];
     } else {
-      return 'Admin';
+      return displayName;
     }
   }
 
