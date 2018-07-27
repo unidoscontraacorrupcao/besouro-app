@@ -425,21 +425,11 @@ class LoginController extends PolymerElement {
     };
   }
 
-  _getEmptyLogin() {
-    return {};
-  }
-
-  _getEmptySignUp() {
-    return {};
-  }
-
-  _getEmptyForgotPassword() {
-    return {};
-  }
-
-  ready() {
-    super.ready();
-  }
+  _requestFacebookLogin() { this.$.facebook.login(); }
+  _getEmptyLogin() { return {}; }
+  _getEmptySignUp() { return {}; }
+  _getEmptyForgotPassword() { return {}; }
+  ready() { super.ready(); }
 
   _showFBLoginErrors(e) {
     if (e.detail.email){
@@ -447,7 +437,6 @@ class LoginController extends PolymerElement {
       this.$.login.hideLoading();
     }
   }
-  _requestFacebookLogin() { this.$.facebook.login(); }
 }
 
 window.customElements.define(LoginController.is, LoginController);
