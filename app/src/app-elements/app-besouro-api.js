@@ -19,6 +19,19 @@ class AppBesouroApi extends PolymerElement {
     withCredentials
     debounce-duration="300"></iron-ajax>
 
+    <iron-ajax
+    id="authAjax"
+    url="{{authUrl}}"
+    body='{{body}}'
+    params={{params}}
+    headers="{{getHeaders()}}"
+    handle-as="json"
+    content-type="{{contentType}}"
+    method={{method}}
+    loading
+    withCredentials
+    debounce-duration="300"></iron-ajax>
+
     <iron-request id="xhr"></iron-request>
     `
   }
@@ -29,6 +42,10 @@ class AppBesouroApi extends PolymerElement {
       baseUrl: {
         type: String,
         value: "http://localhost:8000"
+      },
+      authUrl: {
+        type: String,
+        value: ""
       },
       method: {
         type: String,
@@ -50,15 +67,18 @@ class AppBesouroApi extends PolymerElement {
   }
 
   request() {
-    if (this.method == "POST" || this.method == "PATCH")
-      this.$.ajax.headers = this.getHeaders();
-    else
-      this.$.ajax.headers = {};
+    this.$.ajax.headers = this.getHeaders();
     if (this.url == `${this.baseUrl}/reset/`)
       this.$.ajax.url = `${this.baseUrl}/reset/`;
     if (this.url == `${this.baseUrl}/rest-auth/facebook/`)
       this.$.ajax.url = `${this.baseUrl}/rest-auth/facebook/`;
     return this.$.ajax.generateRequest().completes;
+  }
+
+  authRequest() {
+    this.$.authAjax.url = this.authUrl;
+    this.$.authAjax.headers = this.getHeaders();
+    return this.$.authAjax.generateRequest().completes;
   }
 
   xhrRequest() {
