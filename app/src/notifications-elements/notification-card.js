@@ -22,12 +22,15 @@ class NotificationCard extends PolymerElement {
         line-height: 1;
         font-weight: 400;
       }
+      .card-content .target {
+        text-transform: uppercase;
+        color: var(--paragraph-color);
+      }
       .notification-card {
         padding: 0px;
         display: flex;
         background-color: var(--default-primary-color);
         border-bottom: 1px solid var(--disabled-text-color);
-        height: 110px;
       }
       .card-icon {
         width: 15%;
@@ -59,7 +62,7 @@ class NotificationCard extends PolymerElement {
         <iron-icon icon="{{cardIcon}}"></iron-icon>
       </div>
       <div class="card-content">
-        <h4>{{notification.message.title}}</h4>
+        <h4>{{setCardTitle(notification)}}<span class="target">{{notification.message.title}}</span></h4>
         <span>{{getDate(notification)}}</span>
       </div>
     </div>
@@ -79,7 +82,14 @@ class NotificationCard extends PolymerElement {
 
   getDate(notification) {
     this.setCardIcon(notification);
-    return notification.created_at;
+    const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
+    'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const date = new Date(notification.created_at);
+    const day = date.getDate()
+    const month = date.getMonth();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${day} de ${months[month]}, às ${hours}:${minutes}`;
   }
 
   setCardIcon(notification) {
@@ -94,6 +104,24 @@ class NotificationCard extends PolymerElement {
         this.cardIcon = "app:trophy-notifications"
         break;
     }
+  }
+
+  setCardTitle(notification) {
+    switch(notification.channel.sort) {
+      case "mission":
+        return `Missão nova no ar! Confira a `;
+        break;
+      case "trophy":
+        return `Parabéns! Você recebeu o troféu `;
+        break;
+      case "admin":
+        const message = notification.message.title;
+        notification.message.title = "";
+        return message;
+        break;
+      default:
+        return "";
+    } 
   }
 }
 customElements.define(NotificationCard.is, NotificationCard);
