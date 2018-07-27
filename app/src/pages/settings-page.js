@@ -183,7 +183,7 @@ class SettingsPage extends PolymerElement {
             </div>
             <div class="category">
               <div class="category-icon">
-                <iron-icon icon="app:volume-up"></iron-icon>
+                <iron-icon icon="app:alert-users-settings"></iron-icon>
                 <span>Alertas</span>
               </div>
               <paper-toggle-button checked="{{settings.admin_notifications}}"></paper-toggle-button>      
@@ -193,14 +193,14 @@ class SettingsPage extends PolymerElement {
           <div class="row">
             <div class="category">
               <div class="category-icon">
-                <iron-icon icon="app:splash-blocked"></iron-icon>
+                <iron-icon icon="app:trophy-settings"></iron-icon>
                 <span>Troféus</span>
               </div>
               <paper-toggle-button checked="{{settings.trophy_notifications}}"></paper-toggle-button>      
             </div>
             <div class="category">
               <div class="category-icon">
-                <iron-icon icon="app:thumb-up"></iron-icon>
+                <iron-icon icon="app:thumbs-up-settings"></iron-icon>
                 <span>Aprovados</span>
               </div>
               <paper-toggle-button checked="{{settings.approved_notifications}}"></paper-toggle-button>      
@@ -210,14 +210,14 @@ class SettingsPage extends PolymerElement {
           <div class="row">
             <div class="category">
               <div class="category-icon">
-                <iron-icon icon="app:assignment"></iron-icon>
+                <iron-icon icon="app:conversations-settings"></iron-icon>
                 <span>Opiniões</span>
               </div>
               <paper-toggle-button checked="{{settings.conversation_notifications}}"></paper-toggle-button>      
             </div>
             <div class="category">
               <div class="category-icon">
-                <iron-icon icon="app:thumb-down"></iron-icon>
+                <iron-icon icon="app:thumb-down-settings"></iron-icon>
                 <span>Reprovados</span>
               </div>
               <paper-toggle-button checked="{{settings.disapproved_notifications}}"></paper-toggle-button>      

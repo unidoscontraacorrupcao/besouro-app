@@ -20,6 +20,7 @@ class NotificationCard extends PolymerElement {
         font-family: Folio;
         margin: 10px 0 0;
         line-height: 1;
+        font-weight: 400;
       }
       .notification-card {
         padding: 0px;
@@ -82,10 +83,16 @@ class NotificationCard extends PolymerElement {
   }
 
   setCardIcon(notification) {
-    if(notification.channel.sort === "mission") {
-      this.cardIcon = "app:mission-notifications"
-    } else {
-      this.cardIcon = "app:alert-users-notifications"
+    switch(notification.channel.sort) {
+      case "mission":
+        this.cardIcon = "app:mission-notifications";
+        break;
+      case "admin":
+        this.cardIcon = "app:alert-users-notifications"
+        break;
+      case "trophy":
+        this.cardIcon = "app:trophy-notifications"
+        break;
     }
   }
 }
