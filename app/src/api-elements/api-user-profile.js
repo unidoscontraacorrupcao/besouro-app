@@ -40,6 +40,20 @@ class ApiUserProfile extends PolymerElement {
     }
   }
 
+  requestAsPromise(token, id) {
+    let validation = this._validate(token, id);
+    if(validation.isValid) {
+      this._url = this.$.constants.api.userProfile.replace(`:user_id`, id);
+      this._headers = {
+        'Authorization': `Token ${token}`
+      };
+      return this.$.ajax.generateRequest().completes;
+    } else {
+      this._dispatch(validation.errors);
+    }
+  }
+
+
   _validate(token, id) {
     // TODO: Create validation
     return { isValid: true };

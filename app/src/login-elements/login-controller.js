@@ -13,6 +13,7 @@ import '../api-elements/api-forgot-password.js';
 import '../app-elements/app-besouro-api.js';
 import './sign-up-view.js';
 import './login-view.js';
+import './facebook-login.js';
 import './forgot-password-view.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
@@ -30,6 +31,14 @@ class LoginController extends PolymerElement {
       </style>
 
       <app-besouro-api id="api"></app-besouro-api>
+
+      <facebook-login
+        id="facebook"
+        on-success="_dispatchFBUser"
+        on-error="_showFBLoginErrors"
+        _user="{{_user}}">
+      </facebook-login>
+
       <login-view id="login"
         on-login="_requestLogin",
         on-auth-facebook="_requestFacebookLogin"
@@ -204,6 +213,8 @@ class LoginController extends PolymerElement {
   }
 
   _onAuthUser(e, result) {
+    console.log(e);
+    console.log(result);
     if(result.success) {
       this._user.uid = result.data.id;
       if(`form` in this._signUp) {
@@ -292,6 +303,12 @@ class LoginController extends PolymerElement {
 
   _dispatchUser() {
     this.dispatchEvent(new CustomEvent(`user-update`, { detail: this._user } ));
+    this._clearForms();
+  }
+
+  _dispatchFBUser(e) {
+    console.log(e.detail);
+    this.dispatchEvent(new CustomEvent(`user-update`, { detail: e.detail } ));
     this._clearForms();
   }
 
@@ -420,101 +437,17 @@ class LoginController extends PolymerElement {
     return {};
   }
 
-
-  _initializeFBSDK() {
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId            : '270821273677451',
-        autoLogAppEvents : true,
-        xfbml            : true,
-        version          : 'v3.0'
-      });
-    };
-
-    (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  }
-
-  _requestFacebookLogin() {
-    // get user fb authorization
-    window.FB.login(function(response) {
-      if (response.authResponse) {
-        let accessToken = response.authResponse.accessToken;
-        // get user fb data
-        FB.api('/v3.0/me', function(response) {
-          var fbProfileData = response;
-          let baseUrl = this.$.api.baseUrl;
-
-          // reset csrf token
-          let base = this.$.api.baseUrl;
-          this.$.api.set("url",  `${base}/reset/`);
-          this.$.api.request()
-            .then(function(ajax) {
-              this.$.api.url = `${baseUrl}/rest-auth/facebook/`;
-              this.$.api.method = "POST";
-              this.$.api.body = {"access_token": accessToken};
-              this.$.api.request().then(function(ajax) {
-                var userToken = ajax.response.key;
-                //get user id using user token.
-                this._user.key = userToken;
-                this.$.apiAuthUser.requestAsPromise(userToken)
-                  .then(function(ajax){
-                    var user_id = ajax.response.pk;
-
-                    //fetch user facebook photo and store as a blob
-                    let _fbPhotoUrl = `https://graph.facebook.com/${fbProfileData.id}/picture?type=large`;
-                    fetch(_fbPhotoUrl).then(function(response){
-                      return response.blob();
-                    })
-                    // send facebook photo to django. If we need to store more user
-                    // infos on ej, use this promise.
-                      .then(function(blob){
-                        var fbPhoto = new File([blob], "facebook_photo.jpeg");
-                        var formData = new FormData();
-                        formData.append("image", fbPhoto);
-                        this.$.api.user = {"key": userToken};
-                        this.$.api.xhrData = { method: "put",
-                          url: `${this.$.api.baseUrl}/api/v1/profiles/${user_id}/`,
-                          body: formData };
-                        return this.$.api.xhrRequest();
-                      }.bind(this))
-                      .then(function(){
-                        this._user.email = fbProfileData.email;
-                        this._user.displayName = `.${fbProfileData.name}`;
-                        this.$.api.user = {"key": userToken};
-                        this.$.api.method = "PATCH";
-                        this.$.api.body = {"email": fbProfileData.email,
-                          "display_name": `.${fbProfileData.name}`};
-                        this.$.api.path = `users/${user_id}/`;
-                        this.$.api.url = `${this.$.api.baseUrl}/api/v1/${this.$.api.path}`;
-                        return this.$.api.request();
-                      }.bind(this))
-                      .then(function(ajax){
-                        this._user.uid = user_id;
-                      }.bind(this));
-                  }.bind(this));
-              }.bind(this))
-                .catch(function(error){
-                  this.$.login._errors = {"email": "email do facebook já cadastrado na plataforma."};
-                  this.$.login.hideLoading();
-                }.bind(this));
-            }.bind(this));
-        }.bind(this), {fields: "picture, email, name"});
-      } else {
-        console.log('User cancelled login or did not fully authorize.');
-      }
-    }.bind(this), {"scope": "email,public_profile"});
-  }
-
   ready() {
     super.ready();
-    this._initializeFBSDK();
   }
+
+  _showFBLoginErrors(e) {
+    if (e.detail.email){
+      this.$.login._errors = e.detail;
+      this.$.login.hideLoading();
+    }
+  }
+  _requestFacebookLogin() { this.$.facebook.login(); }
 }
 
 window.customElements.define(LoginController.is, LoginController);
