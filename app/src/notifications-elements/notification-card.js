@@ -32,6 +32,10 @@ class NotificationCard extends PolymerElement {
         background-color: var(--default-primary-color);
         border-bottom: 1px solid var(--disabled-text-color);
       }
+      .notification-card[disabled] .card-icon,
+      .notification-card[disabled] .card-icon iron-icon {
+        background-color: var(--light-text-color);
+      }
       .card-icon {
         width: 15%;
         display: inline-block;
@@ -57,7 +61,7 @@ class NotificationCard extends PolymerElement {
     </style>
     <app-besouro-api id="api"></app-besouro-api>
 
-    <div class="notification-card">
+    <div id="card" class="notification-card">
       <div class="card-icon">
         <iron-icon icon="{{cardIcon}}"></iron-icon>
       </div>
@@ -82,6 +86,7 @@ class NotificationCard extends PolymerElement {
 
   getDate(notification) {
     this.setCardIcon(notification);
+    this.setRead(notification);
     const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
     'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const date = new Date(notification.created_at);
@@ -90,6 +95,12 @@ class NotificationCard extends PolymerElement {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return `${day} de ${months[month]}, às ${hours}:${minutes}`;
+  }
+
+  setRead(notification) {
+    if(notification.read) {
+      this.$.card.setAttribute("disabled", "");
+    }
   }
 
   setCardIcon(notification) {
