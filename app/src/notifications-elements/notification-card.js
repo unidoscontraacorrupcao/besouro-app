@@ -94,10 +94,10 @@ class NotificationCard extends PolymerElement {
     const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
     'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const date = new Date(notification.created_at);
-    const day = date.getDate()
+    const day = `0${date.getDate()}`.slice(-2);
     const month = date.getMonth();
     const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const minutes = `0${date.getMinutes()}`.slice(-2);
     return `${day} de ${months[month]}, às ${hours}:${minutes}`;
   }
 
