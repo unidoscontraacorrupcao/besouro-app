@@ -144,23 +144,23 @@ class NotificationsPage extends PolymerElement {
 
   _checkRead(e) {
     const notification = e.model.get('notification');
-    //const card = e.target;
-    //if(!notification.read) {
-    //  const data = {
-    //    notification_id: notification.id,
-    //    read: true
-    //  }
-    //  this.$.api.method = "PUT";
-    //  this.$.api.user = this.user;
-    //  this.$.api.path = `notifications/update-read`;
-    //  this.$.api.body = data;
-    //  this.$.api.request().then((ajax) => {
-    //    card.notification = ajax.response;
-        this.redirectToTarget(notification);
-    //}, (error) => {
-    //  this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
-    //});
-    //}
+    const card = e.target;
+    if(!notification.read) {
+      const data = {
+        notification_id: notification.id,
+        read: true
+      }
+      this.$.api.method = "PUT";
+      this.$.api.user = this.user;
+      this.$.api.path = `notifications/update-read`;
+      this.$.api.body = data;
+      this.$.api.request().then((ajax) => {
+        card.notification = ajax.response;
+      this.redirectToTarget(notification);
+    }, (error) => {
+      this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
+    });
+    }
   }
 
   redirectToTarget(notification) {

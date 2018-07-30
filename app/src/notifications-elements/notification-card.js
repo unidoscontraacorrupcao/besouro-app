@@ -109,16 +109,29 @@ class NotificationCard extends PolymerElement {
   }
 
   setCardIcon(notification) {
-    switch(notification.channel.sort) {
-      case "mission":
-        this.cardIcon = "app:mission-notifications";
-        break;
-      case "admin":
-        this.cardIcon = "app:alert-users-notifications"
-        break;
-      case "trophy":
-        this.cardIcon = "app:trophy-notifications"
-        break;
+    var channel_sort = notification.channel.sort.split('-');
+
+    if(channel_sort.length == 2) {
+      console.log(channel_sort);
+      var mission_id = channel_sort[1];
+      this.$.api.path = `missions/${mission_id}`;
+      this.$.api.request().then((ajax) => {
+        var mission_name = ajax.response.title;
+        this.set("cardTitle", `Há opiniões disponíveis na missão ${mission_name}.`);
+      });
+    }
+    else {
+      switch(notification.channel.sort) {
+        case "mission":
+          this.cardIcon = "app:mission-notifications";
+          break;
+        case "admin":
+          this.cardIcon = "app:alert-users-notifications"
+          break;
+        case "trophy":
+          this.cardIcon = "app:trophy-notifications"
+          break;
+      }
     }
   }
 
