@@ -600,10 +600,19 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.body = {"id": this.mission.id, "user_id": this.user.uid };
     this.$.api.user = this.user;
     this.$.api.request().then(function(ajax) {
+      this._addUserOnMissionChanel();
       this.currentMissionStats = "started";
       this._setActionBtn();
       this.$.acceptedDialog.present();
     }.bind(this));
+  }
+
+  _addUserOnMissionChanel() {
+    this.$.api.method = "PUT";
+    this.$.api.path = "channels/add-to-group-channel";
+    this.$.api.body = {"user_id": this.user.uid, "sort": `conversation-${this.mission.id}`};
+    this.$.api.user = this.user;
+    return this.$.api.request().then(() => {});
   }
 
   _finishMission(e) {

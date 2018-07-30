@@ -66,7 +66,7 @@ class NotificationCard extends PolymerElement {
         <iron-icon icon="{{cardIcon}}"></iron-icon>
       </div>
       <div class="card-content">
-        <h4>{{setCardTitle(notification)}}<span class="target">{{notification.message.title}}</span></h4>
+        <h4>{{cardTitle}}<span class="target">{{notification.message.title}}</span></h4>
         <span>{{getDate(notification)}}</span>
       </div>
     </div>
@@ -78,9 +78,12 @@ class NotificationCard extends PolymerElement {
     return {
       notification: {
         type: Object,
-        value: function() {}
+        value: function() {},
+        observer: 'setCardTitle'
       },
-      cardIcon: String
+      cardIcon: String,
+      cardTitle: String,
+      cardDescription: String
     }
   }
 
@@ -120,21 +123,39 @@ class NotificationCard extends PolymerElement {
   }
 
   setCardTitle(notification) {
-    switch(notification.channel.sort) {
-      case "mission":
-        return `Missão nova no ar! Confira a `;
-        break;
-      case "trophy":
-        return `Parabéns! Você recebeu o troféu `;
-        break;
-      case "admin":
-        const message = notification.message.title;
-        notification.message.title = "";
-        return message;
-        break;
-      default:
-        return "";
-    } 
+    if (!notification) return;
+
+    var channel_sort = notification.channel.sort.split('-');
+
+    if(channel_sort.length == 2) {
+      console.log(channel_sort);
+      var mission_id = channel_sort[1];
+      this.$.api.path = `missions/${mission_id}`;
+      this.$.api.request().then((ajax) => {
+        var mission_name = ajax.response.title;
+        this.set("cardTitle", `Há opiniões disponíveis na missão ${mission_name}.`);
+      });
+    }
+    else{
+
+      switch(notification.channel.sort) {
+        case "mission":
+          this.set("cardTitle", `Missão nova no ar! Confira a `);
+          break;
+        case "trophy":
+          return `Parabéns! Você recebeu o troféu `;
+          this.set("cardTitle", `Missão nova no ar! Confira a `);
+          break;
+        case "admin":
+          const message = notification.message.title;
+          notification.message.title = "";
+          this.set("cardTitle", ``);
+          return message;
+          break;
+        default:
+          return "";
+      }
+    }
   }
 
 }

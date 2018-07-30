@@ -144,39 +144,51 @@ class NotificationsPage extends PolymerElement {
 
   _checkRead(e) {
     const notification = e.model.get('notification');
-    const card = e.target;
-    if(!notification.read) {
-      const data = {
-        notification_id: notification.id,
-        read: true
-      }
-      this.$.api.method = "PUT";
-      this.$.api.user = this.user;
-      this.$.api.path = `notifications/update-read`;
-      this.$.api.body = data;
-      this.$.api.request().then((ajax) => {
-        card.notification = ajax.response;
+    //const card = e.target;
+    //if(!notification.read) {
+    //  const data = {
+    //    notification_id: notification.id,
+    //    read: true
+    //  }
+    //  this.$.api.method = "PUT";
+    //  this.$.api.user = this.user;
+    //  this.$.api.path = `notifications/update-read`;
+    //  this.$.api.body = data;
+    //  this.$.api.request().then((ajax) => {
+    //    card.notification = ajax.response;
         this.redirectToTarget(notification);
-      }, (error) => {
-        this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
-      });
-    }
+    //}, (error) => {
+    //  this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
+    //});
+    //}
   }
 
   redirectToTarget(notification) {
-    switch(notification.channel.sort) {
-      case "mission":
-        this.set('route.path', `/show-mission/${notification.message.target}`);
-        break;
-      case "trophy":
-        this.set('route.path', '/profile');
-        break;
-      case "admin":
-        window.open(notification.message.body, "_blank");
-        break;
-      default:
-        break;
-    } 
+    var channel_sort = notification.channel.sort.split('-');
+    if(channel_sort.length == 2) {
+      var mission_id = channel_sort[1];
+      this.$.api.path = `missions/${mission_id}`;
+      this.$.api.request().then((ajax) => {
+        var mission_name = ajax.response.title;
+        this.set('route.show_conversation', true);
+        this.set('route.path', `/show-mission/${mission_id}`);
+      });
+    }
+    else {
+      switch(notification.channel.sort) {
+        case "mission":
+          this.set('route.path', `/show-mission/${notification.message.target}`);
+          break;
+        case "trophy":
+          this.set('route.path', '/profile');
+          break;
+        case "admin":
+          window.open(notification.message.body, "_blank");
+          break;
+        default:
+          break;
+      } 
+    }
   }
 
   //Utility functions

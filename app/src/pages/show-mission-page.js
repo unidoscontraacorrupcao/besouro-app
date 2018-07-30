@@ -705,32 +705,32 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _addComment(e) {
-    //  if (!this.user || Object.keys(this.user).length == 0) {
-    //    this.$.unauthorizedDialog.present();
-    //    return;
-    //  }
-    //  const input = this.shadowRoot.querySelector('#commentInput');
-    //  if(!input.value) {
-    //    input.invalid = true;
-    //    return;
-    //  } else {
-    //    input.invalid = false;
-    //  }
+    if (!this.user || Object.keys(this.user).length == 0) {
+      this.$.unauthorizedDialog.present();
+      return;
+    }
+    const input = this.shadowRoot.querySelector('#commentInput');
+    if(!input.value) {
+      input.invalid = true;
+      return;
+    } else {
+      input.invalid = false;
+    }
 
-    //  const content = {
-    //    user_id: this.user.uid,
-    //    comment: input.value
-    //  };
-    //  this.$.api.method = "POST";
-    //  this.$.api.path = `missions/${this.data.key}/comment/`;
-    //  this.$.api.user = this.user;
-    //  this.$.api.body = content;
-    //  this.$.api.request().then(function(ajax) {
-    //    this._missionChanged().then(function(){
-    //      this._openConversationModal();
-    //    }.bind(this));
-    //  }.bind(this));
-    //  input.value = "";
+    const content = {
+      user_id: this.user.uid,
+      comment: input.value
+    };
+    this.$.api.method = "POST";
+    this.$.api.path = `missions/${this.data.key}/comment/`;
+    this.$.api.user = this.user;
+    this.$.api.body = content;
+    this.$.api.request().then(function(ajax) {
+      this._missionChanged().then(function(){
+        this._openConversationModal();
+      }.bind(this));
+    }.bind(this));
+    input.value = "";
     this._openConversationModal();
   }
 
@@ -764,7 +764,16 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.request().then(function(ajax) {
       this._missionChanged();
     }.bind(this));
+   this._addUserOnMissionChanel();
    this.$.acceptedDialog.present();
+  }
+
+  _addUserOnMissionChanel() {
+    this.$.api.method = "PUT";
+    this.$.api.path = "channels/add-to-group-channel";
+    this.$.api.body = {"user_id": this.user.uid, "sort": `conversation-${this.mission.id}`};
+    this.$.api.user = this.user;
+    return this.$.api.request().then(() => {});
   }
 
   _rejectMission(e) {
@@ -912,6 +921,11 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       this.insertDescriptionHtml("#ckDescription");
       this.insertRewardHtml("#ckReward");
       this._calcMissionStats();
+      if (this.route.show_conversation) {
+        console.log(this.route);
+        this.set("route.show_conversation", false);
+        this._openConversationModal();
+      }
     }.bind(this));
   }
 
