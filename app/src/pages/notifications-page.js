@@ -83,9 +83,9 @@ class NotificationsPage extends PolymerElement {
         </app-toolbar>
       </app-header>
         <div class="content">
-          <template is="dom-repeat" items="{{notifications}}" as="notification" >
-              <notification-card notification="{{notification}}" on-tap="_checkRead"></notification-card>
-            </template>
+          <template is="dom-repeat" items="{{notifications}}" as="notification">
+            <notification-card notification="{{notification}}" on-tap="_checkRead"></notification-card>
+          </template>
         </div>
     </app-header-layout>   
 
@@ -144,6 +144,7 @@ class NotificationsPage extends PolymerElement {
 
   _checkRead(e) {
     const notification = e.model.get('notification');
+    const card = e.target;
     if(!notification.read) {
       const data = {
         notification_id: notification.id,
@@ -154,6 +155,7 @@ class NotificationsPage extends PolymerElement {
       this.$.api.path = `notifications/update-read`;
       this.$.api.body = data;
       this.$.api.request().then((ajax) => {
+        card.notification = ajax.response;
       }, (error) => {
         this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
       });

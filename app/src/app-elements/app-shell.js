@@ -14,6 +14,7 @@ import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-toast/paper-toast.js';
 import "share-menu/share-menu.js";
 import './app-actions.js';
+import './app-besouro-api.js';
 import '../pages/login-page.js';
 import '../pages/inbox-page.js';
 import '../pages/profile-page.js';
@@ -176,6 +177,7 @@ class AppShell extends PolymerElement {
       }
     </style>
 
+    <app-besouro-api id="api"></app-besouro-api>
     <app-location route="{{route}}"></app-location>
     <app-route
       route="{{route}}"
@@ -281,7 +283,7 @@ class AppShell extends PolymerElement {
             on-back-pressed="_goToInbox"></profile-page>
       </iron-pages>
       <template is="dom-if" if="{{canShowBottomBar}}">
-        <app-actions on-go-to-inbox="_goToInbox" on-go-to-notifications="_goToNotifications"></app-actions>
+        <app-actions on-go-to-inbox="_goToInbox" on-go-to-notifications="_goToNotifications" unread={{unread}}></app-actions>
       </template>
     </app-drawer-layout>
     <script src="/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
@@ -315,7 +317,8 @@ class AppShell extends PolymerElement {
       noBottomBarList: {
         type: Array,
         value: ['privacy', 'help', 'not-found', 'login']
-      }
+      },
+      unread: Number
     };
   }
 
@@ -338,6 +341,7 @@ class AppShell extends PolymerElement {
       this.$.drawer.close();
     }
     this.canShowBottomBar = !this.noBottomBarList.includes(this.page);
+    this._getUserNotifications(page);
   }
 
   _pageChanged(page) {
@@ -425,6 +429,18 @@ class AppShell extends PolymerElement {
     //try to login with facebook again.
     location.reload();
     this.set("route.path", `/`);
+  }
+
+  _getUserNotifications(page) {
+    if(!this.user) return;
+    if(page === "" || page === "inbox" || page === "show-mission" || page === "profile" || page === "notifications") {
+      this.$.api.method = "GET";
+      this.$.api.path = `notifications/user/${this.user.uid}/unread`;
+      this.$.api.request().then((ajax) => {
+        this.unread = ajax.response.length;
+      }, (error) => {
+      });
+    }
   }
 
   // Profile

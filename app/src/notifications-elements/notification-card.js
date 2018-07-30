@@ -100,6 +100,8 @@ class NotificationCard extends PolymerElement {
   setRead(notification) {
     if(notification.read) {
       this.$.card.setAttribute("disabled", "");
+    } else {
+      this.$.card.removeAttribute("disabled");
     }
   }
 

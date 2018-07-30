@@ -1,5 +1,6 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-fab/paper-fab.js';
+import '@polymer/paper-badge/paper-badge.js';
 import './shared-styles.js';
 import './app-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -99,7 +100,10 @@ class AppActions extends mixinBehaviors(
           -->
           <div id="notifications-btn">
             <div class="icon-container">
-              <paper-icon-button icon="app:navNotifications" on-tap="_goToNotifications"></paper-icon-button>
+              <paper-icon-button id="btn-notifications" icon="app:navNotifications" on-tap="_goToNotifications"></paper-icon-button>
+              <template is="dom-if" if="{{unread}}">
+                <paper-badge for="btn-notifications" label="{{unread}}"></paper-badge>
+              </template>
               <span>notificações</span>
             </div>
           </div>
@@ -129,7 +133,8 @@ class AppActions extends mixinBehaviors(
         type: String,
         notify: true,
         observer: "_hideActions"
-      }
+      },
+      unread: Number
     };
   }
 
