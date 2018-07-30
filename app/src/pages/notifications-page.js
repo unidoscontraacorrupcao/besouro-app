@@ -156,10 +156,27 @@ class NotificationsPage extends PolymerElement {
       this.$.api.body = data;
       this.$.api.request().then((ajax) => {
         card.notification = ajax.response;
+        this.redirectToTarget(notification);
       }, (error) => {
         this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
       });
     }
+  }
+
+  redirectToTarget(notification) {
+    switch(notification.channel.sort) {
+      case "mission":
+        this.set('route.path', `/show-mission/${notification.message.target}`);
+        break;
+      case "trophy":
+        this.set('route.path', '/profile');
+        break;
+      case "admin":
+        window.open(notification.message.body, "_blank");
+        break;
+      default:
+        break;
+    } 
   }
 
   //Utility functions
