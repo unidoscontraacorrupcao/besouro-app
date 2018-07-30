@@ -713,45 +713,53 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _addComment(e) {
-    if (!this.user || Object.keys(this.user).length == 0) {
-      this.$.unauthorizedDialog.present();
-      return;
-    }
-    const input = this.shadowRoot.querySelector('#commentInput');
-    if(!input.value) {
-      input.invalid = true;
-      return;
-    } else {
-      input.invalid = false;
-    }
+    //  if (!this.user || Object.keys(this.user).length == 0) {
+    //    this.$.unauthorizedDialog.present();
+    //    return;
+    //  }
+    //  const input = this.shadowRoot.querySelector('#commentInput');
+    //  if(!input.value) {
+    //    input.invalid = true;
+    //    return;
+    //  } else {
+    //    input.invalid = false;
+    //  }
 
-    const content = {
-      user_id: this.user.uid,
-      comment: input.value
-    };
-    this.$.api.method = "POST";
-    this.$.api.path = `missions/${this.data.key}/comment/`;
-    this.$.api.user = this.user;
-    this.$.api.body = content;
-    this.$.api.request().then(function(ajax) {
-      this._missionChanged().then(function(){
-        this._openConversationModal();
-      }.bind(this));
-    }.bind(this));
-    input.value = "";
+    //  const content = {
+    //    user_id: this.user.uid,
+    //    comment: input.value
+    //  };
+    //  this.$.api.method = "POST";
+    //  this.$.api.path = `missions/${this.data.key}/comment/`;
+    //  this.$.api.user = this.user;
+    //  this.$.api.body = content;
+    //  this.$.api.request().then(function(ajax) {
+    //    this._missionChanged().then(function(){
+    //      this._openConversationModal();
+    //    }.bind(this));
+    //  }.bind(this));
+    //  input.value = "";
+    this._openConversationModal();
   }
 
-_openConversationModal() {
-  this._getMission().then(function(ajax) {
-    var mission = ajax.response;
-    if (mission.pending_conversations.length > 0) {
-      const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
-      conversationComponent.getConversation(mission);
-      this.$.conversationDialog.present();
-    }
-  }.bind(this));
-}
+  _openConversationModal() {
+    this._getNextConversation().then(function(ajax) {
+      var comments_count = ajax.response.comments_count;
+      if (comments_count > 0) {
+        var cid = ajax.response.cid;
+        const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
+        conversationComponent.getConversation(cid, this.data.key);
+        this.$.conversationDialog.present();
+      }
+    }.bind(this));
+  }
 
+  _getNextConversation() {
+    this.$.api.path = `missions/${this.data.key}/conversations/user/${this.user.uid}`;
+    this.$.api.method = "GET";
+    return this.$.api.request();
+  }
+  
   _acceptMission(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
       this.$.unauthorizedDialog.present();

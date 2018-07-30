@@ -194,6 +194,8 @@ class ConversationModal extends PolymerElement {
   static get properties() {
     return {
       mission: Object,
+      mission_id: String,
+      conversation_id: String,
       redirectToMission: {
         type: Boolean,
         value: true
@@ -213,22 +215,17 @@ class ConversationModal extends PolymerElement {
     }
   }
 
-  _goToMission() {
-    if (this.redirectToMission)
-      this.dispatchEvent(new CustomEvent('modal-show-mission',
-        { detail: { mission: this.missionId }}));
-    else
-      this.dispatchEvent(new CustomEvent('close-modal',
-        { detail: {}}));
-  }
-
-  getConversation(mission) {
-    this.set("mission",  mission);
-    this._startConversation();
-    var conversations = mission.pending_conversations;
-    if (conversations.length == 0) return;
+  getConversation(cid=false, mid=false) {
     this.$.api.method = "GET";
-    this.$.api.path = `missions/${mission.id}/conversations/${conversations[0]}/comments`;
+    if (cid && mid) {
+      this.$.api.path = `missions/${mid}/conversations/${cid}/comments`;
+      this.set("conversation_id", cid);
+      this.set("mission_id", mid);
+    }
+    else {
+      this.$.api.path = `missions/${this.mission_id}/conversations/${this.conversation_id}/comments`;
+    }
+    this._prepareConversationModal();
     this.$.api.request().then(function(ajax) {
       this.set("comments", ajax.response);
       this.set("currentCommentIdx", 1);
@@ -259,12 +256,12 @@ class ConversationModal extends PolymerElement {
     this.$.comment.style.color = "white";
     this.$.vote.style.display = "none";
     this.shadowRoot.querySelector("#comment-count").style.display = "none";
-    if (this.mission.pending_conversations.length == 1) {
-      this.$.voteMore.style.display = "none";
-    }
+    //if (this.mission.pending_conversations.length == 1) {
+    //  this.$.voteMore.style.display = "none";
+    //}
   }
 
-    _startConversation() {
+    _prepareConversationModal() {
       this.dispatchEvent(new CustomEvent('restore-modal-bg', { detail: {}}));
       this.headerText = "queremos ouvir sua opinião";
       this.confirmationText = "Vote e nos ajude a identificar ideias e ações \
@@ -290,21 +287,7 @@ class ConversationModal extends PolymerElement {
   _agreeVote() { this._vote(1) };
   _disagreeVote() { this._vote(-1) };
   _skipVote() { this._vote(0) };
-
-  _voteMore() {
-    this._getMission().then(function (ajax) {
-      var mission = ajax.response;
-      this.getConversation(mission);
-    }.bind(this));
-  }
-
-  _getMission() {
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.mission.id}`;
-    return this.$.api.request();
-  }
-
-
+  _voteMore() { this.getConversation(); }
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
 window.customElements.define(ConversationModal.is, ConversationModal);
