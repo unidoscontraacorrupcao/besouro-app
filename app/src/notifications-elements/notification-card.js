@@ -24,6 +24,8 @@ class NotificationCard extends PolymerElement {
       }
       .card-content .target {
         text-transform: uppercase;
+      }
+      #title {
         color: var(--paragraph-color);
       }
       .notification-card {
@@ -31,6 +33,7 @@ class NotificationCard extends PolymerElement {
         display: flex;
         background-color: var(--default-primary-color);
         border-bottom: 1px solid var(--disabled-text-color);
+        color: var(--paragraph-color);
       }
       .notification-card[disabled] .card-icon,
       .notification-card[disabled] .card-icon iron-icon {
@@ -69,7 +72,7 @@ class NotificationCard extends PolymerElement {
         <iron-icon icon="{{cardIcon}}"></iron-icon>
       </div>
       <div class="card-content">
-        <h4>{{cardTitle}}<span class="target">{{notification.message.title}}</span></h4>
+        <h4>{{cardTitle}}<span id="title" class="target">{{notification.message.title}}</span></h4>
         <span>{{cardDate}}</span>
       </div>
     </div>
@@ -101,7 +104,7 @@ class NotificationCard extends PolymerElement {
     const month = date.getMonth();
     const hours = date.getHours();
     const minutes = `0${date.getMinutes()}`.slice(-2);
-    return `${day} de ${months[month]}, às ${hours}:${minutes}`;
+    this.set('cardDate', `${day} de ${months[month]}, às ${hours}:${minutes}`);
   }
 
   setRead(notification) {
@@ -113,8 +116,6 @@ class NotificationCard extends PolymerElement {
   }
 
   setCardIcon(notification) {
-     console.log("eai");
-     console.log(notification.channel.sort);
       switch(true) {
         case /mission/.test(notification.channel.sort):
           this.cardIcon = "app:mission-notifications";
@@ -154,6 +155,7 @@ class NotificationCard extends PolymerElement {
           this.set("cardTitle", `Parabéns! Você recebeu o troféu `);
           break;
         case "admin":
+          this.$.title.removeAttribute("class");
           this.set("cardTitle", `` );
           break;
         default:
