@@ -43,8 +43,8 @@ class FacebookLogin extends PolymerElement {
         window.FB.api('/v3.0/me', function(response) {
           var fbProfileData = response;
           let apiBaseUrl = this.$.api.baseUrl;
-          this.$.api.set("url",  `${apiBaseUrl}/reset/`);
-          this.$.api.request().then((ajax) => {  return {};
+          this.$.api.authUrl = `${apiBaseUrl}/reset/`;
+          this.$.api.authRequest().then((ajax) => {  return {};
           }).then(() => {
             return this._sendOauthToken(apiBaseUrl, accessToken);
           }).catch((error) => {

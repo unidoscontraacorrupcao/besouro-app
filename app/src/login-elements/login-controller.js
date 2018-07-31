@@ -110,8 +110,8 @@ class LoginController extends PolymerElement {
     if(VALIDATION.valid) {
       this._login.form = form;
       let base = this.$.api.baseUrl;
-      this.$.api.set("url",  `${base}/reset/`);
-      this.$.api.request().then(function(ajax) {
+      this.$.api.authUrl = `${base}/reset/`;
+      this.$.api.authRequest().then(function(ajax) {
         this.$.apiLogin.request(form.email, form.password);
       }.bind(this));
     } else {
@@ -125,8 +125,8 @@ class LoginController extends PolymerElement {
     if(VALIDATION.valid) {
       this._signUp.form = form;
       let base = this.$.api.baseUrl;
-      this.$.api.set("url",  `${base}/reset/`);
-      this.$.api.request().then(function(ajax) {
+      this.$.api.authUrl = `${base}/reset/`;
+      this.$.api.authRequest().then(function(ajax) {
         this.$.apiSignUp.request(form.email, form.password);
       }.bind(this));
     } else {
