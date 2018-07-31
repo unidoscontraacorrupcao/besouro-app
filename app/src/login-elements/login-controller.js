@@ -253,6 +253,7 @@ class LoginController extends PolymerElement {
       this._user.phone = result.data.phone;
       this._user.age = result.data.age;
       this._user.photoURL = result.data.image;
+      this._checkUserChannels(this._user);
       this.$.login.emptyForm();
       this._dispatchUser();
       this.$.login.hideLoading();
@@ -437,6 +438,18 @@ class LoginController extends PolymerElement {
       this.$.login.hideLoading();
     }
   }
+
+  _checkUserChannels(user) {
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/check-user-channels/${user.uid}/`;
+    this.$.api.user = {"key": user.key};
+    this.$.api.body = {};
+    this.$.api.request().then((ajax) => {
+     console.log(ajax.response);
+    }, (error) => {
+      console.log(error);
+    });
+  } 
 }
 
 window.customElements.define(LoginController.is, LoginController);

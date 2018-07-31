@@ -157,9 +157,9 @@ class NotificationsPage extends PolymerElement {
       this.$.api.request().then((ajax) => {
         card.notification = ajax.response;
         this.redirectToTarget(notification);
-    }, (error) => {
-      this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
-    });
+      }, (error) => {
+        this._showToast('Problema ao atualizar as notificações. Recarregue a página.');
+      });
     }
   }
 
