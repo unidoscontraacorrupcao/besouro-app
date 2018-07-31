@@ -231,7 +231,7 @@ class ConversationModal extends PolymerElement {
       this.set("mission_id", mid);
     }
     else {
-      this.$.api.path = `missions/${this.mission_id}/conversations/${this.conversation_id}/comments`;
+      this.$.api.path = `missions/${this.mission_id}/conversations/${this.conversation_id}/comments/user/${user.uid}`;
     }
     this._prepareConversationModal();
     this.$.api.request().then(function(ajax) {

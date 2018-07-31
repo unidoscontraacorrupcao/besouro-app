@@ -726,12 +726,10 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.user = this.user;
     this.$.api.body = content;
     this.$.api.request().then(function(ajax) {
-      this._missionChanged().then(function(){
+        this._missionChanged();
         this._openConversationModal();
       }.bind(this));
-    }.bind(this));
     input.value = "";
-    this._openConversationModal();
   }
 
   _openConversationModal() {

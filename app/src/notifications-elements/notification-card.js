@@ -113,6 +113,8 @@ class NotificationCard extends PolymerElement {
   }
 
   setCardIcon(notification) {
+     console.log("eai");
+     console.log(notification.channel.sort);
       switch(true) {
         case /mission/.test(notification.channel.sort):
           this.cardIcon = "app:mission-notifications";
@@ -149,14 +151,10 @@ class NotificationCard extends PolymerElement {
           this.set("cardTitle", `Missão nova no ar! Confira a `);
           break;
         case "trophy":
-          return `Parabéns! Você recebeu o troféu `;
-          this.set("cardTitle", `Missão nova no ar! Confira a `);
+          this.set("cardTitle", `Parabéns! Você recebeu o troféu `);
           break;
         case "admin":
-          const message = notification.message.title;
-          notification.message.title = "";
-          this.set("cardTitle", ``);
-          return message;
+          this.set("cardTitle", `` );
           break;
         default:
           return "";

@@ -14,10 +14,8 @@ class AppBesouroApi extends PolymerElement {
     headers="{{getHeaders()}}"
     handle-as="json"
     content-type="{{contentType}}"
-    method={{method}}
-    loading
-    withCredentials
-    debounce-duration="300"></iron-ajax>
+    method={{method}}>
+    </iron-ajax>
 
     <iron-ajax
     id="authAjax"
