@@ -70,7 +70,7 @@ class NotificationsPage extends PolymerElement {
           }
         }
     </style>
-    
+
     <app-besouro-api id="api"></app-besouro-api>
     <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
 
@@ -87,13 +87,13 @@ class NotificationsPage extends PolymerElement {
             <notification-card notification="{{notification}}" on-tap="_checkRead"></notification-card>
           </template>
         </div>
-    </app-header-layout>   
+    </app-header-layout>
 
     <template is="dom-if" if="{{!notifications.length}}">
       <div class="page-loading">
         <paper-spinner active></paper-spinner>
       </div>
-    </template> 
+    </template>
 `;
   }
 
@@ -114,7 +114,7 @@ class NotificationsPage extends PolymerElement {
         value: []
       },
       rootPath: String
-      
+
     };
   }
 
@@ -168,6 +168,7 @@ class NotificationsPage extends PolymerElement {
     if(channel_sort.length == 2) {
       var mission_id = channel_sort[1];
       this.$.api.path = `missions/${mission_id}`;
+      this.$.api.method = "GET";
       this.$.api.request().then((ajax) => {
         var mission_name = ajax.response.title;
         this.set('route.show_conversation', true);
@@ -187,7 +188,7 @@ class NotificationsPage extends PolymerElement {
           break;
         default:
           break;
-      } 
+      }
     }
   }
 

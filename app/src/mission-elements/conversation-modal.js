@@ -198,6 +198,7 @@ class ConversationModal extends PolymerElement {
       },
       currentCommentIdx: Number,
       currentComment: Object,
+      commentsCount: Number,
       headerText:{
         type: String,
         value: "queremos ouvir sua opinião"
@@ -210,7 +211,10 @@ class ConversationModal extends PolymerElement {
     }
   }
 
-  getConversation(cid=false, mid=false) {
+  getNextComments(cid=false, mid=false, commentsCount=false) {
+    if (commentsCount)
+      this.set("commentsCount", commentsCount);
+
     this.$.api.method = "GET";
     if (cid && mid) {
       this.$.api.path = `missions/${mid}/conversations/${cid}/comments`;
@@ -251,9 +255,9 @@ class ConversationModal extends PolymerElement {
     this.$.comment.style.color = "white";
     this.$.vote.style.display = "none";
     this.shadowRoot.querySelector("#comment-count").style.display = "none";
-    //if (this.mission.pending_conversations.length == 1) {
-    //  this.$.voteMore.style.display = "none";
-    //}
+    if (this.commentsCount == 0) {
+      this.$.voteMore.style.display = "none";
+    }
   }
 
     _prepareConversationModal() {
@@ -268,6 +272,7 @@ class ConversationModal extends PolymerElement {
     }
 
   _vote(choice) {
+    this.commentsCount -= 1;
     var user = JSON.parse(localStorage.getItem("user"));
     this.$.api.body = {"comment": this.currentComment.id,
       "choice": choice, "author": user.uid};
@@ -282,7 +287,7 @@ class ConversationModal extends PolymerElement {
   _agreeVote() { this._vote(1) };
   _disagreeVote() { this._vote(-1) };
   _skipVote() { this._vote(0) };
-  _voteMore() { this.getConversation(); }
+  _voteMore() { this.getNextComments(); }
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
 window.customElements.define(ConversationModal.is, ConversationModal);

@@ -67,7 +67,7 @@ class NotificationCard extends PolymerElement {
       </div>
       <div class="card-content">
         <h4>{{cardTitle}}<span class="target">{{notification.message.title}}</span></h4>
-        <span>{{getDate(notification)}}</span>
+        <span>{{cardDate}}</span>
       </div>
     </div>
 `;
@@ -83,7 +83,8 @@ class NotificationCard extends PolymerElement {
       },
       cardIcon: String,
       cardTitle: String,
-      cardDescription: String
+      cardDescription: String,
+      cardDate: String
     }
   }
 
@@ -109,29 +110,19 @@ class NotificationCard extends PolymerElement {
   }
 
   setCardIcon(notification) {
-    var channel_sort = notification.channel.sort.split('-');
-
-    if(channel_sort.length == 2) {
-      console.log(channel_sort);
-      var mission_id = channel_sort[1];
-      this.$.api.path = `missions/${mission_id}`;
-      this.$.api.request().then((ajax) => {
-        var mission_name = ajax.response.title;
-        this.set("cardTitle", `Há opiniões disponíveis na missão ${mission_name}.`);
-      });
-    }
-    else {
-      switch(notification.channel.sort) {
-        case "mission":
+      switch(true) {
+        case /mission/.test(notification.channel.sort):
           this.cardIcon = "app:mission-notifications";
           break;
-        case "admin":
+        case /admin/.test(notification.channel.sort):
           this.cardIcon = "app:alert-users-notifications"
           break;
-        case "trophy":
+        case /trophy/.test(notification.channel.sort):
           this.cardIcon = "app:trophy-notifications"
           break;
-      }
+        case /conversation/.test(notification.channel.sort):
+          this.cardIcon = "app:notification-opinion-active"
+          break;
     }
   }
 
@@ -141,16 +132,15 @@ class NotificationCard extends PolymerElement {
     var channel_sort = notification.channel.sort.split('-');
 
     if(channel_sort.length == 2) {
-      console.log(channel_sort);
       var mission_id = channel_sort[1];
       this.$.api.path = `missions/${mission_id}`;
       this.$.api.request().then((ajax) => {
         var mission_name = ajax.response.title;
         this.set("cardTitle", `Há opiniões disponíveis na missão ${mission_name}.`);
+        this.getDate(notification);
       });
     }
     else{
-
       switch(notification.channel.sort) {
         case "mission":
           this.set("cardTitle", `Missão nova no ar! Confira a `);
@@ -168,6 +158,7 @@ class NotificationCard extends PolymerElement {
         default:
           return "";
       }
+      this.getDate(notification);
     }
   }
 

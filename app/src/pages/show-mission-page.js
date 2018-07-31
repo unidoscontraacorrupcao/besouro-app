@@ -740,7 +740,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       if (comments_count > 0) {
         var cid = ajax.response.cid;
         const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
-        conversationComponent.getConversation(cid, this.data.key);
+        conversationComponent.getNextComments(cid, this.data.key, comments_count);
         this.$.conversationDialog.present();
       }
     }.bind(this));
@@ -751,7 +751,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.method = "GET";
     return this.$.api.request();
   }
-  
+
   _acceptMission(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
       this.$.unauthorizedDialog.present();
