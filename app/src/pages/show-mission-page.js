@@ -559,12 +559,12 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
         <h2>Entenda a missão</h2>
 
         <!-- description field is inserted by the insertDescriptionHtml method -->
-        <p></p>
+        <p id="ckDescription"></p>
 
         <h2>recompensa</h2>
 
         <!-- reward field is inserted by the insertDescriptionHtml method -->
-        <p></p>
+        <p id="ckReward"></p>
 
         <div class="comments">
           <h2>Comentários</h2>
