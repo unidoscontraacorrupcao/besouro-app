@@ -153,13 +153,21 @@ class ConversationModal extends PolymerElement {
       <div id="vote">
         <div class="voteContainer">
           <div>
-            <paper-icon-button id="agree" icon="app:agree"></paper-icon-button>
+            <paper-icon-button
+              id="agree"
+              icon="app:agree"
+              on-tap="_agreeVote">
+            </paper-icon-button>
           </div>
           <span>concordo</span>
         </div>
         <div class="voteContainer">
           <div>
-            <paper-icon-button id="pass" icon="app:pass"></paper-icon-button>
+            <paper-icon-button
+              id="pass"
+              icon="app:skip"
+              on-tap="_skipVote">
+            </paper-icon-button>
           </div>
           <span>passo</span>
         </div>
@@ -215,9 +223,10 @@ class ConversationModal extends PolymerElement {
     if (commentsCount)
       this.set("commentsCount", commentsCount);
 
+    var user = JSON.parse(localStorage.getItem("user"));
     this.$.api.method = "GET";
     if (cid && mid) {
-      this.$.api.path = `missions/${mid}/conversations/${cid}/comments`;
+      this.$.api.path = `missions/${mid}/conversations/${cid}/comments/user/${user.uid}`;
       this.set("conversation_id", cid);
       this.set("mission_id", mid);
     }
