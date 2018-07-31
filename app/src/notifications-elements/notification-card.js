@@ -36,6 +36,9 @@ class NotificationCard extends PolymerElement {
       .notification-card[disabled] .card-icon iron-icon {
         background-color: var(--light-text-color);
       }
+      .notification-card[disabled] .card-content {
+        background-color: #e8e8e8;
+      }
       .card-icon {
         width: 15%;
         display: inline-block;
