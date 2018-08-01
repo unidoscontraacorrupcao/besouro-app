@@ -274,7 +274,7 @@ class SettingsPage extends PolymerElement {
   _requestSettings() {
     if(!this.user) return;
     this.$.api.method = "GET";
-    this.$.api.path = `settings/${this.user.uid}/`;
+    this.$.api.path = `profiles/${this.user.profile_id}/profile_settings`;
     this.$.api.request().then((ajax) => {
       this.set('settings', ajax.response)
     }, (error) => {
@@ -286,7 +286,7 @@ class SettingsPage extends PolymerElement {
     if(!this.user) return;
     this._updateUserChannels();
     this.$.api.method = "PUT";
-    this.$.api.path = `settings/${this.user.uid}/`;
+    this.$.api.path = `settings/${this.settings.id}/`;
     this.$.api.body = this.settings;
     this.$.api.user = this.user;
     this.$.api.request().then((ajax) => {
@@ -322,10 +322,11 @@ class SettingsPage extends PolymerElement {
   //TODO generate a component from this 
   _removeFromMissionChannel() {
     const data = {
-      user_id: this.user.uid
+      user_id: this.user.uid,
+      sort: "mission"
     }
     this.$.api.method = "PUT";
-    this.$.api.path = `channels/2/remove-from-general-channel`;
+    this.$.api.path = `channels/remove-from-general-channel/`;
     this.$.api.body = data;
     this.$.api.user = this.user;
     this.$.api.request().then((ajax) => {
@@ -336,10 +337,11 @@ class SettingsPage extends PolymerElement {
 
   _addToMissionChannel() {
     const data = {
-      user_id: this.user.uid
+      user_id: this.user.uid,
+      sort: "mission"
     }
     this.$.api.method = "PUT";
-    this.$.api.path = `channels/2/add-to-general-channel`;
+    this.$.api.path = `channels/add-to-general-channel/`;
     this.$.api.body = data;
     this.$.api.user = this.user;
     this.$.api.request().then((ajax) => {
@@ -369,7 +371,7 @@ class SettingsPage extends PolymerElement {
       sort: "trophy"
     }
     this.$.api.method = "PUT";
-    this.$.api.path = `channels/add-to-individual-channel`;
+    this.$.api.path = `channels/add-to-individual-channel/`;
     this.$.api.body = data;
     this.$.api.user = this.user;
     this.$.api.request().then((ajax) => {
