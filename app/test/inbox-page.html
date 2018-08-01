@@ -14,28 +14,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>my-view1</title>
+    <title>inbox page</title>
 
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
     <!-- Import the element to test -->
-    <script type="module" src="../src/my-view1.js"></script>
+    <script type="module" src="../src/pages/inbox-page.js"></script>
   </head>
   <body>
-    <test-fixture id="BasicView">
+    <test-fixture id="InboxView">
       <template>
-        <my-view1></my-view1>
+        <inbox-page name="inbox"
+          route="{{route}}"
+          user="{{user}}"
+          on-open-drawer="_openDrawer">
+        </inbox-page>
       </template>
     </test-fixture>
 
     <script type="module">
-      suite('my-view1 tests', function() {
-        test('Number in circle should be 1', function() {
-          var myView = fixture('BasicView');
-          var circle = myView.shadowRoot.querySelector('.circle');
-
-          assert.equal(circle.textContent, '1');
+      suite('inbox-page tests', function() {
+        test('should have two tabs', function() {
+          var myView = fixture('InboxView');
+          myView.route = {};
+          myView.user = {"uid": 1};
+          var elements = myView.shadowRoot.querySelectorAll("paper-tab");
+          assert.equal(elements.length, '2');
         });
       });
     </script>
