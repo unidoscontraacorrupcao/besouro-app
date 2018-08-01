@@ -65,6 +65,7 @@ class FacebookLogin extends PolymerElement {
           }).then(() => {
             return this._updateUserData(fbProfileData, userToken, user_id, profile);
           }).then(() => {
+            this._checkUserChannels(this._user);
             this.dispatchEvent(new CustomEvent(`success`, { detail: this._user } ));
           });
         }.bind(this), {fields: "picture, email, name"});
@@ -171,6 +172,18 @@ class FacebookLogin extends PolymerElement {
     super.ready();
     this._initializeFBSDK();
   }
+
+  _checkUserChannels(user) {
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/check-user-channels/${user.uid}/`;
+    this.$.api.user = {"key": user.key};
+    this.$.api.body = {};
+    this.$.api.request().then((ajax) => {
+     console.log(ajax.response);
+    }, (error) => {
+      console.log(error);
+    });
+  } 
 }
 
 window.customElements.define(FacebookLogin.is, FacebookLogin);
