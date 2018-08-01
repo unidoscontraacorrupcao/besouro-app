@@ -140,6 +140,7 @@ class FacebookLogin extends PolymerElement {
     this._user.displayName = `${fbProfileData.name}`;
     this._user.key = userToken;
     this._user.uid = user_id;
+    this._user.profile_id = profile.profile_id;
     this.$.api.user = {"key": userToken};
     this.$.api.method = "PATCH";
     this.$.api.body = {"email": fbProfileData.email,
@@ -175,7 +176,7 @@ class FacebookLogin extends PolymerElement {
 
   _checkUserChannels(user) {
     this.$.api.method = "PUT";
-    this.$.api.path = `channels/check-user-channels/${user.uid}/`;
+    this.$.api.path = `channels/check-user-channels/${user.profile_id}/`;
     this.$.api.user = {"key": user.key};
     this.$.api.body = {};
     this.$.api.request().then((ajax) => {
@@ -183,7 +184,7 @@ class FacebookLogin extends PolymerElement {
     }, (error) => {
       console.log(error);
     });
-  } 
+  }
 }
 
 window.customElements.define(FacebookLogin.is, FacebookLogin);

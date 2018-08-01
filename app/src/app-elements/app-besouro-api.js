@@ -2,6 +2,9 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-ajax/iron-request.js';
 
+/**
+  * Component to communicate with besouro api.
+  */
 class AppBesouroApi extends PolymerElement {
 
   static get template() {
