@@ -54,7 +54,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       .content p {
         font-size: 1.1em;
         color: rgba(51,51,51,1);
-        font-family: helvetica-light;
+        font-family: helvetica-neue;
       }
 
       mission-player { margin: auto; }
