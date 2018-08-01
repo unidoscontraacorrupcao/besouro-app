@@ -253,6 +253,7 @@ class LoginController extends PolymerElement {
       this._user.phone = result.data.phone;
       this._user.age = result.data.age;
       this._user.photoURL = result.data.image;
+      this._user.profile_id = result.data.profile_id;
       this.$.login.emptyForm();
       this._dispatchUser();
       this.$.login.hideLoading();

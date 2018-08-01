@@ -139,6 +139,7 @@ class FacebookLogin extends PolymerElement {
     this._user.displayName = `${fbProfileData.name}`;
     this._user.key = userToken;
     this._user.uid = user_id;
+    this._user.profile_id = profile.profile_id;
     this.$.api.user = {"key": userToken};
     this.$.api.method = "PATCH";
     this.$.api.body = {"email": fbProfileData.email,
