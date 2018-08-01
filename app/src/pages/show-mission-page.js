@@ -638,7 +638,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.set("route.path", "/mission");
   }
 
-  addComment(e) {
+  _addComment(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
       this.$.unauthorizedDialog.present();
       return;

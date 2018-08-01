@@ -66,6 +66,9 @@ class AppBesouroApi extends PolymerElement {
   }
   }
 
+  /**
+   * Send requests for api endpoints
+   */
   request() {
     this.$.ajax.headers = this.getHeaders();
     if (this.url == `${this.baseUrl}/reset/`)
@@ -75,17 +78,29 @@ class AppBesouroApi extends PolymerElement {
     return this.$.ajax.generateRequest().completes;
   }
 
+  /**
+   * Send requests for non api endpoints
+   */
   authRequest() {
     this.$.authAjax.url = this.authUrl;
     this.$.authAjax.headers = this.getHeaders();
     return this.$.authAjax.generateRequest().completes;
   }
 
+  /**
+   * Send xhr requests for api endpoints. Usefull for send form Data objects.
+   */
   xhrRequest() {
     this.xhrData["headers"] = this.getHeaders();
-    return this.$.xhr.send(this.xhrData);
+    return new Promise((resolve, reject) => {
+      resolve(this.$.xhr.send(this.xhrData));
+    });
   }
 
+  /**
+   * Get headers from the user attribute. For requests like POST/PUT/PATH 
+   * set the user attribute with the django api key
+   */
   getHeaders() {
     // This token is from a ej_user.
     // I used this command to genenrate it: ./manage.py drf_create_token <username>
