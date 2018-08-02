@@ -151,6 +151,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `flex`;
     this.$.login.style.display = `none`;
     this.$.forgotPassword.style.display = `none`;
+    window.scroll(0,0);
     this._clearForms();
   }
 
@@ -158,6 +159,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `flex`;
     this.$.forgotPassword.style.display = `none`;
+    window.scroll(0,0);
     this._clearForms();
   }
 
@@ -165,6 +167,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `none`;
     this.$.forgotPassword.style.display = `flex`;
+    window.scroll(0,0);
     this._clearForms();
   }
 
