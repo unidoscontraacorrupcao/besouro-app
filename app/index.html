@@ -108,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }).catch(function(e) {
             console.error('Service worker registration failed:', e);
           });
-      
+
           // Check to see if the service worker controlling the page at initial load
           // has become redundant, since this implies there's a new service worker with fresh content.
           if (navigator.serviceWorker.controller) {
@@ -147,6 +147,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: #eeeeee;
       }
     </style>
+    <!--analytics
+    <script
+      async
+      custom-element="amp-analytics"
+      src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js">
+    </script>
+    analytics-->
   </head>
   <body>
     <app-shell></app-shell>
@@ -154,5 +161,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Please enable JavaScript to view this website.
     </noscript>
     <!-- Built with love using Polymer Starter Kit -->
+
+    <!--analytics
+    <amp-analytics
+      config="https://www.googletagmanager.com/amp.json?id=GTM-K573FJP&gtm.url=SOURCE_URL"
+      data-credentials="include">
+    </amp-analytics>
+    analytics-->
   </body>
 </html>

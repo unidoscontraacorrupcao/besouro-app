@@ -118,6 +118,13 @@ class SignUpView extends PolymerElement {
           margin-bottom: 5vh;
         }
       </style>
+      <!--analytics
+      <script
+        type="text/javascript"
+        async
+        src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/00338ef3-fb6d-4aeb-80a5-2d23782fa6e9-loader.js" >
+      </script>
+      analytics-->
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
