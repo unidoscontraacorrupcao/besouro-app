@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.1.3] - 2018-08-02
+### Added
+- First app test.
+### Changed
+- fix show-mission page font
+- Use promise to send xhr requests. Fix "then for undefined" error.
+- Get profile id after log in with facebook.
+
 ## [0.1.2] - 2018-07-27
 ### Added
 - component to manage facebook login.
