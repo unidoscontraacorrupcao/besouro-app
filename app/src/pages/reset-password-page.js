@@ -83,14 +83,17 @@ class ResetPasswordPage extends PolymerElement {
         new_password1: this.password1,
         new_password2: this.password2
       }
-      this.$.api.authUrl = `${apiBaseUrl}/rest-auth/password/reset/confirm/ `;
-      this.$.api.method = "POST";
-      this.$.api.body = data;
-      this.$.api.authRequest().then((ajax) => {
-        this._showToast('Senha redefinida com sucesso!');
-        this.redirectToLogin();
-      }, (error) => {
-        this._showToast('Problema ao atualizar a senha. Tente novamente.');
+      this.$.api.authUrl = `${apiBaseUrl}/reset/`;
+      this.$.api.authRequest().then(function(ajax) {
+        this.$.api.authUrl = `${apiBaseUrl}/rest-auth/password/reset/confirm/ `;
+        this.$.api.method = "POST";
+        this.$.api.body = data;
+        this.$.api.authRequest().then((ajax) => {
+          this._showToast('Senha redefinida com sucesso!');
+          this.redirectToLogin();
+        }, (error) => {
+          this._showToast('Problema ao atualizar a senha. Tente novamente.');
+        });
       });
     } else {
       this._showToast('As duas senhas devem ser iguais');
