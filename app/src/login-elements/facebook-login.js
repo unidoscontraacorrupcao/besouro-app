@@ -63,7 +63,7 @@ class FacebookLogin extends PolymerElement {
           }).then((blob) => {
             return this._postFbData(blob, userToken, profile_id);
           }).then(() => {
-            return this._updateUserData(fbProfileData, userToken, user_id, profile);
+            return this._updateUserData(fbProfileData, userToken, user_id, profile, profile_id);
           }).then(() => {
             this._checkUserChannels(this._user);
             this.dispatchEvent(new CustomEvent(`success`, { detail: this._user } ));
@@ -127,7 +127,7 @@ class FacebookLogin extends PolymerElement {
     return profile_url.split("/")[profile_url.split("/").length - 2]
   }
 
-  _updateUserData(fbProfileData, userToken, user_id, profile) {
+  _updateUserData(fbProfileData, userToken, user_id, profile, profile_id) {
     this._user.email = fbProfileData.email;
     this._user.city = profile.city;
     this._user.state = profile.state;
@@ -140,7 +140,7 @@ class FacebookLogin extends PolymerElement {
     this._user.displayName = `${fbProfileData.name}`;
     this._user.key = userToken;
     this._user.uid = user_id;
-    this._user.profile_id = profile.profile_id;
+    this._user.profile_id = profile_id;
     this.$.api.user = {"key": userToken};
     this.$.api.method = "PATCH";
     this.$.api.body = {"email": fbProfileData.email,
