@@ -26,6 +26,7 @@ import '../pages/privacy-page.js';
 import '../pages/notifications-page.js';
 import '../pages/settings-page.js';
 import '../pages/help-page.js';
+import '../pages/reset-password-page.js';
 import './app-icons.js';
 import './app-theme.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
@@ -266,6 +267,7 @@ class AppShell extends PolymerElement {
           <settings-page name="settings" route="{{route}}" user="{{user}}"></settings-page>
           <privacy-page name="privacy" route="{{route}}" user="{{user}}"></privacy-page>
           <help-page name="help" route="{{route}}"></help-page>
+          <reset-password-page name="reset-password" route="{{route}}"></reset-password-page>
           <not-found-page name="not-found"></not-found-page>
           <login-page id="login"
             name="login"
@@ -316,7 +318,7 @@ class AppShell extends PolymerElement {
       canShowBottomBar: Boolean,
       noBottomBarList: {
         type: Array,
-        value: ['privacy', 'help', 'not-found', 'login']
+        value: ['privacy', 'help', 'not-found', 'login', 'reset-password']
       },
       unread: Number
     };
