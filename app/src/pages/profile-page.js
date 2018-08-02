@@ -489,7 +489,7 @@ class ProfilePage extends PolymerElement {
                   <paper-listbox slot="dropdown-content" selected="{{_form.race}}">
                     <paper-item>Não informada</paper-item>
                     <paper-item>Preto</paper-item>
-                    <paper-item>Marrom</paper-item>
+                    <paper-item>Pardo</paper-item>
                     <paper-item>Branco</paper-item>
                     <paper-item>Amarelo</paper-item>
                     <paper-item>Indígena</paper-item>
@@ -1069,7 +1069,7 @@ class ProfilePage extends PolymerElement {
   _getRaceText(raceId) {
     switch(raceId) {
       case 1: return `Preto`;
-      case 2: return `Marrom`;
+      case 2: return `Pardo`;
       case 3: return `Branco`;
       case 4: return `Amarelo`;
       case 5: return `Indígena`;
