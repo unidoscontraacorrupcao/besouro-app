@@ -5,6 +5,7 @@ import '@polymer/paper-spinner/paper-spinner.js';
 
 import '../app-elements/app-besouro-api.js';
 import '../notifications-elements/notification-card.js';
+import '../notifications-elements/empty-notifications.js';
 import { html } from "@polymer/polymer/lib/utils/html-tag.js";
 class NotificationsPage extends PolymerElement {
   static get template() {
@@ -64,7 +65,7 @@ class NotificationsPage extends PolymerElement {
 
     <app-besouro-api id="api"></app-besouro-api>
     <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
-
+    
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
         <app-toolbar>
@@ -74,13 +75,16 @@ class NotificationsPage extends PolymerElement {
         </app-toolbar>
       </app-header>
         <div class="content">
+          <template is="dom-if" if="{{!notifications.length}}">
+            <empty-notifications></empty-notifications>
+          </template>
           <template is="dom-repeat" items="{{notifications}}" as="notification">
             <notification-card notification="{{notification}}" on-tap="_checkRead"></notification-card>
           </template>
         </div>
     </app-header-layout>
 
-    <template is="dom-if" if="{{!notifications.length}}">
+    <template is="dom-if" if="{{loading}}">
       <div class="page-loading">
         <paper-spinner active></paper-spinner>
       </div>
@@ -104,14 +108,15 @@ class NotificationsPage extends PolymerElement {
         type: Array,
         value: []
       },
-      rootPath: String
-
+      rootPath: String,
+      loading: Boolean
     };
   }
 
   _selectedChanged(selected) {
     if(!selected) return;
     this._requestNotifications();
+    this.set('loading', true);
   }
 
   _redirectToInbox() {
@@ -128,6 +133,7 @@ class NotificationsPage extends PolymerElement {
     this.$.api.path = `notifications/user/${this.user.uid}/`;
     this.$.api.request().then((ajax) => {
       this.set('notifications', ajax.response)
+      this.set('loading', false);
     }, (error) => {
       this._showToast('Ocorreu um problema ao requisitar suas notificações. Tente novamente.');
     });
