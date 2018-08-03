@@ -12,6 +12,10 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-toast/paper-toast.js';
+import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+
+import '../app-elements/app-besouro-api.js';
 import "share-menu/share-menu.js";
 import './app-actions.js';
 import './app-besouro-api.js';
@@ -29,8 +33,6 @@ import '../pages/help-page.js';
 import '../pages/reset-password-page.js';
 import './app-icons.js';
 import './app-theme.js';
-import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
 setPassiveTouchGestures(true);
@@ -338,12 +340,21 @@ class AppShell extends PolymerElement {
     // If no page was found in the route data, page will be an empty string.
     // Default to 'inbox' in that case.
     this.page = page || "inbox";
-    // Close a non-persistent drawer when the page & route are changed.
+    this.canShowBottomBar = !this.noBottomBarList.includes(this.page);
     if (!this.$.drawer.persistent) {
       this.$.drawer.close();
     }
-    this.canShowBottomBar = !this.noBottomBarList.includes(this.page);
-    this._getUserNotifications(page);
+
+    if (this.page != "login") {
+      this._checkToken().then((ajax) => {
+        if (ajax.response.expired) {
+          this._resetUser();
+          this.set('route.path', '/login');
+        } else {
+          this._getUserNotifications(page);
+        }
+      });
+    }
   }
 
   _pageChanged(page) {
@@ -462,6 +473,8 @@ class AppShell extends PolymerElement {
     return JSON.parse(localStorage.getItem("user"));
   }
 
+  _resetUser() { localStorage.removeItem('user'); }
+
   _shareLink(e) {
     const shareLinkNode = this.shadowRoot.querySelector("#shareMenu");
     const clonedNode = shareLinkNode.cloneNode(true);
@@ -474,6 +487,20 @@ class AppShell extends PolymerElement {
     );
     document.body.appendChild(clonedNode);
     clonedNode.share();
+  }
+
+  _checkToken() {
+    var currentUser = this._getUser();
+    if (currentUser && currentUser.key) {
+      var base = this.$.api.baseUrl;
+      this.$.api.authUrl = `${base}/check-token`;
+      this.$.api.user = currentUser;
+      this.$.api.method = "GET";
+      return this.$.api.authRequest();
+    }
+    return new Promise((resolve, reject) => {
+      resolve({"response": {"expired": true}});
+    })
   }
 }
 
