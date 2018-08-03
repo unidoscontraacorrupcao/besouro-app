@@ -94,7 +94,7 @@ class ResetPasswordPage extends PolymerElement {
         }, (error) => {
           this._showToast('Problema ao atualizar a senha. Tente novamente.');
         });
-      });
+      }.bind(this));
     } else {
       this._showToast('As duas senhas devem ser iguais');
     }
