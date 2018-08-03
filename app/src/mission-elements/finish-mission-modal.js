@@ -294,7 +294,7 @@ class FinishMissionModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInput
     };
     this.$.api.user = this.user;
     this.$.api.xhrRequest().then(function(response) {
-        this.$.input.value = '';
+        //this.$.input.value = '';
         this.set('description', '');
         this.hideLoading();
         this._dismiss();
@@ -308,10 +308,10 @@ class FinishMissionModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInput
 
   ready() {
     super.ready();
-    var receiptPaperIcon = this.$.uploadIcon;
-    var ironIcon = receiptPaperIcon.shadowRoot.querySelector("iron-icon");
-    ironIcon.setAttribute("style", "width: 40px; height: 40px;");
     this.hideLoading();
+    //var receiptPaperIcon = this.$.uploadIcon;
+    //var ironIcon = receiptPaperIcon.shadowRoot.querySelector("iron-icon");
+    //ironIcon.setAttribute("style", "width: 40px; height: 40px;");
   }
 }
 customElements.define(FinishMissionModal.is, FinishMissionModal);
