@@ -200,12 +200,12 @@ class FinishMissionModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInput
       </div>
       <div id="confirmation-text">
         <span>agradecemos seu engajamento! <3</span>
-        <p>Agora é hora de pedir para o comitê de campanha validar sua missão e oferecer a sua recompensa, caso tenha. Pra isso basta enviar a comprovação solicitada na missão descrevendo sua solução e, se necessário,
-        fazendo o upload de imagens e/ou arquivos.</p>
+        <p>Agora é hora de pedir para o comitê de campanha validar sua missão e oferecer a sua recompensa, caso tenha. Pra isso basta enviar a comprovação solicitada na missão descrevendo sua solução.</p>
         <div class="description">
           <h3>Descrição<h3>
           <paper-textarea value="{{description}}" max-rows="4" rows="2" maxlength="1000" placeholder="Uma breve descrição da comprovação pode ser escrita aqui" no-label-float></paper-textarea>
         </div>
+        <!--
         <div class="buttons">
           <div class="input-file-container">
             <paper-icon-button id="uploadIcon" slot="suffix" icon="app:receipt-upload" on-tap="_openInput"><paper-input id="input" type="file"></paper-input></paper-icon-button>
@@ -218,6 +218,7 @@ class FinishMissionModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInput
             </div>
           </div>
         </div>
+        -->
         <div id="loading">
           <paper-spinner active=""></paper-spinner>
         </div>
@@ -281,7 +282,7 @@ class FinishMissionModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInput
     formData.append("userName", this.user.displayName);
     formData.append("userEmail", this.user.email);
     formData.append("uid", this.user.uid);
-    formData.append("status", "pending");
+    formData.append("status", "realized");
     formData.append("description", this.description);
 
     if(this.input && this.input.files.length > 0) {

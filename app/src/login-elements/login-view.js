@@ -106,7 +106,7 @@ class LoginView extends PolymerElement {
           color: white;
           background-color: #4460a0;
         }
-        #social-advisor {
+        #social-notice {
           width: 300px;
           margin: 20px auto;
           color: var(--light-text-color);
@@ -190,7 +190,7 @@ class LoginView extends PolymerElement {
             <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
         </div>
-        <div id="social-advisor">
+        <div id="social-notice">
           <span>
             Não publicamos nem cedemos nenhuma informação para essas redes
           </span>
