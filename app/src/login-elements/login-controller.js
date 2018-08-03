@@ -216,8 +216,6 @@ class LoginController extends PolymerElement {
   }
 
   _onAuthUser(e, result) {
-    console.log(e);
-    console.log(result);
     if(result.success) {
       this._user.uid = result.data.id;
       if(`form` in this._signUp) {
@@ -382,8 +380,8 @@ class LoginController extends PolymerElement {
 
   _validatePassword(password) {
     let errors = ``;
-    if(password.length < 8) {
-      errors += `Esta senha é muito curta. Ela precisa conter pelo menos 8 caracteres. `;
+    if(password.length < 4) {
+      errors += `Esta senha é muito curta. Ela precisa conter pelo menos 4 caracteres. `;
     }
     return errors;
   }

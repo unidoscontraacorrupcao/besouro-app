@@ -34,19 +34,9 @@ class ApiSignUp extends PolymerElement {
   }
 
   request(email, password) {
-    let validation = this._validate(email, password);
-    if(validation.isValid) {
       this._email = email;
       this._password = password;
       this.$.ajax.generateRequest();
-    } else {
-      this._dispatch(validation.errors);
-    }
-  }
-
-  _validate(email, password) {
-    // TODO: Create validation
-    return { isValid: true };
   }
 
   _dispatch(result) {
@@ -80,11 +70,20 @@ class ApiSignUp extends PolymerElement {
     let response = iron.request.xhr.response;
     console.error("api-sign-up", response);
 
+    let email_error = "";
+    let password_error = "";
+
+    if (response.email)
+      email_error = response.email[0];
+    if (response.password1)
+      password_error = response.password1[0];
+
+
     let result = {
       success: false,
       errors: {
-        email: "",
-        password1: ""
+        email: email_error,
+        password1: password_error,
       }
     };
 

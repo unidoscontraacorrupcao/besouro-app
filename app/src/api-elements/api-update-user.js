@@ -1,8 +1,9 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '../app-elements/app-constants.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 
-class ApiUpdateUser extends PolymerElement {
+class ApiUpdateUser extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
     <app-constants id="constants"></app-constants>
@@ -52,14 +53,6 @@ class ApiUpdateUser extends PolymerElement {
     this.dispatchEvent(new CustomEvent('result', { detail: result }));
   }
 
-  _parseDisplayName(displayName) {
-    if(displayName.indexOf(".") != -1) {
-      return displayName.split(".")[1];
-    } else {
-      return displayName;
-    }
-  }
-
   _onResponse(e) {
     let response = e.detail.xhr.response;
 
@@ -69,7 +62,7 @@ class ApiUpdateUser extends PolymerElement {
         success: true,
         data: {
           email: response.email,
-          displayName: this._parseDisplayName(response.display_name),
+          displayName: this.parseDisplayName(response.display_name),
           isAdmin: response.is_superuser || response.is_staff
         }
       };
