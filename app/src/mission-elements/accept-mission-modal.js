@@ -25,13 +25,7 @@ class AcceptMissionModal extends PolymerElement {
         width: 100%;
       }
 
-      .header-content {
-        background-color: var(--accent-color);
-        height: 76px;
-        position: absolute;
-        top: 0;
-        width: 100%;
-      }
+      .header-content { background-color: var(--accent-color); }
 
       #header-text {
         padding: 30px 10px 20px 10px;
@@ -49,7 +43,7 @@ class AcceptMissionModal extends PolymerElement {
       }
 
       #confirmation-text {
-        margin: 115px auto 34px auto;
+        margin: 32px auto auto auto;
         width: 80%;
         text-align: center;
         color: var(--secondary-text-color);
@@ -61,7 +55,7 @@ class AcceptMissionModal extends PolymerElement {
         font-size: 20px;
         line-height: 1.3;
         color: #333333;
-        margin: 34px auto 40px auto;
+        margin: 16px auto;
         width: 90%;
       }
 
@@ -76,8 +70,7 @@ class AcceptMissionModal extends PolymerElement {
         height: 64px;
         margin: auto;
         text-align: center;
-        margin-top: 60px;
-        margin-bottom: 60px;
+        margin-bottom: 25px;
         background-color:#009FE3;
       }
 

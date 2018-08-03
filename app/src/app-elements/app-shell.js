@@ -343,7 +343,8 @@ class AppShell extends PolymerElement {
       this.$.drawer.close();
     }
 
-    if (this.page != "login") {
+    var exception_pages = ["login", "reset-password"];
+    if (!exception_pages.includes(this.page)) {
       this._checkToken().then((ajax) => {
         if (ajax.response.expired) {
           this._resetUser();
