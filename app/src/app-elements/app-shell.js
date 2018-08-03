@@ -326,9 +326,7 @@ class AppShell extends PolymerElement {
     };
   }
 
-  static get observers() {
-    return ["_routePageChanged(routeData.page)"];
-  }
+  static get observers() { return ["_routePageChanged(routeData.page)"]; }
 
   constructor() {
     super();

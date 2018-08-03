@@ -73,9 +73,9 @@ class ApiSignUp extends PolymerElement {
     let email_error = "";
     let password_error = "";
 
-    if (response.email)
+    if (response && response.email)
       email_error = response.email[0];
-    if (response.password1)
+    if (response && response.password1)
       password_error = response.password1[0];
 
 

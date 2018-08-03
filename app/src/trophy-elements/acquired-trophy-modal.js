@@ -55,7 +55,7 @@ class AcquiredTrophyModal extends PolymerElement {
 
       #confirmation-text p {
         font-family: helvetica-neue;
-        font-size: 16px;
+        font-size: 19px;
         color: #333333;
         margin: 15px auto 20px auto;
         width: 90%;
