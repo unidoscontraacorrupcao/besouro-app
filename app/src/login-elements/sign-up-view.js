@@ -90,12 +90,7 @@ class SignUpView extends PolymerElement {
           justify-content: center;
           border-radius: 50%;
         }
-        .social-button.google {
-          height: 67px;
-          width: 67px;
-          border: 1px solid #b7b7b7;
-          background-color: white;
-        }
+
         .social-button.facebook {
           margin-left: 2.35vw;
           height: 66px;
@@ -116,6 +111,13 @@ class SignUpView extends PolymerElement {
           color: #009fe3;
           max-width: none;
           margin-bottom: 5vh;
+        }
+        #social-advisor {
+          width: 300px;
+          margin: 20px auto;
+          color: var(--light-text-color);
+          font-family: folio;
+          font-size: 18px;
         }
       </style>
       <!--analytics
@@ -171,12 +173,14 @@ class SignUpView extends PolymerElement {
         Você também pode usar suas redes sociais
         </div>
         <div class="social-buttons">
-          <div class="social-button google">
-            <paper-icon-button icon="app:google" on-tap="_onAuthGoogle"></paper-icon-button>
-          </div>
           <div class="social-button facebook">
             <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
+        </div>
+        <div id="social-advisor">
+          <span>
+            Não publicamos nem cedemos nenhuma informação para essas redes
+          </span>
         </div>
       </div>
       <div class="fill">
@@ -235,10 +239,6 @@ class SignUpView extends PolymerElement {
 
   _onAuthFacebook(e) {
     this.dispatchEvent(new CustomEvent(`auth-facebook`));
-  }
-
-  _onAuthGoogle(e) {
-    this.dispatchEvent(new CustomEvent(`auth-google`));
   }
 
   _getEmptyForm() {
