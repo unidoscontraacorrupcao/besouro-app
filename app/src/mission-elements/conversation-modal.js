@@ -2,7 +2,8 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-class ConversationModal extends PolymerElement {
+import {MissionMixin} from '../mixin-elements/mission-mixin.js';
+class ConversationModal extends MissionMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="shared-styles">
@@ -154,7 +155,7 @@ class ConversationModal extends PolymerElement {
             {{confirmationText}}
         </span>
         <div id="voteMore">
-          <a on-tap="_voteMore"><span>vote em mais 3 opiniões</span></a>
+          <a on-tap="getNextComments"><span>vote em mais 3 opiniões</span></a>
         </div>
         <div id="vote">
           <div class="voteContainer">
@@ -200,8 +201,8 @@ class ConversationModal extends PolymerElement {
   static get properties() {
     return {
       mission: Object,
-      mission_id: String,
-      conversation_id: String,
+      missionId: String,
+      conversationId: String,
       redirectToMission: {
         type: Boolean,
         value: true
@@ -220,23 +221,25 @@ class ConversationModal extends PolymerElement {
       confirmationText:{
         type: String,
         value: "Vote e nos ajude a melhorar a campanha."
-      }
+      },
+      current_comments_count: Number,
+      current_conversation: Number
     }
   }
 
   getNextComments(cid=false, mid=false, commentsCount=false) {
-    if (commentsCount)
+    if (typeof commentsCount == "number")
       this.set("commentsCount", commentsCount);
 
     var user = JSON.parse(localStorage.getItem("user"));
     this.$.api.method = "GET";
-    if (cid && mid) {
+    if (typeof cid == "number" && typeof mid == "string") {
       this.$.api.path = `missions/${mid}/conversations/${cid}/comments/user/${user.uid}`;
-      this.set("conversation_id", cid);
-      this.set("mission_id", mid);
+      this.set("conversationId", cid);
+      this.set("missionId", mid);
     }
     else {
-      this.$.api.path = `missions/${this.mission_id}/conversations/${this.conversation_id}/comments/user/${user.uid}`;
+      this.$.api.path = `missions/${this.missionId}/conversations/${this.conversationId}/comments/user/${user.uid}`;
     }
     this._prepareConversationModal();
     this.$.api.request().then(function(ajax) {
@@ -253,7 +256,8 @@ class ConversationModal extends PolymerElement {
       this.set('currentComment', this.comments[this.currentCommentIdx - 1]);
     }
     else {
-      this._finishConversation();
+      this._voteMore();
+      //this._finishConversation();
     }
   }
 
@@ -270,9 +274,6 @@ class ConversationModal extends PolymerElement {
     this.$.vote.style.display = "none";
     this.shadowRoot.querySelector("#comment-count").style.display = "none";
     this.shadowRoot.querySelector("#comment").style.fontFamily = "helvetica-neue";
-    if (this.commentsCount == 0) {
-      this.$.voteMore.style.display = "none";
-    }
   }
 
     _prepareConversationModal() {
@@ -302,7 +303,17 @@ class ConversationModal extends PolymerElement {
   _agreeVote() { this._vote(1) };
   _disagreeVote() { this._vote(-1) };
   _skipVote() { this._vote(0) };
-  _voteMore() { this.getNextComments(); }
+  _voteMore() {
+    var user = JSON.parse(localStorage.getItem("user"));
+    this.getNextConversation(this.missionId, user.uid).then((ajax) => {
+      if (ajax.response.comments_count > 0) {
+        console.log(ajax.response);
+        this.set("conversationId",  ajax.response.cid);
+        this.set("commentsCount",  ajax.response.comments_count);
+      }
+      this._finishConversation();
+    })
+  }
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
 window.customElements.define(ConversationModal.is, ConversationModal);

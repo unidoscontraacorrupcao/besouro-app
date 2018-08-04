@@ -690,31 +690,32 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
   _returnToInbox() { this.set('route.path', '/'); }
 
   _addComment(e) {
-    if (!this.user || Object.keys(this.user).length == 0) {
-      this.$.unauthorizedDialog.present();
-      return;
-    }
-    const input = this.shadowRoot.querySelector('#commentInput');
-    if(!input.value) {
-      input.invalid = true;
-      return;
-    } else {
-      input.invalid = false;
-    }
+    //if (!this.user || Object.keys(this.user).length == 0) {
+    //  this.$.unauthorizedDialog.present();
+    //  return;
+    //}
+    //const input = this.shadowRoot.querySelector('#commentInput');
+    //if(!input.value) {
+    //  input.invalid = true;
+    //  return;
+    //} else {
+    //  input.invalid = false;
+    //}
 
-    const content = {
-      user_id: this.user.uid,
-      comment: input.value
-    };
-    this.$.api.method = "POST";
-    this.$.api.path = `missions/${this.data.key}/comment/`;
-    this.$.api.user = this.user;
-    this.$.api.body = content;
-    this.$.api.request().then(function(ajax) {
-        this._missionChanged();
+    //const content = {
+    //  user_id: this.user.uid,
+    //  comment: input.value
+    //};
+    //this.$.api.method = "POST";
+    //this.$.api.path = `missions/${this.data.key}/comment/`;
+    //this.$.api.user = this.user;
+    //this.$.api.body = content;
+    //this.$.api.request().then(function(ajax) {
+    //    this._missionChanged();
+    //    this._openConversationModal();
+    //  }.bind(this));
+    //input.value = "";
         this._openConversationModal();
-      }.bind(this));
-    input.value = "";
   }
 
   _openConversationModal() {
