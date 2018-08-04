@@ -21,16 +21,13 @@ import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-comment.js';
 import '../mission-elements/mission-player.js';
 import '../mission-elements/accept-mission-modal.js';
-import '../mission-elements/reject-mission-modal.js';
-import '../mission-elements/finish-mission-modal.js';
 import '../mission-elements/conversation-modal.js';
-import '../mission-elements/mission-receipt.js';
 import '../app-elements/app-besouro-api.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
-import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
+import {MissionMixin} from '../mixin-elements/mission-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { resolveCss } from '@polymer/polymer/lib/utils/resolve-url';
-class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
+class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -442,14 +439,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
         <reject-mission-modal></reject-mission-modal>
     </app-dialog>
 
-      <app-scrollable-dialog
-        id="receiptsDialog">
-          <mission-receipts-modal
-            mission-id="{{data.key}}"
-            receipts="{{mission.receipts}}">
-          </mission-receipts-modal>
-    </app-scrollable-dialog>
-
     <app-header-layout has-scrolling-region="">
       <app-header
         slot="header"
@@ -700,11 +689,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _returnToInbox() { this.set('route.path', '/'); }
 
-  _editMission() {
-    this.set("route.data", {missionID: this.data.key});
-    this.set("route.path", "/mission");
-  }
-
   _addComment(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
       this.$.unauthorizedDialog.present();
@@ -734,7 +718,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _openConversationModal() {
-    this._getNextConversation().then(function(ajax) {
+    this.getNextConversation(this.data.key, this.user.uid).then(function(ajax) {
       var comments_count = ajax.response.comments_count;
       if (comments_count > 0) {
         var cid = ajax.response.cid;
@@ -743,12 +727,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
         this.$.conversationDialog.present();
       }
     }.bind(this));
-  }
-
-  _getNextConversation() {
-    this.$.api.path = `missions/${this.data.key}/conversations/user/${this.user.uid}`;
-    this.$.api.method = "GET";
-    return this.$.api.request();
   }
 
   _acceptMission(e) {
@@ -796,26 +774,8 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this._setActionBtn();
   }
 
-  _openMissionReceipts() {
-    this.set('route.path', `/mission-receipts/${this.data.key}`);
-  }
-
-  _openFinishedMissionList() {
-    if (this.mission.content.usersFinished &&
-      this.mission.content.usersFinished.length > 0) {
-      this.set('route.path', `/mission-finished/${this.data.key}`);
-    }
-  }
-
-  _openAcceptedMissionList() {
-    if (this.acceptedMissionStats > 0) {
-      this.set('route.path', `/mission-accepted/${this.data.key}`);
-    }
-  }
-
   ready() {
     super.ready();
-    this.shadowRoot.querySelector('mission-receipts-modal').addEventListener('close-modal', this._dismissReceiptsModal.bind(this));
     this.shadowRoot.querySelector('finish-mission-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
     this.acceptMissionFunc = this._acceptMission.bind(this);
     this.finishMissionFunc = this._finishMission.bind(this);

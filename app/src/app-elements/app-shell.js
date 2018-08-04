@@ -24,7 +24,6 @@ import '../pages/inbox-page.js';
 import '../pages/profile-page.js';
 import '../pages/mission-page.js';
 import '../pages/show-mission-page.js';
-import '../pages/mission-receipts-page.js';
 import '../pages/not-found-page.js';
 import '../pages/privacy-page.js';
 import '../pages/notifications-page.js';
