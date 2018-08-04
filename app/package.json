@@ -46,7 +46,8 @@
     "@webcomponents/webcomponentsjs": "^2.0.2",
     "lit-html": "^0.10.2",
     "share-menu": "git://github.com/unidoscontraacorrupcao/share-menu.git#polymer-modulizer-auto-generated",
-    "web-animations-js": "^2.3.1"
+    "web-animations-js": "^2.3.1",
+    "firebase": "^5.3.1"
   },
   "devDependencies": {
     "polymer-cli": "^1.7.1",

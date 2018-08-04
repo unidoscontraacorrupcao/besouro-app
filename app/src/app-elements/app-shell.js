@@ -33,7 +33,10 @@ import '../pages/reset-password-page.js';
 import '../pages/candidates-page.js';
 import './app-icons.js';
 import './app-theme.js';
+import messaging from '../../firebase.js'
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
 setPassiveTouchGestures(true);
@@ -473,6 +476,20 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       }, (error) => {
       });
     }
+  }
+
+  //Get token for push notification
+  _setUserToken(token, user) {
+    if(!user) return;
+    messaging.getToken().then(function(currentToken) {
+      if (currentToken) {
+        console.log(currentToken);
+        return Promise.resolve(currentToken);
+      } else {
+        // Need to request permissions to show notifications.
+        return messaging.requestPermission()
+      }
+    }.bind(this))
   }
 
   // Profile
