@@ -34,12 +34,12 @@ class ConversationModal extends MissionMixin(PolymerElement) {
         width: 100%;
       }
 
-      #header-text {
-        padding: 30px 10px 20px 10px;
+      .header-text {
+        padding: 8px 10px 20px 10px;
         text-align: center;
       }
 
-      #header-text span, #confirmation-text span {
+      .header-text span, #confirmation-text span {
         text-transform: uppercase;
         font-family: folio;
       }
@@ -50,7 +50,7 @@ class ConversationModal extends MissionMixin(PolymerElement) {
       text-transform: unset !important;
     }
 
-      #header-text span {
+      .header-text span {
         font-size: 24px;
         color: white;
       }
@@ -133,18 +133,18 @@ class ConversationModal extends MissionMixin(PolymerElement) {
 
     <div class="modal-header">
       <div class="header-content">
-        <div id="header-text"><span>{{headerText}}</span></div>
         <div class="icon-header">
           <paper-icon-button
             slot="suffix"
             icon="app:opinion">
           </paper-icon-button>
-
           <paper-icon-button
             on-tap="_dismiss"
             id="closeModal"
             icon="app:closeModal">
           </paper-icon-button>
+        <div class="header-text"><span>{{headerText}}</span></div>
+        <div class="header-text"><span>{{supportText}}</span></div>
         </div>
       </div>
       <div id="confirmation-text">
@@ -257,7 +257,6 @@ class ConversationModal extends MissionMixin(PolymerElement) {
     }
     else {
       this._voteMore();
-      //this._finishConversation();
     }
   }
 
@@ -275,6 +274,22 @@ class ConversationModal extends MissionMixin(PolymerElement) {
     this.shadowRoot.querySelector("#comment-count").style.display = "none";
     this.shadowRoot.querySelector("#comment").style.fontFamily = "helvetica-neue";
   }
+
+  _finishAllConversations() {
+    this.dispatchEvent(new CustomEvent('change-modal-bg', { detail: {}}));
+    this.headerText = "uhul!";
+    this.confirmationText = "";
+    this.supportText = "você votou em todas as opiniões dessa missão!";
+    this.set("currentComment.content", "Agradecemos demais seu engajamento!\
+      Aceite e conclua missões para ajudar ainda mais a campanha!");
+    this.$.voteMore.style.display = "none";
+    this.$.comment.style.color = "white";
+    this.$.vote.style.display = "none";
+    this.shadowRoot.querySelector("#comment-count").style.display = "none";
+    this.shadowRoot.querySelector("#comment").style.fontFamily = "helvetica-neue";
+    this.shadowRoot.querySelector("#confirmation-text").style.margin = "200px auto 34px auto";
+  }
+
 
     _prepareConversationModal() {
       this.dispatchEvent(new CustomEvent('restore-modal-bg', { detail: {}}));
@@ -307,11 +322,13 @@ class ConversationModal extends MissionMixin(PolymerElement) {
     var user = JSON.parse(localStorage.getItem("user"));
     this.getNextConversation(this.missionId, user.uid).then((ajax) => {
       if (ajax.response.comments_count > 0) {
-        console.log(ajax.response);
         this.set("conversationId",  ajax.response.cid);
         this.set("commentsCount",  ajax.response.comments_count);
+        this._finishConversation();
       }
-      this._finishConversation();
+      else {
+        this._finishAllConversations();
+      }
     })
   }
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
