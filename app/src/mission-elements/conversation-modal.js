@@ -43,6 +43,12 @@ class ConversationModal extends PolymerElement {
         font-family: folio;
       }
 
+    #campaign-text {
+      font-family: helvetica-neue !important;
+      color: rgba(51,51,51,1)
+      text-transform: unset !important;
+    }
+
       #header-text span {
         font-size: 24px;
         color: white;
@@ -95,7 +101,7 @@ class ConversationModal extends PolymerElement {
      }
 
     #comment {
-      font-family: helvetica-neue;
+      font-family: folio;
       margin: 34px auto 30px auto;
       font-size: 18px;
     }
@@ -141,47 +147,47 @@ class ConversationModal extends PolymerElement {
         </div>
       </div>
       <div id="confirmation-text">
-      <span>
-          {{confirmationText}}
-      </span>
-      <div id="comment">
-        {{currentComment.content}}
-      </div>
-      <div id="voteMore">
-        <a on-tap="_voteMore"><span>vote em mais 3 opiniões</span></a>
-      </div>
-      <div id="vote">
-        <div class="voteContainer">
-          <div>
-            <paper-icon-button
-              id="agree"
-              icon="app:agree"
-              on-tap="_agreeVote">
-            </paper-icon-button>
-          </div>
-          <span>concordo</span>
+        <div id="comment">
+          {{currentComment.content}}
         </div>
-        <div class="voteContainer">
-          <div>
-            <paper-icon-button
-              id="pass"
-              icon="app:skip"
-              on-tap="_skipVote">
-            </paper-icon-button>
-          </div>
-          <span>passo</span>
+        <span id="campaign-text">
+            {{confirmationText}}
+        </span>
+        <div id="voteMore">
+          <a on-tap="_voteMore"><span>vote em mais 3 opiniões</span></a>
         </div>
-        <div class="voteContainer">
-          <div>
-            <paper-icon-button
-              id="disagree"
-              on-tap="_disagreeVote"
-              icon="app:disagree">
-            </paper-icon-button>
+        <div id="vote">
+          <div class="voteContainer">
+            <div>
+              <paper-icon-button
+                id="agree"
+                icon="app:agree"
+                on-tap="_agreeVote">
+              </paper-icon-button>
+            </div>
+            <span>concordo</span>
           </div>
-          <span>discordo</span>
+          <div class="voteContainer">
+            <div>
+              <paper-icon-button
+                id="pass"
+                icon="app:skip"
+                on-tap="_skipVote">
+              </paper-icon-button>
+            </div>
+            <span>passo</span>
+          </div>
+          <div class="voteContainer">
+            <div>
+              <paper-icon-button
+                id="disagree"
+                on-tap="_disagreeVote"
+                icon="app:disagree">
+              </paper-icon-button>
+            </div>
+            <span>discordo</span>
+          </div>
         </div>
-      </div>
       </div>
     <div id="comment-count">
       <span>{{currentCommentIdx}}/{{comments.length}}</span>
@@ -213,8 +219,7 @@ class ConversationModal extends PolymerElement {
       },
       confirmationText:{
         type: String,
-        value: "Vote e nos ajude a identificar ideias e ações \
-      importantes para melhorar a campanha."
+        value: "Vote e nos ajude a melhorar a campanha."
       }
     }
   }
@@ -264,6 +269,7 @@ class ConversationModal extends PolymerElement {
     this.$.comment.style.color = "white";
     this.$.vote.style.display = "none";
     this.shadowRoot.querySelector("#comment-count").style.display = "none";
+    this.shadowRoot.querySelector("#comment").style.fontFamily = "helvetica-neue";
     if (this.commentsCount == 0) {
       this.$.voteMore.style.display = "none";
     }
@@ -272,10 +278,10 @@ class ConversationModal extends PolymerElement {
     _prepareConversationModal() {
       this.dispatchEvent(new CustomEvent('restore-modal-bg', { detail: {}}));
       this.headerText = "queremos ouvir sua opinião";
-      this.confirmationText = "Vote e nos ajude a identificar ideias e ações \
-        importantes para melhorar a campanha.";
+      this.confirmationText = "Vote e nos ajude a melhorar a campanha.";
       this.$.voteMore.style.display = "none";
       this.$.comment.style.color = "rgba(51,51,51,1)";
+      this.$.comment.style.fontFamily = "folio";
       this.$.vote.style.display = "flex";
       this.shadowRoot.querySelector("#comment-count").style.display = "block";
     }
