@@ -43,8 +43,8 @@ class FacebookLogin extends PolymerElement {
         window.FB.api('/v3.0/me', function(response) {
           var fbProfileData = response;
           let apiBaseUrl = this.$.api.baseUrl;
-          this.$.api.set("url",  `${apiBaseUrl}/reset/`);
-          this.$.api.request().then((ajax) => {  return {};
+          this.$.api.authUrl = `${apiBaseUrl}/reset/`;
+          this.$.api.authRequest().then((ajax) => {  return {};
           }).then(() => {
             return this._sendOauthToken(apiBaseUrl, accessToken);
           }).catch((error) => {
@@ -65,6 +65,7 @@ class FacebookLogin extends PolymerElement {
           }).then(() => {
             return this._updateUserData(fbProfileData, userToken, user_id, profile, profile_id);
           }).then(() => {
+            this._checkUserChannels(this._user);
             this.dispatchEvent(new CustomEvent(`success`, { detail: this._user } ));
           });
         }.bind(this), {fields: "picture, email, name"});
@@ -171,6 +172,18 @@ class FacebookLogin extends PolymerElement {
   ready() {
     super.ready();
     this._initializeFBSDK();
+  }
+
+  _checkUserChannels(user) {
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/check-user-channels/${user.profile_id}/`;
+    this.$.api.user = {"key": user.key};
+    this.$.api.body = {};
+    this.$.api.request().then((ajax) => {
+     console.log(ajax.response);
+    }, (error) => {
+      console.log(error);
+    });
   }
 }
 

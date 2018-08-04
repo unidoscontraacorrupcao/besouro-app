@@ -57,13 +57,10 @@ class PrivacyPage extends PolymerElement {
 
     <app-header-layout has-scrolling-region>
       <app-header slot="header" condenses reveals fixed effects="waterfall">
-        <app-toolbar>
-          <paper-icon-button class="header-icon" icon="app:arrow-back"  on-tap="_redirectToInbox"></paper-icon-button>
-          <div main-title >Notificações</div>
-          <div class="header-space"></div>
-          <div class="icon-box">
-            <paper-icon-button class="config-icon" icon="app:settings" on-tap="_redirectToConfig"></paper-icon-button>
-          </div>
+      <app-toolbar>
+          <paper-icon-button class="header-icon" icon="app:arrow-back" on-tap="_redirectToInbox"></paper-icon-button>
+          <div main-title >Privacidade</div>
+          <!-- <paper-icon-button class="header-icon" icon="app:search"></paper-icon-button> -->
         </app-toolbar>
       </app-header>
         <div class="content">

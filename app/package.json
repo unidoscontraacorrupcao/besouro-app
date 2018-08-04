@@ -7,10 +7,11 @@
   "repository": "Polymer/polymer-starter-kit",
   "scripts": {
     "start": "polymer serve",
-    "build": "polymer build",
     "lint": "polymer lint",
     "test": "polymer test",
-    "test:integration": "polymer build # test that psk builds without error with the CLI"
+    "test:integration": "polymer build # test that psk builds without error with the CLI",
+    "prod_build": "./app_build.sh --analytics",
+    "dev_build": "./app_build.sh"
   },
   "dependencies": {
     "@polymer/app-layout": "^3.0.0-pre.15",
@@ -24,7 +25,9 @@
     "@polymer/iron-selector": "^3.0.0-pre.15",
     "@polymer/lit-element": "^0.5.2",
     "@polymer/neon-animation": "^3.0.0-pre.19",
+    "@polymer/paper-badge": "^3.0.0-pre.21",
     "@polymer/paper-button": "^3.0.0-pre.19",
+    "@polymer/paper-checkbox": "^3.0.0-pre.21",
     "@polymer/paper-dialog-behavior": "^3.0.0-pre.19",
     "@polymer/paper-dialog-scrollable": "^3.0.0-pre.19",
     "@polymer/paper-dropdown-menu": "^3.0.0-pre.19",

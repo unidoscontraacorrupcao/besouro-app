@@ -5,6 +5,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/app-layout/app-grid/app-grid-style.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 
@@ -14,7 +15,6 @@ import '../api-elements/api-user-trophies.js';
 import '../api-elements/api-trophies.js';
 import '../api-elements/api-update-profile.js';
 import '../api-elements/api-update-user.js';
-import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/app-dialog.js';
 import '../profile-elements/password-dialog.js';
@@ -320,312 +320,311 @@ class ProfilePage extends PolymerElement {
       </blocked-mission-modal>
     </app-dialog>
 
-     <app-actions on-go-to-inbox="_dispatchToInboxPressed"></app-actions>
-      <app-header-layout has-scrolling-region>
-        <app-header slot="header">
-          <app-toolbar>
-            <paper-icon-button class="left" icon="app:arrow-back" on-tap="_dispatchBackPressed"></paper-icon-button>
-            <h1 main-title>
-              <div class="wrap-title">
-                <div class="title-name">
-                  {{_user.displayName}}
-                </div>
-                <div class="status">
-                  Status do participante
-                </div>
+    <app-header-layout has-scrolling-region>
+      <app-header slot="header">
+        <app-toolbar>
+          <paper-icon-button class="left" icon="app:arrow-back" on-tap="_dispatchBackPressed"></paper-icon-button>
+          <h1 main-title>
+            <div class="wrap-title">
+              <div class="title-name">
+                {{_user.displayName}}
               </div>
-            </h1>
-            <div id="photoload">
+              <div class="status">
+                Status do participante
+              </div>
+            </div>
+          </h1>
+          <div id="photoload">
+            <paper-spinner active=""></paper-spinner>
+          </div>
+          <paper-icon-button class="right" icon="app:edit-profile" on-tap="_switchInfo"></paper-icon-button>
+          <iron-image class="image" id="avatar" src="{{_user.photoURL}}" sizing="cover"></iron-image>
+          <div class="image-filter"></div>
+        </app-toolbar>
+        <app-toolbar tab-bar>
+          <paper-tabs selected="{{_tab}}" fallback-selection="0">
+            <paper-tab>
+              <span class="tabs-text">
+                infos
+              </span>
+              <div class="selected-mark"></div>
+            </paper-tab>
+            <paper-tab>
+              <span class="tabs-text">
+                troféus
+              </span>
+              <div class="selected-mark"></div>
+            </paper-tab>
+            <!-- <paper-tab>
+              <span class="tabs-text">
+                contribuições
+              </span>
+              <div class="selected-mark"></div>
+            </paper-tab> -->
+          </paper-tabs>
+        </app-toolbar>
+        <iron-pages selected="{{_tab}}">
+          <div id="info">
+            <div class="content" id="content">
+              <div class="info-name">email</div>
+              <div class="info-value">{{_info.email}}</div>
+
+              <div class="info-name">cidade</div>
+              <div class="info-value">{{_info.city}}</div>
+
+              <div class="info-name">país</div>
+              <div class="info-value">{{_info.country}}</div>
+
+              <div class="info-name">identidade de gênero</div>
+              <div class="info-value">{{_info.gender}}</div>
+
+              <div class="info-name">cor / raça</div>
+              <div class="info-value">{{_info.race}}</div>
+
+              <div class="info-name">Telefone/WhatsApp</div>
+              <div class="info-value">{{_info.phone}}</div>
+
+              <div class="info-name">Idade</div>
+              <div class="info-value">{{_info.age}}</div>
+
+              <div class="footer-edit">
+                <paper-button on-tap="_switchInfo"><iron-icon icon="app:edit-profile"></iron-icon>Editar perfil</paper-button>
+              </div>
+
+            </div>
+            <div class="form" id="form">
+              <div class="fields">
+                <div class="file-upload">
+                  <input type="file" id="image" on-change="_extractPhoto" accept=".jpg, .jpeg, .png">
+                  <paper-button class="flex-button" on-tap="">Atualizar foto de perfil</paper-button>
+                  <p class="button-disclaimer">
+                    Se for tirar uma foto nova, deite o celular.
+                  </p>
+                  <paper-input-error
+                    hidden$=[[!_errors.image]] invalid>
+                    {{_errors.image}}
+                  </paper-input-error>
+                </div>
+                <paper-input id="displayName"
+                  label="Nome"
+                  value="{{_form.displayName}}"
+                  invalid=[[_errors.displayName]]
+                  required></paper-input>
+                <paper-input-error
+                  hidden$=[[!_errors.displayName]] invalid>
+                  {{_errors.displayName}}
+                </paper-input-error>
+                <paper-input id="city"
+                  label="Cidade"
+                  value="{{_form.city}}"
+                  allowed-pattern="[A-Za-zÀ-ÿ ]"
+                  invalid=[[_errors.city]]
+                  required></paper-input>
+                <paper-input-error
+                  hidden$=[[!_errors.city]] invalid>
+                  {{_errors.city}}
+                </paper-input-error>
+                <paper-input id="state"
+                  label="Estado"
+                  value="{{_form.state}}"
+                  allowed-pattern="[A-Za-z]"
+                  maxlength="2"
+                  invalid=[[_errors.state]]
+                  required></paper-input>
+                <paper-input-error
+                  hidden$=[[!_errors.state]] invalid>
+                  {{_errors.state}}
+                </paper-input-error>
+                <paper-input id="country"
+                  label="País"
+                  value="{{_form.country}}"
+                  allowed-pattern="[A-Za-zÀ-ÿ ]"
+                  invalid=[[_errors.country]]
+                  required></paper-input>
+                <paper-input-error
+                  hidden$=[[!_errors.country]] invalid>
+                  {{_errors.country}}
+                </paper-input-error>
+                <paper-dropdown-menu label="Identidade de gênero"
+                  on-value-changed="_onGenderChanged">
+                  <paper-listbox slot="dropdown-content" selected="{{_form.gender}}">
+                    <paper-item>Não informado</paper-item>
+                    <paper-item>Feminino</paper-item>
+                    <paper-item>Masculino</paper-item>
+                    <paper-item>Feminino Cis</paper-item>
+                    <paper-item>Masculino Cis</paper-item>
+                    <paper-item>Agênero</paper-item>
+                    <paper-item>Queer</paper-item>
+                    <paper-item>Gênero fluído</paper-item>
+                    <paper-item>Gênero não conformista</paper-item>
+                    <paper-item>Gênero variante</paper-item>
+                    <paper-item>Intersex</paper-item>
+                    <paper-item>Não binário</paper-item>
+                    <paper-item>Transgênero</paper-item>
+                    <paper-item>Pangênero</paper-item>
+                    <paper-item>Mulher transexual</paper-item>
+                    <paper-item>Homem transexual</paper-item>
+                    <paper-item>Transfeminino</paper-item>
+                    <paper-item>Transmasculino</paper-item>
+                    <paper-item>Não sei</paper-item>
+                    <paper-item>Nenhum</paper-item>
+                    <paper-item>Outro</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+                <paper-input-error
+                  hidden$=[[!_errors.gender]] invalid>
+                  {{_errors.gender}}
+                </paper-input-error>
+                <paper-input id="genderOther"
+                  label="Especificar identidade de gênero"
+                  value="{{_form.genderOther}}"
+                  allowed-pattern="[A-Za-zÀ-ÿ ]"
+                  invalid=[[_errors.genderOther]]
+                  required></paper-input>
+                <paper-input-error
+                  hidden$=[[!_errors.genderOther]] invalid>
+                  {{_errors.genderOther}}
+                </paper-input-error>
+                <paper-dropdown-menu label="Cor / raça">
+                  <paper-listbox slot="dropdown-content" selected="{{_form.race}}">
+                    <paper-item>Não informada</paper-item>
+                    <paper-item>Preto</paper-item>
+                    <paper-item>Pardo</paper-item>
+                    <paper-item>Branco</paper-item>
+                    <paper-item>Amarelo</paper-item>
+                    <paper-item>Indígena</paper-item>
+                    <paper-item>Não sei</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+                <paper-input-error
+                  hidden$=[[!_errors.race]] invalid>
+                  {{_errors.race}}
+                </paper-input-error>
+                <paper-input id="phone"
+                  label="Telefone/WhatsApp"
+                  value="{{_form.phone}}"
+                  allowed-pattern="[0-9]"
+                  pattern="[0-9]"
+                  invalid=[[_errors.phone]]>
+                </paper-input>
+                <paper-input-error
+                  hidden$=[[!_errors.phone]] invalid>
+                  {{_errors.phone}}
+                </paper-input-error>
+                <paper-input id="age"
+                  type="number"
+                  label="Idade"
+                  value="{{_form.age}}"
+                  allowed-pattern="[0-9]"
+                  pattern="[0-9]"
+                  maxlength="3"
+                  invalid=[[_errors.age]]>
+                </paper-input>
+                <paper-input-error
+                  hidden$=[[!_errors.age]] invalid>
+                  {{_errors.age}}
+                </paper-input-error>
+              </div>
+              <paper-button class="accent" on-tap="_updateProfile">Salvar</paper-button>
+            </div>
+          </div>
+          <div id="trophies">
+            <div id="loading">
               <paper-spinner active=""></paper-spinner>
             </div>
-            <paper-icon-button class="right" icon="app:edit-profile" on-tap="_switchInfo"></paper-icon-button>
-            <iron-image class="image" id="avatar" src="{{_user.photoURL}}" sizing="cover"></iron-image>
-            <div class="image-filter"></div>
-          </app-toolbar>
-          <app-toolbar tab-bar>
-            <paper-tabs selected="{{_tab}}" fallback-selection="0">
-              <paper-tab>
-                <span class="tabs-text">
-                  infos
-                </span>
-                <div class="selected-mark"></div>
-              </paper-tab>
-              <paper-tab>
-                <span class="tabs-text">
-                  troféus
-                </span>
-                <div class="selected-mark"></div>
-              </paper-tab>
-              <!-- <paper-tab>
-                <span class="tabs-text">
-                  contribuições
-                </span>
-                <div class="selected-mark"></div>
-              </paper-tab> -->
-            </paper-tabs>
-          </app-toolbar>
-          <iron-pages selected="{{_tab}}">
-            <div id="info">
-              <div class="content" id="content">
-                <div class="info-name">email</div>
-                <div class="info-value">{{_info.email}}</div>
-
-                <div class="info-name">cidade</div>
-                <div class="info-value">{{_info.city}}</div>
-
-                <div class="info-name">país</div>
-                <div class="info-value">{{_info.country}}</div>
-
-                <div class="info-name">identidade de gênero</div>
-                <div class="info-value">{{_info.gender}}</div>
-
-                <div class="info-name">cor / raça</div>
-                <div class="info-value">{{_info.race}}</div>
-
-                <div class="info-name">Telefone/WhatsApp</div>
-                <div class="info-value">{{_info.phone}}</div>
-
-                <div class="info-name">Idade</div>
-                <div class="info-value">{{_info.age}}</div>
-
-                <div class="footer-edit">
-                  <paper-button on-tap="_switchInfo"><iron-icon icon="app:edit-profile"></iron-icon>Editar perfil</paper-button>
-                </div>
-
-              </div>
-              <div class="form" id="form">
-                <div class="fields">
-                  <div class="file-upload">
-                    <input type="file" id="image" on-change="_extractPhoto" accept=".jpg, .jpeg, .png">
-                    <paper-button class="flex-button" on-tap="">Atualizar foto de perfil</paper-button>
-                    <p class="button-disclaimer">
-                      Se for tirar uma foto nova, deite o celular.
-                    </p>
-                    <paper-input-error
-                      hidden$=[[!_errors.image]] invalid>
-                      {{_errors.image}}
-                    </paper-input-error>
-                  </div>
-                  <paper-input id="displayName"
-                    label="Nome"
-                    value="{{_form.displayName}}"
-                    invalid=[[_errors.displayName]]
-                    required></paper-input>
-                  <paper-input-error
-                    hidden$=[[!_errors.displayName]] invalid>
-                    {{_errors.displayName}}
-                  </paper-input-error>
-                  <paper-input id="city"
-                    label="Cidade"
-                    value="{{_form.city}}"
-                    allowed-pattern="[A-Za-zÀ-ÿ ]"
-                    invalid=[[_errors.city]]
-                    required></paper-input>
-                  <paper-input-error
-                    hidden$=[[!_errors.city]] invalid>
-                    {{_errors.city}}
-                  </paper-input-error>
-                  <paper-input id="state"
-                    label="Estado"
-                    value="{{_form.state}}"
-                    allowed-pattern="[A-Za-z]"
-                    maxlength="2"
-                    invalid=[[_errors.state]]
-                    required></paper-input>
-                  <paper-input-error
-                    hidden$=[[!_errors.state]] invalid>
-                    {{_errors.state}}
-                  </paper-input-error>
-                  <paper-input id="country"
-                    label="País"
-                    value="{{_form.country}}"
-                    allowed-pattern="[A-Za-zÀ-ÿ ]"
-                    invalid=[[_errors.country]]
-                    required></paper-input>
-                  <paper-input-error
-                    hidden$=[[!_errors.country]] invalid>
-                    {{_errors.country}}
-                  </paper-input-error>
-                  <paper-dropdown-menu label="Identidade de gênero"
-                    on-value-changed="_onGenderChanged">
-                    <paper-listbox slot="dropdown-content" selected="{{_form.gender}}">
-                      <paper-item>Não informado</paper-item>
-                      <paper-item>Feminino</paper-item>
-                      <paper-item>Masculino</paper-item>
-                      <paper-item>Feminino Cis</paper-item>
-                      <paper-item>Masculino Cis</paper-item>
-                      <paper-item>Agênero</paper-item>
-                      <paper-item>Queer</paper-item>
-                      <paper-item>Gênero fluído</paper-item>
-                      <paper-item>Gênero não conformista</paper-item>
-                      <paper-item>Gênero variante</paper-item>
-                      <paper-item>Intersex</paper-item>
-                      <paper-item>Não binário</paper-item>
-                      <paper-item>Transgênero</paper-item>
-                      <paper-item>Pangênero</paper-item>
-                      <paper-item>Mulher transexual</paper-item>
-                      <paper-item>Homem transexual</paper-item>
-                      <paper-item>Transfeminino</paper-item>
-                      <paper-item>Transmasculino</paper-item>
-                      <paper-item>Não sei</paper-item>
-                      <paper-item>Nenhum</paper-item>
-                      <paper-item>Outro</paper-item>
-                    </paper-listbox>
-                  </paper-dropdown-menu>
-                  <paper-input-error
-                    hidden$=[[!_errors.gender]] invalid>
-                    {{_errors.gender}}
-                  </paper-input-error>
-                  <paper-input id="genderOther"
-                    label="Especificar identidade de gênero"
-                    value="{{_form.genderOther}}"
-                    allowed-pattern="[A-Za-zÀ-ÿ ]"
-                    invalid=[[_errors.genderOther]]
-                    required></paper-input>
-                  <paper-input-error
-                    hidden$=[[!_errors.genderOther]] invalid>
-                    {{_errors.genderOther}}
-                  </paper-input-error>
-                  <paper-dropdown-menu label="Cor / raça">
-                    <paper-listbox slot="dropdown-content" selected="{{_form.race}}">
-                      <paper-item>Não informada</paper-item>
-                      <paper-item>Preto</paper-item>
-                      <paper-item>Pardo</paper-item>
-                      <paper-item>Branco</paper-item>
-                      <paper-item>Amarelo</paper-item>
-                      <paper-item>Indígena</paper-item>
-                      <paper-item>Não sei</paper-item>
-                    </paper-listbox>
-                  </paper-dropdown-menu>
-                  <paper-input-error
-                    hidden$=[[!_errors.race]] invalid>
-                    {{_errors.race}}
-                  </paper-input-error>
-                  <paper-input id="phone"
-                    label="Telefone/WhatsApp"
-                    value="{{_form.phone}}"
-                    allowed-pattern="[0-9]"
-                    pattern="[0-9]"
-                    invalid=[[_errors.phone]]>
-                  </paper-input>
-                  <paper-input-error
-                    hidden$=[[!_errors.phone]] invalid>
-                    {{_errors.phone}}
-                  </paper-input-error>
-                  <paper-input id="age"
-                    type="number"
-                    label="Idade"
-                    value="{{_form.age}}"
-                    allowed-pattern="[0-9]"
-                    pattern="[0-9]"
-                    maxlength="3"
-                    invalid=[[_errors.age]]>
-                  </paper-input>
-                  <paper-input-error
-                    hidden$=[[!_errors.age]] invalid>
-                    {{_errors.age}}
-                  </paper-input-error>
-                </div>
-                <paper-button class="accent" on-tap="_updateProfile">Salvar</paper-button>
-              </div>
-            </div>
-            <div id="trophies">
-              <div id="loading">
-                <paper-spinner active=""></paper-spinner>
-              </div>
-              <ul class="app-grid">
-                <template id="trophyList" is="dom-repeat" items="{{_trophies}}" as="trophy">
-                  <li class="item">
-                    <div class="trophy-icon">
-                      <iron-image src="{{trophy.icon}}" sizing="cover"></iron-image>
-                    </div>
-                    <div class="trophy-name">
-                      {{trophy.name}}
-                    </div>
-                    <div class="trophy-more">
-                      <a on-tap="_triggerTrophyAction">{{trophy.label}}</a>
-                    </div>
-                  </li>
-                </template>
-              </ul>
-            </div>
-            <!-- <div id="contributions">
-              <ul class="app-grid">
+            <ul class="app-grid">
+              <template id="trophyList" is="dom-repeat" items="{{_trophies}}" as="trophy">
                 <li class="item">
-                  <div class="contribution-value">
-                    {{_contributions.missions_pending}}
+                  <div class="trophy-icon">
+                    <iron-image src="{{trophy.icon}}" sizing="cover"></iron-image>
                   </div>
-                  <div class="contribution-description">
-                    Missões pendentes
+                  <div class="trophy-name">
+                    {{trophy.name}}
+                  </div>
+                  <div class="trophy-more">
+                    <a on-tap="_triggerTrophyAction">{{trophy.label}}</a>
                   </div>
                 </li>
-                <li class="item">
-                  <div class="contribution-value">
-                    {{_contributions.missions_complete}}
-                  </div>
-                  <div class="contribution-description">
-                    Missões completas
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="contribution-value">
-                    {{_contributions.missions_total}}
-                  </div>
-                  <div class="contribution-description">
-                    Total de missões
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="contribution-value">
-                    {{_contributions.votes_total}}
-                  </div>
-                  <div class="contribution-description">
-                    Total de votos
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="contribution-value">
-                    {{_contributions.shares_total}}
-                  </div>
-                  <div class="contribution-description">
-                    Total de compartilhamentos
-                  </div>
-                </li>
-                <li class="item">
-                  <div class="contribution-value">
-                    {{_contributions.trophies_total}}
-                  </div>
-                  <div class="contribution-description">
-                    Total de troféus
-                  </div>
-                </li>
-              </ul>
-              <div class="contribution-total">
-                <div class="contribution-value special">
-                  {{_contributions.score}}
+              </template>
+            </ul>
+          </div>
+          <!-- <div id="contributions">
+            <ul class="app-grid">
+              <li class="item">
+                <div class="contribution-value">
+                  {{_contributions.missions_pending}}
                 </div>
                 <div class="contribution-description">
-                  Total de pontos
+                  Missões pendentes
                 </div>
+              </li>
+              <li class="item">
+                <div class="contribution-value">
+                  {{_contributions.missions_complete}}
+                </div>
+                <div class="contribution-description">
+                  Missões completas
+                </div>
+              </li>
+              <li class="item">
+                <div class="contribution-value">
+                  {{_contributions.missions_total}}
+                </div>
+                <div class="contribution-description">
+                  Total de missões
+                </div>
+              </li>
+              <li class="item">
+                <div class="contribution-value">
+                  {{_contributions.votes_total}}
+                </div>
+                <div class="contribution-description">
+                  Total de votos
+                </div>
+              </li>
+              <li class="item">
+                <div class="contribution-value">
+                  {{_contributions.shares_total}}
+                </div>
+                <div class="contribution-description">
+                  Total de compartilhamentos
+                </div>
+              </li>
+              <li class="item">
+                <div class="contribution-value">
+                  {{_contributions.trophies_total}}
+                </div>
+                <div class="contribution-description">
+                  Total de troféus
+                </div>
+              </li>
+            </ul>
+            <div class="contribution-total">
+              <div class="contribution-value special">
+                {{_contributions.score}}
               </div>
-            </div> -->
-          </iron-pages>
-        </app-header>
-      </app-header-layout>
+              <div class="contribution-description">
+                Total de pontos
+              </div>
+            </div>
+          </div> -->
+        </iron-pages>
+      </app-header>
+    </app-header-layout>
 
-      <paper-toast id="toast"
-        text="{{_toastMessage}}"></paper-toast>
+    <paper-toast id="toast"
+      text="{{_toastMessage}}"></paper-toast>
 
-      <api-trophies id="apiTrophies"
-      on-result="_onTrophies"></api-trophies>
-      <api-user-profile id="apiUserProfile"
-        on-result="_onUserProfile"></api-user-profile>
-      <api-user-trophies id="apiUserTrophies"
-        on-result="_onUserTrophies"></api-user-trophies>
-      <api-update-profile id="apiUpdateProfile"
-        on-result="_onUpdateProfile"></api-update-profile>
-      <api-update-user id="apiUpdateUser"
-        on-result="_onUpdateUser"></api-update-user>
+    <api-trophies id="apiTrophies"
+    on-result="_onTrophies"></api-trophies>
+    <api-user-profile id="apiUserProfile"
+      on-result="_onUserProfile"></api-user-profile>
+    <api-user-trophies id="apiUserTrophies"
+      on-result="_onUserTrophies"></api-user-trophies>
+    <api-update-profile id="apiUpdateProfile"
+      on-result="_onUpdateProfile"></api-update-profile>
+    <api-update-user id="apiUpdateUser"
+      on-result="_onUpdateUser"></api-update-user>
     `;
   }
 
@@ -773,9 +772,6 @@ class ProfilePage extends PolymerElement {
     this.dispatchEvent(new CustomEvent(`back-pressed`));
   }
 
-  _dispatchToInboxPressed() {
-    this.dispatchEvent(new CustomEvent(`to-inbox-pressed`));
-  }
 
   _requestUser() {
     this.dispatchEvent(new CustomEvent(`request-user`));

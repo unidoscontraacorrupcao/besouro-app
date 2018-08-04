@@ -110,8 +110,8 @@ class LoginController extends PolymerElement {
     if(VALIDATION.valid) {
       this._login.form = form;
       let base = this.$.api.baseUrl;
-      this.$.api.set("url",  `${base}/reset/`);
-      this.$.api.request().then(function(ajax) {
+      this.$.api.authUrl = `${base}/reset/`;
+      this.$.api.authRequest().then(function(ajax) {
         this.$.apiLogin.request(form.email, form.password);
       }.bind(this));
     } else {
@@ -125,8 +125,8 @@ class LoginController extends PolymerElement {
     if(VALIDATION.valid) {
       this._signUp.form = form;
       let base = this.$.api.baseUrl;
-      this.$.api.set("url",  `${base}/reset/`);
-      this.$.api.request().then(function(ajax) {
+      this.$.api.authUrl = `${base}/reset/`;
+      this.$.api.authRequest().then(function(ajax) {
         this.$.apiSignUp.request(form.email, form.password);
       }.bind(this));
     } else {
@@ -151,6 +151,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `flex`;
     this.$.login.style.display = `none`;
     this.$.forgotPassword.style.display = `none`;
+    window.scroll(0,0);
     this._clearForms();
   }
 
@@ -158,6 +159,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `flex`;
     this.$.forgotPassword.style.display = `none`;
+    window.scroll(0,0);
     this._clearForms();
   }
 
@@ -165,6 +167,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `none`;
     this.$.forgotPassword.style.display = `flex`;
+    window.scroll(0,0);
     this._clearForms();
   }
 
@@ -254,6 +257,7 @@ class LoginController extends PolymerElement {
       this._user.age = result.data.age;
       this._user.photoURL = result.data.image;
       this._user.profile_id = result.data.profile_id;
+      this._checkUserChannels(this._user);
       this.$.login.emptyForm();
       this._dispatchUser();
       this.$.login.hideLoading();
@@ -378,8 +382,8 @@ class LoginController extends PolymerElement {
 
   _validatePassword(password) {
     let errors = ``;
-    if(password.length < 8) {
-      errors += `Esta senha é muito curta. Ela precisa conter pelo menos 8 caracteres. `;
+    if(password.length < 4) {
+      errors += `Esta senha é muito curta. Ela precisa conter pelo menos 4 caracteres. `;
     }
     return errors;
   }
@@ -437,6 +441,18 @@ class LoginController extends PolymerElement {
       this.$.login._errors = e.detail;
       this.$.login.hideLoading();
     }
+  }
+
+  _checkUserChannels(user) {
+    this.$.api.method = "PUT";
+    this.$.api.path = `channels/check-user-channels/${user.uid}/`;
+    this.$.api.user = {"key": user.key};
+    this.$.api.body = {};
+    this.$.api.request().then((ajax) => {
+     console.log(ajax.response);
+    }, (error) => {
+      console.log(error);
+    });
   }
 }
 

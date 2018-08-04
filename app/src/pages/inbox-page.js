@@ -66,7 +66,6 @@ class InboxPage extends PolymerElement {
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
-    <app-actions on-go-to-inbox="_returnToInbox" on-go-to-profile="_goToProfile"></app-actions>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
     </app-dialog>

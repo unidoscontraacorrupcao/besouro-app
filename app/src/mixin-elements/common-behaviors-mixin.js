@@ -34,6 +34,14 @@ let behaviors = function(superClass) {
     showLoading() {
       this.shadowRoot.querySelector("#loading").setAttribute("style", "display:block");
     }
+
+    parseDisplayName(displayName) {
+      if(displayName.indexOf(".") != -1) {
+        return displayName.split(".")[1];
+      } else {
+        return displayName;
+      }
+    }
   }
 }
 

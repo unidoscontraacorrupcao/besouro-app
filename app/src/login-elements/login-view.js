@@ -106,6 +106,13 @@ class LoginView extends PolymerElement {
           color: white;
           background-color: #4460a0;
         }
+        #social-notice {
+          width: 300px;
+          margin: 20px auto;
+          color: var(--light-text-color);
+          font-family: folio;
+          font-size: 18px;
+        }
         .line {
           box-sizing: border-box;
           margin-top: 4vh;
@@ -182,6 +189,11 @@ class LoginView extends PolymerElement {
           <div class="social-button facebook">
             <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
+        </div>
+        <div id="social-notice">
+          <span>
+            Não publicamos nem cedemos nenhuma informação para essas redes
+          </span>
         </div>
       </div>
       <div class="fill">

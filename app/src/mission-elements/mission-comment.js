@@ -5,7 +5,8 @@ import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../app-elements/app-besouro-api.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-class MissionComment extends PolymerElement {
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+class MissionComment extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -82,11 +83,7 @@ class MissionComment extends PolymerElement {
 
   userName(comment) {
     this.requestPhoto(comment);
-    var name = comment.user.display_name.split(".")[1];
-    if (name != undefined)
-      return comment.user.display_name.split(".")[1];
-    else
-      return comment.user.name;
+    return this.parseDisplayName(comment.user.display_name);
   }
 
   requestPhoto(comment) {

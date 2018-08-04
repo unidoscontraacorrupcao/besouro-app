@@ -11,11 +11,9 @@ import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
-
-import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import 'share-menu/share-menu.js';
+
 import '../mission-elements/unauthorized-modal.js';
-import '../app-elements/app-actions.js';
 import '../app-elements/app-scrollable-dialog.js';
 import '../app-elements/app-form-header.js';
 import '../app-elements/app-icons.js';
@@ -23,14 +21,13 @@ import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-comment.js';
 import '../mission-elements/mission-player.js';
 import '../mission-elements/accept-mission-modal.js';
-import '../mission-elements/reject-mission-modal.js';
-import '../mission-elements/finish-mission-modal.js';
-import '../mission-elements/mission-receipt.js';
+import '../mission-elements/conversation-modal.js';
 import '../app-elements/app-besouro-api.js';
-import {MissionDurationMixin} from '../mixin-elements/mission-duration-mixin.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+import {MissionMixin} from '../mixin-elements/mission-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { resolveCss } from '@polymer/polymer/lib/utils/resolve-url';
-class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
+class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -389,21 +386,45 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
-    <app-actions on-go-to-inbox="_returnToInbox" on-go-to-profile="_goToProfile"></app-actions>
     <app-dialog id="unauthorizedDialog">
-      <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
+      <unauthorized-modal
+        on-close-modal="_dismissUnauthorizedModal"
+        on-go-to-register="_goToLogin">
+      </unauthorized-modal>
     </app-dialog>
 
-    <share-menu id="shareMenu" title="{{mission.title}}" text="{{stripHtmlTags(mission.description)}}" url="{{address}}/{{data.key}}?shared=true" enabled-services='["telegram", "whatsapp"]'></share-menu>
+    <share-menu
+      id="shareMenu"
+      title="{{mission.title}}"
+      text="{{stripHtmlTags(mission.description)}}"
+      url="{{address}}/{{data.key}}?shared=true"
+      enabled-services='["telegram", "whatsapp"]'>
+    </share-menu>
 
-    <app-route route="{{route}}" pattern="/show-mission/:key" data="{{data}}">
+    <app-route
+      route="{{route}}"
+      pattern="/show-mission/:key"
+      data="{{data}}">
     </app-route>
 
-
-
     <app-scrollable-dialog id="finishedDialog">
-      <finish-mission-modal user="[[user]]" mission-id="{{data.key}}"></finish-mission-modal>
+      <finish-mission-modal
+        user="[[user]]"
+        mission-id="{{data.key}}"
+        on-open-conversation="_openConversationModal">
+      </finish-mission-modal>
     </app-scrollable-dialog>
+
+    <app-scrollable-dialog id="conversationDialog">
+      <conversation-modal
+        user="[[user]]"
+        mission-id="{{data.key}}"
+        on-close-modal="_dismissConversationModal"
+        on-change-modal-bg="_changeConversationModalBg"
+        on-restore-modal-bg="_restoreConversationModalBg">
+      </conversation-modal>
+    </app-scrollable-dialog>
+
 
     <app-dialog id="acceptedDialog">
       <accept-mission-modal
@@ -412,115 +433,150 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
       </accept-mission-modal>
     </app-dialog>
 
-    <app-dialog id="rejectedDialog" opened="{{rejectedModal}}">
-      <reject-mission-modal></reject-mission-modal>
+    <app-dialog
+      id="rejectedDialog"
+      opened="{{rejectedModal}}">
+        <reject-mission-modal></reject-mission-modal>
     </app-dialog>
 
-    <app-scrollable-dialog id="receiptsDialog">
-      <mission-receipts-modal mission-id="{{data.key}}" receipts="{{mission.receipts}}"></mission-receipts-modal>
-    </app-scrollable-dialog>
-
     <app-header-layout has-scrolling-region="">
-      <app-header slot="header" fixed="" condenses="" effects="waterfall resize-title blend-background parallax-background">
+      <app-header
+        slot="header"
+        fixed=""
+        condenses=""
+        effects="waterfall resize-title blend-background parallax-background">
         <app-toolbar>
-          <paper-icon-button icon="app:arrow-back" on-tap="_returnToInbox"></paper-icon-button>
-          <h1 condensed-title class="dark title">{{mission.title}}</h1>
-          <!-- <paper-icon-button icon="app:mission-edit"></paper-icon-button> -->
+
+          <paper-icon-button
+            icon="app:arrow-back"
+            on-tap="_returnToInbox">
+          </paper-icon-button>
+
+            <h1 condensed-title class="dark title">{{mission.title}}</h1>
+            <!-- <paper-icon-button icon="app:mission-edit"></paper-icon-button> -->
         </app-toolbar>
 
         <app-toolbar class="tall">
           <p bottom-item main-title="" class="title">
             {{mission.title}}
             <div bottom-item class="timing">
-              <paper-icon-button icon="app:mission-timing"></paper-icon-button>
-              <span>{{mission.remainig_days}}</span>
+
+            <paper-icon-button
+              icon="app:mission-timing">
+            </paper-icon-button>
+            <span>{{mission.remainig_days}}</span>
             </div>
           </p>
-          <mission-player id="player" mission-image="{{missionImage}}" mission="{{mission}}" mission-key="{{data.key}}">
-          </mission-player>
-          <div class="actions">
-            <paper-icon-button on-tap="_shareMission" id="share-mission" icon="app:share"></paper-icon-button>
-          </div>
-        </app-toolbar>
-      </app-header>
+      <mission-player
+        id="player"
+        mission-image="{{missionImage}}"
+        mission="{{mission}}"
+        mission-key="{{data.key}}">
+      </mission-player>
 
-        <div class="stats">
-          <div class="stats-content">
-            <div>
-             <span><span class="stats-number">{{acceptedMissionCount}} </span>aceitaram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
-            </div>
+      <div class="actions">
 
-            <div>
-             <span><span class="stats-number">{{concludedMissionCount}}</span> concluiram <span class="space">&nbsp;&verbar;&nbsp;</span></span>
-            </div>
-
-            <div>
-             <span><span class="stats-number">{{pendingMissionCount}}</span> pendentes</span>
-            </div>
-          </div>
-        </div>
-
-      <div class="card-action">
-        <div>
-          <a><span id="btnText">{{btnAction}}</span></a>
-        </div>
+        <paper-icon-button
+          on-tap="_shareMission"
+          id="share-mission"
+          icon="app:share">
+        </paper-icon-button>
       </div>
+    </app-toolbar>
+  </app-header>
 
-      <div class="card-action" id="mission-finished">
-        <div>
-          <paper-icon-button
-            disabled
-            icon="app:accept-mission-intern">
-          </paper-icon-button>
-        </div>
-        <span>missão concluida</span>
-      </div>
-
-      <div class="card-action" id="mission-blocked">
-        <div>
-          <paper-icon-button disabled icon="app:mission-blocked"></paper-icon-button>
-        </div>
-        <span>missão bloqueada</span>
-      </div>
-
-
-      <div class="card-action" id="mission-accepted">
-        <div>
-          <a id="btnLink"><span id="btnText">missão aceita</span></a>
-        </div>
-        <div>
-          <span>já realizou a missão?
-            <a id="finishMission">acesse aqui para concluir</a>
+  <div class="stats">
+    <div class="stats-content">
+      <div>
+        <span>
+          <span class="stats-number">{{acceptedMissionCount}} </span>
+            aceitaram <span class="space">&nbsp;&verbar;&nbsp;</span>
           </span>
-        </div>
+      </div>
+
+      <div>
+        <span>
+          <span class="stats-number">{{concludedMissionCount}}</span>
+          concluiram <span class="space">&nbsp;&verbar;&nbsp;</span>
+        </span>
+      </div>
+
+      <div>
+        <span>
+          <span class="stats-number">{{pendingMissionCount}}</span>
+          pendentes</span>
+      </div>
+    </div>
+  </div>
+
+    <div class="card-action">
+      <div>
+        <a><span id="btnText">{{btnAction}}</span></a>
       </div>
     </div>
 
-      <template is="dom-if" if="{{mission}}">
-        <div class="content">
-          <h2>Entenda a missão</h2>
-          <!-- description field is inserted by the insertDescriptionHtml method -->
-          <p id="ckDescription"></p>
+    <div class="card-action" id="mission-finished">
+      <div>
+        <paper-icon-button
+          disabled
+          icon="app:accept-mission-intern">
+        </paper-icon-button>
+      </div>
+      <span>missão concluida</span>
+    </div>
 
-          <h2>recompensa</h2>
-          <!-- reward field is inserted by the insertDescriptionHtml method -->
-          <p id="ckReward"></p>
+    <div class="card-action" id="mission-blocked">
+      <div>
+        <paper-icon-button disabled icon="app:mission-blocked"></paper-icon-button>
+      </div>
+      <span>missão bloqueada</span>
+    </div>
 
-            <div class="comments">
-              <h2>Comentários</h2>
-              <template is="dom-repeat" items="{{mission.comment_set}}" as="comment" >
-                <mission-comment comment="{{comment}}">
-                </mission-comment>
-              </template>
-              <div class="comment">
-                    <div class="message">
-                      <paper-textarea id="commentInput" label="Escreva um comentário" required="" error-message="O campo não pode ser vazio.">
-                      </paper-textarea>
-                      <paper-button on-tap="_addComment" class="plain">Enviar</paper-button>
-                    </div>
-              </div>
+
+    <div class="card-action" id="mission-accepted">
+      <div>
+        <a id="btnLink"><span id="btnText">missão aceita</span></a>
+      </div>
+      <div>
+        <span>já realizou a missão?
+          <a id="finishMission">acesse aqui para concluir</a>
+        </span>
+      </div>
+    </div>
+
+    <template is="dom-if" if="{{mission}}">
+      <div class="content">
+        <h2>Entenda a missão</h2>
+
+        <!-- description field is inserted by the insertDescriptionHtml method -->
+        <p id="ckDescription"></p>
+
+        <h2>recompensa</h2>
+
+        <!-- reward field is inserted by the insertDescriptionHtml method -->
+        <p id="ckReward"></p>
+
+        <div class="comments">
+          <h2>Comentários</h2>
+          <template is="dom-repeat" items="{{mission.comment_set}}" as="comment" >
+            <mission-comment comment="{{comment}}"></mission-comment>
+          </template>
+          <div class="comment">
+            <div class="message">
+              <paper-textarea
+                id="commentInput"
+                label="Escreva um comentário"
+                required=""
+                error-message="O campo não pode ser vazio.">
+              </paper-textarea>
+              <paper-button
+                on-tap="_addComment"
+                class="plain">Enviar
+              </paper-button>
             </div>
           </div>
+        </div>
+      </div>
     </template>
     </app-header-layout>
 
@@ -633,11 +689,6 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _returnToInbox() { this.set('route.path', '/'); }
 
-  _editMission() {
-    this.set("route.data", {missionID: this.data.key});
-    this.set("route.path", "/mission");
-  }
-
   _addComment(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
       this.$.unauthorizedDialog.present();
@@ -660,9 +711,22 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.user = this.user;
     this.$.api.body = content;
     this.$.api.request().then(function(ajax) {
-      this._missionChanged();
-    }.bind(this));
+        this._missionChanged();
+        this._openConversationModal();
+      }.bind(this));
     input.value = "";
+  }
+
+  _openConversationModal() {
+    this.getNextConversation(this.data.key, this.user.uid).then(function(ajax) {
+      var comments_count = ajax.response.comments_count;
+      if (comments_count > 0) {
+        var cid = ajax.response.cid;
+        const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
+        conversationComponent.getNextComments(cid, this.data.key, comments_count);
+        this.$.conversationDialog.present();
+      }
+    }.bind(this));
   }
 
   _acceptMission(e) {
@@ -677,7 +741,16 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.request().then(function(ajax) {
       this._missionChanged();
     }.bind(this));
+   this._addUserOnMissionChanel();
    this.$.acceptedDialog.present();
+  }
+
+  _addUserOnMissionChanel() {
+    this.$.api.method = "PUT";
+    this.$.api.path = "channels/add-to-group-channel";
+    this.$.api.body = {"user_id": this.user.uid, "sort": `conversation-${this.mission.id}`};
+    this.$.api.user = this.user;
+    return this.$.api.request().then(() => {});
   }
 
   _rejectMission(e) {
@@ -701,26 +774,8 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     this._setActionBtn();
   }
 
-  _openMissionReceipts() {
-    this.set('route.path', `/mission-receipts/${this.data.key}`);
-  }
-
-  _openFinishedMissionList() {
-    if (this.mission.content.usersFinished &&
-      this.mission.content.usersFinished.length > 0) {
-      this.set('route.path', `/mission-finished/${this.data.key}`);
-    }
-  }
-
-  _openAcceptedMissionList() {
-    if (this.acceptedMissionStats > 0) {
-      this.set('route.path', `/mission-accepted/${this.data.key}`);
-    }
-  }
-
   ready() {
     super.ready();
-    this.shadowRoot.querySelector('mission-receipts-modal').addEventListener('close-modal', this._dismissReceiptsModal.bind(this));
     this.shadowRoot.querySelector('finish-mission-modal').addEventListener('close-modal', this._dismissFinishModal.bind(this));
     this.acceptMissionFunc = this._acceptMission.bind(this);
     this.finishMissionFunc = this._finishMission.bind(this);
@@ -820,15 +875,24 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _missionChanged() {
     if (!this.data) return;
-    this.set("mission", {});
-    this.$.api.method = "GET";
-    this.$.api.path = `missions/${this.data.key}`;
-    this.$.api.request().then(function(ajax) {
+    this._getMission().then(function(ajax) {
       this.set("mission", ajax.response);
       this.insertDescriptionHtml("#ckDescription");
       this.insertRewardHtml("#ckReward");
       this._calcMissionStats();
+      if (this.route.show_conversation) {
+        console.log(this.route);
+        this.set("route.show_conversation", false);
+        this._openConversationModal();
+      }
     }.bind(this));
+  }
+
+  _getMission() {
+    this.set("mission", {});
+    this.$.api.method = "GET";
+    this.$.api.path = `missions/${this.data.key}`;
+    return this.$.api.request();
   }
 
   _shareMission(e) {
@@ -845,6 +909,7 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _returnToInbox() { this.set("route.path", "/"); }
   _dismissUnauthorizedModal() {this.$.unauthorizedDialog.dismiss();}
+  _dismissConversationModal() {this.$.conversationDialog.dismiss();}
   _closeAcceptModal() { this.$.acceptedDialog.dismiss(); }
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
@@ -857,6 +922,20 @@ class ShowMissionPage extends CommonBehaviorsMixin(PolymerElement) {
     } else {
       this.set("route.path", "/profile");
     }
+  }
+
+  _changeConversationModalBg() {
+    const scrollableDialog = this.$.conversationDialog;
+    const paperDialog = scrollableDialog.shadowRoot.querySelector("#scroll");
+    console.log(paperDialog);
+    paperDialog.style.background = "var(--secondary-text-color)";
+  }
+
+  _restoreConversationModalBg() {
+    const scrollableDialog = this.$.conversationDialog;
+    const paperDialog = scrollableDialog.shadowRoot.querySelector("#scroll");
+    console.log(paperDialog);
+    paperDialog.style.background = "white";
   }
 
   _disableModalRedirect() { return false; }

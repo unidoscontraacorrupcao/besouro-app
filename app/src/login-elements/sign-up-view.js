@@ -90,12 +90,7 @@ class SignUpView extends PolymerElement {
           justify-content: center;
           border-radius: 50%;
         }
-        .social-button.google {
-          height: 67px;
-          width: 67px;
-          border: 1px solid #b7b7b7;
-          background-color: white;
-        }
+
         .social-button.facebook {
           margin-left: 2.35vw;
           height: 66px;
@@ -117,7 +112,21 @@ class SignUpView extends PolymerElement {
           max-width: none;
           margin-bottom: 5vh;
         }
+        #social-notice {
+          width: 300px;
+          margin: 20px auto;
+          color: var(--light-text-color);
+          font-family: folio;
+          font-size: 18px;
+        }
       </style>
+      <!--analytics
+      <script
+        type="text/javascript"
+        async
+        src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/00338ef3-fb6d-4aeb-80a5-2d23782fa6e9-loader.js" >
+      </script>
+      analytics-->
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
@@ -164,12 +173,14 @@ class SignUpView extends PolymerElement {
         Você também pode usar suas redes sociais
         </div>
         <div class="social-buttons">
-          <div class="social-button google">
-            <paper-icon-button icon="app:google" on-tap="_onAuthGoogle"></paper-icon-button>
-          </div>
           <div class="social-button facebook">
             <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
+        </div>
+        <div id="social-notice">
+          <span>
+            Não publicamos nem cedemos nenhuma informação para essas redes
+          </span>
         </div>
       </div>
       <div class="fill">
@@ -228,10 +239,6 @@ class SignUpView extends PolymerElement {
 
   _onAuthFacebook(e) {
     this.dispatchEvent(new CustomEvent(`auth-facebook`));
-  }
-
-  _onAuthGoogle(e) {
-    this.dispatchEvent(new CustomEvent(`auth-google`));
   }
 
   _getEmptyForm() {

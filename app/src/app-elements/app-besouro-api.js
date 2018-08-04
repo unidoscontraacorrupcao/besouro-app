@@ -17,6 +17,17 @@ class AppBesouroApi extends PolymerElement {
     headers="{{getHeaders()}}"
     handle-as="json"
     content-type="{{contentType}}"
+    method={{method}}>
+    </iron-ajax>
+
+    <iron-ajax
+    id="authAjax"
+    url="{{authUrl}}"
+    body='{{body}}'
+    params={{params}}
+    headers="{{getHeaders()}}"
+    handle-as="json"
+    content-type="{{contentType}}"
     method={{method}}
     loading
     withCredentials
@@ -74,10 +85,6 @@ class AppBesouroApi extends PolymerElement {
    */
   request() {
     this.$.ajax.headers = this.getHeaders();
-    if (this.url == `${this.baseUrl}/reset/`)
-      this.$.ajax.url = `${this.baseUrl}/reset/`;
-    if (this.url == `${this.baseUrl}/rest-auth/facebook/`)
-      this.$.ajax.url = `${this.baseUrl}/rest-auth/facebook/`;
     return this.$.ajax.generateRequest().completes;
   }
 
