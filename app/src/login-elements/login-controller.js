@@ -1,6 +1,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 import '../api-elements/api-auth-user.js';
 import '../api-elements/api-login.js';
@@ -15,8 +16,6 @@ import './sign-up-view.js';
 import './login-view.js';
 import './facebook-login.js';
 import './forgot-password-view.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-
 class LoginController extends PolymerElement {
   static get template() {
     return html`
@@ -41,17 +40,23 @@ class LoginController extends PolymerElement {
 
       <login-view id="login"
         on-login="_requestLogin",
-        on-auth-facebook="_requestFacebookLogin"
-        on-sign-up="_showSignUp" on-forgot-password="_showForgotPassword"></login-view>
+        on-sign-up="_showSignUp" 
+        on-forgot-password="_showForgotPassword"
+        on-auth-facebook="_requestFacebookLogin">
+      </login-view>
 
       <sign-up-view id="signUp"
         on-sign-up="_requestSignUp"
         on-login="_showLogin"
-        on-forgot-password="_showForgotPassword"></sign-up-view>
+        on-forgot-password="_showForgotPassword"
+        on-auth-facebook="_requestFacebookLogin">
+      </sign-up-view>
 
       <forgot-password-view id="forgotPassword"
         on-forgot-password="_requestForgotPassword"
-        on-sign-up="_showSignUp"></forgot-password-view>
+        on-sign-up="_showSignUp"
+        on-auth-facebook="_requestFacebookLogin">
+      </forgot-password-view>
 
       <paper-toast id="toast"
         text="{{_toastMessage}}"></paper-toast>
@@ -312,7 +317,6 @@ class LoginController extends PolymerElement {
   }
 
   _dispatchFBUser(e) {
-    console.log(e.detail);
     this.dispatchEvent(new CustomEvent(`user-update`, { detail: e.detail } ));
     this._clearForms();
   }

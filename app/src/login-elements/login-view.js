@@ -5,9 +5,12 @@ import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
-class LoginView extends PolymerElement {
+import '../app-elements/styles/modal-shared-styles.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+class LoginView extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
+      <style include="modal-shared-styles"></style>
       <style>
         :host {
           display: flex;
@@ -77,42 +80,6 @@ class LoginView extends PolymerElement {
           line-height: 19px;
           text-align: center;
         }
-        .social {
-          text-align: center;
-          margin-top: 5vh;
-        }
-        .social-text {
-          font-family: Folio;
-          font-size: 18px;
-          line-height: 19px;
-          color: #312783;
-        }
-        .social-buttons {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 1.6vh auto 0;
-        }
-        .social-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-        }
-        .social-button.facebook {
-          margin-left: 2.35vw;
-          height: 66px;
-          width: 66px;
-          color: white;
-          background-color: #4460a0;
-        }
-        #social-notice {
-          width: 300px;
-          margin: 20px auto;
-          color: var(--light-text-color);
-          font-family: folio;
-          font-size: 18px;
-        }
         .line {
           box-sizing: border-box;
           margin-top: 4vh;
@@ -133,13 +100,6 @@ class LoginView extends PolymerElement {
           background-color: #009fe3;
           max-width: none;
           margin-bottom: 5vh;
-        }
-
-        #loading {
-          position: absolute;
-          top: 50%;
-          right: 50%;
-          transform: translate(50%);
         }
 
       </style>
@@ -273,13 +233,6 @@ class LoginView extends PolymerElement {
       email: ``,
       password: ``
     };
-  }
-  hideLoading() {
-    this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
-  }
-
-  showLoading() {
-    this.shadowRoot.querySelector("#loading").setAttribute("style", "display:block");
   }
 
   ready() {

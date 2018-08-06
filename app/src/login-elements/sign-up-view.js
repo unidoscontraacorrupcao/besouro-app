@@ -2,11 +2,15 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
-class SignUpView extends PolymerElement {
+import '../app-elements/styles/modal-shared-styles.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
+      <style include="modal-shared-styles"></style>
       <style>
         :host {
           display: none;
@@ -68,36 +72,7 @@ class SignUpView extends PolymerElement {
           margin: 4vh auto 0;
           border-radius: 0;
         }
-        .social {
-          text-align: center;
-          margin-top: 5vh;
-        }
-        .social-text {
-          font-family: Folio;
-          font-size: 18px;
-          line-height: 19px;
-          color: #312783;
-        }
-        .social-buttons {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 1.6vh auto 0;
-        }
-        .social-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-        }
 
-        .social-button.facebook {
-          margin-left: 2.35vw;
-          height: 66px;
-          width: 66px;
-          color: white;
-          background-color: #4460a0;
-        }
         .line {
           box-sizing: border-box;
           margin-top: 4vh;
@@ -112,13 +87,6 @@ class SignUpView extends PolymerElement {
           max-width: none;
           margin-bottom: 5vh;
         }
-        #social-notice {
-          width: 300px;
-          margin: 20px auto;
-          color: var(--light-text-color);
-          font-family: folio;
-          font-size: 18px;
-        }
       </style>
       <!--analytics
       <script
@@ -127,6 +95,9 @@ class SignUpView extends PolymerElement {
         src="https://d335luupugsy2.cloudfront.net/js/loader-scripts/00338ef3-fb6d-4aeb-80a5-2d23782fa6e9-loader.js" >
       </script>
       analytics-->
+      <div id="loading">
+        <paper-spinner active=""></paper-spinner>
+      </div>
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
@@ -238,6 +209,7 @@ class SignUpView extends PolymerElement {
   }
 
   _onAuthFacebook(e) {
+    this.showLoading();
     this.dispatchEvent(new CustomEvent(`auth-facebook`));
   }
 
@@ -255,6 +227,11 @@ class SignUpView extends PolymerElement {
       name: ``,
       password: ``
     };
+  }
+
+  ready() {
+    super.ready();
+    this.hideLoading();
   }
 }
 

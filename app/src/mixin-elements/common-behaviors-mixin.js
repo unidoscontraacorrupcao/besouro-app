@@ -28,11 +28,15 @@ let behaviors = function(superClass) {
     }
 
     hideLoading() {
-      this.shadowRoot.querySelector("#loading").setAttribute("style", "display:none");
+      const loading = this.shadowRoot.querySelector("#loading");
+      if(loading)
+        loading.setAttribute("style", "display:none");
     }
 
     showLoading() {
-      this.shadowRoot.querySelector("#loading").setAttribute("style", "display:block");
+      const loading = this.shadowRoot.querySelector("#loading");
+        if(loading)
+        loading.setAttribute("style", "display:block");
     }
 
     parseDisplayName(displayName) {

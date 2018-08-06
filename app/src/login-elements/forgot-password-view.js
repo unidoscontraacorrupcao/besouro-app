@@ -2,11 +2,15 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
-class ForgotPasswordView extends PolymerElement {
+import '../app-elements/styles/modal-shared-styles.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
+      <style include="modal-shared-styles"></style>
       <style>
         :host {
           display: none;
@@ -68,41 +72,6 @@ class ForgotPasswordView extends PolymerElement {
           margin: 4vh auto 0;
           border-radius: 0;
         }
-        .social {
-          text-align: center;
-          margin-top: 5vh;
-        }
-        .social-text {
-          font-family: Folio;
-          font-size: 18px;
-          line-height: 19px;
-          color: #312783;
-        }
-        .social-buttons {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 1.6vh auto 0;
-        }
-        .social-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-        }
-        .social-button.google {
-          height: 67px;
-          width: 67px;
-          border: 1px solid #b7b7b7;
-          background-color: white;
-        }
-        .social-button.facebook {
-          margin-left: 2.35vw;
-          height: 66px;
-          width: 66px;
-          color: white;
-          background-color: #4460a0;
-        }
         .line {
           box-sizing: border-box;
           margin-top: 4vh;
@@ -125,6 +94,9 @@ class ForgotPasswordView extends PolymerElement {
           margin-bottom: 5vh;
         }
       </style>
+      <div id="loading">
+        <paper-spinner active=""></paper-spinner>
+      </div>
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
@@ -158,12 +130,14 @@ class ForgotPasswordView extends PolymerElement {
           Você também pode usar suas redes sociais
         </div>
         <div class="social-buttons">
-          <div class="social-button google">
-            <paper-icon-button icon="app:google" on-tap="_onAuthGoogle"></paper-icon-button>
-          </div>
           <div class="social-button facebook">
             <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
+        </div>
+        <div id="social-notice">
+          <span>
+            Não publicamos nem cedemos nenhuma informação para essas redes
+          </span>
         </div>
       </div>
       <div class="fill">
@@ -213,17 +187,12 @@ class ForgotPasswordView extends PolymerElement {
     }));
   }
 
-  _onSignUp(e) {
-    this.dispatchEvent(new CustomEvent(`sign-up`));
-  }
-
+  _onSignUp(e) { this.dispatchEvent(new CustomEvent(`sign-up`)); }
   _onAuthFacebook(e) {
+    this.showLoading();
     this.dispatchEvent(new CustomEvent(`auth-facebook`));
   }
 
-  _onAuthGoogle(e) {
-    this.dispatchEvent(new CustomEvent(`auth-google`));
-  }
 
   _getEmptyForm() {
     return {
@@ -235,6 +204,11 @@ class ForgotPasswordView extends PolymerElement {
     return {
       email: ``
     };
+  }
+
+  ready() {
+    super.ready();
+    this.hideLoading();
   }
 }
 
