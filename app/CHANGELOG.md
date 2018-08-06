@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2018-08-06
+### Added
+- Notifications infrastructure.
+- Conversations infrastructure.
+- Integration between notifications and conversations.
+### Changed
+- Recreate iron-request component for every new request.
+- Check if user token is expired.
+### Removed
+- Remove several views that was not being used.
+
 ## [0.1.3] - 2018-08-02
 ### Added
 - First app test.
