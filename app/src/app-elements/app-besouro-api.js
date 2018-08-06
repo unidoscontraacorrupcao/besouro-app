@@ -32,21 +32,6 @@ class AppBesouroApi extends PolymerElement {
     loading
     withCredentials
     debounce-duration="300"></iron-ajax>
-
-    <iron-ajax
-    id="authAjax"
-    url="{{authUrl}}"
-    body='{{body}}'
-    params={{params}}
-    headers="{{getHeaders()}}"
-    handle-as="json"
-    content-type="{{contentType}}"
-    method={{method}}
-    loading
-    withCredentials
-    debounce-duration="300"></iron-ajax>
-
-    <iron-request id="xhr"></iron-request>
     `
   }
 
@@ -101,14 +86,15 @@ class AppBesouroApi extends PolymerElement {
    * Send xhr requests for api endpoints. Usefull for send form Data objects.
    */
   xhrRequest() {
+    // iron-request is not updating the XMLHttpRequest readyState attribute,
+    // so we will always recreate the iron-request component.
+    const xhrComponent = document.createElement("iron-request");
     this.xhrData["headers"] = this.getHeaders();
-    return new Promise((resolve, reject) => {
-      resolve(this.$.xhr.send(this.xhrData));
-    });
+    return xhrComponent.send(this.xhrData);
   }
 
   /**
-   * Get headers from the user attribute. For requests like POST/PUT/PATH 
+   * Get headers from the user attribute. For requests like POST/PUT/PATH
    * set the user attribute with the django api key
    */
   getHeaders() {

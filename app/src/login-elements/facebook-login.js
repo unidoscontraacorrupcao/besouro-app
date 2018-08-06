@@ -176,7 +176,7 @@ class FacebookLogin extends PolymerElement {
 
   _checkUserChannels(user) {
     this.$.api.method = "PUT";
-    this.$.api.path = `channels/check-user-channels/${user.profile_id}/`;
+    this.$.api.path = `channels/check-user-channels/${user.uid}/`;
     this.$.api.user = {"key": user.key};
     this.$.api.body = {};
     this.$.api.request().then((ajax) => {
