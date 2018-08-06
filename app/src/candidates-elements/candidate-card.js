@@ -73,15 +73,15 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
           <div id="candidate-infos">
       <div id="candidacy">
       <span>candidatura:</span>
-      <span><b>senadora</b></span>
+      <span><b>{{candidate.candidacy}}</b></span>
       </div>
       <div id="urn">
         <span>urna:</span>
-      <span><b>12345</b></span>
+      <span><b>{{candidate.urn}}</b></span>
       </div>
       <div id="party-uf">
         <span>partido - UF:</span>
-      <span><b>partido da pessoa - uf</b></span>
+      <span><b>{{candidate.party}}</b></span>
       </div>
           </div>
         </div>
@@ -111,7 +111,8 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
     return {
       candidate: {
         type: Object,
-        observer: 'setCandidateData'
+        value: function() {return {"candidacy": "senadora",
+        "urn": "12345", "party": "pt"} }
       },
       candidatePhoto: String,
       user: Object
