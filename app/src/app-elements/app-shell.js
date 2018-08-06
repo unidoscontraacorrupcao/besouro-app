@@ -497,7 +497,7 @@ class AppShell extends PolymerElement {
       return this.$.api.authRequest();
     }
     return new Promise((resolve, reject) => {
-      resolve({"response": {"expired": true}});
+      resolve({"response": {"expired": false}});
     })
   }
 }
