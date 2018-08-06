@@ -11,6 +11,7 @@ import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
+import '../candidates-elements/candidate-card.js';
 import '../app-elements/app-besouro-api.js';
 class CandidatesPage extends PolymerElement {
   static get template() {
@@ -86,6 +87,7 @@ class CandidatesPage extends PolymerElement {
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
           <welcome-card></welcome-card>
+          <candidate-card></candidate-card>
         </div>
         <div class="inbox">
           <empty-card id="emptyMessage" on-select-inbox="_selectInbox"></empty-card>
