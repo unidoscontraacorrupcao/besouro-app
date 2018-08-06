@@ -30,6 +30,7 @@ import '../pages/notifications-page.js';
 import '../pages/settings-page.js';
 import '../pages/help-page.js';
 import '../pages/reset-password-page.js';
+import '../pages/candidates-page.js';
 import './app-icons.js';
 import './app-theme.js';
 // Gesture events like tap and track generated from touch will not be
@@ -259,6 +260,7 @@ class AppShell extends PolymerElement {
         fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged"
         role="main">
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
+          <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></candidates-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
@@ -286,7 +288,12 @@ class AppShell extends PolymerElement {
             on-back-pressed="_goToInbox"></profile-page>
       </iron-pages>
       <template is="dom-if" if="{{canShowBottomBar}}">
-        <app-actions on-go-to-inbox="_goToInbox" on-go-to-notifications="_goToNotifications" unread={{unread}}></app-actions>
+        <app-actions
+          on-go-to-inbox="_goToInbox"
+          on-go-to-notifications="_goToNotifications"
+          on-go-to-candidates="_goToCandidates"
+          unread={{unread}}>
+        </app-actions>
       </template>
     </app-drawer-layout>
     <script src="/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
@@ -403,6 +410,14 @@ class AppShell extends PolymerElement {
       this.$.unauthorizedDialog.present();
     } else {
       this.set("route.path", "/notifications");
+    }
+  }
+
+  _goToCandidates() {
+    if(!this.user || Object.keys(this.user).length == 0) {
+      this.$.unauthorizedDialog.present();
+    } else {
+      this.set("route.path", "/candidates");
     }
   }
 
