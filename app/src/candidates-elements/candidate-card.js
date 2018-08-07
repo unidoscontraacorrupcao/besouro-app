@@ -33,6 +33,7 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
       font-family: folio;
       font-size: 24px;
       color: var(--secondary-text-color);
+      margin-bottom: 16px;
     }
 
     #candidate-infos {
@@ -59,8 +60,33 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
       color: var(--paragraph-color);
     }
 
+      .card-footer {
+        height: 141px;
+        position: relative;
+      }
 
+      .card-footer paper-button {
+        height: 80px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        border-style: solid;
+        border-radius: 0;
+        border-width: 1px;
+      }
 
+      .card-footer paper-button div {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #btn-icon {
+        width: 25%;
+        margin: auto auto 10px auto;
+      }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -71,35 +97,39 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
         <div class="container">
           <span id="candidate-name"> nome da pessoa </span>
           <div id="candidate-infos">
-      <div id="candidacy">
-      <span>candidatura:</span>
-      <span><b>{{candidate.candidacy}}</b></span>
-      </div>
-      <div id="urn">
-        <span>urna:</span>
-      <span><b>{{candidate.urn}}</b></span>
-      </div>
-      <div id="party-uf">
-        <span>partido - UF:</span>
-      <span><b>{{candidate.party}}</b></span>
-      </div>
+            <div id="candidacy">
+              <span>candidatura:</span>
+              <span><b>{{candidate.candidacy}}</b></span>
+            </div>
+            <div id="urn">
+              <span>urna:</span>
+              <span><b>{{candidate.urn}}</b></span>
+            </div>
+            <div id="party-uf">
+              <span>partido - UF:</span>
+              <span><b>{{candidate.party}}</b></span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="card-content" on-tap="_goToMission">
-        <h1> {{mission.title}} </h1>
-        <!-- description field is inserted by the insertDescriptionHtml method -->
-        <p></p>
-      </div>
-
       <div id="card-image">
-
         <iron-image
           sizing="cover"
           preload="" fade=""
-          src="{{missionImage}}">
+          src="images/generic/candidate_example.jpg">
         </iron-image>
+      </div>
+
+      <div class="card-footer">
+      <paper-button>
+        <div>
+          <div id="btn-icon">
+            <iron-icon icon="app:select-candidate"></iron-icon>
+          </div>
+          selecionar
+        </div>
+      </paper-button>
       </div>
     </div>
 `;

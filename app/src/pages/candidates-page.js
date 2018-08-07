@@ -54,14 +54,6 @@ class CandidatesPage extends PolymerElement {
         right: 50%;
         transform: translate(50%);
       }
-
-      paper-spinner {
-        width: 40px;
-        height: 40px;
-        padding: 5px;
-        background-color: var(--default-primary-color);
-        border-radius: 50%;
-      }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -93,10 +85,6 @@ class CandidatesPage extends PolymerElement {
           <empty-card id="emptyMessage" on-select-inbox="_selectInbox"></empty-card>
         </div>
       </iron-pages>
-      <div id="loading">
-        <paper-spinner active=""></paper-spinner>
-      </div>
-
     </app-header-layout>
 `;
   }
