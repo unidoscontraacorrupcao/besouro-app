@@ -13,7 +13,8 @@ import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
 import '../candidates-elements/candidate-card.js';
 import '../app-elements/app-besouro-api.js';
-class CandidatesPage extends PolymerElement {
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="shared-styles">
@@ -79,7 +80,9 @@ class CandidatesPage extends PolymerElement {
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
           <welcome-card></welcome-card>
-          <candidate-card></candidate-card>
+        <template is="dom-repeat" items="{{allCandidates}}">
+            <candidate-card candidate="[[item]]"></candidate-card>
+        </template>
         </div>
         <div class="inbox">
           <empty-card id="emptyMessage" on-select-inbox="_selectInbox"></empty-card>
@@ -109,12 +112,9 @@ class CandidatesPage extends PolymerElement {
         type: String,
         value: "CANDIDATOS"
       },
-      inboxMissions: {
-        type: Array
-      },
-      domChangeEventCount: {
-        type: Number,
-        value: 0
+      allCandidates: {
+        type: Array,
+        value: []
       },
       user: {
         type: Object
@@ -143,13 +143,29 @@ class CandidatesPage extends PolymerElement {
     };
   }
 
-  openDrawer() {
-    this.dispatchEvent(new CustomEvent("open-drawer"));
+  static get observers() {
+    return [
+      'routePathChanged(route.path)'
+    ]
   }
+
+  routePathChanged(path) {
+    this.set("user", this.getUser());
+    if (path == "/candidates")
+      this._getAllCandidates();
+  }
+
+  openDrawer() { this.dispatchEvent(new CustomEvent("open-drawer")); }
 
   _goToCandidate(e) { }
 
-  _getAllCandidates() { }
+  _getAllCandidates() {
+    this.$.api.path = "candidates/";
+    this.$.api.method = "GET";
+    this.$.api.request().then((ajax) => {
+      this.set("allCandidates", ajax.response.results);
+    });
+  }
 
   _selectInbox() { this.set("inboxtab", 0); }
   _openRestrictModal() { this.$.unauthorizedDialog.present(); }

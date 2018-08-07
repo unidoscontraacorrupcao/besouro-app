@@ -117,7 +117,7 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
         <iron-image
           sizing="cover"
           preload="" fade=""
-          src="images/generic/candidate_example.jpg">
+          src="{{candidate.image}}">
         </iron-image>
       </div>
 
@@ -140,12 +140,8 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
   static get properties() {
     return {
       candidate: {
-        type: Object,
-        value: function() {return {"candidacy": "senadora",
-        "urn": "12345", "party": "pt"} }
-      },
-      candidatePhoto: String,
-      user: Object
+        type: Object
+      }
     }
   }
 
@@ -155,7 +151,7 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.path = "selected-candidates/";
     this.$.api.user = user;
     //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": 2};
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
     this.$.api.request().then((ajax) => {
       console.log(ajax.response);
     });
