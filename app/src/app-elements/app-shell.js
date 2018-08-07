@@ -33,11 +33,12 @@ import '../pages/reset-password-page.js';
 import '../pages/candidates-page.js';
 import './app-icons.js';
 import './app-theme.js';
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
 setPassiveTouchGestures(true);
 
-class AppShell extends PolymerElement {
+class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
     <style>
@@ -337,7 +338,7 @@ class AppShell extends PolymerElement {
   constructor() {
     super();
     this._afterLogin = `/`;
-    this.user = this._getUser();
+    this.user = this.getUser();
   }
 
   _routePageChanged(page) {
@@ -353,7 +354,7 @@ class AppShell extends PolymerElement {
     if (!exception_pages.includes(this.page)) {
       this._checkToken().then((ajax) => {
         if (ajax.response.expired) {
-          this._resetUser();
+          this.resetUser();
           this.set('route.path', '/login');
         } else {
           this._getUserNotifications(page);
@@ -431,11 +432,11 @@ class AppShell extends PolymerElement {
 
   _onUserUpdate(e, user) {
     if (user.key != 0) {
-      this._saveUser(user);
+      this.saveUser(user);
     } else {
-      this._saveUser({});
+      this.saveUser({});
     }
-    this.user = this._getUser();
+    this.user = this.getUser();
   }
 
   // Login
@@ -476,18 +477,6 @@ class AppShell extends PolymerElement {
     this.set(`route.path`, `/login`);
   }
 
-  // Storage
-
-  _saveUser(user) {
-    localStorage.setItem("user", JSON.stringify(user));
-  }
-
-  _getUser() {
-    return JSON.parse(localStorage.getItem("user"));
-  }
-
-  _resetUser() { localStorage.removeItem('user'); }
-
   _shareLink(e) {
     const shareLinkNode = this.shadowRoot.querySelector("#shareMenu");
     const clonedNode = shareLinkNode.cloneNode(true);
@@ -503,7 +492,7 @@ class AppShell extends PolymerElement {
   }
 
   _checkToken() {
-    var currentUser = this._getUser();
+    var currentUser = this.getUser();
     if (currentUser && currentUser.key) {
       var base = this.$.api.baseUrl;
       this.$.api.authUrl = `${base}/check-token`;

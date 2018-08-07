@@ -122,7 +122,7 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
       </div>
 
       <div class="card-footer">
-      <paper-button>
+      <paper-button on-click="_selectCandidate">
         <div>
           <div id="btn-icon">
             <iron-icon icon="app:select-candidate"></iron-icon>
@@ -147,6 +147,18 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
       candidatePhoto: String,
       user: Object
     }
+  }
+
+  _selectCandidate() {
+    var user = this.getUser();
+    this.$.api.method = "POST";
+    this.$.api.path = "selected-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": 2};
+    this.$.api.request().then((ajax) => {
+      console.log(ajax.response);
+    });
   }
 
   constructor() { super(); }
