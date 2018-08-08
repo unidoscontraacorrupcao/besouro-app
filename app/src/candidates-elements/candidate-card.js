@@ -11,14 +11,16 @@ import '../mission-elements/accept-mission-modal.js';
 import '../trophy-elements/blocked-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+import {CardMixin} from '../mixin-elements/card-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 /**
  * @polymer
  * @CandidateCard
  * @appliesMixin CommonBehaviorsMixin
+ * @appliesMixin CardMixin
  */
-class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
+class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -214,6 +216,18 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
     });
   }
 
+  _chooseCandidateColor() {
+    var colors = [
+      "rgba(50,206,166,0.5)", "rgba(255,255,255,0.5)","rgba(0,0,0,1)"
+    ];
+    this.setCardImageGradient(colors, false, "to bottom");
+  }
+
   constructor() { super(); }
+
+  ready() {
+    super.ready();
+    this._chooseCandidateColor();
+  }
 }
 customElements.define(CandidateCard.is, CandidateCard);

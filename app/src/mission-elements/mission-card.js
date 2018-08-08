@@ -10,6 +10,7 @@ import '../mission-elements/accept-mission-modal.js';
 import '../trophy-elements/blocked-mission-modal.js';
 import '../mission-elements/finish-mission-modal.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+import {CardMixin} from '../mixin-elements/card-mixin.js';
 import './mission-player.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
@@ -17,8 +18,9 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
  * @polymer
  * @MissionCard
  * @appliesMixin CommonBehaviorsMixin
+ * @appliesMixin CardMixin
  */
-class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
+class MissionCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
@@ -511,13 +513,15 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
 
     if (this.currentMissionStats == "blocked") {
       const cardBlocked = this.shadowRoot.querySelector(".card-blocked");
-      this._setCardImageGradient("rgba(49,39,131,0.85)", "rgba(49,39,131,0.85)", cardBlocked);
+      var colors = ["rgba(49,39,131,0.85)", "rgba(49,39,131,0.85)"];
+      this.setCardImageGradient(colors, cardBlocked);
       this.set('btnAction', 'missão bloqueada');
     }
 
     if (this.currentMissionStats == "realized") {
       const card = this.shadowRoot.querySelector(".mission-started");
-      this._setCardImageGradient("rgba(173, 174, 178, 0.8)", "rgba(173, 174, 178, 0.8)", card);
+      var colors = ["rgba(173, 174, 178, 0.8)", "rgba(173, 174, 178, 0.8)"];
+      this.setCardImageGradient(colors, card);
       this.$.btnText.setAttribute("id", "card-action-bg");
       this.set('btnAction', 'missão concluida');
     }
@@ -531,13 +535,15 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
     if (this.currentMissionStats == "started") {
       this.set('btnAction', 'missão aceita');
       const card = this.shadowRoot.querySelector(".mission-started");
-      this._setCardImageGradient("rgba(216, 28, 136, 0.8)", "rgba(216, 28, 136, 0.8)", card);
+      var colors = ["rgba(216, 28, 136, 0.8)", "rgba(216, 28, 136, 0.8)"];
+      this.setCardImageGradient(colors, card);
       link.addEventListener('tap', this.finishMissionFunc);
     }
 
     if (this.currentMissionStats == "pending") {
       const card = this.shadowRoot.querySelector(".mission-started");
-      this._setCardImageGradient("rgba(173, 174, 178, 0.8)", "rgba(173, 174, 178, 0.8)", card);
+      var colors = ["rgba(173, 174, 178, 0.8)", "rgba(173, 174, 178, 0.8)"];
+      this.setCardImageGradient(colors, card);
       this.$.btnText.setAttribute("class", "card-action-bg");
       this.set("btnAction", "avaliação pendente");
     }
@@ -546,22 +552,6 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
       this.set("btnAction", "rejeitada");
       cardAction.setAttribute("style", "background-color: rgba(173, 174, 178, 0.8);");
       this.$.btnText.setAttribute("class", "card-action-bg");
-    }
-  }
-
-  _setCardImageGradient(firstColor, secondColor, card) {
-      const cardAction = this.shadowRoot.querySelector(".card-action");
-      cardAction.setAttribute("style", "display: none;");
-      card.setAttribute("style", "display: flex;");
-      var image = this.shadowRoot.querySelector("#card-image iron-image");
-      var sizedImgDiv = image.shadowRoot.querySelector("#sizedImgDiv")
-      var backgroundImage = sizedImgDiv.style.backgroundImage;
-      var imageAsArray = backgroundImage.split(",");
-      if (imageAsArray.length == 0)
-        sizedImgDiv.style.backgroundImage = `linear-gradient(to right,${firstColor}, ${secondColor}), ${imageAsArray[0]}`;
-    else {
-        var imageArrayUrl = imageAsArray[imageAsArray.length - 1]
-        sizedImgDiv.style.backgroundImage = `linear-gradient(to right,${firstColor}, ${secondColor}), ${imageArrayUrl}`;
     }
   }
 
