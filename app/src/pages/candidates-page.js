@@ -77,7 +77,17 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       </app-header>
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
-          <welcome-card></welcome-card>
+      <welcome-card>
+        <p>
+          Olá! Selecione candidatos que te interessarem e pressione quem ainda não tiver
+          se comprometido com as Novas Medidas e o Pacto pela Democracia!
+          Você também pode favoritar e divulgar bons candidatos! :)
+          <br>
+          <br>
+          Ah! Veja atentamente quem tem Ficha Limpa e que não tem!
+          Que legal que você quer mobilizar o Brasil contra a corrupção!
+          </p>
+      </welcome-card>
         <template is="dom-repeat" items="{{allCandidates}}">
         <candidate-card
           candidate="[[item]]"

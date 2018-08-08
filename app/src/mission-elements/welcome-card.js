@@ -23,10 +23,10 @@ class WelcomeCard extends PolymerElement {
         background-color: var(--default-primary-color);
       }
 
-      .welcome-card p {
+      ::slotted(p) {
         font-family: helvetica-neue;
         font-size: 16px;
-        color: var(--paragraph-color);
+        color: var(--paragraph-color) !important;
         line-height: 1.3;
       }
 
@@ -51,13 +51,7 @@ class WelcomeCard extends PolymerElement {
     <div class="welcome-card">
       <div id="card-content">
         <div id="welcome-title"> boas vindas!</div>
-        <p>
-Que legal que você quer mobilizar o Brasil contra a corrupção!
-<br>
-<br>
-
-Aqui você encontra diferentes missões de mobilização e pode se tornar ativista para conseguirmos unir o máximo possível de pessoas e eleger candidatos e candidatas comprometidos com o fim da corrupção!
-        </p>
+        <slot></slot>
       </div>
     </div>
 

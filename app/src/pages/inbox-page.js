@@ -95,7 +95,14 @@ class InboxPage extends PolymerElement {
       </app-header>
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
-          <welcome-card></welcome-card>
+      <welcome-card>
+          <p>
+            Que legal que você quer mobilizar o Brasil contra a corrupção!
+            <br>
+            <br>
+              Aqui você encontra diferentes missões de mobilização e pode se tornar ativista para conseguirmos unir o máximo possível de pessoas e eleger candidatos e candidatas comprometidos com o fim da corrupção!
+          </p>
+      </welcome-card>
           <template id="missionsList" is="dom-repeat" items="{{inboxMissions}}" as="mission" notify-dom-change="true" on-dom-change="hideLoading">
             <mission-card user="{{user}}" mission="{{mission}}" on-show-mission="_goToMission"  on-modal-show-mission="_goToMission" on-open-restrict-modal="_openRestrictModal"></mission-card>
           </template>
