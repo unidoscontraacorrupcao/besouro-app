@@ -39,23 +39,28 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
     #candidate-infos {
       display: flex;
-      margin-top: 16px;
+      flex-grow: 2;
+      margin-top: 25px;
       width: 95%;
     }
 
     #candidate-infos div {
+      float: left;
+      margin-right: 10px;
+    }
+    #candidate-infos #candidacy,
+    #candidate-infos #urn,
+    #candidate-infos #party-uf{
       display: flex;
       flex-direction: column;
-      flex-grow: 1;
     }
 
     #candidate-infos div span:first-child {
       margin-bottom: 5px;
       font-family: helvetica-neue;
       text-transform: capitalize;
+      font-size: 18px;
     }
-
-    #urn span:nth-child(2) { color: var(--accent-color) !important; }
 
     #candidate-infos div span:nth-child(2) {
       text-transform: uppercase;
@@ -81,6 +86,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         border-width: 1px;
         border-color: var(--secondary-text-color);
         font-family: folio;
+        text-align: center;
       }
 
       .card-footer paper-button:first-child {
@@ -137,6 +143,38 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         font-size: 20px;
       }
 
+
+    #close {
+      position: absolute;
+      top: -8px;
+      right: 22px;
+      background-color: var(--accent-color);
+      height: 29px;
+      width: 69px;
+    }
+
+    #close div {
+      margin: 10px 10px 10px 17px;
+      font-family: folio;
+      color: white;
+      position: relative;
+    }
+    
+    #close div div:first-child {
+      position: absolute;
+      top: -19px;
+      left: -35px;
+      bottom: 0;
+      right: 0;
+    }
+
+    #close paper-icon-button {
+      width: 26px;
+      height: auto;
+    }
+
+    #close span { margin: 8px 8px 8px 10px; }
+
     @media only screen and (max-width: 360px) {
       #political-infos {
         left: 0;
@@ -152,18 +190,32 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       <div class="card-header">
         <div class="container">
           <span id="candidate-name"> {{candidate.name}} </span>
+          <div id="close">
+            <div>
+              <div>
+                <paper-icon-button on-click="_ignoreCandidate" icon="app:closeModal"></paper-icon-button>
+              </div>
+              <span on-click="_ignoreCandidate">fechar</span>
+            </div>
+          </div>
           <div id="candidate-infos">
-            <div id="candidacy">
-              <span>candidatura:</span>
-              <span><b>{{candidate.candidacy}}</b></span>
+            <div>
+              <div id="candidacy">
+                <span>candidatura:</span>
+                <span><b>{{candidate.candidacy}}</b></span>
+              </div>
             </div>
-            <div id="urn">
-              <span>urna:</span>
-              <span><b>{{candidate.urn}}</b></span>
+            <div>
+              <div id="urn">
+                <span>urna:</span>
+                <span><b>{{candidate.urn}}</b></span>
+              </div>
             </div>
-            <div id="party-uf">
-              <span>partido - UF:</span>
-              <span><b>{{candidate.party}}</b></span>
+            <div>
+              <div id="party-uf">
+                <span>partido - UF:</span>
+                <span><b>{{candidate.party}}</b></span>
+              </div>
             </div>
           </div>
         </div>
@@ -231,7 +283,8 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   static get properties() {
     return {
       candidate: {
-        type: Object
+        type: Object,
+        observer: '_candidateChanged'
       }
     }
   }
@@ -260,18 +313,27 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     });
   }
 
+  _ignoreCandidate() {
+    var user = this.getUser();
+    this.$.api.method = "POST";
+    this.$.api.path = "ignored-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("ignored-candidate"));
+    });
+  }
+
 
   _chooseCandidateColor() {
+    this._showPressBtn();
     if (this.candidate.score == "good") {
       this._hidePressBtn();
-      var colors = [
-        "rgba(50,206,166,0.5)", "rgba(255,255,255,0.5)","rgba(0,0,0,1)"
-      ];
+      var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else {
-      var colors = [
-        "rgba(50,206,166,0.5)", "rgba(255,255,255,0.5)","rgba(0,0,0,1)"
-      ];
+      var colors = ["rgba(255,255,255,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     }
   }
@@ -283,6 +345,17 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     selectBtn.style.margin = "auto";
     selectBtn.style.width = "262px";
   }
+
+  _showPressBtn() {
+    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
+    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
+    pressBtn.style.display = "block";
+    selectBtn.style.marginLeft = "auto";
+    selectBtn.style.marginRight = "5px";
+    selectBtn.style.width = "128px";
+  }
+
+  _candidateChanged() { this._chooseCandidateColor(); }
 
   constructor() { super(); }
 

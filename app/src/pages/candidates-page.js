@@ -93,7 +93,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         <candidate-card
           candidate="[[item]]"
           on-selected-candidate="_userCandidatesChanged"
-          on-pressed-candidate="_userCandidatesChanged">
+          on-pressed-candidate="_userCandidatesChanged"
+          on-ignored-candidate="_userCandidatesChanged">
         </candidate-card>
         </template>
         </div>
@@ -207,7 +208,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this._getSelectedCandidates();
   }
 
-
+  _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
   _selectInbox() { this.set("inboxtab", 0); }
   _openRestrictModal() { this.$.unauthorizedDialog.present(); }
 
@@ -215,8 +216,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.unauthorizedDialog.dismiss();
     this.set("route.path", "/login");
   }
-
-  _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
 
   _tabChanged() {
     if (this.inboxtab == 1) {
