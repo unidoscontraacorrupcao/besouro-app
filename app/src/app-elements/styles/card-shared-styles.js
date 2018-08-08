@@ -6,7 +6,6 @@ $_documentContainer.innerHTML = `<dom-module id="card-shared-styles">
   <template>
   <style>
       .card {
-        padding: 16px 0;
         line-height: 0.7;
         position: relative;
         max-width: 500px;

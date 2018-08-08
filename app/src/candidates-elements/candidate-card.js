@@ -23,7 +23,6 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   static get template() {
     return html`
-    <style include="shared-styles"></style>
     <style include="card-shared-styles"></style>
     <style>
       :host {
@@ -41,6 +40,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     #candidate-infos {
       display: flex;
       margin-top: 16px;
+      width: 95%;
     }
 
     #candidate-infos div {
@@ -79,11 +79,14 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         border-style: solid;
         border-radius: 0;
         border-width: 1px;
+        border-color: var(--secondary-text-color);
+        font-family: folio;
       }
 
       .card-footer paper-button:first-child {
         margin-left: auto;
         margin-right: 5px;
+        color: var(--secondary-text-color);
       }
 
       .card-footer paper-button:last-child {
@@ -124,6 +127,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       #political-infos .info div:first-child {
         font-family: helvetica-neue;
         text-align: center;
+        line-height: 0.9;
       }
 
       #political-infos .info div:last-child {
@@ -147,7 +151,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
       <div class="card-header">
         <div class="container">
-          <span id="candidate-name"> nome da pessoa </span>
+          <span id="candidate-name"> {{candidate.name}} </span>
           <div id="candidate-infos">
             <div id="candidacy">
               <span>candidatura:</span>
@@ -178,7 +182,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               <span>Tem passado limpo?</span>
             </div>
             <div>
-              <span><br>SIM</br></span>
+              <span><br>{{candidate.has_clean_pass}}</br></span>
             </div>
           </div>
           <div class="info">
@@ -186,7 +190,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               <span>Comprometeu-se com democracia?</span>
             </div>
             <div>
-              <span><br>SIM</br></span>
+              <span><br>{{candidate.committed_to_democracy}}</br></span>
             </div>
           </div>
           <div class="info">
@@ -194,7 +198,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               <span>Aderiu às novas medidas?</span>
             </div>
             <div>
-              <span><br>SIM</br></span>
+              <span><br>{{candidate.adhered_to_the_measures}}</br></span>
             </div>
           </div>
         </div>
@@ -258,10 +262,26 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
 
   _chooseCandidateColor() {
-    var colors = [
-      "rgba(50,206,166,0.5)", "rgba(255,255,255,0.5)","rgba(0,0,0,1)"
-    ];
-    this.setCardImageGradient(colors, false, "to bottom");
+    if (this.candidate.score == "good") {
+      this._hidePressBtn();
+      var colors = [
+        "rgba(50,206,166,0.5)", "rgba(255,255,255,0.5)","rgba(0,0,0,1)"
+      ];
+      this.setCardImageGradient(colors, false, "to bottom");
+    } else {
+      var colors = [
+        "rgba(50,206,166,0.5)", "rgba(255,255,255,0.5)","rgba(0,0,0,1)"
+      ];
+      this.setCardImageGradient(colors, false, "to bottom");
+    }
+  }
+
+  _hidePressBtn () {
+    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
+    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
+    pressBtn.style.display = "none";
+    selectBtn.style.margin = "auto";
+    selectBtn.style.width = "262px";
   }
 
   constructor() { super(); }

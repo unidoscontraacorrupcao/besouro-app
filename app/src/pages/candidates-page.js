@@ -18,8 +18,8 @@ import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js'
 class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
-    <style include="shared-styles"></style>
     <style include="modal-shared-styles"></style>
+    <style include="shared-styles"></style>
     <style>
       :host {
         display: block;
