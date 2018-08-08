@@ -87,6 +87,36 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
         width: 25%;
         margin: auto auto 10px auto;
       }
+
+      #card-image { position: relative; }
+
+      #political-infos {
+        position: absolute;
+        bottom: 8px;
+        height: 57px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        color: white;
+      }
+
+      #political-infos .info {
+        margin-left: 7px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #political-infos .info div:first-child {
+        font-family: helvetica-neue;
+        text-align: center;
+      }
+
+      #political-infos .info div:last-child {
+        font-family: folio;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 20px;
+      }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -119,6 +149,33 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
           preload="" fade=""
           src="{{candidate.image}}">
         </iron-image>
+
+        <div id="political-infos">
+          <div class="info">
+            <div>
+              <span>Tem passado limpo?</span>
+            </div>
+            <div>
+              <span><br>SIM</br></span>
+            </div>
+          </div>
+          <div class="info">
+            <div>
+              <span>Comprometeu-se com democracia?</span>
+            </div>
+            <div>
+              <span><br>SIM</br></span>
+            </div>
+          </div>
+          <div class="info">
+            <div>
+              <span>Aderiu às novas medidas?</span>
+            </div>
+            <div>
+              <span><br>SIM</br></span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="card-footer">
