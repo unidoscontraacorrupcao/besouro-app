@@ -6,7 +6,6 @@ import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 import '../mission-elements/unauthorized-modal.js';
-import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
 import '../app-elements/styles/modal-shared-styles.js';
@@ -177,6 +176,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     if (path == "/candidates") {
       this._getAllCandidates();
       this._getSelectedCandidates();
+      this._requestGeocoder();
     }
   }
 
@@ -224,6 +224,31 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.$.emptyMessage.setAttribute("style", "display: none");
         this.$.unauthorizedDialog.present();
       }
+    }
+  }
+
+  _requestGeocoder() {
+    if(!this.user) return;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        console.log(pos);
+        const geocoder = new google.maps.Geocoder;
+        geocoder.geocode({'location': pos}, function(results, status) {
+          if(status === 'OK') {
+            console.log(results);
+            console.log(results[0]);
+          }
+        });
+      }, function() {
+        console.log('erro');
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      console.log('seu navegador nao suporta geo')
     }
   }
 }
