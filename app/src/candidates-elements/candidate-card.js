@@ -65,11 +65,12 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       .card-footer {
         height: 141px;
         position: relative;
+        display: flex;
       }
 
       .card-footer paper-button {
         height: 80px;
-        position: absolute;
+        width: 128px;
         top: 0;
         left: 0;
         bottom: 0;
@@ -78,6 +79,18 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         border-style: solid;
         border-radius: 0;
         border-width: 1px;
+      }
+
+      .card-footer paper-button:first-child {
+        margin-left: auto;
+        margin-right: 5px;
+      }
+
+      .card-footer paper-button:last-child {
+        margin-left: 5px;
+        margin-right: auto;
+        background-color: var(--secondary-text-color);
+        color: white;
       }
 
       .card-footer paper-button div {
@@ -119,6 +132,13 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         text-transform: uppercase;
         font-size: 20px;
       }
+
+    @media only screen and (max-width: 360px) {
+      #political-infos {
+        left: 0;
+        right: 0;
+      }
+    }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -189,6 +209,14 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
           selecionar
         </div>
       </paper-button>
+      <paper-button on-click="_pressCandidate">
+        <div>
+          <div id="btn-icon">
+            <iron-icon icon="app:press-candidate"></iron-icon>
+          </div>
+          pressionar
+        </div>
+      </paper-button>
       </div>
     </div>
 `;
@@ -215,6 +243,19 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       this.dispatchEvent(new CustomEvent("selected-candidate"));
     });
   }
+
+  _pressCandidate() {
+    var user = this.getUser();
+    this.$.api.method = "POST";
+    this.$.api.path = "pressed-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("pressed-candidate"));
+    });
+  }
+
 
   _chooseCandidateColor() {
     var colors = [

@@ -49,6 +49,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       .inbox {
         padding-bottom: 80px;
       }
+
     </style>
 
     <div id="loading">
@@ -91,7 +92,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         <template is="dom-repeat" items="{{allCandidates}}">
         <candidate-card
           candidate="[[item]]"
-          on-selected-candidate="_userCandidatesChanged">
+          on-selected-candidate="_userCandidatesChanged"
+          on-pressed-candidate="_userCandidatesChanged">
         </candidate-card>
         </template>
         </div>
