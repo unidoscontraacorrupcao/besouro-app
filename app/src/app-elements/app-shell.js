@@ -489,7 +489,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         // Need to request permissions to show notifications.
         return messaging.requestPermission()
       }
-    }.bind(this))
+    }.bind(this));
   }
 
   // Profile
