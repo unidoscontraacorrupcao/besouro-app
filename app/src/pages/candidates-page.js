@@ -9,6 +9,7 @@ import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-actions.js';
 import '../app-elements/app-icons.js';
 import '../app-elements/shared-styles.js';
+import '../app-elements/styles/modal-shared-styles.js';
 import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
 import '../candidates-elements/candidate-card.js';
@@ -17,8 +18,8 @@ import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js'
 class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
-    <style include="shared-styles">
-    </style>
+    <style include="shared-styles"></style>
+    <style include="modal-shared-styles"></style>
     <style>
       :host {
         display: block;
@@ -48,14 +49,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       .inbox {
         padding-bottom: 80px;
       }
-
-      #inboxLoading {
-        position: absolute;
-        top: 50%;
-        right: 50%;
-        transform: translate(50%);
-      }
     </style>
+
+    <div id="loading">
+      <paper-spinner active=""></paper-spinner>
+    </div>
 
     <app-besouro-api id="api"></app-besouro-api>
     <app-dialog id="unauthorizedDialog">
@@ -81,11 +79,18 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         <div class="inbox">
           <welcome-card></welcome-card>
         <template is="dom-repeat" items="{{allCandidates}}">
-            <candidate-card candidate="[[item]]"></candidate-card>
+        <candidate-card
+          candidate="[[item]]"
+          on-selected-candidate="_userCandidatesChanged">
+        </candidate-card>
         </template>
         </div>
         <div class="inbox">
-          <empty-card id="emptyMessage" on-select-inbox="_selectInbox"></empty-card>
+          <template is="dom-repeat" items="{{selectedCandidates}}">
+            <candidate-card
+              candidate="[[item]]">
+            </candidate-card>
+          </template>
         </div>
       </iron-pages>
     </app-header-layout>
@@ -113,6 +118,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         value: "CANDIDATOS"
       },
       allCandidates: {
+        type: Array,
+        value: []
+      },
+      selectedCandidates: {
         type: Array,
         value: []
       },
@@ -151,8 +160,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   routePathChanged(path) {
     this.set("user", this.getUser());
-    if (path == "/candidates")
+    if (path == "/candidates") {
       this._getAllCandidates();
+      this._getSelectedCandidates();
+    }
   }
 
   openDrawer() { this.dispatchEvent(new CustomEvent("open-drawer")); }
@@ -160,12 +171,30 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _goToCandidate(e) { }
 
   _getAllCandidates() {
-    this.$.api.path = "candidates/";
+    this.showLoading();
+    this.$.api.path = `users/${this.getUser().uid}/candidates`;
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
-      this.set("allCandidates", ajax.response.results);
+      this.set("allCandidates", ajax.response);
+      this.hideLoading();
     });
   }
+
+  _getSelectedCandidates() {
+    this.showLoading();
+    this.$.api.path = `users/${this.getUser().uid}/selected_candidates`;
+    this.$.api.method = "GET";
+    this.$.api.request().then((ajax) => {
+      this.set("selectedCandidates", ajax.response);
+      this.hideLoading();
+    });
+  }
+
+  _userCandidatesChanged() {
+    this._getAllCandidates();
+    this._getSelectedCandidates();
+  }
+
 
   _selectInbox() { this.set("inboxtab", 0); }
   _openRestrictModal() { this.$.unauthorizedDialog.present(); }
@@ -176,7 +205,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
-  _dismissTrophyModal() { this.$.trophyDialog.dismiss(); }
 
   _tabChanged() {
     if (this.inboxtab == 1) {
@@ -186,6 +214,5 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       }
     }
   }
-
 }
 window.customElements.define(CandidatesPage.is, CandidatesPage);

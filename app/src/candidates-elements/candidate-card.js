@@ -153,7 +153,7 @@ class CandidateCard extends CommonBehaviorsMixin(PolymerElement) {
     //TODO: replace 1 by the candidate id.
     this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
     this.$.api.request().then((ajax) => {
-      console.log(ajax.response);
+      this.dispatchEvent(new CustomEvent("selected-candidate"));
     });
   }
 
