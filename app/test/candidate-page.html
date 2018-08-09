@@ -14,57 +14,57 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>inbox page</title>
+    <title>candidates page</title>
 
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
     <!-- Import the element to test -->
-    <script type="module" src="../src/pages/inbox-page.js"></script>
+    <script type="module" src="../src/pages/candidates-page.js"></script>
   </head>
   <body>
-    <test-fixture id="InboxView">
+    <test-fixture id="CandidatesView">
       <template>
-        <inbox-page name="inbox"
+        <candidates-page name="inbox"
           route="{{route}}"
           user="{{user}}"
           on-open-drawer="_openDrawer">
-        </inbox-page>
+        </candidates-page>
       </template>
     </test-fixture>
 
     <script type="module">
-      suite('inbox-page tests', function() {
+      suite('candidates-page tests', function() {
         test('should have two tabs', function() {
-          var myView = fixture('InboxView');
+          var myView = fixture('CandidatesView');
           myView.route = {};
           myView.user = {"uid": 1};
           var elements = myView.shadowRoot.querySelectorAll("paper-tab");
           assert.equal(elements.length, '2');
         });
-        test('should call MISSÕES', function() {
-          var myView = fixture('InboxView');
-          myView.route = {};
-          myView.user = {"uid": 1};
-          var toolBar = myView.shadowRoot.querySelector("app-toolbar");
-          var title = toolBar.querySelector("[main-title]");
-          assert.equal(title.textContent, 'MISSÕES');
-        });
-        test('first tab should call MISSÕES PÚBLICAS', function() {
-          var myView = fixture('InboxView');
+        test('first tab should call TODOS', function() {
+          var myView = fixture('CandidatesView');
           myView.route = {};
           myView.user = {"uid": 1};
           var tabs = myView.shadowRoot.querySelectorAll("paper-tab");
           var first_paper_tab_span = tabs[0].querySelector("span");
-          assert.equal(first_paper_tab_span.textContent, 'missões públicas');
+          assert.equal(first_paper_tab_span.textContent, 'TODOS');
         });
-        test('second tab should call MINHAS MISSÕES', function() {
-          var myView = fixture('InboxView');
+        test('second tab should call SELECIONADOS', function() {
+          var myView = fixture('CandidatesView');
           myView.route = {};
           myView.user = {"uid": 1};
           var tabs = myView.shadowRoot.querySelectorAll("paper-tab");
           var first_paper_tab_span = tabs[1].querySelector("span");
-          assert.equal(first_paper_tab_span.textContent, 'minhas missões');
+          assert.equal(first_paper_tab_span.textContent, 'SELECIONADOS');
+        });
+        test('should call CANDIDATOS', function() {
+          var myView = fixture('CandidatesView');
+          myView.route = {};
+          myView.user = {"uid": 1};
+          var toolBar = myView.shadowRoot.querySelector("app-toolbar");
+          var title = toolBar.querySelector("[main-title]");
+          assert.equal(title.textContent, 'CANDIDATOS');
         });
       });
     </script>
