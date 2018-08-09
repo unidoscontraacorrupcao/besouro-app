@@ -51,6 +51,10 @@ let behaviors = function(superClass) {
     resetUser() { localStorage.removeItem('user'); }
     saveUser(user) { localStorage.setItem("user", JSON.stringify(user)); }
 
+    _showToast(message) {
+      this._toastMessage = message;
+      this.$.toast.open();
+    }
 
   }
 }

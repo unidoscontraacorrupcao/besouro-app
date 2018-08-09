@@ -1,6 +1,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@polymer/paper-fab/paper-fab.js';
+import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -229,27 +230,63 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _requestGeocoder() {
     if(!this.user) return;
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        console.log(pos);
-        const geocoder = new google.maps.Geocoder;
-        geocoder.geocode({'location': pos}, function(results, status) {
-          if(status === 'OK') {
-            console.log(results);
-            console.log(results[0]);
-          }
+    if(!window.google) return;
+    if(!this.user.state) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) =>{
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          const geocoder = new google.maps.Geocoder;
+          geocoder.geocode({'location': pos}, (results, status) => {
+            if(status === 'OK') {
+              if(results[0]) {
+                let state = "";
+                let city = "";
+                const states = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MG", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
+                //administrative area level is way of google to respond to adress levels
+                const stateObject = results[0].address_components.filter((c) => c.types.includes('administrative_area_level_1'));
+                const cityObject = results[0].address_components.filter((c) => c.types.includes('administrative_area_level_2'));
+                if(stateObject.length > 0 && states.includes(stateObject[0].short_name)) state = stateObject[0].short_name;
+                if(cityObject.length > 0) city = cityObject[0].long_name;
+                if(state) {
+                  this._updateLocation(city, state);
+                }
+              } else {
+                this._showToast('Encontramos dificuldades em identificar sua localidade. Acesse o seu perfil e defina uma localização para ver apenas candidatos do seu estado.');
+              }
+            } else {
+              this._showToast('Encontramos dificuldades em identificar sua localidade. Acesse o seu perfil e defina uma localização para ver apenas candidatos do seu estado.');
+            }
+          });
+        }, () => {
+          console.log('Localização não fornecida');
         });
-      }, function() {
-        console.log('erro');
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      console.log('seu navegador nao suporta geo')
+      } else {
+        // Browser doesn't support Geolocation
+        console.log('seu navegador nao suporta geolocalização');
+      }
     }
+  }
+
+  _updateLocation(city, state) {
+    if(!state) return;
+    const data = {
+      city: city,
+      state: state,
+      country: "Brasil"
+    }
+    this.$.api.user = this.user;
+    this.$.api.path = `profiles/${this.getUser().profile_id}/`;
+    this.$.api.body = data;
+    this.$.api.method = "PATCH";
+    this.$.api.request().then((ajax) => {
+      let user = this.getUser();
+      user.state = state;
+      user.city = city;
+      localStorage.setItem("user", JSON.stringify(user));
+    });
   }
 }
 window.customElements.define(CandidatesPage.is, CandidatesPage);
