@@ -16,11 +16,11 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 /**
  * @polymer
- * @CandidateCard
+ * @SelectedCandidateCard
  * @appliesMixin CommonBehaviorsMixin
  * @appliesMixin CardMixin
  */
-class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
+class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="candidate-card-shared-styles"></style>
@@ -28,6 +28,24 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       :host {
         display: block;
       }
+
+      #close span {
+        position: absolute;
+        top: -15px;
+        right: -18px;
+        left: -2px;
+        line-height: 0.9;
+        font-size: 14px;
+      }
+
+      #close paper-icon-button { width:28px; }
+
+      .card-footer paper-button:last-child {
+        background-color: rgba(0,159,227,1);
+        border-color: rgba(0,159,227,1);
+      }
+
+      #btn-icon { margin: auto 20px 7px auto; }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -40,9 +58,9 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
           <div id="close">
             <div>
               <div>
-                <paper-icon-button on-click="_ignoreCandidate" icon="app:closeModal"></paper-icon-button>
+                <paper-icon-button on-click="_ignoreCandidate" icon="app:remove-selected"></paper-icon-button>
               </div>
-              <span on-click="_ignoreCandidate">fechar</span>
+              <span on-click="_ignoreCandidate">remover seleção</span>
             </div>
           </div>
           <div id="candidate-infos">
@@ -104,20 +122,23 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       </div>
 
       <div class="card-footer">
-      <paper-button on-click="_selectCandidate">
+      <!--
+      <paper-button on-click="_supportCandidate">
         <div>
-          <div id="btn-icon">
-            <iron-icon icon="app:select-candidate"></iron-icon>
-          </div>
-          selecionar
+        <div id="btn-icon">
+        <iron-icon icon="app:fav-candidate"></iron-icon>
+        </div>
+      favoritar
         </div>
       </paper-button>
-      <paper-button on-click="_pressCandidate">
+      -->
+
+      <paper-button on-click="_supportCandidate">
         <div>
           <div id="btn-icon">
-            <iron-icon icon="app:press-candidate"></iron-icon>
+            <iron-icon icon="app:wallet"></iron-icon>
           </div>
-          pressionar
+          apoiar
         </div>
       </paper-button>
       </div>
@@ -125,7 +146,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 `;
   }
 
-  static get is() { return 'candidate-card'; }
+  static get is() { return 'selected-candidate-card'; }
 
   static get properties() {
     return {
@@ -136,16 +157,8 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     }
   }
 
-  _selectCandidate() {
-    var user = this.getUser();
-    this.$.api.method = "POST";
-    this.$.api.path = "selected-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("selected-candidate"));
-    });
+  _supportCandidate() {
+    window.open(this.candidate.support_url);
   }
 
   _pressCandidate() {
@@ -174,32 +187,26 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
 
   _chooseCandidateColor() {
-    this._showPressBtn();
     if (this.candidate.score == "good") {
-      this._hidePressBtn();
+      this._showSupportBtn();
       var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else {
+      this._hideSupportBtn();
       var colors = ["rgba(255,255,255,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     }
   }
 
-  _hidePressBtn () {
-    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
-    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    pressBtn.style.display = "none";
-    selectBtn.style.margin = "auto";
-    selectBtn.style.width = "262px";
+  _hideSupportBtn () {
+    var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
+    supportBtn.style.display = "none";
   }
 
-  _showPressBtn() {
-    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
-    pressBtn.style.display = "block";
-    selectBtn.style.marginLeft = "auto";
-    selectBtn.style.marginRight = "5px";
-    selectBtn.style.width = "128px";
+  _showSupportBtn() {
+    var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
+    supportBtn.style.margin = "auto";
+    supportBtn.style.width = "262px";
   }
 
   _candidateChanged() { this._chooseCandidateColor(); }
@@ -211,4 +218,4 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     this._chooseCandidateColor();
   }
 }
-customElements.define(CandidateCard.is, CandidateCard);
+customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);

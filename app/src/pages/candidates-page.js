@@ -13,6 +13,7 @@ import '../app-elements/styles/modal-shared-styles.js';
 import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
 import '../candidates-elements/candidate-card.js';
+import '../candidates-elements/selected-candidate-card.js';
 import '../app-elements/app-besouro-api.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
@@ -100,9 +101,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         </div>
         <div class="inbox">
           <template is="dom-repeat" items="{{selectedCandidates}}">
-            <candidate-card
+            <selected-candidate-card
               candidate="[[item]]">
-            </candidate-card>
+            </selected-candidate-card>
           </template>
         </div>
       </iron-pages>
