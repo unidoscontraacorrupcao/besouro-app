@@ -191,6 +191,7 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
       .content p,
       .content h2 { margin: 10px 0; }
 
+      .comment {margin-bottom: 106px;}
       .comment .message { display: flex; }
 
       .comment .message paper-textarea { flex: 1; }
@@ -368,6 +369,19 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
 
     #mission-accepted div:nth-child(2) span { letter-spacing: 0; }
     #mission-accepted div:nth-child(2) a { text-decoration: underline; }
+
+    #load-more-comments {
+      width: 90%;
+      margin: 52px auto 50px auto;
+      text-align: center;
+    }
+
+    #load-more-comments span {
+      font-family: Folio;
+      font-size: 18px;
+      text-transform: uppercase;
+      color: var(--secondary-text-color);
+    }
 
     @media only screen and (max-width: 460px) {
       .stats-content { font-size: 1.0rem; }
@@ -558,9 +572,12 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
 
         <div class="comments">
           <h2>Comentários</h2>
-          <template is="dom-repeat" items="{{mission.comment_set}}" as="comment" >
+          <template is="dom-repeat" items="{{comments}}" as="comment" >
             <mission-comment comment="{{comment}}"></mission-comment>
           </template>
+          <div id="load-more-comments">
+            <span on-click="_getMissionComments">carregar mais comentários</span>
+          </div>
           <div class="comment">
             <div class="message">
               <paper-textarea
@@ -674,6 +691,14 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
       ownerName: {
         type: String,
         value: ""
+      },
+      comments: {
+        type: Array,
+        value: []
+      },
+      comments_pagination: {
+        type: Number,
+        value: 0
       }
     };
   }
@@ -711,7 +736,7 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
     this.$.api.user = this.user;
     this.$.api.body = content;
     this.$.api.request().then(function(ajax) {
-        this._missionChanged();
+        this._getMissionComments(true);
         this._openConversationModal();
       }.bind(this));
     input.value = "";
@@ -719,11 +744,12 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
 
   _openConversationModal() {
     this.getNextConversation(this.data.key, this.user.uid).then(function(ajax) {
-      var comments_count = ajax.response.comments_count;
-      if (comments_count > 0) {
+      var conversation_comments_count = ajax.response.comments_count;
+      if (conversation_comments_count > 0) {
         var cid = ajax.response.cid;
         const conversationComponent = this.shadowRoot.querySelector("conversation-modal");
-        conversationComponent.getNextComments(cid, this.data.key, comments_count);
+        conversationComponent.getNextComments(cid, this.data.key,
+          conversation_comments_count);
         this.$.conversationDialog.present();
       }
     }.bind(this));
@@ -751,15 +777,6 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
     this.$.api.body = {"user_id": this.user.uid, "sort": `conversation-${this.mission.id}`};
     this.$.api.user = this.user;
     return this.$.api.request().then(() => {});
-  }
-
-  _rejectMission(e) {
-    this.$.accepted.ref.remove();
-    const usersAccepted = new Set(this.mission.content.usersAccepted);
-    usersAccepted.delete(this.user.uid);
-    this.mission.content.usersAccepted = Array.from(usersAccepted);
-    this.$.document.ref.set(this.mission);
-    this.$.rejectedDialog.present();
   }
 
   _setLayerImage(missionImage) {
@@ -864,12 +881,14 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
       this.$.btnText.setAttribute("style", "width: 300px;");
     }
   }
+
   /* every time that route is show-mission, we reload the mission */
   routePathChanged(path) {
     if (this.route.__queryParams && this.route.__queryParams["shared"] === "true") {
       this.route["shared"] = this.data.key;
       this.route.__queryParams = {};
     }
+    this.set("comments_pagination", 0);
     this._missionChanged();
   }
 
@@ -881,10 +900,10 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
       this.insertRewardHtml("#ckReward");
       this._calcMissionStats();
       if (this.route.show_conversation) {
-        console.log(this.route);
         this.set("route.show_conversation", false);
         this._openConversationModal();
       }
+      this._getMissionComments();
     }.bind(this));
   }
 
@@ -939,5 +958,18 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
   }
 
   _disableModalRedirect() { return false; }
+
+  _getMissionComments(new_comment=false) {
+    if (typeof new_comment == "boolean" && new_comment)
+      this.set("comments_pagination", this.comments_pagination + 1);
+    else
+      this.set("comments_pagination", this.comments_pagination + 4);
+    this.$.api.path = `missions/${this.mission.id}/comments`;
+    this.$.api.params = {"pagination": this.comments_pagination};
+    this.$.api.method = "GET";
+    this.$.api.request().then((ajax) => {
+      this.set("comments", ajax.response);
+    });
+  }
 }
 window.customElements.define(ShowMissionPage.is, ShowMissionPage);
