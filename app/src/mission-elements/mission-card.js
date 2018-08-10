@@ -393,7 +393,7 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
 
           <paper-button on-tap="_goToMission">
             <iron-icon icon="app:mission-comments"></iron-icon>
-            <span>&nbsp;{{mission.comment_set.length}}</span>
+            <span>&nbsp;{{mission.comments_count}}</span>
           </paper-button>
 
         </div>
