@@ -129,14 +129,20 @@ class NotificationCard extends PolymerElement {
         case /conversation/.test(notification.channel.sort):
           this.cardIcon = "app:notification-opinion-active"
           break;
+        case /selected/.test(notification.channel.sort):
+          this.cardIcon = "app:thumbs-up-notifications"
+          break;
+        default:
+          this.cardIcon = "app:alert-users-notifications"
+          break;
     }
   }
 
   setCardTitle(notification) {
     if (!notification) return;
-
+    
     var channel_sort = notification.channel.sort.split('-');
-
+    
     if(channel_sort.length == 2) {
       var mission_id = channel_sort[1];
       this.$.api.path = `missions/${mission_id}`;
@@ -145,8 +151,7 @@ class NotificationCard extends PolymerElement {
         this.set("cardTitle", `Há opiniões disponíveis na missão ${mission_name}.`);
         this.getDate(notification);
       });
-    }
-    else{
+    } else {
       switch(notification.channel.sort) {
         case "mission":
           this.set("cardTitle", `Missão nova no ar! Confira a `);
@@ -158,6 +163,12 @@ class NotificationCard extends PolymerElement {
           this.$.title.removeAttribute("class");
           this.set("cardTitle", `` );
           break;
+        case "selected":
+          let message = `Você selecionou o candidato(a) ${this.notification.message.title}. 
+            Para conhecer mais sobre suas propostas e sua história, acesse: ${this.notification.message.body}`;
+            this.set('cardTitle', '');
+            this.set('notification.message.title', message)
+            break;
         default:
           return "";
       }

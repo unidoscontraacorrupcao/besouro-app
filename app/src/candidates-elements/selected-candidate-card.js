@@ -2,7 +2,6 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
-import '@collaborne/paper-collapse-item/paper-collapse-item.js';
 
 import '../app-elements/shared-styles.js';
 import '../app-elements/styles/candidate-card-shared-styles.js';
