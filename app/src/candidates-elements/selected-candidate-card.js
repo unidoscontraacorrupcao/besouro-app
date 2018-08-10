@@ -2,6 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
+import '@collaborne/paper-collapse-item/paper-collapse-item.js';
 
 import '../app-elements/shared-styles.js';
 import '../app-elements/styles/candidate-card-shared-styles.js';
@@ -40,12 +41,92 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
       #close paper-icon-button { width:28px; }
 
-      .card-footer paper-button:last-child {
-        background-color: rgba(0,159,227,1);
-        border-color: rgba(0,159,227,1);
+      .card-footer  {
+        width: 90%;
+        margin: auto;
       }
 
-      #btn-icon { margin: auto 20px 7px auto; }
+    hr {
+      color: var(--divider-color);
+      margin-bottom: 16px;
+    }
+
+    #social-medias {
+      width: 75%;
+      margin: auto;
+      margin-bottom: 12px;
+    }
+
+    #social-medias span {
+      text-transform: uppercase;
+      font-family: Folio;
+      font-size: 14px;
+    }
+
+    #medias {
+      display: flex;
+      margin-top: 16px;
+    }
+    #medias > * { flex-grow: 1; }
+
+
+    .card-footer paper-button:last-child {
+      background-color: rgba(0,159,227,1);
+      border-color: rgba(0,159,227,1);
+    }
+
+    #btn-icon { margin: auto 20px 7px auto; }
+
+    #tse-data {
+      border-color: rgba(49,39,131,1);
+      border-style: solid;
+      border-width: 1px;
+      width: 90%;
+      margin: auto auto 46px auto;
+    }
+
+    .item {
+      height: 40px;
+      overflow: hidden;
+      transition: height 1s;
+      border-bottom-style: solid;
+      border-bottom-color: rgba(49,39,131,1);
+      border-bottom-width: 1px;
+    }
+
+    .item paper-icon-button {
+      float: right;
+      background-color: rgba(49,39,131,1);
+      color: white;
+    }
+
+    .item-title {
+      margin-top: 13px;
+      display: inline-block;
+    }
+
+    .item-title span {
+      text-transform: uppercase;
+      color: rgba(49,39,131,1);
+      font-family: folio;
+      font-size: 16px;
+    }
+
+    #see-more {
+      width: 90%;
+      margin: auto;
+      text-align: center;
+      padding-bottom: 46px;
+      text-decoration: underline;
+      color: var(--accent-color);
+    }
+
+    #see-more span {
+      text-transform: uppercase;
+      color: var(--accent-color);
+      font-family: folio;
+      font-size: 16px;
+    }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -142,7 +223,50 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         </div>
       </paper-button>
       </div>
-    </div>
+      <div id="social-medias">
+        <hr>
+        <span>redes sociais deste candidato:</span>
+        <div id="medias">
+            <paper-icon-button icon="app:facebook"></paper-icon-button>
+            <paper-icon-button icon="app:facebook"></paper-icon-button>
+            <paper-icon-button icon="app:facebook"></paper-icon-button>
+            <paper-icon-button icon="app:facebook"></paper-icon-button>
+            <paper-icon-button icon="app:facebook"></paper-icon-button>
+        </div>
+      </div>
+
+        <div id="tse-data">
+          <div class="item">
+            <div class="item-title">
+              <span>dados do tse</span>
+            </div>
+            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>dados da camera dos deputados e do senado federal</span>
+            </div>
+            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>dados da camera dos deputados</span>
+            </div>
+            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>dados dos tribunais de conta [tcu tces]</span>
+            </div>
+            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+          </div>
+        </div>
+
+        <div id="see-more">
+            <span>conheça mais</span>
+        </div>
+
+      </div>
 `;
   }
 
@@ -206,7 +330,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   _showSupportBtn() {
     var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
     supportBtn.style.margin = "auto";
-    supportBtn.style.width = "262px";
+    supportBtn.style.width = "300px";
   }
 
   _candidateChanged() { this._chooseCandidateColor(); }
@@ -216,6 +340,21 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   ready() {
     super.ready();
     this._chooseCandidateColor();
+  }
+
+  _toggle(e) {
+    var item = e.target.parentNode;
+    var itemHeight = item.clientHeight;
+    if (itemHeight == 40) {
+      console.log(e.target);
+      item.setAttribute("style", "height: 80px");
+      e.target.set("icon",  "app:expand-less");
+      console.log(e.target.icon);
+    }
+    else {
+      item.setAttribute("style", "height: 40px");
+      e.target.icon = "app:expand-more";
+    }
   }
 }
 customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);

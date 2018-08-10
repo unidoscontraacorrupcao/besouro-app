@@ -46,7 +46,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     }
 
       .card-footer {
-        height: 141px;
+        height: 128px;
         position: relative;
         display: flex;
       }
