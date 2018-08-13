@@ -19,12 +19,14 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       display: flex;
       flex-grow: 2;
       margin-top: 25px;
-      width: 95%;
+      margin-right: 25px;
+      line-height: 0.8;
     }
-
+    #candidate-infos .flex {
+      flex: 3;
+    }
     #candidate-infos div {
-      float: left;
-      margin-right: 10px;
+      flex: 2;
     }
     #candidate-infos #candidacy,
     #candidate-infos #urn,

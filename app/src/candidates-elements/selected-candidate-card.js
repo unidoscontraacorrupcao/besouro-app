@@ -111,7 +111,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
             </div>
           </div>
           <div id="candidate-infos">
-            <div>
+            <div class="flex">
               <div id="candidacy">
                 <span>candidatura:</span>
                 <span><b>{{candidate.candidacy}}</b></span>

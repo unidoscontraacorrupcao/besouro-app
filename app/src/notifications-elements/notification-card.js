@@ -132,6 +132,9 @@ class NotificationCard extends PolymerElement {
         case /selected/.test(notification.channel.sort):
           this.cardIcon = "app:thumbs-up-notifications"
           break;
+        case /press/.test(notification.channel.sort):
+          this.cardIcon = "app:thumb-down-notifications"
+          break;
         default:
           this.cardIcon = "app:alert-users-notifications"
           break;
@@ -168,6 +171,12 @@ class NotificationCard extends PolymerElement {
             Para conhecer mais sobre suas propostas e sua história, acesse: ${this.notification.message.body}`;
             this.set('cardTitle', '');
             this.set('notification.message.title', message)
+            break;
+        case "press":
+          let text = `Você pressionou ${this.notification.message.title} porque ele ainda não se comprometeu
+          com os compromissos da unidos contra a corrupção`;
+            this.set('cardTitle', '');
+            this.set('notification.message.title', text)
             break;
         default:
           return "";
