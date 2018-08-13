@@ -49,6 +49,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
       .inbox {
         padding-bottom: 80px;
+        overflow-x: hidden;
       }
 
     </style>
@@ -102,7 +103,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         <div class="inbox">
           <template is="dom-repeat" items="{{selectedCandidates}}">
             <selected-candidate-card
-              candidate="[[item]]">
+              candidate="[[item]]"
+              on-unselect-candidate="_userCandidatesChanged">
             </selected-candidate-card>
           </template>
         </div>

@@ -140,7 +140,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <div>
                 <paper-icon-button on-click="_ignoreCandidate" icon="app:remove-selected"></paper-icon-button>
               </div>
-              <span on-click="_ignoreCandidate">remover seleção</span>
+              <span on-click="_unselectCandidate">remover seleção</span>
             </div>
           </div>
           <div id="candidate-infos">
@@ -296,15 +296,14 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     });
   }
 
-  _ignoreCandidate() {
+  _unselectCandidate() {
     var user = this.getUser();
     this.$.api.method = "POST";
-    this.$.api.path = "ignored-candidates/";
+    this.$.api.path = `users/${user.uid}/unselect-candidate/`;
+    this.$.api.body = {"candidate": this.candidate.id};
     this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
     this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("ignored-candidate"));
+      this.dispatchEvent(new CustomEvent("unselect-candidate"));
     });
   }
 
