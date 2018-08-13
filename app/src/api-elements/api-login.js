@@ -12,7 +12,7 @@ class ApiLogin extends PolymerElement {
       handle-as="json"
       method="POST"
       url="{{_url}}"
-      body='{"username":"{{_username}}","password":"{{_password}}"}'
+      body='{"email":"{{_username}}","password":"{{_password}}"}'
       on-response="_onResponse"
       on-error="_onError"></iron-ajax>
     `;

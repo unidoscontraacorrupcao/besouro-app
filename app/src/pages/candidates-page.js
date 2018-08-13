@@ -197,7 +197,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _getSelectedCandidates() {
     this.showLoading();
-    this.$.api.path = `users/${this.getUser().uid}/selected_candidates`;
+    this.$.api.path = `users/${this.getUser().uid}/selected-candidates`;
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
       this.set("selectedCandidates", ajax.response);

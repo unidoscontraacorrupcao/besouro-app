@@ -884,7 +884,7 @@ class ProfilePage extends PolymerElement {
 
   setTrophyStatus(allTrophies, dataIndex, userTrophies, trophyKey) {
     return new Promise(function(resolve, reject){
-      this.$.api.path = `users/1/required_trophies/?trophy=${trophyKey}`;
+      this.$.api.path = `users/1/required-trophies/?trophy=${trophyKey}`;
       this.$.api.request().then(function(ajax) {
         var requiredTrophies = ajax.response;
         if (requiredTrophies.length == 0)
