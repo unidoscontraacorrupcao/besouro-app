@@ -126,9 +126,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         type: Object,
         notify: true
       },
-      selected: {
-        observer: "_selectedChanged"
-      },
       pageTitle: {
         type: String,
         value: "CANDIDATOS"

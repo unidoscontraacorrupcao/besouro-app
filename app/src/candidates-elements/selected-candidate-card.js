@@ -126,7 +126,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
             <div>
               <div id="party-uf">
                 <span>partido - UF:</span>
-                <span><b>{{candidate.party}}</b></span>
+                <span><b>{{candidate.party}} - {{candidate.uf}}</b></span>
               </div>
             </div>
           </div>
@@ -280,9 +280,13 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       this._showSupportBtn();
       var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
+    } else if (this.candidate.score == "bad") {
+      this._hideSupportBtn();
+      var colors = ["rgba(230,0,0,0.5)", "rgba(0,0,0,1)"];
+      this.setCardImageGradient(colors, false, "to bottom");
     } else {
       this._hideSupportBtn();
-      var colors = ["rgba(255,255,255,0.5)", "rgba(0,0,0,1)"];
+      var colors = ["rgba(183,184,183,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     }
   }
