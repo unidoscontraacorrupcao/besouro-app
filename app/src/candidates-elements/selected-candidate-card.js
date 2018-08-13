@@ -67,6 +67,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       margin-top: 16px;
     }
     #medias > * { flex-grow: 1; }
+    #medias paper-icon-button {padding: 4px;}
 
 
     .card-footer paper-button:last-child {
@@ -75,41 +76,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
 
     #btn-icon { margin: auto 20px 7px auto; }
-
-    #tse-data {
-      border-color: rgba(49,39,131,1);
-      border-style: solid;
-      border-width: 1px;
-      width: 90%;
-      margin: auto auto 46px auto;
-    }
-
-    .item {
-      height: 40px;
-      overflow: hidden;
-      transition: height 1s;
-      border-bottom-style: solid;
-      border-bottom-color: rgba(49,39,131,1);
-      border-bottom-width: 1px;
-    }
-
-    .item paper-icon-button {
-      float: right;
-      background-color: rgba(49,39,131,1);
-      color: white;
-    }
-
-    .item-title {
-      margin-top: 13px;
-      display: inline-block;
-    }
-
-    .item-title span {
-      text-transform: uppercase;
-      color: rgba(49,39,131,1);
-      font-family: folio;
-      font-size: 16px;
-    }
 
     #see-more {
       width: 90%;
@@ -126,6 +92,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       font-family: folio;
       font-size: 16px;
     }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -226,11 +193,11 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         <hr>
         <span>redes sociais deste candidato:</span>
         <div id="medias">
-            <paper-icon-button icon="app:facebook"></paper-icon-button>
-            <paper-icon-button icon="app:facebook"></paper-icon-button>
-            <paper-icon-button icon="app:facebook"></paper-icon-button>
-            <paper-icon-button icon="app:facebook"></paper-icon-button>
-            <paper-icon-button icon="app:facebook"></paper-icon-button>
+            <paper-icon-button on-click="_redirectToSocialLink" data-item="facebook_url" icon="app:social-facebook"></paper-icon-button>
+            <paper-icon-button on-click="_redirectToSocialLink" data-item="twitter_url" icon="app:social-twitter"></paper-icon-button>
+            <paper-icon-button on-click="_redirectToSocialLink" data-item="insta_url" icon="app:social-insta"></paper-icon-button>
+            <paper-icon-button on-click="_redirectToSocialLink" data-item="youtube_url" icon="app:social-youtube"></paper-icon-button>
+            <paper-icon-button on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
         </div>
       </div>
 
@@ -321,8 +288,8 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   }
 
   _hideSupportBtn () {
-    var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    supportBtn.style.display = "none";
+    var cardFooter = this.shadowRoot.querySelector(".card-footer");
+    cardFooter.style.display = "none";
   }
 
   _showSupportBtn() {
@@ -353,6 +320,11 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       item.setAttribute("style", "height: 40px");
       e.target.icon = "app:expand-more";
     }
+  }
+
+  _redirectToSocialLink(e) {
+    var link = e.target.dataset.item;
+    window.open(this.candidate[`${link}`]);
   }
 }
 customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);

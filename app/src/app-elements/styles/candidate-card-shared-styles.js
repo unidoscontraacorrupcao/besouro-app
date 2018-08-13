@@ -137,7 +137,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       color: white;
       position: relative;
     }
-    
+
     #close div div:first-child {
       position: absolute;
       top: -19px;
@@ -153,12 +153,62 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     #close span { margin: 8px 8px 8px 10px; }
 
+    #tse-data {
+      border-color: rgba(49,39,131,1);
+      border-style: solid;
+      border-width: 1px;
+      width: 90%;
+      margin: auto auto 46px auto;
+    }
+
+    .item {
+      height: 40px;
+      overflow: hidden;
+      transition: height 1s;
+      border-bottom-style: solid;
+      border-bottom-color: rgba(49,39,131,1);
+      border-bottom-width: 1px;
+    }
+
+    .item paper-icon-button {
+      float: right;
+      background-color: rgba(49,39,131,1);
+      color: white;
+    }
+
+    .item-title {
+      margin-top: 13px;
+      display: inline-block;
+    }
+
+    .item-title span {
+      text-transform: uppercase;
+      color: rgba(49,39,131,1);
+      font-family: folio;
+      font-size: 14px;
+    }
+
+
     @media only screen and (max-width: 360px) {
       #political-infos {
         left: 0;
         right: 0;
       }
+      #political-infos .info div:last-child {
+        font-size: 16px;
+      }
+
+      .item-title span {
+        font-size: 14px;
+      }
     }
+
+    @media only screen and (max-width: 320px) {
+      .item-title span {
+        font-size: 12px;
+      }
+    }
+
     </style>
   </template>
 </dom-module>`;
