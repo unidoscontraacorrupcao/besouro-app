@@ -585,9 +585,9 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
     if (!this.mission.owner) return;
     var name = this.mission.owner.display_name.split(".")[1];
     if (name != undefined)
-      return this.mission.owner.display_name.split(".")[1];
+      return name;
     else
-      return this.mission.owner.name;
+      return this.mission.owner.display_name;
   }
 
   _acceptMission() {
