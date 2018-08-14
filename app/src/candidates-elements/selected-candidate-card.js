@@ -315,10 +315,8 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     var item = e.target.parentNode;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
-      console.log(e.target);
       item.setAttribute("style", "height: 80px");
       e.target.set("icon",  "app:expand-less");
-      console.log(e.target.icon);
     }
     else {
       item.setAttribute("style", "height: 40px");

@@ -14,6 +14,7 @@ import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
 import '../candidates-elements/candidate-card.js';
 import '../candidates-elements/selected-candidate-card.js';
+import '../candidates-elements/candidate-filter.js';
 import '../app-elements/app-besouro-api.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
@@ -52,6 +53,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         overflow-x: hidden;
       }
 
+      welcome-card {
+        margin-top: 56px;
+      }
+
     </style>
 
     <div id="loading">
@@ -77,28 +82,29 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             <paper-tab><span class="tabs-text">SELECIONADOS</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
+        <candidate-filter></candidate-filter>
       </app-header>
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
-      <welcome-card>
-        <p>
-          Olá! Selecione candidatos que te interessarem e pressione quem ainda não tiver
-          se comprometido com as Novas Medidas e o Pacto pela Democracia!
-          Você também pode favoritar e divulgar bons candidatos! :)
-          <br>
-          <br>
-          Ah! Veja atentamente quem tem Ficha Limpa e que não tem!
-          Que legal que você quer mobilizar o Brasil contra a corrupção!
-          </p>
-      </welcome-card>
-        <template is="dom-repeat" items="{{allCandidates}}">
-        <candidate-card
-          candidate="[[item]]"
-          on-selected-candidate="_userCandidatesChanged"
-          on-pressed-candidate="_userCandidatesChanged"
-          on-ignored-candidate="_userCandidatesChanged">
-        </candidate-card>
-        </template>
+          <welcome-card>
+            <p>
+              Olá! Selecione candidatos que te interessarem e pressione quem ainda não tiver
+              se comprometido com as Novas Medidas e o Pacto pela Democracia!
+              Você também pode favoritar e divulgar bons candidatos! :)
+              <br>
+              <br>
+              Ah! Veja atentamente quem tem Ficha Limpa e que não tem!
+              Que legal que você quer mobilizar o Brasil contra a corrupção!
+              </p>
+          </welcome-card>
+          <template is="dom-repeat" items="{{allCandidates}}">
+            <candidate-card
+              candidate="[[item]]"
+              on-selected-candidate="_userCandidatesChanged"
+              on-pressed-candidate="_userCandidatesChanged"
+              on-ignored-candidate="_userCandidatesChanged">
+            </candidate-card>
+          </template>
         </div>
         <div class="inbox">
           <template is="dom-repeat" items="{{selectedCandidates}}">
