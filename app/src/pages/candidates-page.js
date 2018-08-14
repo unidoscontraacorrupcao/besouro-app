@@ -82,7 +82,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             <paper-tab><span class="tabs-text">SELECIONADOS</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
-        <candidate-filter></candidate-filter>
+          <candidate-filter
+            on-filtered-candidates="_showFilteredCandidates">
+          </candidate-filter>
       </app-header>
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
@@ -198,6 +200,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       this.set("allCandidates", ajax.response);
       this.hideLoading();
     });
+  }
+
+  _showFilteredCandidates(e) {
+    var candidates = e.detail.candidates;
+    this.set("allCandidates", candidates);
   }
 
   _getSelectedCandidates() {

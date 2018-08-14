@@ -4,13 +4,12 @@ import '@polymer/paper-button/paper-button.js';
 
 import '../app-elements/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-
-
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 /**
  * @polymer
  * @CandidateFilter
  */
-class CandidateFilter extends PolymerElement {
+class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   static get template() {
     return html`
@@ -70,7 +69,7 @@ class CandidateFilter extends PolymerElement {
         </div>
         <div id="filter-fields">
           <div class="row">
-            <paper-input always-float-label label="pesquise pelo nome"></paper-input>
+            <paper-input value="{{filterBycandidate}}" always-float-label label="pesquise pelo nome"></paper-input>
             <paper-input always-float-label label="tipo de candidatura"></paper-input>
           </div>
           <div class="row">
@@ -79,7 +78,7 @@ class CandidateFilter extends PolymerElement {
           </div>
           <div class="row">
             <paper-input always-float-label label="visualizando"></paper-input>
-            <paper-button>filtrar</paper-button>
+            <paper-button on-tap="_filter">filtrar</paper-button>
           </div>
         </div>
       </div>
@@ -91,7 +90,12 @@ class CandidateFilter extends PolymerElement {
   static get is() { return 'candidate-filter'; }
 
   static get properties() {
-    return {}
+    return {
+      filterBycandidate: {
+        type: String,
+        value: ""
+      }
+    }
   }
 
   _toggle(e) {
@@ -105,6 +109,16 @@ class CandidateFilter extends PolymerElement {
       item.setAttribute("style", "height: 40px");
       e.target.icon = "app:expand-more";
     }
+  }
+
+  _filter() {
+    var user = this.getUser();
+    this.$.api.path = `users/${user.uid}/candidates`;
+    this.$.api.params = {"filter_by_name": this.filterBycandidate};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("filtered-candidates",
+        {detail: {candidates: ajax.response}}));
+    });
   }
 }
 
