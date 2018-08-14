@@ -31,6 +31,7 @@ class CandidateFilter extends PolymerElement {
       position: absolute;
       overflow: hidden;
       transition: height 0.2s;
+      box-shadow: 0 2px 5px 0 rgba(0,0,0,0.2);
     }
 
     #filter-header {
