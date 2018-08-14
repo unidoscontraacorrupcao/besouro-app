@@ -177,7 +177,7 @@ class BlockedMissionModal extends PolymerElement {
     //TODO: move this endpoint to a better place. This hack was necessary
     //because boogie is not exposing the required_trophies variable on
     //trophies endpoint.
-    this.$.api.path = `users/1/required_trophies/?trophy=${this.trophyId}`;
+    this.$.api.path = `users/1/required-trophies/?trophy=${this.trophyId}`;
     this.$.api.request().then(function(ajax) {
       let preReqNames = "";
       ajax.response.map(x => preReqNames += x.name + ',');
