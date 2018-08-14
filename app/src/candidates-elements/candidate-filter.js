@@ -22,7 +22,7 @@ class CandidateFilter extends PolymerElement {
 
     #filter {
       background-color: white;
-      height: 36px;
+      height: 40px;
       width: 360px;
       left: 0;
       right: 0;
@@ -30,6 +30,7 @@ class CandidateFilter extends PolymerElement {
       z-index: 10;
       position: absolute;
       overflow: hidden;
+      transition: height 0.2s;
     }
 
     #filter-header {
@@ -48,10 +49,15 @@ class CandidateFilter extends PolymerElement {
 
     #filter-header paper-icon-button {float: right;}
 
-      .row { display: flex; }
-      .row > * {
-        width: 75%;
-        margin-left: 20px;
+      .row {
+        width: 90%;
+        height: 70px;
+        margin: auto;
+        display: flex;
+      }
+
+      .row paper-input:first-child {
+        margin-right: 20px;
       }
 
     </style>
@@ -90,12 +96,12 @@ class CandidateFilter extends PolymerElement {
   _toggle(e) {
     var item = e.target.parentNode.parentNode;
     var itemHeight = item.clientHeight;
-    if (itemHeight == 36) {
+    if (itemHeight == 40) {
       item.setAttribute("style", "height: 250px");
       e.target.set("icon",  "app:expand-less");
     }
     else {
-      item.setAttribute("style", "height: 36px");
+      item.setAttribute("style", "height: 40px");
       e.target.icon = "app:expand-more";
     }
   }
