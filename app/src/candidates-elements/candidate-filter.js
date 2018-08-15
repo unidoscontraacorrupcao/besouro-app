@@ -56,6 +56,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       text-transform: uppercase;
     }
 
+    #filter-reload { margin-top: 4px; }
     #filter-header paper-icon-button {float: right;}
 
       .row {
@@ -83,6 +84,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       <div id="filter">
         <div id="filter-header">
           <span>filtre os resultados da lista</span>
+          <paper-icon-button id="filter-reload" on-click="_reload" icon="app:icon-reload"></paper-icon-button>
           <paper-icon-button on-click="_toggle" icon="app:icon-down"></paper-icon-button>
         </div>
         <div id="filter-fields">
@@ -202,11 +204,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     filters["filter_by_name"] = this.filterByName;
     filters["filter_by_party"] = this.filterByParty;
     if (this.$.candidacyOpts.value == "todas")
-      filters["filter_by_candidacy"] = false;
+      filters["filter_by_candidacy"] = '';
     else
       filters["filter_by_candidacy"] = this.$.candidacyOpts.value;
     if (this.$.ufOpts.value == "todas")
-      filters["filter_by_uf"] = false;
+      filters["filter_by_uf"] = '';
     else
       filters["filter_by_uf"] = this.$.ufOpts.value;
     return filters;
@@ -217,6 +219,15 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       this._fiterAllCandidates();
     else
       this._filterSelectedCandidates();
+  }
+
+  _reload() {
+    if (this.tab == 0)
+      this.dispatchEvent(new CustomEvent("reload-candidates",
+        {detail: {"tab": 0}}));
+    else
+      this.dispatchEvent(new CustomEvent("reload-candidates",
+        {detail: {"tab": 1}}));
   }
 }
 

@@ -95,6 +95,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         </app-toolbar>
           <candidate-filter
             tab="{{inboxtab}}"
+            on-reload-candidates="_reloadCandidates"
             on-filtered-candidates="_showFilteredCandidates">
           </candidate-filter>
       </app-header>
@@ -209,6 +210,14 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       this.set("allCandidates", candidates);
     if (tab == 1)
       this.set("selectedCandidates", candidates);
+  }
+
+  _reloadCandidates(e) {
+    var tab = e.detail.tab;
+    if (tab == 0)
+      this._getAllCandidates();
+    if (tab == 1)
+      this._getSelectedCandidates();
   }
 
   _getSelectedCandidates() {
