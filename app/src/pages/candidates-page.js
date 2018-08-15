@@ -27,19 +27,16 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         display: block;
         height: 100vh;
       }
-
       app-toolbar { font-size: 35px; }
       .tabs-text {
         font-size: 18px;
         font-family: Folio;
         text-transform: uppercase;
       }
-
       .header-icon {
         padding: 7px;
         margin-top: 4px;
       }
-
       [main-title] {
         color: var(--accent-color);
         margin-left: 15px;
@@ -47,13 +44,21 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         font-family: Folio;
         font-size: 32px;
       }
-
       .inbox {
         padding-bottom: 80px;
         overflow-x: hidden;
       }
-
       welcome-card, selected-candidate-card { margin-top: 56px; }
+      paper-toast {
+        --paper-font-common-base: Folio;
+        font-family: Folio;
+        font-weight: 200;
+      }
+      .toast-text {
+        color: white;
+        text-transform: uppercase;
+        margin-top: 0;
+      }
 
     </style>
 
@@ -62,6 +67,14 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     </div>
 
     <app-besouro-api id="api"></app-besouro-api>
+    <paper-toast id="selectedToast" class="error" text="{{_toastMessage}}">
+      <h3 class="toast-text">Candidato(a) selecionado com sucesso</h3>
+      <p class="toast-text">Agradecemos sua participação! Continue selecionando candidatos que te interessem e não deixe de conferir sua caixa de notificações para acompanhar as novidades</p>
+    </paper-toast>
+    <paper-toast id="pressedToast" class="error" text="{{_toastMessage}}">
+      <h3 class="toast-text">Candidato(a) pressionado com sucesso</h3>
+      <p class="toast-text">Agradecemos sua participação! Continue pressionando candidatos que não se comprometeram ainda e não deixe de conferir as novidades na sua caixa de notificações</p>
+    </paper-toast>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
     </app-dialog>
@@ -101,8 +114,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <template is="dom-repeat" items="{{allCandidates}}">
             <candidate-card
               candidate="[[item]]"
-              on-selected-candidate="_userCandidatesChanged"
-              on-pressed-candidate="_userCandidatesChanged"
+              on-selected-candidate="_selectedCandidatesChanged"
+              on-pressed-candidate="_pressedCandidatesChanged"
               on-ignored-candidate="_userCandidatesChanged">
             </candidate-card>
           </template>
@@ -148,19 +161,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       user: {
         type: Object
       },
-      userMissions: {
-        type: Array,
-        value: []
-      },
-      allMissions: {
-        type: Array,
-        value: [],
-        observer: "_onAllMissionsChanged"
-      },
-      userAcceptedMissions: {
-        type: Array,
-        value: []
-      },
       inboxtab: {
         type: Number,
         observer: "_tabChanged"
@@ -168,7 +168,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       trophyData: {
         type: Object,
         value: {}
-      }
+      },
+      _toastMessage: String
     };
   }
 
@@ -218,6 +219,18 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       this.set("selectedCandidates", ajax.response);
       this.hideLoading();
     });
+  }
+
+  _selectedCandidatesChanged() {
+    this._showSelectedToast('');
+    this._getAllCandidates();
+    this._getSelectedCandidates();
+  }
+
+  _pressedCandidatesChanged() {
+    this._showPressedToast('');
+    this._getAllCandidates();
+    this._getSelectedCandidates();
   }
 
   _userCandidatesChanged() {
@@ -303,5 +316,16 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       localStorage.setItem("user", JSON.stringify(user));
     });
   }
+
+  _showSelectedToast(message) {
+    this._toastMessage = message;
+    this.$.selectedToast.open();
+  }
+
+  _showPressedToast(message) {
+    this._toastMessage = message;
+    this.$.pressedToast.open();
+  }
+
 }
 window.customElements.define(CandidatesPage.is, CandidatesPage);

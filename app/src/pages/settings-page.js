@@ -274,7 +274,7 @@ class SettingsPage extends PolymerElement {
   _requestSettings() {
     if(!this.user) return;
     this.$.api.method = "GET";
-    this.$.api.path = `profiles/${this.user.profile_id}/profile_settings`;
+    this.$.api.path = `profiles/${this.user.profile_id}/profile-settings`;
     this.$.api.request().then((ajax) => {
       this.set('settings', ajax.response)
     }, (error) => {
