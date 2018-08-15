@@ -67,13 +67,13 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         margin-top: 0;
       }
 
-      #load-more-candidates {
+      #loadMoreCandidates {
         width: 90%;
         margin: 52px auto 50px auto;
         text-align: center;
       }
 
-      #load-more-candidates span {
+      #loadMoreCandidates  span {
         font-family: Folio;
         font-size: 18px;
         text-transform: uppercase;
@@ -150,7 +150,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
               on-unselect-candidate="_userCandidatesChanged">
             </selected-candidate-card>
           </template>
-          <div id="load-more-candidates">
+          <div id="loadMoreCandidates">
             <span on-click="_getMoreSelectedCandidates">carregar mais candidatos</span>
           </div>
         </div>
@@ -266,6 +266,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.method = "GET";
     this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
+      if (ajax.response.length == 0)
+        this.$.loadMoreCandidates.style.display = "none";
+      else
+        this.$.loadMoreCandidates.style.display = "block";
       this.set("selectedCandidates", ajax.response);
       this.hideLoading();
     });
