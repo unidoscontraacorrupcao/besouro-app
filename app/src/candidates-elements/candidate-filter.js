@@ -79,6 +79,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         margin-top: 6px;
       }
 
+    @media only screen and (max-width: 360px) {
+      #filter {
+        width: 300px;
+      }
+    }
     </style>
 
       <div id="filter">

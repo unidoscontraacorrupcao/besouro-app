@@ -66,6 +66,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       display: flex;
       margin-top: 16px;
     }
+
     #medias > * { flex-grow: 1; }
     #medias paper-icon-button {padding: 4px;}
 
@@ -247,9 +248,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _supportCandidate() {
-    window.open(this.candidate.support_url);
-  }
+  _supportCandidate() { window.open(this.candidate.crowdfunding_url); }
 
   _pressCandidate() {
     var user = this.getUser();

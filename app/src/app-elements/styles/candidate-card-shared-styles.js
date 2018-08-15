@@ -192,7 +192,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     }
 
 
-    @media only screen and (max-width: 360px) {
+    @media only screen and (max-width: 470px) {
       #political-infos {
         left: 0;
         right: 0;
