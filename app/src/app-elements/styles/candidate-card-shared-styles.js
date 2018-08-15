@@ -45,6 +45,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     #candidate-infos div span:nth-child(2) {
       text-transform: uppercase;
       color: var(--paragraph-color);
+      line-height: 0.95;
     }
 
       .card-footer {
@@ -201,7 +202,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       }
 
       .item-title span {
-        font-size: 14px;
+        font-size: 12px;
       }
     }
 

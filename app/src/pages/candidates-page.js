@@ -53,9 +53,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         overflow-x: hidden;
       }
 
-      welcome-card {
-        margin-top: 56px;
-      }
+      welcome-card, selected-candidate-card { margin-top: 56px; }
 
     </style>
 
@@ -83,6 +81,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           </paper-tabs>
         </app-toolbar>
           <candidate-filter
+            tab="{{inboxtab}}"
             on-filtered-candidates="_showFilteredCandidates">
           </candidate-filter>
       </app-header>
@@ -204,7 +203,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _showFilteredCandidates(e) {
     var candidates = e.detail.candidates;
-    this.set("allCandidates", candidates);
+    var tab = e.detail.tab;
+    if (tab == 0)
+      this.set("allCandidates", candidates);
+    if (tab == 1)
+      this.set("selectedCandidates", candidates);
   }
 
   _getSelectedCandidates() {

@@ -69,7 +69,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         </div>
         <div id="filter-fields">
           <div class="row">
-            <paper-input value="{{filterBycandidate}}" always-float-label label="pesquise pelo nome"></paper-input>
+            <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome"></paper-input>
             <paper-input always-float-label label="tipo de candidatura"></paper-input>
           </div>
           <div class="row">
@@ -91,9 +91,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   static get properties() {
     return {
-      filterBycandidate: {
+      filterByName: {
         type: String,
         value: ""
+      },
+      tab: {
+        type: Number,
+        value: 1
       }
     }
   }
@@ -111,14 +115,31 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     }
   }
 
-  _filter() {
+  _fiterAllCandidates() {
     var user = this.getUser();
     this.$.api.path = `users/${user.uid}/candidates`;
     this.$.api.params = {"filter_by_name": this.filterBycandidate};
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
-        {detail: {candidates: ajax.response}}));
+        {detail: {candidates: ajax.response, "tab": 0}}));
     });
+  }
+
+  _filterSelectedCandidates() {
+    var user = this.getUser();
+    this.$.api.path = `users/${user.uid}/selected-candidates`;
+    this.$.api.params = {"filter_by_name": this.filterByName};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("filtered-candidates",
+        {detail: {candidates: ajax.response, "tab": 1}}));
+    });
+  }
+
+  _filter() {
+    if (this.tab == 0)
+      this._fiterAllCandidates();
+    else
+      this._filterSelectedCandidates();
   }
 }
 
