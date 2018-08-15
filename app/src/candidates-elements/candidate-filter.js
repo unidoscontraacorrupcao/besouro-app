@@ -69,16 +69,27 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         margin-right: 20px;
       }
 
+      paper-button {
+        color: white;
+        background-color: var(--accent-color);
+        font-family: folio;
+        width: 73%;
+        height: 70%;
+        margin-top: 6px;
+      }
+
     </style>
 
       <div id="filter">
         <div id="filter-header">
           <span>filtre os resultados da lista</span>
-          <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+          <paper-icon-button on-click="_toggle" icon="app:icon-down"></paper-icon-button>
         </div>
         <div id="filter-fields">
           <div class="row">
-            <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome"></paper-input>
+      <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome">
+        <iron-icon icon="app:icon-search" slot="suffix"></iron-icon>
+      </paper-input>
 
             <paper-dropdown-menu id="candidacyOpts" label="tipo de candidatura">
               <paper-listbox slot="dropdown-content" selected="0">
@@ -158,11 +169,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
       item.setAttribute("style", "height: 250px");
-      e.target.set("icon",  "app:expand-less");
+      e.target.set("icon",  "app:icon-up");
     }
     else {
       item.setAttribute("style", "height: 40px");
-      e.target.icon = "app:expand-more";
+      e.target.icon = "app:icon-down";
     }
   }
 
