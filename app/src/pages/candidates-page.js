@@ -33,6 +33,13 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         font-family: Folio;
         text-transform: uppercase;
       }
+      .tabs-number {
+        font-size: 18px;
+        font-family: Folio;
+        text-transform: uppercase;
+        color: var(--accent-color);
+        margin-left: 10px;
+      }
       .header-icon {
         padding: 7px;
         margin-top: 4px;
@@ -91,7 +98,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         <app-toolbar sticky="">
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
             <paper-tab><span class="tabs-text">TODOS</span></paper-tab>
-            <paper-tab><span class="tabs-text">SELECIONADOS</span></paper-tab>
+            <paper-tab><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
           <candidate-filter
@@ -171,7 +178,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         type: Object,
         value: {}
       },
-      _toastMessage: String
+      _toastMessage: String,
+      selectedCount: String
     };
   }
 
@@ -231,6 +239,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
       this.set("selectedCandidates", ajax.response);
+      const count = `0${this.selectedCandidates.length}`.slice(-2);
+      this.set("selectedCount", count);
       this.hideLoading();
     });
   }
