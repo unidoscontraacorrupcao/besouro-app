@@ -67,6 +67,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     </div>
 
     <app-besouro-api id="api"></app-besouro-api>
+    <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
     <paper-toast id="selectedToast" class="error" text="{{_toastMessage}}">
       <h3 class="toast-text">Candidato(a) selecionado com sucesso</h3>
       <p class="toast-text">Agradecemos sua participação! Continue selecionando candidatos que te interessem e não deixe de conferir sua caixa de notificações para acompanhar as novidades</p>
@@ -195,7 +196,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _getAllCandidates() {
     this.showLoading();
-    this.$.api.path = `users/${this.getUser().uid}/candidates`;
+    if(this.getUser().state) {
+      this.$.api.path = `users/${this.getUser().uid}/candidates?filter_by_uf=${this.getUser().state}`;
+    } else {
+      this.$.api.path = `users/${this.getUser().uid}/candidates`;
+    }
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
       this.set("allCandidates", ajax.response);
@@ -323,6 +328,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       user.state = state;
       user.city = city;
       localStorage.setItem("user", JSON.stringify(user));
+      this._userCandidatesChanged();
     });
   }
 
