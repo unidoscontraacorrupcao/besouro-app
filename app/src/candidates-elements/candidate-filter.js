@@ -74,7 +74,6 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         color: white;
         background-color: var(--accent-color);
         font-family: folio;
-        width: 73%;
         height: 70%;
         margin-top: 6px;
       }
@@ -142,7 +141,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
             </paper-dropdown-menu>
           </div>
           <div class="row">
-            <paper-input always-float-label label="visualizando"></paper-input>
+      <!-- <paper-input always-float-label label="visualizando"></paper-input> -->
             <paper-button on-tap="_filter">filtrar</paper-button>
           </div>
         </div>

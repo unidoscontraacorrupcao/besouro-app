@@ -196,7 +196,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         value: {}
       },
       _toastMessage: String,
-      selectedCount: String
+      selectedCount: String,
       limit: {
         type: Number,
         value: 10
