@@ -19,6 +19,15 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         display: block;
       }
 
+    paper-listbox {
+      --paper-listbox_-_max-height: 230px;
+    }
+
+      .item {
+          position: relative;
+          z-index: 1001;
+      }
+
     #filter {
       background-color: white;
       height: 40px;
@@ -70,11 +79,49 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         <div id="filter-fields">
           <div class="row">
             <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome"></paper-input>
-            <paper-input always-float-label label="tipo de candidatura"></paper-input>
+
+            <paper-dropdown-menu id="candidacyOpts" label="tipo de candidatura">
+              <paper-listbox slot="dropdown-content" selected="0">
+                <paper-item>todas</paper-item>
+                <paper-item>senador(a)</paper-item>
+                <paper-item>deputado(a)</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
           </div>
           <div class="row">
-            <paper-input always-float-label label="partido"></paper-input>
-            <paper-input always-float-label label="cidade-uf"></paper-input>
+            <paper-input value="{{filterByParty}}" always-float-label label="partido"></paper-input>
+            <paper-dropdown-menu id="ufOpts" label="UF">
+              <paper-listbox slot="dropdown-content" selected="0">
+                  <paper-item>todas</paper-item>
+                  <paper-item>AC</paper-item>
+                  <paper-item>AL</paper-item>
+                  <paper-item>AP</paper-item>
+                  <paper-item>AM</paper-item>
+                  <paper-item>BA</paper-item>
+                  <paper-item>CE</paper-item>
+                  <paper-item>ES</paper-item>
+                  <paper-item>GO</paper-item>
+                  <paper-item>MA</paper-item>
+                  <paper-item>MT</paper-item>
+                  <paper-item>MS</paper-item>
+                  <paper-item>MG</paper-item>
+                  <paper-item>PA</paper-item>
+                  <paper-item>PB</paper-item>
+                  <paper-item>PR</paper-item>
+                  <paper-item>PE</paper-item>
+                  <paper-item>PI</paper-item>
+                  <paper-item>RJ</paper-item>
+                  <paper-item>RN</paper-item>
+                  <paper-item>RS</paper-item>
+                  <paper-item>RO</paper-item>
+                  <paper-item>RR</paper-item>
+                  <paper-item>SC</paper-item>
+                  <paper-item>SP</paper-item>
+                  <paper-item>SE</paper-item>
+                  <paper-item>TO</paper-item>
+                  <paper-item>DF</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
           </div>
           <div class="row">
             <paper-input always-float-label label="visualizando"></paper-input>
@@ -92,6 +139,10 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   static get properties() {
     return {
       filterByName: {
+        type: String,
+        value: ""
+      },
+      filterByParty: {
         type: String,
         value: ""
       },
@@ -118,7 +169,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _fiterAllCandidates() {
     var user = this.getUser();
     this.$.api.path = `users/${user.uid}/candidates`;
-    this.$.api.params = {"filter_by_name": this.filterBycandidate};
+    this.$.api.params = this._getFilters();
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 0}}));
@@ -128,11 +179,26 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _filterSelectedCandidates() {
     var user = this.getUser();
     this.$.api.path = `users/${user.uid}/selected-candidates`;
-    this.$.api.params = {"filter_by_name": this.filterByName};
+    this.$.api.params = this._getFilters();
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 1}}));
     });
+  }
+
+  _getFilters() {
+    let filters = {}
+    filters["filter_by_name"] = this.filterByName;
+    filters["filter_by_party"] = this.filterByParty;
+    if (this.$.candidacyOpts.value == "todas")
+      filters["filter_by_candidacy"] = false;
+    else
+      filters["filter_by_candidacy"] = this.$.candidacyOpts.value;
+    if (this.$.ufOpts.value == "todas")
+      filters["filter_by_uf"] = false;
+    else
+      filters["filter_by_uf"] = this.$.ufOpts.value;
+    return filters;
   }
 
   _filter() {

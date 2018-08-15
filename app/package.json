@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@polymer/app-layout": "^3.0.0-pre.15",
+    "@polymer/paper-dropdown-menu": "^3.0.0-pre.19",
     "@polymer/app-route": "^3.0.0-pre.15",
     "@polymer/iron-ajax": "^3.0.0-pre.19",
     "@polymer/iron-flex-layout": "^3.0.0-pre.15",
@@ -30,7 +31,6 @@
     "@polymer/paper-checkbox": "^3.0.0-pre.21",
     "@polymer/paper-dialog-behavior": "^3.0.0-pre.19",
     "@polymer/paper-dialog-scrollable": "^3.0.0-pre.19",
-    "@polymer/paper-dropdown-menu": "^3.0.0-pre.19",
     "@polymer/paper-fab": "^3.0.0-pre.19",
     "@polymer/paper-icon-button": "^3.0.0-pre.15",
     "@polymer/paper-input": "^3.0.0-pre.19",
