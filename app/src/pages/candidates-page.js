@@ -15,6 +15,7 @@ import '../mission-elements/empty-card.js';
 import '../candidates-elements/candidate-card.js';
 import '../candidates-elements/selected-candidate-card.js';
 import '../candidates-elements/candidate-filter.js';
+import '../candidates-elements/empty-search-card.js';
 import '../app-elements/app-besouro-api.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
@@ -134,6 +135,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
               Que legal que você quer mobilizar o Brasil contra a corrupção!
               </p>
           </welcome-card>
+          <template is="dom-if" if="{{!allCandidates.length}}">
+            <empty-search-card></empty-search-card>
+          </template>
           <template is="dom-repeat" items="{{allCandidates}}">
             <candidate-card
               candidate="[[item]]"

@@ -58,6 +58,8 @@ class NotificationCard extends PolymerElement {
         flex: 1;
         display: inline-block;
         padding: 10px 20px;
+        overflow: hidden;
+        word-wrap: break-word;
       }
       .card-content span {
         font-family: Folio;
