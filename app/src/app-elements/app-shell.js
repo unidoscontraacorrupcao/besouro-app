@@ -12,8 +12,6 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-toast/paper-toast.js';
-import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 import '../app-elements/app-besouro-api.js';
 import "share-menu/share-menu.js";
@@ -480,16 +478,33 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
   //Get token for push notification
   _setUserToken(token, user) {
-    if(!user) return;
-    messaging.getToken().then(function(currentToken) {
+    if(!user || !this.user || Object.keys(this.user).length == 0) return;
+    messaging.getToken().then((currentToken) => {
       if (currentToken) {
-        console.log(currentToken);
         return Promise.resolve(currentToken);
       } else {
         // Need to request permissions to show notifications.
-        return messaging.requestPermission()
+        return messaging.requestPermission().then(function(result) {
+          return messaging.getToken();
+        });
       }
-    }.bind(this));
+    }).then((currentToken) => {
+      let apiBaseUrl = this.$.api.baseUrl;
+      const data = {
+        user_id: user.uid,
+        registration_id: currentToken
+      }
+      this.$.api.authUrl = `${apiBaseUrl}/create-user-device/`;
+      this.$.api.method = "POST";
+      this.$.api.body = data;
+      this.$.api.user = user;
+      this.$.api.authRequest().then((ajax) => {
+      }, (error) => {
+        console.log('Failed to update token');
+      });
+    }).catch((err) =>{
+      console.log('Notificações não habilitadas');
+    });
   }
 
   // Profile
