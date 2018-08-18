@@ -28,12 +28,32 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       :host {
         display: block;
       }
+
+    @keyframes selected-candidate {
+      0% {left: unset;}
+      10% {left: 10px;}
+      20% {left: 20px;}
+      30% {left: 30px;}
+      40% {left: 40px;}
+      50% {left: 50px;}
+      60% {left: 60px;}
+      70% {left: 70px; opacity: 0.3;}
+      80% {left: 80px; opacity: 0.2;}
+      90% {left: 90px; opacity: 0.1;}
+      100% {opacity: 0;}
+
+    }
+
+    .selected-candidate-animation {
+      animation: selected-candidate 0.8s;
+      -webkit-animation: selected-candidate 0.8s;
+    }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
 
     <div class="card">
-
       <div class="card-header">
         <div class="container">
           <span id="candidate-name"> {{candidate.name}} </span>

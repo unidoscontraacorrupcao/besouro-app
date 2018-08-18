@@ -293,15 +293,24 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     });
   }
 
-   _selectedCandidatesChanged() {
+   _selectedCandidatesChanged(e) {
     this._showSelectedToast('');
-    if (this.limit == 1)
-      this.limit = 10;
-    else
-      this.limit -=1;
-    var candidatesCards = this.shadowRoot.querySelectorAll("candidate-card");
-    this._getAllCandidates();
-    this._getSelectedCandidates();
+     this._showSelectedCardAnimation(e);
+     if (this.limit == 1)
+       this.limit = 10;
+     else
+       this.limit -=1;
+     var candidatesCards = this.shadowRoot.querySelectorAll("candidate-card");
+     this._getAllCandidates();
+     this._getSelectedCandidates();
+  }
+
+  _showSelectedCardAnimation(e, type="selected") {
+    var card = e.target.shadowRoot.querySelector(".card");
+    card.classList.remove("selected-candidate-animation");
+    setTimeout(() => {
+      card.classList.add("selected-candidate-animation");
+    }, 100);
   }
 
   _pressedCandidatesChanged() {
