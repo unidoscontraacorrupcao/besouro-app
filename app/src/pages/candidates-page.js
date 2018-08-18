@@ -143,7 +143,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
               candidate="[[item]]"
               on-selected-candidate="_selectedCandidatesChanged"
               on-pressed-candidate="_pressedCandidatesChanged"
-              on-ignored-candidate="_userCandidatesChanged">
+              on-ignored-candidate="_ignoredCandidatesChanged">
             </candidate-card>
           </template>
         </div>
@@ -229,8 +229,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   openDrawer() { this.dispatchEvent(new CustomEvent("open-drawer")); }
 
-  _goToCandidate(e) { }
-
   _getAllCandidates() {
     this.showLoading();
     this.$.api.params = {"limit": this.limit};
@@ -293,30 +291,48 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     });
   }
 
+  _showSelectedCardAnimation(e) {
+    var card = e.target.shadowRoot.querySelector(".card");
+    card.classList.add("selected-candidate-animation");
+  }
+
+  _showPressedCardAnimation(e) {
+    var card = e.target.shadowRoot.querySelector(".card");
+    card.classList.add("pressed-candidate-animation");
+  }
+
+  _showIgnoredCardAnimation(e) {
+    var card = e.target.shadowRoot.querySelector(".card");
+    card.classList.add("ignored-candidate-animation");
+  }
+
+
    _selectedCandidatesChanged(e) {
     this._showSelectedToast('');
      this._showSelectedCardAnimation(e);
-     if (this.limit == 1)
-       this.limit = 10;
-     else
-       this.limit -=1;
-     var candidatesCards = this.shadowRoot.querySelectorAll("candidate-card");
-     this._getAllCandidates();
-     this._getSelectedCandidates();
-  }
-
-  _showSelectedCardAnimation(e, type="selected") {
-    var card = e.target.shadowRoot.querySelector(".card");
-    card.classList.remove("selected-candidate-animation");
     setTimeout(() => {
-      card.classList.add("selected-candidate-animation");
-    }, 100);
+      if (this.limit == 1)
+        this.limit = 10;
+      else
+        this.limit -=1;
+      var candidatesCards = this.shadowRoot.querySelectorAll("candidate-card");
+      this._userCandidatesChanged();
+    }, 1000);
   }
 
-  _pressedCandidatesChanged() {
+  _pressedCandidatesChanged(e) {
     this._showPressedToast('');
-    this._getAllCandidates();
-    this._getSelectedCandidates();
+    this._showPressedCardAnimation(e);
+    setTimeout(() => {
+      this._userCandidatesChanged();
+    }, 1000);
+  }
+
+  _ignoredCandidatesChanged(e) {
+    this._showIgnoredCardAnimation(e);
+    setTimeout(() => {
+      this._userCandidatesChanged();
+    }, 1000);
   }
 
   _userCandidatesChanged() {

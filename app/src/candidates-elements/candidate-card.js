@@ -41,12 +41,50 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       80% {left: 80px; opacity: 0.2;}
       90% {left: 90px; opacity: 0.1;}
       100% {opacity: 0;}
+    }
 
+
+    @keyframes pressed-candidate {
+      0% {bottom: unset;}
+      10% {bottom: 10px;}
+      20% {bottom: 20px;}
+      30% {bottom: 30px;}
+      40% {bottom: 40px;}
+      50% {bottom: 50px;}
+      60% {bottom: 60px;}
+      70% {bottom: 70px; opacity: 0.3;}
+      80% {bottom: 80px; opacity: 0.2;}
+      90% {bottom: 90px; opacity: 0.1;}
+      100% {opacity: 0;}
+    }
+
+    @keyframes ignored-candidate {
+      0% {opacity: unset;}
+      10% {opacity: 1;}
+      20% {opacity: 0.8;}
+      30% {opacity: 0.7;}
+      40% {opacity: 0.6;}
+      50% {opacity: 0.5;}
+      60% {opacity: 0.4;}
+      70% {opacity: 0.3;}
+      80% {opacity: 0.2;}
+      90% {opacity: 0.1;}
+      100% {opacity: 0;}
     }
 
     .selected-candidate-animation {
       animation: selected-candidate 0.8s;
       -webkit-animation: selected-candidate 0.8s;
+    }
+
+    .pressed-candidate-animation {
+      animation: pressed-candidate 0.8s;
+      -webkit-animation: pressed-candidate 0.8s;
+    }
+
+    .ignored-candidate-animation {
+      animation: ignored-candidate 0.8s;
+      -webkit-animation: ignored-candidate 0.8s;
     }
 
     </style>
@@ -225,7 +263,18 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     selectBtn.style.width = "128px";
   }
 
-  _candidateChanged() { this._chooseCandidateColor(); }
+  _candidateChanged() {
+    this._removeCardAnimations();
+    this._chooseCandidateColor();
+  }
+
+  _removeCardAnimations() {
+    var card = this.shadowRoot.querySelector(".card");
+    card.classList.remove("selected-candidate-animation");
+    card.classList.remove("pressed-candidate-animation");
+    card.classList.remove("ignored-candidate-animation");
+  }
+
 
   constructor() { super(); }
 
