@@ -151,7 +151,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <template is="dom-repeat" items="{{selectedCandidates}}">
             <selected-candidate-card
               candidate="[[item]]"
-              on-unselect-candidate="_userCandidatesChanged">
+              on-unselect-candidate="_unselectCandidatesChanged">
             </selected-candidate-card>
           </template>
           <div id="loadMoreCandidates">
@@ -319,7 +319,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.limit -=1;
       var candidatesCards = this.shadowRoot.querySelectorAll("candidate-card");
       this._userCandidatesChanged();
-    }, 1000);
+    }, 500);
   }
 
   _pressedCandidatesChanged(e) {
@@ -327,19 +327,26 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this._showPressedCardAnimation(e);
     setTimeout(() => {
       this._userCandidatesChanged();
-    }, 1000);
+    }, 500);
   }
 
   _ignoredCandidatesChanged(e) {
     this._showIgnoredCardAnimation(e);
     setTimeout(() => {
       this._userCandidatesChanged();
-    }, 1000);
+    }, 500);
   }
 
   _userCandidatesChanged() {
     this._getAllCandidates();
     this._getSelectedCandidates();
+  }
+
+  _unselectCandidatesChanged(e) {
+    this._showIgnoredCardAnimation(e);
+    setTimeout(() => {
+      this._userCandidatesChanged();
+    }, 500);
   }
 
   _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }

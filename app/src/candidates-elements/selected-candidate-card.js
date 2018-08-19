@@ -94,6 +94,24 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       font-size: 16px;
     }
 
+    @keyframes ignored-candidate {
+      0% {opacity: unset;}
+      10% {opacity: 1;}
+      20% {opacity: 0.8;}
+      30% {opacity: 0.7;}
+      40% {opacity: 0.6;}
+      50% {opacity: 0.5;}
+      60% {opacity: 0.4;}
+      70% {opacity: 0.3;}
+      80% {opacity: 0.2;}
+      90% {opacity: 0.1;}
+      100% {opacity: 0;}
+    }
+
+    .ignored-candidate-animation {
+      animation: ignored-candidate 0.8s;
+      -webkit-animation: ignored-candidate 0.8s;
+    }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -106,7 +124,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           <div id="close">
             <div>
               <div>
-                <paper-icon-button on-click="_ignoreCandidate" icon="app:remove-selected"></paper-icon-button>
+                <paper-icon-button on-click="_unselectCandidate" icon="app:remove-selected"></paper-icon-button>
               </div>
               <span on-click="_unselectCandidate">remover seleção</span>
             </div>
