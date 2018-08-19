@@ -273,6 +273,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       else
         this.$.loadMoreCandidates.style.display = "block";
       this.set("selectedCandidates", ajax.response);
+      const count = `0${this.selectedCandidates.length}`.slice(-2);
+      this.set("selectedCount", count);
       this.hideLoading();
     });
   }
@@ -309,7 +311,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
    _selectedCandidatesChanged(e) {
     this._showSelectedToast('');
-     this._showSelectedCardAnimation(e);
+    this._showSelectedCardAnimation(e);
     setTimeout(() => {
       if (this.limit == 1)
         this.limit = 10;
