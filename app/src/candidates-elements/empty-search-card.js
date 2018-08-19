@@ -18,6 +18,7 @@ class EmptySearchCard extends PolymerElement {
         margin-top: 40px;
         background-color: #f5f5f5;
         padding: 10px 0;
+        margin: 0 auto;
       }
 
       p, span {

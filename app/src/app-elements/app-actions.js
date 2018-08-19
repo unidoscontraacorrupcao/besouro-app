@@ -18,8 +18,7 @@ class AppActions extends mixinBehaviors(
         bottom: 0;
         background: white;
         width: calc(100% - 256px);
-        border-top-style: solid;
-        border-top-color: #E7E7E7;
+        box-shadow: 0 -5px 5px -5px #cccccc;
         z-index: 1000;
       }
 

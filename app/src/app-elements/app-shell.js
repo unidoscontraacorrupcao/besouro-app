@@ -62,6 +62,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
       app-drawer[persistent] {
         --app-drawer-width: 256px;
+        z-index: 0;
       }
 
       app-toolbar {
