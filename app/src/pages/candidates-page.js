@@ -81,6 +81,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         color: var(--secondary-text-color);
       }
 
+      welcome-card p {
+        color: var(--paragraph-color);
+      }
+
 
     </style>
 
@@ -126,15 +130,21 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
           <welcome-card>
-            <p>
-              Olá! Selecione candidatos que te interessarem e pressione quem ainda não tiver
-              se comprometido com as Novas Medidas e o Pacto pela Democracia!
-              Você também pode favoritar e divulgar bons candidatos! :)
-              <br>
-              <br>
-              Ah! Veja atentamente quem tem Ficha Limpa e que não tem!
-              Que legal que você quer mobilizar o Brasil contra a corrupção!
+            <div>
+              <p>
+                Descubra quais candidatas/os atendem a três critérios: 1. Passado Limpo; 2.
+                Compromisso com Democracia; e 3. Adesão às Novas Medidas contra a Corrupção.
               </p>
+              <ul>
+                <li>VERDE é SIM nos três critérios</li>
+                <li>VERMELHO é NÃO em algum critério.</li>
+                <li>CINZA: ainda não respondeu</li>
+              </ul>
+              <p>
+                Candidatos à reeleição terão os dados referentes a Passado Limpo verificados 
+                e, se forem réus, não serão considerados como tendo passado limpo.
+              </p>
+            </div>
           </welcome-card>
           <template is="dom-if" if="{{!allCandidates.length}}">
             <empty-search-card></empty-search-card>

@@ -12,7 +12,6 @@ class WelcomeCard extends PolymerElement {
         display: block;
       }
 
-
       .welcome-card {
         display: block;
         padding: 0px;
@@ -22,8 +21,16 @@ class WelcomeCard extends PolymerElement {
         margin: 20px auto;
         background-color: var(--default-primary-color);
       }
+      
 
       ::slotted(p) {
+        font-family: helvetica-neue;
+        font-size: 16px;
+        color: var(--paragraph-color) !important;
+        line-height: 1.3;
+      }
+
+      ::slotted(div) {
         font-family: helvetica-neue;
         font-size: 16px;
         color: var(--paragraph-color) !important;
