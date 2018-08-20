@@ -253,7 +253,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
     var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
     pressBtn.style.display = "none";
-    selectBtn.style.margin = "auto";
+    selectBtn.style.margin = "20px auto";
     selectBtn.style.width = "262px";
   }
 

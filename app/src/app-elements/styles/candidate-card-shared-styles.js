@@ -7,6 +7,18 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
   <template>
   <style include="card-shared-styles"></style>
   <style>
+    .card-header {
+      height: unset;
+    }
+
+    .card-header .container {
+      margin: 0;
+      position: unset;
+      width: unset;
+      padding: 20px 0px 0px 20px;
+      margin-bottom: 10px;
+    }
+
     #candidate-name {
       text-transform: uppercase;
       font-family: folio;
@@ -18,21 +30,33 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     #candidate-infos {
       display: flex;
       flex-grow: 2;
-      margin-top: 25px;
-      margin-right: 25px;
+      margin-top: 20px;
       line-height: 0.8;
     }
+
+    .card iron-image {
+      width: 100%;
+      height: 220px;
+      background-color: var(--dark-primary-color);
+    }
+
     #candidate-infos .flex {
       flex: 3;
     }
+
     #candidate-infos div {
       flex: 2;
     }
+
     #candidate-infos #candidacy,
     #candidate-infos #urn,
     #candidate-infos #party-uf{
       display: flex;
       flex-direction: column;
+    }
+
+    #candidate-infos #urn {
+      padding-left: 15px;
     }
 
     #candidate-infos div span:first-child {
@@ -55,13 +79,13 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       }
 
       .card-footer paper-button {
-        height: 80px;
+        height: 70px;
         width: 128px;
         top: 0;
         left: 0;
         bottom: 0;
         right: 0;
-        margin: auto;
+        margin: 20px auto;
         border-style: solid;
         border-radius: 0;
         border-width: 1px;
@@ -127,8 +151,8 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     #close {
       position: absolute;
-      top: -8px;
-      right: 22px;
+      top: 15px;
+      right: 0;
       background-color: var(--accent-color);
       height: 29px;
       width: 69px;
