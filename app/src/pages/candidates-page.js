@@ -116,11 +116,12 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             <paper-tab><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
-          <candidate-filter
-            tab="{{inboxtab}}"
-            on-reload-candidates="_reloadCandidates"
-            on-filtered-candidates="_showFilteredCandidates">
-          </candidate-filter>
+        <candidate-filter
+          tab="{{inboxtab}}"
+          on-reload-candidates="_reloadCandidates"
+          on-filtered-candidates="_showFilteredCandidates"
+          id="filter">
+        </candidate-filter>
       </app-header>
       <iron-pages selected="{{inboxtab}}">
         <div class="inbox">
@@ -219,11 +220,17 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   routePathChanged(path) {
+    this.$.filter.style.display = 'block';
     this.set("user", this.getUser());
     if (path == "/candidates") {
-      this._getAllCandidates();
-      this._getSelectedCandidates();
-      this._requestGeocoder();
+      if (!this.user || Object.keys(this.user).length == 0) {
+        this.$.filter.style.display = 'none';
+        this._getAllCandidates();
+      } else {
+        this._getAllCandidates();
+        this._getSelectedCandidates();
+        this._requestGeocoder();
+      }
     }
   }
 
@@ -232,15 +239,24 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _getAllCandidates() {
     this.showLoading();
     this.$.api.params = {"limit": this.limit};
-    if(this.getUser().state) {
-      this.$.api.params["filter_by_uf"] = this.getUser().state;
-      this.$.api.path = `users/${this.getUser().uid}/candidates`;
-    } else {
-      this.$.api.path = `users/${this.getUser().uid}/candidates`;
+    if(!this.user || Object.keys(this.user).length == 0) {
+      this.$.api.path = `candidates/`;
+    }
+    if(this.user && Object.keys(this.user).length > 0) {
+      if(this.getUser().state) {
+        this.$.api.params["filter_by_uf"] = this.getUser().state;
+        this.$.api.path = `users/${this.getUser().uid}/candidates`;
+      } else {
+        this.$.api.path = `users/${this.getUser().uid}/candidates`;
+      }
     }
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
-      this.set("allCandidates", ajax.response);
+      if(!this.user || Object.keys(this.user).length == 0) {
+        this.set("allCandidates", ajax.response.results);
+      } else {
+        this.set("allCandidates", ajax.response);
+      }
       this.hideLoading();
     });
   }
@@ -263,6 +279,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _getSelectedCandidates() {
+    if(!this.user || Object.keys(this.user).length == 0) return;
     this.showLoading();
     this.$.api.path = `users/${this.getUser().uid}/selected-candidates`;
     this.$.api.method = "GET";
@@ -280,6 +297,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _getMoreSelectedCandidates() {
+    if(!this.user || Object.keys(this.user).length == 0) return;
     this.showLoading();
     this.$.api.path = `users/${this.getUser().uid}/selected-candidates`;
     this.selectedLimit += 10;
@@ -361,7 +379,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _tabChanged() {
     if (this.inboxtab == 1) {
       if (!this.user || Object.keys(this.user).length == 0) {
-        this.$.emptyMessage.setAttribute("style", "display: none");
         this.$.unauthorizedDialog.present();
       }
     }

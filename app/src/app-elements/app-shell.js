@@ -334,7 +334,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
     };
   }
 
-  static get observers() { return ["_routePageChanged(routeData.page)"]; }
+  static get observers() { return ["_routePageChanged(routeData.page)", "routePathChanged(route.path)"]; }
 
   constructor() {
     super();
@@ -345,7 +345,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   _routePageChanged(page) {
     // If no page was found in the route data, page will be an empty string.
     // Default to 'inbox' in that case.
-    this.page = page || "inbox";
+    this.page = page || "candidates";
     this.canShowBottomBar = !this.noBottomBarList.includes(this.page);
     if (!this.$.drawer.persistent) {
       this.$.drawer.close();
@@ -362,6 +362,10 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         }
       });
     }
+  }
+
+  routePathChanged(path) {
+    if(path === '' || path === '/') this.set('route.path', '/candidates');
   }
 
   _pageChanged(page) {
@@ -391,7 +395,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _goToInbox() {
-    this.set(`route.path`, `/`);
+    this.set(`route.path`, `/inbox`);
   }
 
   _redirectToPrivacy() {
@@ -416,11 +420,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _goToCandidates() {
-    if(!this.user || Object.keys(this.user).length == 0) {
-      this.$.unauthorizedDialog.present();
-    } else {
-      this.set("route.path", "/candidates");
-    }
+    this.set("route.path", "/candidates");
   }
 
   _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }

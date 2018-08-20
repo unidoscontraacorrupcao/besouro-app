@@ -712,7 +712,7 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
     }
   }
 
-  _returnToInbox() { this.set('route.path', '/'); }
+  _returnToInbox() { this.set('route.path', '/inbox'); }
 
   _addComment(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
@@ -926,7 +926,7 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
   }
 
 
-  _returnToInbox() { this.set("route.path", "/"); }
+  _returnToInbox() { this.set("route.path", "/inbox"); }
   _dismissUnauthorizedModal() {this.$.unauthorizedDialog.dismiss();}
   _dismissConversationModal() {this.$.conversationDialog.dismiss();}
   _closeAcceptModal() { this.$.acceptedDialog.dismiss(); }

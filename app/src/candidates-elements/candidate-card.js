@@ -196,6 +196,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
   _selectCandidate() {
     var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) return;
     this.$.api.method = "POST";
     this.$.api.path = "selected-candidates/";
     this.$.api.user = user;
@@ -208,6 +209,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
   _pressCandidate() {
     var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) return;
     this.$.api.method = "POST";
     this.$.api.path = "pressed-candidates/";
     this.$.api.user = user;
@@ -220,6 +222,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
   _ignoreCandidate() {
     var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) return;
     this.$.api.method = "POST";
     this.$.api.path = "ignored-candidates/";
     this.$.api.user = user;
