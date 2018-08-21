@@ -89,13 +89,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         <div id="filter-header">
           <span>filtre os resultados da lista</span>
           <paper-icon-button id="filter-reload" on-click="_reload" icon="app:icon-reload"></paper-icon-button>
-          <paper-icon-button on-click="_toggle" icon="app:icon-down"></paper-icon-button>
+          <paper-icon-button id="filterToggle" on-click="_toggle" icon="app:icon-down"></paper-icon-button>
         </div>
         <div id="filter-fields">
           <div class="row">
-      <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome">
-        <iron-icon icon="app:icon-search" slot="suffix"></iron-icon>
-      </paper-input>
+          <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome" id="candidateName">
+            <iron-icon icon="app:icon-search" slot="suffix"></iron-icon>
+          </paper-input>
 
             <paper-dropdown-menu id="candidacyOpts" label="tipo de candidatura">
               <paper-listbox slot="dropdown-content" selected="0">
@@ -106,7 +106,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
             </paper-dropdown-menu>
           </div>
           <div class="row">
-            <paper-input value="{{filterByParty}}" always-float-label label="partido"></paper-input>
+            <paper-input id="partyName" value="{{filterByParty}}" always-float-label label="partido"></paper-input>
             <paper-dropdown-menu id="ufOpts" label="UF">
               <paper-listbox slot="dropdown-content" selected="0">
                   <paper-item>todas</paper-item>
@@ -171,15 +171,15 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _toggle(e) {
-    var item = e.target.parentNode.parentNode;
+    var item = this.$.filter;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
       item.setAttribute("style", "height: 250px");
-      e.target.set("icon",  "app:icon-up");
+      this.$.filterToggle.set("icon",  "app:icon-up");
     }
     else {
       item.setAttribute("style", "height: 40px");
-      e.target.icon = "app:icon-down";
+      this.$.filterToggle.icon = "app:icon-down";
     }
   }
 
@@ -190,6 +190,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 0}}));
+      this._toggle();
     });
   }
 
@@ -200,6 +201,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 1}}));
+      this._toggle();
     });
   }
 
@@ -232,6 +234,15 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     else
       this.dispatchEvent(new CustomEvent("reload-candidates",
         {detail: {"tab": 1}}));
+    this.clearFields();
+  }
+
+  clearFields() {
+    this.$.candidateName.value = '';
+    this.$.candidacyOpts.value = 'todas';
+    this.$.ufOpts.value = 'todas';
+    this.$.partyName.value = '';
+
   }
 }
 
