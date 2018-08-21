@@ -70,12 +70,24 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         margin-right: 20px;
       }
 
+      #adheredOpts {
+        margin-right: 20px;
+        flex: 1;
+      }
+
+      #adheredOpts paper-item {
+        --paper-item: {
+            font-size: 14px;
+        }
+      }
+
       paper-button {
         color: white;
         background-color: var(--accent-color);
         font-family: folio;
         height: 70%;
         margin-top: 6px;
+        flex: 1;
       }
 
     @media only screen and (max-width: 360px) {
@@ -141,7 +153,14 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
             </paper-dropdown-menu>
           </div>
           <div class="row">
-      <!-- <paper-input always-float-label label="visualizando"></paper-input> -->
+            <paper-dropdown-menu id="adheredOpts" label="Visualizando">
+              <paper-listbox slot="dropdown-content" selected="0">
+                <paper-item>todos</paper-item>
+                <paper-item>não responderam</paper-item>
+                <paper-item>não se comprometeram</paper-item>
+                <paper-item>se comprometeram</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
             <paper-button on-tap="_filter">filtrar</paper-button>
           </div>
         </div>
@@ -217,6 +236,22 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       filters["filter_by_uf"] = '';
     else
       filters["filter_by_uf"] = this.$.ufOpts.value;
+    if (this.$.adheredOpts.value == 'todos')
+      filters["filter_by_adhered"] = '';
+    else
+      switch (this.$.adheredOpts.value) {
+        case 'não responderam':
+          filters["filter_by_adhered"] = 'SEM RESPOSTA';
+          break;
+        case 'não se comprometeram':
+          filters["filter_by_adhered"] = 'NÃO';
+          break;
+        case 'se comprometeram':
+          filters["filter_by_adhered"] = 'SIM';
+          break;
+        default:
+          break;
+      }
     return filters;
   }
 
