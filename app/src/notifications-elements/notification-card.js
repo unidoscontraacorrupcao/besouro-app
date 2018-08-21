@@ -25,7 +25,7 @@ class NotificationCard extends PolymerElement {
       .card-content .target {
         text-transform: uppercase;
       }
-      #title {
+      .card-content h4 span {
         color: var(--paragraph-color);
       }
       .notification-card {
@@ -74,7 +74,7 @@ class NotificationCard extends PolymerElement {
         <iron-icon icon="{{cardIcon}}"></iron-icon>
       </div>
       <div class="card-content">
-        <h4>{{cardTitle}}<span id="title" class="target">{{notification.message.title}}</span></h4>
+        <h4>{{cardTitle}}<span id="title" class="target">{{notification.message.title}}</span><span>{{additionalText}}</span></h4>
         <span>{{cardDate}}</span>
       </div>
     </div>
@@ -92,7 +92,8 @@ class NotificationCard extends PolymerElement {
       cardIcon: String,
       cardTitle: String,
       cardDescription: String,
-      cardDate: String
+      cardDate: String,
+      additionalText: String
     }
   }
 
@@ -169,17 +170,13 @@ class NotificationCard extends PolymerElement {
           this.set("cardTitle", `` );
           break;
         case "selected":
-          let message = `Você selecionou o candidato(a) ${this.notification.message.title}. 
-            Para conhecer mais sobre suas propostas e sua história, acesse: ${this.notification.message.body}`;
-            this.set('cardTitle', '');
-            this.set('notification.message.title', message)
-            break;
+          this.set('cardTitle', 'Você selecionou ');
+          this.set('additionalText', `. Conheça suas ideias em: ${this.notification.message.body}`)
+          break;
         case "press":
-          let text = `Você pressionou ${this.notification.message.title} porque ele ainda não se comprometeu
-          com os compromissos da unidos contra a corrupção`;
-            this.set('cardTitle', '');
-            this.set('notification.message.title', text)
-            break;
+          this.set('cardTitle', 'Você pressionou ');
+          this.set('additionalText', ' para que ele se comprometa contra a corrupção!')
+          break;
         default:
           return "";
       }
