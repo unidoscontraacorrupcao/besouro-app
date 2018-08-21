@@ -144,7 +144,7 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         width: 90%;
         margin: 0px auto 0px auto;
         color: var(--light-text-color);
-        font-size: 1.2rem;
+        font-size: 1rem;
       }
       .card-footer .stats .stats-number {
         color: var(--accent-color);
@@ -232,67 +232,67 @@ class MissionCard extends CommonBehaviorsMixin(PolymerElement) {
         text-transform: uppercase;
       }
 
-    .card-blocked {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 35%;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      width: 90%;
-      text-align: center;
-      line-height: 1.2;
-      height: 300px;
-    }
-
-    .card-blocked > * {
-      margin-bottom: 20px;
-      font-family: Folio;
-    }
-
-    #blockedText {
-      font-size: 32px;
-      text-transform: uppercase;
-      color: var(--light-text-color);
-      letter-spacing: 5px;
-    }
-
-    #blockedDetail {
-      color: var(--accent-color);
-      font-size: 24px;
-    }
-
-    .card-blocked paper-icon-button {
-      width: 105px;
-      height: 105px;
-    }
-
-    @media only screen and (max-width: 460px) {
-      .card-footer .stats {
-      font-size: 1.0rem;
-      }
-    }
-
-    @media only screen and (max-width: 390px) {
-      .card-footer .stats {
-      width: 95%;
-      font-size: 0.9rem;
+      .card-blocked {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 35%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 90%;
+        text-align: center;
+        line-height: 1.2;
+        height: 300px;
       }
 
-      .card-action-bg {
-        width: 230px !important;
-        font-size: 1.2rem !important;
+      .card-blocked > * {
+        margin-bottom: 20px;
+        font-family: Folio;
       }
-    }
 
-    @media only screen and (max-width: 330px) {
-      .stats { font-size: 1rem;}
-      .card-footer .stats { width: 98%; }
-      .card-action span { font-size: 1.5em };
+      #blockedText {
+        font-size: 32px;
+        text-transform: uppercase;
+        color: var(--light-text-color);
+        letter-spacing: 5px;
+      }
 
-    }
+      #blockedDetail {
+        color: var(--accent-color);
+        font-size: 24px;
+      }
+
+      .card-blocked paper-icon-button {
+        width: 105px;
+        height: 105px;
+      }
+
+      @media only screen and (max-width: 460px) {
+        .card-footer .stats {
+        font-size: 0.9rem;
+        }
+      }
+
+      @media only screen and (max-width: 390px) {
+        .card-footer .stats {
+        width: 95%;
+        font-size: 0.8rem;
+        }
+
+        .card-action-bg {
+          width: 230px !important;
+          font-size: 1.2rem !important;
+        }
+      }
+
+      @media only screen and (max-width: 330px) {
+        .stats { font-size: 0.75rem;}
+        .card-footer .stats { width: 98%; }
+        .card-action span { font-size: 1.5em };
+
+      }
     </style>
 
     <app-dialog id="acceptedDialog">
