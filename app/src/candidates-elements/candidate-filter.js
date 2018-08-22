@@ -120,7 +120,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           <div class="row">
             <paper-input id="partyName" value="{{filterByParty}}" always-float-label label="partido"></paper-input>
             <paper-dropdown-menu id="ufOpts" label="UF">
-              <paper-listbox slot="dropdown-content" selected="0">
+              <paper-listbox slot="dropdown-content">
                 <paper-item>todas</paper-item>
                 <paper-item>AC</paper-item>
                 <paper-item>AL</paper-item>
