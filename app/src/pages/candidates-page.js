@@ -124,6 +124,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           tab="{{inboxtab}}"
           on-reload-candidates="_reloadCandidates"
           on-filtered-candidates="_showFilteredCandidates"
+          user="{{user}}" 
           id="filter">
         </candidate-filter>
       </app-header>

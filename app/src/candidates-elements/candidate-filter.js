@@ -19,45 +19,45 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         display: block;
       }
 
-    paper-listbox {
-      --paper-listbox_-_max-height: 230px;
-    }
+      paper-listbox {
+        --paper-listbox_-_max-height: 230px;
+      }
 
       .item {
           position: relative;
           z-index: 1001;
       }
 
-    #filter {
-      background-color: white;
-      height: 40px;
-      width: 360px;
-      left: 0;
-      right: 0;
-      margin: auto;
-      z-index: 10;
-      position: absolute;
-      overflow: hidden;
-      transition: height 0.2s;
-      box-shadow: 0 2px 5px 0 rgba(0,0,0,0.2);
-    }
+      #filter {
+        background-color: white;
+        height: 40px;
+        width: 360px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        z-index: 10;
+        position: absolute;
+        overflow: hidden;
+        transition: height 0.2s;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.2);
+      }
 
-    #filter-header {
-      width: 90%;
-      margin: auto;
-      color: var(--secondary-text-color);
-      height: 35px;
-    }
+      #filter-header {
+        width: 90%;
+        margin: auto;
+        color: var(--secondary-text-color);
+        height: 35px;
+      }
 
-    #filter-header span {
-      float: left;
-      padding-top: 7px;
-      font-family: folio;
-      text-transform: uppercase;
-    }
+      #filter-header span {
+        float: left;
+        padding-top: 7px;
+        font-family: folio;
+        text-transform: uppercase;
+      }
 
-    #filter-reload { margin-top: 4px; }
-    #filter-header paper-icon-button {float: right;}
+      #filter-reload { margin-top: 4px; }
+      #filter-header paper-icon-button {float: right;}
 
       .row {
         width: 90%;
@@ -90,11 +90,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         flex: 1;
       }
 
-    @media only screen and (max-width: 360px) {
-      #filter {
-        width: 300px;
+      @media only screen and (max-width: 360px) {
+        #filter {
+          width: 300px;
+        }
       }
-    }
     </style>
 
       <div id="filter">
@@ -121,34 +121,34 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
             <paper-input id="partyName" value="{{filterByParty}}" always-float-label label="partido"></paper-input>
             <paper-dropdown-menu id="ufOpts" label="UF">
               <paper-listbox slot="dropdown-content" selected="0">
-                  <paper-item>todas</paper-item>
-                  <paper-item>AC</paper-item>
-                  <paper-item>AL</paper-item>
-                  <paper-item>AP</paper-item>
-                  <paper-item>AM</paper-item>
-                  <paper-item>BA</paper-item>
-                  <paper-item>CE</paper-item>
-                  <paper-item>ES</paper-item>
-                  <paper-item>GO</paper-item>
-                  <paper-item>MA</paper-item>
-                  <paper-item>MT</paper-item>
-                  <paper-item>MS</paper-item>
-                  <paper-item>MG</paper-item>
-                  <paper-item>PA</paper-item>
-                  <paper-item>PB</paper-item>
-                  <paper-item>PR</paper-item>
-                  <paper-item>PE</paper-item>
-                  <paper-item>PI</paper-item>
-                  <paper-item>RJ</paper-item>
-                  <paper-item>RN</paper-item>
-                  <paper-item>RS</paper-item>
-                  <paper-item>RO</paper-item>
-                  <paper-item>RR</paper-item>
-                  <paper-item>SC</paper-item>
-                  <paper-item>SP</paper-item>
-                  <paper-item>SE</paper-item>
-                  <paper-item>TO</paper-item>
-                  <paper-item>DF</paper-item>
+                <paper-item>todas</paper-item>
+                <paper-item>AC</paper-item>
+                <paper-item>AL</paper-item>
+                <paper-item>AP</paper-item>
+                <paper-item>AM</paper-item>
+                <paper-item>BA</paper-item>
+                <paper-item>CE</paper-item>
+                <paper-item>ES</paper-item>
+                <paper-item>GO</paper-item>
+                <paper-item>MA</paper-item>
+                <paper-item>MT</paper-item>
+                <paper-item>MS</paper-item>
+                <paper-item>MG</paper-item>
+                <paper-item>PA</paper-item>
+                <paper-item>PB</paper-item>
+                <paper-item>PR</paper-item>
+                <paper-item>PE</paper-item>
+                <paper-item>PI</paper-item>
+                <paper-item>RJ</paper-item>
+                <paper-item>RN</paper-item>
+                <paper-item>RS</paper-item>
+                <paper-item>RO</paper-item>
+                <paper-item>RR</paper-item>
+                <paper-item>SC</paper-item>
+                <paper-item>SP</paper-item>
+                <paper-item>SE</paper-item>
+                <paper-item>TO</paper-item>
+                <paper-item>DF</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
@@ -185,9 +185,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       tab: {
         type: Number,
         value: 1
-      }
+      },
+      user: Object
     }
   }
+
 
   _toggle(e) {
     var item = this.$.filter;
@@ -195,6 +197,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     if (itemHeight == 40) {
       item.setAttribute("style", "height: 250px");
       this.$.filterToggle.set("icon",  "app:icon-up");
+      if(this.user.state) this.$.ufOpts.value = this.user.state;
     }
     else {
       item.setAttribute("style", "height: 40px");
