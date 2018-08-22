@@ -247,9 +247,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
         </div>
 
-        <div id="see-more">
+        <!-- <div id="see-more">
             <span>conheça mais</span>
-        </div>
+        </div> -->
 
       </div>
 `;

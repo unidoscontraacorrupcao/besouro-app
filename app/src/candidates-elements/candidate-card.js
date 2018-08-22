@@ -162,22 +162,22 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       </div>
 
       <div class="card-footer">
-      <paper-button on-click="_selectCandidate">
-        <div>
-          <div id="btn-icon">
-            <iron-icon icon="app:select-candidate"></iron-icon>
+        <paper-button on-click="_selectCandidate">
+          <div>
+            <div id="btn-icon">
+              <iron-icon icon="app:select-candidate"></iron-icon>
+            </div>
+            selecionar
           </div>
-          selecionar
-        </div>
-      </paper-button>
-      <paper-button on-click="_pressCandidate">
-        <div>
-          <div id="btn-icon">
-            <iron-icon icon="app:press-candidate"></iron-icon>
+        </paper-button>
+        <paper-button on-click="_pressCandidate">
+          <div>
+            <div id="btn-icon">
+              <iron-icon icon="app:press-candidate"></iron-icon>
+            </div>
+            pressionar
           </div>
-          pressionar
-        </div>
-      </paper-button>
+        </paper-button>
       </div>
     </div>
 `;

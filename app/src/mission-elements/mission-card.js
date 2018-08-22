@@ -370,7 +370,7 @@ class MissionCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       </div>
 
       <div class="card-action">
-        <a href="#" id="btnLink"><span id="btnText">{{btnAction}}</span></a>
+        <a id="btnLink"><span id="btnText">{{btnAction}}</span></a>
       </div>
 
       <div class="card-footer">
