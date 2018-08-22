@@ -190,6 +190,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     }
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if(this.user.state) this.$.ufOpts.value = this.user.state;
+    else this.$.ufOpts.value = 'todas';
+  }
 
   _toggle(e) {
     var item = this.$.filter;
@@ -197,7 +202,6 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     if (itemHeight == 40) {
       item.setAttribute("style", "height: 250px");
       this.$.filterToggle.set("icon",  "app:icon-up");
-      if(this.user.state) this.$.ufOpts.value = this.user.state;
     }
     else {
       item.setAttribute("style", "height: 40px");
