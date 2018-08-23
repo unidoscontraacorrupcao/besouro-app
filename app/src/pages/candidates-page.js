@@ -322,10 +322,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.method = "GET";
     this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
-      if (ajax.response.length <= 10)
+      if (ajax.response.length < 10) {
         this.$.loadMoreCandidates.style.display = "none";
-      else
+      } else {
         this.$.loadMoreCandidates.style.display = "block";
+      }
       this.set("selectedCandidates", ajax.response);
       this.hideLoading();
     });
@@ -339,10 +340,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.method = "GET";
     this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
-      if (ajax.response.length == 0)
+      if (ajax.response.length == this.selectedCount) {
         this.$.loadMoreCandidates.style.display = "none";
-      else
+      } else {
         this.$.loadMoreCandidates.style.display = "block";
+      }
       this.set("selectedCandidates", ajax.response);
       this.hideLoading();
     });
