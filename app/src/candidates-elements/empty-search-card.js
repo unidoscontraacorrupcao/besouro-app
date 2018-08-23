@@ -37,6 +37,13 @@ class EmptySearchCard extends PolymerElement {
         font-size: 32px;
         line-height: 1.3;
       }
+
+      @media screen and (min-width: 1100px) {
+        .empty-card {
+          max-width: unset;
+          width: 90%;
+        }
+      }
       
       </style>
 

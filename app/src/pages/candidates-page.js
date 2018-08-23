@@ -144,8 +144,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <welcome-card>
             <div>
               <p>
-                Descubra quais candidatas/os atendem a três critérios: 1. Passado Limpo; 2.
-                Compromisso com Democracia; e 3. Adesão às Novas Medidas contra a Corrupção.
+                Descubra quais candidatas/os atendem a três critérios: 1. Passado Limpo; 2. Compromisso com Democracia; 
+                e 3. Adesão às Novas Medidas contra a Corrupção.
               </p>
               <ul>
                 <li>VERDE é SIM nos três critérios</li>
@@ -153,8 +153,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
                 <li>CINZA: ainda não respondeu</li>
               </ul>
               <p>
-                Candidatos à reeleição terão os dados referentes a Passado Limpo verificados 
-                e, se forem réus, não serão considerados como tendo passado limpo.
+                Você pode selecionar aqueles que te interessarem Também pode pressionar para que 
+                candidatas/os se comprometam! Veja mais detalhes em AJUDA, no menu.
               </p>
             </div>
           </welcome-card>
