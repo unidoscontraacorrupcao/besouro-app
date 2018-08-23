@@ -87,6 +87,16 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       -webkit-animation: ignored-candidate 0.8s;
     }
 
+    @media screen and (min-width: 1100px) {
+      :host {
+        flex: 0 0 49%;
+        margin-bottom: 10px;
+      }
+      .card-footer {
+        height: 108px;
+      }
+    }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>

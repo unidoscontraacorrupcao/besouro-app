@@ -95,6 +95,40 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           width: 300px;
         }
       }
+
+      @media screen and (min-width: 1100px) {
+        #filter {
+          width: calc(90% - 15px);
+          right: 15px;
+        }
+        #filter-fields {
+          display: flex;
+          width: 95%;
+          margin: 0 auto;
+          justify-content: space-around;
+          padding: 0 20px;
+        }
+        .row {
+          width: unset;
+          height: unset;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          flex: 0 0 30%;
+        }
+        paper-button {
+          margin: 0;
+          flex: unset;
+          height: unset;
+        }
+        #adheredOpts {
+          margin: 0;
+        }
+        .row paper-input:first-child {
+          margin: 0;
+        }
+      }
     </style>
 
       <div id="filter">
@@ -197,10 +231,15 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _toggle(e) {
+    console.log(window.innerWidth);
     var item = this.$.filter;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
-      item.setAttribute("style", "height: 250px");
+      if(window.innerWidth > 1100) {
+        item.setAttribute("style", "height: 200px");
+      } else {
+        item.setAttribute("style", "height: 250px");
+      }
       this.$.filterToggle.set("icon",  "app:icon-up");
     }
     else {

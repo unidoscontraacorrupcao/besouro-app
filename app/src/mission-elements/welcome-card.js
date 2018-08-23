@@ -53,6 +53,13 @@ class WelcomeCard extends PolymerElement {
         margin: auto;
         padding: 20px 0 20px 0;
       }
+
+      @media screen and (min-width: 1100px) {
+        .welcome-card {
+          max-width: unset;
+          width: 90%;
+        }
+      }
     </style>
 
     <div class="welcome-card">

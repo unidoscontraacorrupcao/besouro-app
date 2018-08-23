@@ -85,6 +85,16 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         color: var(--paragraph-color);
       }
 
+      @media screen and (min-width: 1100px) {
+        .candidates {
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          width: 90%;
+          margin: 0 auto;
+        }
+      }
+
 
     </style>
 
@@ -150,15 +160,18 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <template is="dom-if" if="{{!allCandidates.length}}">
             <empty-search-card></empty-search-card>
           </template>
-          <template is="dom-repeat" items="{{allCandidates}}">
-            <candidate-card
-              candidate="[[item]]"
-              on-selected-candidate="_selectedCandidatesChanged"
-              on-pressed-candidate="_pressedCandidatesChanged"
-              on-ignored-candidate="_ignoredCandidatesChanged">
-            </candidate-card>
-          </template>
+          <div class="candidates">
+            <template is="dom-repeat" items="{{allCandidates}}">
+              <candidate-card
+                candidate="[[item]]"
+                on-selected-candidate="_selectedCandidatesChanged"
+                on-pressed-candidate="_pressedCandidatesChanged"
+                on-ignored-candidate="_ignoredCandidatesChanged">
+              </candidate-card>
+            </template>
+          </div>
         </div>
+
         <div class="inbox">
           <template is="dom-repeat" items="{{selectedCandidates}}">
             <selected-candidate-card
