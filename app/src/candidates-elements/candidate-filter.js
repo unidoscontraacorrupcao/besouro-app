@@ -220,14 +220,16 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         type: Number,
         value: 1
       },
-      user: Object
+      user: {
+        type: Object,
+        observer: 'setStateOnFilter'
+      }
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    if(!this.user) return;
-    if(this.user.state) this.$.ufOpts.value = this.user.state;
+  setStateOnFilter(user) {
+    if(!user) return;
+    if(user.state) this.$.ufOpts.value = user.state;
     else this.$.ufOpts.value = 'todas';
   }
 
