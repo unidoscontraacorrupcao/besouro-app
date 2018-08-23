@@ -226,12 +226,12 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   connectedCallback() {
     super.connectedCallback();
+    if(!this.user) return;
     if(this.user.state) this.$.ufOpts.value = this.user.state;
     else this.$.ufOpts.value = 'todas';
   }
 
   _toggle(e) {
-    console.log(window.innerWidth);
     var item = this.$.filter;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {

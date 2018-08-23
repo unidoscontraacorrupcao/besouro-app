@@ -79,6 +79,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         font-size: 18px;
         text-transform: uppercase;
         color: var(--secondary-text-color);
+        cursor: pointer;
       }
 
       welcome-card p {
@@ -302,20 +303,30 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       this._getSelectedCandidates();
   }
 
+  _getTotalSelected() {
+    if(!this.user || Object.keys(this.user).length == 0) return;
+    this.$.api.path = `users/${this.getUser().uid}/selected-candidates`;
+    this.$.api.method = "GET";
+    this.$.api.params = {};
+    this.$.api.request().then((ajax) => {
+      const count = `0${ajax.response.length}`.slice(-2);
+      this.set("selectedCount", count);
+    });
+  }
+
   _getSelectedCandidates() {
     if(!this.user || Object.keys(this.user).length == 0) return;
+    this._getTotalSelected();
     this.showLoading();
     this.$.api.path = `users/${this.getUser().uid}/selected-candidates`;
     this.$.api.method = "GET";
     this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
-      if (ajax.response.length == 0)
+      if (ajax.response.length <= 10)
         this.$.loadMoreCandidates.style.display = "none";
       else
         this.$.loadMoreCandidates.style.display = "block";
       this.set("selectedCandidates", ajax.response);
-      const count = `0${this.selectedCandidates.length}`.slice(-2);
-      this.set("selectedCount", count);
       this.hideLoading();
     });
   }
@@ -328,9 +339,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.method = "GET";
     this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
+      if (ajax.response.length == 0)
+        this.$.loadMoreCandidates.style.display = "none";
+      else
+        this.$.loadMoreCandidates.style.display = "block";
       this.set("selectedCandidates", ajax.response);
-      const count = `0${this.selectedCandidates.length}`.slice(-2);
-      this.set("selectedCount", count);
       this.hideLoading();
     });
   }

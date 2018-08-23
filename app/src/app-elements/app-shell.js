@@ -287,7 +287,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
             on-user-update="_onUserUpdate"
             on-access-denial="_onProfileAccessDenial"
             on-to-inbox-pressed="_goToInbox"
-            on-back-pressed="_goToInbox"></profile-page>
+            on-back-pressed="_goToHome"></profile-page>
       </iron-pages>
       <template is="dom-if" if="{{canShowBottomBar}}">
         <app-actions
@@ -396,6 +396,10 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
   _goToInbox() {
     this.set(`route.path`, `/inbox`);
+  }
+
+  _goToHome() {
+    this.set(`route.path`, `/`);
   }
 
   _redirectToPrivacy() {
