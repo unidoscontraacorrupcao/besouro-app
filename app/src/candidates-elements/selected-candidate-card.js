@@ -335,6 +335,8 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   }
 
   _showSupportBtn() {
+    var cardFooter = this.shadowRoot.querySelector(".card-footer");
+    cardFooter.style.display = "flex";
     var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
     supportBtn.style.margin = "auto";
     supportBtn.style.width = "300px";
