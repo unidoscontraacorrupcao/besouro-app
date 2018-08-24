@@ -145,7 +145,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
         <div id="political-infos">
           <div class="info">
-            <div>
+            <div id="short">
               <span>Tem passado limpo?</span>
             </div>
             <div>

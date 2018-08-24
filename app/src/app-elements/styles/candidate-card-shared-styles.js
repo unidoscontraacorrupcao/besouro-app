@@ -40,12 +40,12 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       background-color: var(--dark-primary-color);
     }
 
-    #candidate-infos .flex {
-      flex: 3;
+    #candidate-infos div:first-of-type {
+      flex: 0 0 45%;
     }
 
     #candidate-infos div {
-      flex: 2;
+      flex: 1;
     }
 
     #candidate-infos #candidacy,
@@ -72,82 +72,87 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       line-height: 0.95;
     }
 
-      .card-footer {
-        height: 128px;
-        position: relative;
-        display: flex;
-      }
+    .card-footer {
+      height: 128px;
+      position: relative;
+      display: flex;
+    }
 
-      .card-footer paper-button {
-        height: 70px;
-        width: 128px;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        margin: 20px auto;
-        border-style: solid;
-        border-radius: 0;
-        border-width: 1px;
-        border-color: var(--secondary-text-color);
-        font-family: folio;
-        text-align: center;
-      }
+    .card-footer paper-button {
+      height: 70px;
+      width: 128px;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: 20px auto;
+      border-style: solid;
+      border-radius: 0;
+      border-width: 1px;
+      border-color: var(--secondary-text-color);
+      font-family: folio;
+      text-align: center;
+    }
 
-      .card-footer paper-button:first-child {
-        margin-left: auto;
-        margin-right: 5px;
-        color: var(--secondary-text-color);
-      }
+    .card-footer paper-button:first-child {
+      margin-left: auto;
+      margin-right: 5px;
+      color: var(--secondary-text-color);
+    }
 
-      .card-footer paper-button:last-child {
-        margin-left: 5px;
-        margin-right: auto;
-        background-color: var(--secondary-text-color);
-        color: white;
-      }
+    .card-footer paper-button:last-child {
+      margin-left: 5px;
+      margin-right: auto;
+      background-color: var(--secondary-text-color);
+      color: white;
+    }
 
-      .card-footer paper-button div {
-        display: flex;
-        flex-direction: column;
-      }
+    .card-footer paper-button div {
+      display: flex;
+      flex-direction: column;
+    }
 
-      #btn-icon {
-        width: 25%;
-        margin: auto auto 10px auto;
-      }
+    #btn-icon {
+      width: 25%;
+      margin: auto auto 10px auto;
+    }
 
-      #card-image { position: relative; }
+    #card-image { position: relative; }
 
-      #political-infos {
-        position: absolute;
-        bottom: 8px;
-        height: 57px;
-        left: 20px;
-        right: 20px;
-        display: flex;
-        color: white;
-      }
+    #political-infos {
+      position: absolute;
+      bottom: 8px;
+      height: 57px;
+      left: 10px;
+      display: flex;
+      color: white;
+      width: 100%;
+    }
 
-      #political-infos .info {
-        margin-left: 7px;
-        display: flex;
-        flex-direction: column;
-      }
+    #political-infos .info {
+      flex: 0 1 32%;
+      text-align: center;
+      flex-direction: column;
+    }
 
-      #political-infos .info div:first-child {
-        font-family: helvetica-neue;
-        text-align: center;
-        line-height: 0.9;
-      }
+    #political-infos .info #short {
+      width: 65%;
+    }
 
-      #political-infos .info div:last-child {
-        font-family: folio;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: 20px;
-      }
+    #political-infos .info div:first-child {
+      font-family: helvetica-neue;
+      text-align: center;
+      line-height: 0.9;
+      width: 85%;
+      margin: 0 auto;
+    }
 
+    #political-infos .info div:last-child {
+      font-family: folio;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 20px;
+    }
 
     #close {
       position: absolute;
@@ -185,7 +190,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       border-style: solid;
       border-width: 1px;
       width: 90%;
-      margin: auto auto 46px auto;
+      margin: auto auto;
     }
 
     .item {
@@ -226,7 +231,6 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       font-size: 14px;
     }
 
-
     @media only screen and (max-width: 470px) {
       #political-infos {
         left: 0;
@@ -240,6 +244,15 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
         font-size: 12px;
       }
 
+    }
+    
+    @media only screen and (max-width: 400px) {
+      #political-infos .info div:first-child {
+        width: 100%;
+      }
+      #political-infos .info #short {
+        width: 75%;
+      }
     }
 
     @media only screen and (max-width: 320px) {

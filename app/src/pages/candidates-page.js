@@ -174,12 +174,14 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         </div>
 
         <div class="inbox">
-          <template is="dom-repeat" items="{{selectedCandidates}}">
-            <selected-candidate-card
-              candidate="[[item]]"
-              on-unselect-candidate="_unselectCandidatesChanged">
-            </selected-candidate-card>
-          </template>
+          <div class="candidates">
+            <template is="dom-repeat" items="{{selectedCandidates}}">
+              <selected-candidate-card
+                candidate="[[item]]"
+                on-unselect-candidate="_unselectCandidatesChanged">
+              </selected-candidate-card>
+            </template>
+          </div>
           <div id="loadMoreCandidates">
             <span on-click="_getMoreSelectedCandidates">carregar mais candidatos</span>
           </div>
