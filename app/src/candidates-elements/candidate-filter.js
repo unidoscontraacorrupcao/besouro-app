@@ -146,8 +146,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
             <paper-dropdown-menu id="candidacyOpts" label="tipo de candidatura">
               <paper-listbox slot="dropdown-content" selected="0">
                 <paper-item>todas</paper-item>
-                <paper-item>senador(a)</paper-item>
-                <paper-item>deputado(a)</paper-item>
+                <paper-item>senador</paper-item>
+                <paper-item>deputado federal</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
