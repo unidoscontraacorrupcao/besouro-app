@@ -205,12 +205,17 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     .item-header { height: 45px; }
 
     .item-body {
-      font-family: helvetica-neue;
-      font-size: 18px;
-      color: rgba(51,51,51,1);
       width: 90%;
       margin: auto;
       text-align: left;
+      margin-top: 5px;
+    }
+
+    .item-body span {
+      font-family: helvetica-neue;
+      font-size: 18px;
+      color: rgba(51,51,51,1);
+      line-height: 1;
     }
 
     .item paper-icon-button {

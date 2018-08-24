@@ -224,7 +224,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
           <div class="item-body">
-            {{candidate.full_name}}
+             <span>{{candidate.full_name}}</span>
           </div>
 
           </div>
@@ -236,7 +236,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
-              {{candidate.occupation}}
+              <span>
+                {{candidate.occupation}}
+              </span>
             </div>
           </div>
           <div class="item">
@@ -247,7 +249,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
-              {{candidate.justify_adhered_to_the_measures}}
+              <span>
+                {{candidate.justify_adhered_to_the_measures}}
+              </span>
             </div>
           </div>
           <div class="item">
@@ -258,7 +262,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
-              {{candidate.riches}}
+              <span>
+                {{candidate.riches}}
+              </span>
             </div>
           </div>
           <div class="item">
@@ -269,7 +275,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
-              {{candidate.lawsuits}}
+              <span>
+                {{candidate.lawsuits}}
+              </span>
             </div>
           </div>
         </div>
@@ -361,7 +369,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     var item = e.target.parentNode.parentNode;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
-      item.setAttribute("style", "height: 80px");
+      item.setAttribute("style", "height: 110px");
       e.target.set("icon",  "app:expand-less");
     }
     else {
