@@ -45,73 +45,73 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         margin: auto;
       }
 
-    hr {
-      color: var(--divider-color);
-      margin-bottom: 16px;
-    }
+      hr {
+        color: var(--divider-color);
+        margin-bottom: 16px;
+      }
 
-    #social-medias {
-      width: 75%;
-      margin: auto;
-      margin-bottom: 12px;
-    }
+      #social-medias {
+        width: 75%;
+        margin: auto;
+        margin-bottom: 12px;
+      }
 
-    #social-medias span {
-      text-transform: uppercase;
-      font-family: Folio;
-      font-size: 14px;
-    }
+      #social-medias span {
+        text-transform: uppercase;
+        font-family: Folio;
+        font-size: 14px;
+      }
 
-    #medias {
-      display: flex;
-      margin-top: 16px;
-    }
+      #medias {
+        display: flex;
+        margin-top: 16px;
+      }
 
-    #medias > * { flex-grow: 1; }
-    #medias paper-icon-button {padding: 4px;}
+      #medias > * { flex-grow: 1; }
+      #medias paper-icon-button {padding: 4px;}
 
 
-    .card-footer paper-button:last-child {
-      background-color: rgba(0,159,227,1);
-      border-color: rgba(0,159,227,1);
-    }
+      .card-footer paper-button:last-child {
+        background-color: rgba(0,159,227,1);
+        border-color: rgba(0,159,227,1);
+      }
 
-    #btn-icon { margin: auto 20px 7px auto; }
+      #btn-icon { margin: auto 20px 7px auto; }
 
-    #see-more {
-      width: 90%;
-      margin: auto;
-      text-align: center;
-      padding-bottom: 46px;
-      text-decoration: underline;
-      color: var(--accent-color);
-    }
+      #see-more {
+        width: 90%;
+        margin: auto;
+        text-align: center;
+        padding-bottom: 46px;
+        text-decoration: underline;
+        color: var(--accent-color);
+      }
 
-    #see-more span {
-      text-transform: uppercase;
-      color: var(--accent-color);
-      font-family: folio;
-      font-size: 16px;
-    }
+      #see-more span {
+        text-transform: uppercase;
+        color: var(--accent-color);
+        font-family: folio;
+        font-size: 16px;
+      }
 
-    @keyframes ignored-candidate {
-      0% {opacity: unset;}
-      10% {opacity: 1;}
-      20% {opacity: 0.8;}
-      30% {opacity: 0.7;}
-      40% {opacity: 0.6;}
-      50% {opacity: 0.5;}
-      60% {opacity: 0.4;}
-      70% {opacity: 0.3;}
-      80% {opacity: 0.2;}
-      90% {opacity: 0.1;}
-      100% {opacity: 0;}
-    }
+      @keyframes ignored-candidate {
+        0% {opacity: unset;}
+        10% {opacity: 1;}
+        20% {opacity: 0.8;}
+        30% {opacity: 0.7;}
+        40% {opacity: 0.6;}
+        50% {opacity: 0.5;}
+        60% {opacity: 0.4;}
+        70% {opacity: 0.3;}
+        80% {opacity: 0.2;}
+        90% {opacity: 0.1;}
+        100% {opacity: 0;}
+      }
 
-    .ignored-candidate-animation {
-      animation: ignored-candidate 0.8s;
-      -webkit-animation: ignored-candidate 0.8s;
-    }
+      .ignored-candidate-animation {
+        animation: ignored-candidate 0.8s;
+        -webkit-animation: ignored-candidate 0.8s;
+      }
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -188,17 +188,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       </div>
 
       <div class="card-footer">
-      <!--
-      <paper-button on-click="_supportCandidate">
-        <div>
-        <div id="btn-icon">
-        <iron-icon icon="app:fav-candidate"></iron-icon>
-        </div>
-      favoritar
-        </div>
-      </paper-button>
-      -->
-
       <paper-button on-click="_supportCandidate">
         <div>
           <div id="btn-icon">
@@ -222,28 +211,60 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
         <div id="tse-data">
           <div class="item">
-            <div class="item-title">
-              <span>dados do tse</span>
+            <div class="item-header">
+              <div class="item-title">
+                <span>Nome Completo</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
-            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+          <div class="item-body">
+            {{candidate.full_name}}
+          </div>
+
           </div>
           <div class="item">
-            <div class="item-title">
-              <span>dados da camera dos deputados e do senado federal</span>
+            <div class="item-header">
+              <div class="item-title">
+                <span>Ocupação Profissional</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
-            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+            <div class="item-body">
+              {{candidate.occupation}}
+            </div>
           </div>
           <div class="item">
-            <div class="item-title">
-              <span>dados da camera dos deputados</span>
+            <div class="item-header">
+              <div class="item-title">
+                <span>Aderiu totalmente às novas medidas</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
-            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+            <div class="item-body">
+              {{candidate.justify_adhered_to_the_measures}}
+            </div>
           </div>
           <div class="item">
-            <div class="item-title">
-              <span>dados dos tribunais de conta [tcu tces]</span>
+            <div class="item-header">
+              <div class="item-title">
+                <span>Total de bens e patrimônio</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
-            <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+            <div class="item-body">
+              {{candidate.riches}}
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-header">
+              <div class="item-title">
+                <span>Total de processos a que responde</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+            </div>
+            <div class="item-body">
+              {{candidate.lawsuits}}
+            </div>
           </div>
         </div>
 
@@ -329,7 +350,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   }
 
   _toggle(e) {
-    var item = e.target.parentNode;
+    var item = e.target.parentNode.parentNode;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
       item.setAttribute("style", "height: 80px");

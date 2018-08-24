@@ -191,10 +191,21 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     .item {
       height: 40px;
       overflow: hidden;
-      transition: height 1s;
+      transition: height 0.5s;
       border-bottom-style: solid;
       border-bottom-color: rgba(49,39,131,1);
       border-bottom-width: 1px;
+    }
+
+    .item-header { height: 45px; }
+
+    .item-body {
+      font-family: helvetica-neue;
+      font-size: 18px;
+      color: rgba(51,51,51,1);
+      width: 90%;
+      margin: auto;
+      text-align: left;
     }
 
     .item paper-icon-button {
@@ -228,6 +239,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       .item-title span {
         font-size: 12px;
       }
+
     }
 
     @media only screen and (max-width: 320px) {
