@@ -160,7 +160,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
       <div id="card-image">
         <iron-image
-          sizing="cover"
+          sizing="contain"
           preload="" fade=""
           src="{{candidate.image}}">
         </iron-image>

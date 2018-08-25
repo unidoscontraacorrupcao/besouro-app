@@ -37,7 +37,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     .card iron-image {
       width: 100%;
       height: 220px;
-      background-color: var(--dark-primary-color);
+      background-color: white;
     }
 
     #candidate-infos div:first-of-type {
