@@ -252,8 +252,14 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   _fiterAllCandidates() {
     var user = this.getUser();
-    this.$.api.path = `users/${user.uid}/candidates`;
+
     this.$.api.params = this._getFilters();
+    if (!this.user || Object.keys(this.user).length == 0) {
+      this.$.api.path = `candidates`;
+    }
+    else {
+      this.$.api.path = `users/${user.uid}/candidates`;
+    }
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 0}}));
@@ -273,14 +279,14 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _getFilters() {
-    let filters = {}
+    let filters = {};
     filters["filter_by_name"] = this.filterByName;
     filters["filter_by_party"] = this.filterByParty;
     if (this.$.candidacyOpts.value == "todas")
       filters["filter_by_candidacy"] = '';
     else
       filters["filter_by_candidacy"] = this.$.candidacyOpts.value;
-    if (this.$.ufOpts.value == "todas")
+    if (this.$.ufOpts.value == "todas" || this.$.ufOpts.value == undefined)
       filters["filter_by_uf"] = '';
     else
       filters["filter_by_uf"] = this.$.ufOpts.value;

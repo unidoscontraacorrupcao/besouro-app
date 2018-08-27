@@ -251,7 +251,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.set("user", this.getUser());
     if (path == "/candidates") {
       if (!this.user || Object.keys(this.user).length == 0) {
-        this.$.filter.style.display = 'none';
         this._getAllCandidates();
       } else {
         this._getAllCandidates();
@@ -291,10 +290,18 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _showFilteredCandidates(e) {
     var candidates = e.detail.candidates;
     var tab = e.detail.tab;
-    if (tab == 0)
-      this.set("allCandidates", candidates);
-    if (tab == 1)
-      this.set("selectedCandidates", candidates);
+    if (tab == 0) {
+      if (candidates.results)
+        this.set("allCandidates", candidates.results);
+      else
+        this.set("allCandidates", candidates);
+    }
+    if (tab == 1) {
+      if (candidates.results)
+        this.set("selectedCandidates", candidates.results);
+      else
+        this.set("selectedCandidates", candidates);
+    }
   }
 
   _reloadCandidates(e) {
