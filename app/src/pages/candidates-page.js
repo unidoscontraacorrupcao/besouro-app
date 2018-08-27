@@ -68,13 +68,14 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         margin-top: 0;
       }
 
-      #loadMoreCandidates {
+      #loadMoreSelectedCandidates, #loadMoreCandidates {
         width: 90%;
         margin: 52px auto 50px auto;
         text-align: center;
       }
 
-      #loadMoreCandidates  span {
+      #loadMoreSelectedCandidates span,
+      #loadMoreCandidates span{
         font-family: Folio;
         font-size: 18px;
         text-transform: uppercase;
@@ -135,7 +136,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           tab="{{inboxtab}}"
           on-reload-candidates="_reloadCandidates"
           on-filtered-candidates="_showFilteredCandidates"
-          user="{{user}}" 
+          user="{{user}}"
           id="filter">
         </candidate-filter>
       </app-header>
@@ -144,7 +145,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <welcome-card>
             <div>
               <p>
-                Descubra quais candidatas/os atendem a três critérios: 1. Passado Limpo; 2. Compromisso com Democracia; 
+                Descubra quais candidatas/os atendem a três critérios: 1. Passado Limpo; 2. Compromisso com Democracia;
                 e 3. Adesão às Novas Medidas contra a Corrupção.
               </p>
               <ul>
@@ -153,7 +154,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
                 <li>CINZA: ainda não respondeu</li>
               </ul>
               <p>
-                Você pode selecionar aqueles que te interessarem Também pode pressionar para que 
+                Você pode selecionar aqueles que te interessarem Também pode pressionar para que
                 candidatas/os se comprometam! Veja mais detalhes em AJUDA, no menu.
               </p>
             </div>
@@ -172,8 +173,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
               </candidate-card>
             </template>
           </div>
+          <div id="loadMoreCandidates">
+            <span on-click="_getMoreCandidates">carregar mais candidatos</span>
+          </div>
         </div>
-
         <div class="inbox">
           <div class="candidates">
             <template is="dom-repeat" items="{{selectedCandidates}}">
@@ -183,7 +186,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
               </selected-candidate-card>
             </template>
           </div>
-          <div id="loadMoreCandidates">
+          <div id="loadMoreSelectedCandidates">
             <span on-click="_getMoreSelectedCandidates">carregar mais candidatos</span>
           </div>
         </div>
@@ -347,11 +350,34 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
       if (ajax.response.length < 10) {
+        this.$.loadMoreSelectedCandidates.style.display = "none";
+      } else {
+        this.$.loadMoreSelectedCandidates.style.display = "block";
+      }
+      this.set("selectedCandidates", ajax.response);
+      this.hideLoading();
+    });
+  }
+
+  _getMoreCandidates() {
+    if(!this.user || Object.keys(this.user).length == 0){
+      this.$.api.path = 'candidates';
+    }
+    else {
+      this.$.api.path = `users/${this.getUser().uid}/candidates`;
+    }
+
+    this.showLoading();
+    this.$.api.method = "GET";
+    this.limit += 10;
+    this.$.api.params = {"limit": this.limit};
+    this.$.api.request().then((ajax) => {
+      if (ajax.response.length == this.selectedCount) {
         this.$.loadMoreCandidates.style.display = "none";
       } else {
         this.$.loadMoreCandidates.style.display = "block";
       }
-      this.set("selectedCandidates", ajax.response);
+      this.set("allCandidates", ajax.response);
       this.hideLoading();
     });
   }
@@ -365,9 +391,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
       if (ajax.response.length == this.selectedCount) {
-        this.$.loadMoreCandidates.style.display = "none";
+        this.$.loadMoreSelectedCandidates.style.display = "none";
       } else {
-        this.$.loadMoreCandidates.style.display = "block";
+        this.$.loadMoreSelectedCandidates.style.display = "block";
       }
       this.set("selectedCandidates", ajax.response);
       this.hideLoading();
