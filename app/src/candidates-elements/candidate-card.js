@@ -2,6 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
+import '@polymer/paper-tooltip/paper-tooltip.js';
 
 import '../app-elements/shared-styles.js';
 import '../app-elements/styles/candidate-card-shared-styles.js';
@@ -146,7 +147,13 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         <div id="political-infos">
           <div class="info">
             <div id="short">
-              <span>Tem passado limpo?</span>
+              <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="right">
+                Nosso critério de passado limpo é rígido. 
+                A referência são os crimes da Lei da Ficha Limpa, mas 
+                para nós eles nunca prescrevem. No caso de quem tentará 
+                reeleição, veremos quem responde a processo no STF.
+              </paper-tooltip>
             </div>
             <div>
               <span><br>{{candidate.has_clean_pass}}</br></span>
@@ -154,7 +161,14 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
           </div>
           <div class="info">
             <div>
-              <span>Comprometeu-se com democracia?</span>
+              <span>Comprometeu-se com democracia?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="top">
+                O critério de compromisso com os princípios 
+                democráticos baseia-se na adesão ao Pacto 
+                pela Democracia – iniciativa da sociedade pela 
+                preservação e revigoramento da vida política e 
+                democrática do país.
+              </paper-tooltip>
             </div>
             <div>
               <span><br>{{candidate.committed_to_democracy}}</br></span>
@@ -162,7 +176,13 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
           </div>
           <div class="info">
             <div>
-              <span>Aderiu às novas medidas?</span>
+              <span>Aderiu às novas medidas?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="left">
+                No caso do combate à corrupção, a/o candidata/o 
+                terá de se comprometer a, se eleita/o, pôr nossas 
+                propostas em tramitação e atuar por sua aprovação. 
+                Ressalvas terão de ser identificadas e justificadas.
+              </paper-tooltip>
             </div>
             <div>
               <span><br>{{candidate.adhered_to_the_measures}}</br></span>

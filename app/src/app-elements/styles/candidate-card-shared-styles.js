@@ -135,6 +135,25 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       flex-direction: column;
     }
 
+    #political-infos .info iron-icon {
+      width: 18px;
+      height: 15px;
+      color: var(--disabled-text-color);
+    }
+
+    #political-infos .info paper-tooltip {
+      width: 170px;
+      --paper-tooltip-text-color: var(--paragraph-color);
+      --paper-tooltip-background: var(--primary-background-color);
+      --paper-tooltip-opacity: 1;
+      --paper-tooltip: {
+        border: 1px solid var(--paragraph-color);
+        font-size: 14px;
+        text-align: left;
+        font-family: helvetica-neue;
+      }
+    }
+
     #political-infos .info #short {
       width: 65%;
     }
@@ -145,6 +164,10 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       line-height: 0.9;
       width: 85%;
       margin: 0 auto;
+    }
+
+    #political-infos .info div:first-child:hover iron-icon {
+      color: white;
     }
 
     #political-infos .info div:last-child {
@@ -238,7 +261,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     @media only screen and (max-width: 470px) {
       #political-infos {
-        left: 0;
+        left: 5px;
         right: 0;
       }
       #political-infos .info div:last-child {
@@ -260,9 +283,22 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       }
     }
 
+    @media only screen and (max-width: 359px) {
+      #political-infos .info div:first-child {
+        font-size: 14px;
+      }
+      #political-infos .info iron-icon {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
     @media only screen and (max-width: 320px) {
       .item-title span {
         font-size: 12px;
+      }
+      #political-infos .info div:first-child {
+        font-size: 13px;
       }
     }
 
