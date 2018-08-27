@@ -332,11 +332,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _getTotalSelected() {
     if(!this.user || Object.keys(this.user).length == 0) return;
-    this.$.api.path = `users/${this.getUser().uid}/selected-candidates`;
+    this.$.api.path = `users/${this.getUser().uid}/total-selected-candidates`;
     this.$.api.method = "GET";
     this.$.api.params = {};
     this.$.api.request().then((ajax) => {
-      const count = `0${ajax.response.length}`.slice(-2);
+      const count = `0${ajax.response.total}`.slice(-2);
       this.set("selectedCount", count);
     });
   }
