@@ -66,7 +66,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         display: flex;
       }
 
-      .row paper-input:first-child {
+      .row paper-input:first-child,
+      #partyName {
         margin-right: 20px;
       }
 
@@ -125,7 +126,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         #adheredOpts {
           margin: 0;
         }
-        .row paper-input:first-child {
+        .row paper-input:first-child,
+        #partyName {
           margin: 0;
         }
       }
@@ -139,10 +141,9 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         </div>
         <div id="filter-fields">
           <div class="row">
-          <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome" id="candidateName">
-            <iron-icon icon="app:icon-search" slot="suffix"></iron-icon>
-          </paper-input>
-
+            <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome" id="candidateName">
+              <iron-icon icon="app:icon-search" slot="suffix"></iron-icon>
+            </paper-input>
             <paper-dropdown-menu id="candidacyOpts" label="tipo de candidatura">
               <paper-listbox slot="dropdown-content" selected="0">
                 <paper-item>todas</paper-item>
@@ -152,7 +153,46 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
             </paper-dropdown-menu>
           </div>
           <div class="row">
-            <paper-input id="partyName" value="{{filterByParty}}" always-float-label label="partido"></paper-input>
+          <paper-dropdown-menu id=partyName label="partido">
+              <paper-listbox slot="dropdown-content" selected="0">
+                <paper-item>todos</paper-item>
+                <paper-item>MDB</paper-item>
+                <paper-item>PT</paper-item>
+                <paper-item>PSDB</paper-item>
+                <paper-item>PP</paper-item>
+                <paper-item>PDT</paper-item>
+                <paper-item>PTB</paper-item>
+                <paper-item>DEM</paper-item>
+                <paper-item>PR</paper-item>
+                <paper-item>PSB</paper-item>
+                <paper-item>PPS</paper-item>
+                <paper-item>PSC</paper-item>
+                <paper-item>PCdoB</paper-item>
+                <paper-item>PRB</paper-item>
+                <paper-item>PV</paper-item>
+                <paper-item>PSD</paper-item>
+                <paper-item>PRP</paper-item>
+                <paper-item>PSL</paper-item>
+                <paper-item>PMN</paper-item>
+                <paper-item>PHS</paper-item>
+                <paper-item>SD</paper-item>
+                <paper-item>PTC</paper-item>
+                <paper-item>DC</paper-item>
+                <paper-item>AVANTE</paper-item>
+                <paper-item>PODE</paper-item>
+                <paper-item>PSOL</paper-item>
+                <paper-item>PRTB</paper-item>
+                <paper-item>PROS</paper-item>
+                <paper-item>PATRI</paper-item>
+                <paper-item>PMB</paper-item>
+                <paper-item>PPL</paper-item>
+                <paper-item>REDE</paper-item>
+                <paper-item>NOVO</paper-item>
+                <paper-item>PSTU</paper-item>
+                <paper-item>PCB</paper-item>
+                <paper-item>PCO</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
             <paper-dropdown-menu id="ufOpts" label="UF">
               <paper-listbox slot="dropdown-content">
                 <paper-item>todas</paper-item>
@@ -209,10 +249,6 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   static get properties() {
     return {
       filterByName: {
-        type: String,
-        value: ""
-      },
-      filterByParty: {
         type: String,
         value: ""
       },
@@ -281,7 +317,10 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _getFilters() {
     let filters = {};
     filters["filter_by_name"] = this.filterByName;
-    filters["filter_by_party"] = this.filterByParty;
+    if (this.$.partyName.value == "todos")
+      filters["filter_by_party"] = '';
+    else
+      filters["filter_by_party"] = this.$.partyName.value;
     if (this.$.candidacyOpts.value == "todas")
       filters["filter_by_candidacy"] = '';
     else
@@ -330,7 +369,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.$.candidateName.value = '';
     this.$.candidacyOpts.value = 'todas';
     this.$.ufOpts.value = 'todas';
-    this.$.partyName.value = '';
+    this.$.partyName.value = 'todos';
 
   }
 }

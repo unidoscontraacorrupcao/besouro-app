@@ -167,7 +167,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
                 candidate="[[item]]"
                 on-selected-candidate="_selectedCandidatesChanged"
                 on-pressed-candidate="_pressedCandidatesChanged"
-                on-ignored-candidate="_ignoredCandidatesChanged">
+                on-ignored-candidate="_ignoredCandidatesChanged"
+                on-unauthorized="_openRestrictModal">
               </candidate-card>
             </template>
           </div>
