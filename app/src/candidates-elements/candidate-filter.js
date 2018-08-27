@@ -317,11 +317,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _getFilters() {
     let filters = {};
     filters["filter_by_name"] = this.filterByName;
-    if (this.$.partyName.value == "todos")
+    if (this.$.partyName.value == 'todos' || this.$.partyName.value == undefined)
       filters["filter_by_party"] = '';
     else
       filters["filter_by_party"] = this.$.partyName.value;
-    if (this.$.candidacyOpts.value == "todas")
+    if (this.$.candidacyOpts.value == 'todas' || this.$.candidacyOpts.value == undefined)
       filters["filter_by_candidacy"] = '';
     else
       filters["filter_by_candidacy"] = this.$.candidacyOpts.value;
@@ -329,7 +329,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       filters["filter_by_uf"] = '';
     else
       filters["filter_by_uf"] = this.$.ufOpts.value;
-    if (this.$.adheredOpts.value == 'todos')
+    if (this.$.adheredOpts.value == 'todos' || this.$.adheredOpts.value == undefined)
       filters["filter_by_adhered"] = '';
     else
       switch (this.$.adheredOpts.value) {
@@ -356,13 +356,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _reload() {
+    this.clearFields();
     if (this.tab == 0)
       this.dispatchEvent(new CustomEvent("reload-candidates",
         {detail: {"tab": 0}}));
     else
       this.dispatchEvent(new CustomEvent("reload-candidates",
         {detail: {"tab": 1}}));
-    this.clearFields();
   }
 
   clearFields() {

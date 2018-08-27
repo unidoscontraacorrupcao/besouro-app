@@ -254,7 +254,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       if (!this.user || Object.keys(this.user).length == 0) {
         this._getAllCandidates();
       } else {
-        this._getAllCandidates();
+        this._firstFilter();
         this._getSelectedCandidates();
         this._requestGeocoder();
       }
@@ -263,19 +263,33 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   openDrawer() { this.dispatchEvent(new CustomEvent("open-drawer")); }
 
+  _firstFilter() {
+    if(!this.user || Object.keys(this.user).length == 0) {
+      this._getAllCandidates();
+      } else {
+        if(this.getUser().state) {
+          this.showLoading();
+          this.$.api.params = {};
+          this.$.api.params["filter_by_uf"] = this.getUser().state;
+          this.$.api.params['limit'] = this.limit;
+          this.$.api.path = `users/${this.getUser().uid}/candidates`;
+          this.$.api.method = "GET";
+          this.$.api.request().then((ajax) => {
+            this.set("allCandidates", ajax.response);
+            this.hideLoading();
+          });
+      }
+    }
+  }
+
   _getAllCandidates() {
     this.showLoading();
-    this.$.api.params = {"limit": this.limit};
+    this.$.api.params = this.$.filter._getFilters();
+    this.$.api.params['limit'] = this.limit;
     if(!this.user || Object.keys(this.user).length == 0) {
       this.$.api.path = `candidates/`;
-    }
-    if(this.user && Object.keys(this.user).length > 0) {
-      if(this.getUser().state) {
-        this.$.api.params["filter_by_uf"] = this.getUser().state;
-        this.$.api.path = `users/${this.getUser().uid}/candidates`;
-      } else {
-        this.$.api.path = `users/${this.getUser().uid}/candidates`;
-      }
+    } else {
+      this.$.api.path = `users/${this.getUser().uid}/candidates`;
     }
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
