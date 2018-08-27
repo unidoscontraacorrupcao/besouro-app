@@ -167,7 +167,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
                 <paper-item>PSB</paper-item>
                 <paper-item>PPS</paper-item>
                 <paper-item>PSC</paper-item>
-                <paper-item>PCdoB</paper-item>
+                <paper-item>PC do B</paper-item>
                 <paper-item>PRB</paper-item>
                 <paper-item>PV</paper-item>
                 <paper-item>PSD</paper-item>
@@ -370,8 +370,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.$.candidacyOpts.value = 'todas';
     this.$.ufOpts.value = 'todas';
     this.$.partyName.value = 'todos';
-
+    this.$.adheredOpts.value = 'todos';
+    const lists = this.shadowRoot.querySelectorAll('paper-listbox');
+    lists.forEach(element => {
+      element.selected = 0;
+    });
   }
+
 }
 
 customElements.define(CandidateFilter.is, CandidateFilter);
