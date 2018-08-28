@@ -259,6 +259,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       user: {
         type: Object,
         observer: 'setStateOnFilter'
+      },
+      filters: {
+        type: Object,
+        value: {},
+        notify: true
       }
     }
   }
@@ -289,7 +294,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _fiterAllCandidates() {
     var user = this.getUser();
 
-    this.$.api.params = this._getFilters();
+    this._setFilters();
+    this.$.api.params = this.filters;
     if (!this.user || Object.keys(this.user).length == 0) {
       this.$.api.path = `candidates`;
     }
@@ -306,7 +312,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _filterSelectedCandidates() {
     var user = this.getUser();
     this.$.api.path = `users/${user.uid}/selected-candidates`;
-    this.$.api.params = this._getFilters();
+    this._setFilters();
+    this.$.api.params = this.filters;
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 1}}));
@@ -314,8 +321,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     });
   }
 
-  _getFilters() {
-    let filters = {};
+  _setFilters() {
+    let filters = {}
     filters["filter_by_name"] = this.filterByName;
     if (this.$.partyName.value == 'todos' || this.$.partyName.value == undefined)
       filters["filter_by_party"] = '';
@@ -345,8 +352,19 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         default:
           break;
       }
-    return filters;
+    this.set("filters", filters);
   }
+
+  _resetFilters() {
+    let filters = {};
+    filters["filter_by_name"] = '';
+    filters["filter_by_party"] = '';
+    filters["filter_by_candidacy"] = '';
+    filters["filter_by_uf"] = '';
+    filters["filter_by_adhered"] = '';
+    this.set("filters", filters);
+  }
+
 
   _filter() {
     if (this.tab == 0)
@@ -357,6 +375,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   _reload() {
     this.clearFields();
+    this._resetFilters();
     if (this.tab == 0)
       this.dispatchEvent(new CustomEvent("reload-candidates",
         {detail: {"tab": 0}}));

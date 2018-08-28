@@ -137,6 +137,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           on-reload-candidates="_reloadCandidates"
           on-filtered-candidates="_showFilteredCandidates"
           user="{{user}}"
+          filters="{{filters}}"
           id="filter">
         </candidate-filter>
       </app-header>
@@ -240,6 +241,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       selectedLimit: {
         type: Number,
         value: 10
+      },
+      filters: {
+        type: Object
       }
     };
   }
@@ -285,10 +289,15 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     }
   }
 
-  _getAllCandidates() {
+  _getAllCandidates(limit=0) {
     this.showLoading();
-    this.$.api.params = this.$.filter._getFilters();
-    this.$.api.params['limit'] = this.limit;
+    this.$.api.params = this.filters;
+    if (limit > 0){
+      this.set("limit", 10);
+      this.$.api.params['limit'] = limit;
+    }
+    else
+      this.$.api.params['limit'] = this.limit;
     if(!this.user || Object.keys(this.user).length == 0) {
       this.$.api.path = `candidates/`;
     } else {
@@ -325,7 +334,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _reloadCandidates(e) {
     var tab = e.detail.tab;
     if (tab == 0)
-      this._getAllCandidates();
+      this._getAllCandidates(10);
     if (tab == 1)
       this._getSelectedCandidates();
   }
@@ -341,13 +350,18 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     });
   }
 
-  _getSelectedCandidates() {
+  _getSelectedCandidates(limit=0) {
     if(!this.user || Object.keys(this.user).length == 0) return;
     this._getTotalSelected();
     this.showLoading();
     this.$.api.path = `users/${this.getUser().uid}/selected-candidates`;
     this.$.api.method = "GET";
-    this.$.api.params = {"limit": this.selectedLimit};
+    if (limit > 0) {
+      this.set("selectedLimit", 10);
+      this.$.api.params = {"limit": limit};
+    }
+    else
+      this.$.api.params = {"limit": this.selectedLimit};
     this.$.api.request().then((ajax) => {
       if (ajax.response.length < 10) {
         this.$.loadMoreSelectedCandidates.style.display = "none";
@@ -360,7 +374,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _getMoreCandidates() {
-    if(!this.user || Object.keys(this.user).length == 0){
+    if(!this.user || Object.keys(this.user).length == 0) {
       this.$.api.path = 'candidates';
     }
     else {
@@ -370,14 +384,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.showLoading();
     this.$.api.method = "GET";
     this.limit += 10;
-    this.$.api.params = {"limit": this.limit};
+    this.$.api.params = this.filters;
+    this.$.api.params["limit"] = this.limit;
     this.$.api.request().then((ajax) => {
-      if (ajax.response.length == this.selectedCount) {
-        this.$.loadMoreCandidates.style.display = "none";
-      } else {
-        this.$.loadMoreCandidates.style.display = "block";
-      }
-      this.set("allCandidates", ajax.response);
+      this.set("allCandidates", ajax.response.results);
       this.hideLoading();
     });
   }

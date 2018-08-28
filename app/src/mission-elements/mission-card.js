@@ -470,7 +470,7 @@ class MissionCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   }
 
   _setOwnerPhoto() {
-    const ownerId = this.mission.owner.id;
+    const ownerId = this.mission.owner.profile_id;
     this.$.api.method = "GET";
     this.$.api.path = `profiles/${ownerId}/`;
     this.$.api.request().then(function (ajax) {
