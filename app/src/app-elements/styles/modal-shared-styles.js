@@ -29,8 +29,7 @@ $_documentContainer.innerHTML = `<dom-module id="modal-shared-styles">
       }
 
       .social-button.facebook {
-        margin-left: 2.35vw;
-        height: 66px;
+        height: 67px;
         width: 66px;
         color: white;
         background-color: #4460a0;

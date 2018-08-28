@@ -41,7 +41,7 @@
     "@polymer/paper-tabs": "^3.0.0-pre.19",
     "@polymer/paper-toast": "^3.0.0-pre.19",
     "@polymer/paper-toggle-button": "^3.0.0-pre.19",
-    "@polymer/paper-tooltip": "^3.0.0-pre.19",
+    "@polymer/paper-tooltip": "^3.0.0-pre.23",
     "@polymer/polymer": "^3.0.0",
     "@webcomponents/webcomponentsjs": "^2.0.2",
     "lit-html": "^0.10.2",

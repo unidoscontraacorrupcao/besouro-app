@@ -46,6 +46,16 @@ let behaviors = function(superClass) {
         return displayName;
       }
     }
+
+    getUser() { return JSON.parse(localStorage.getItem("user")); }
+    resetUser() { localStorage.removeItem('user'); }
+    saveUser(user) { localStorage.setItem("user", JSON.stringify(user)); }
+
+    _showToast(message) {
+      this._toastMessage = message;
+      this.$.toast.open();
+    }
+
   }
 }
 

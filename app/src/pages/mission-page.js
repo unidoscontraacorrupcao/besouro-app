@@ -275,7 +275,7 @@ class MissionPage extends PolymerElement {
     const btn = this.$.saveBtn;
     btn.removeEventListener("tap", this.editMissionFunc, false);
     btn.removeEventListener("tap", this.saveMissionFunc, false);
-    this.set('route.path', '/');
+    this.set('route.path', '/inbox');
   }
 
   _saveMission(e) {

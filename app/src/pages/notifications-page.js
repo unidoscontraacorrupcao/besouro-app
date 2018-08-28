@@ -183,6 +183,11 @@ class NotificationsPage extends PolymerElement {
         case "admin":
           window.open(notification.message.body, "_blank");
           break;
+        case "selected":
+          window.open(notification.message.body, "_blank");
+          break;
+        case "press":
+          break;
         default:
           break;
       }

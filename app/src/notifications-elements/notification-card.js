@@ -25,7 +25,7 @@ class NotificationCard extends PolymerElement {
       .card-content .target {
         text-transform: uppercase;
       }
-      #title {
+      .card-content h4 span {
         color: var(--paragraph-color);
       }
       .notification-card {
@@ -58,6 +58,8 @@ class NotificationCard extends PolymerElement {
         flex: 1;
         display: inline-block;
         padding: 10px 20px;
+        overflow: hidden;
+        word-wrap: break-word;
       }
       .card-content span {
         font-family: Folio;
@@ -72,7 +74,7 @@ class NotificationCard extends PolymerElement {
         <iron-icon icon="{{cardIcon}}"></iron-icon>
       </div>
       <div class="card-content">
-        <h4>{{cardTitle}}<span id="title" class="target">{{notification.message.title}}</span></h4>
+        <h4>{{cardTitle}}<span id="title" class="target">{{notification.message.title}}</span><span>{{additionalText}}</span></h4>
         <span>{{cardDate}}</span>
       </div>
     </div>
@@ -90,7 +92,8 @@ class NotificationCard extends PolymerElement {
       cardIcon: String,
       cardTitle: String,
       cardDescription: String,
-      cardDate: String
+      cardDate: String,
+      additionalText: String
     }
   }
 
@@ -129,14 +132,23 @@ class NotificationCard extends PolymerElement {
         case /conversation/.test(notification.channel.sort):
           this.cardIcon = "app:notification-opinion-active"
           break;
+        case /selected/.test(notification.channel.sort):
+          this.cardIcon = "app:thumbs-up-notifications"
+          break;
+        case /press/.test(notification.channel.sort):
+          this.cardIcon = "app:thumb-down-notifications"
+          break;
+        default:
+          this.cardIcon = "app:alert-users-notifications"
+          break;
     }
   }
 
   setCardTitle(notification) {
     if (!notification) return;
-
+    
     var channel_sort = notification.channel.sort.split('-');
-
+    
     if(channel_sort.length == 2) {
       var mission_id = channel_sort[1];
       this.$.api.path = `missions/${mission_id}`;
@@ -145,8 +157,7 @@ class NotificationCard extends PolymerElement {
         this.set("cardTitle", `Há opiniões disponíveis na missão ${mission_name}.`);
         this.getDate(notification);
       });
-    }
-    else{
+    } else {
       switch(notification.channel.sort) {
         case "mission":
           this.set("cardTitle", `Missão nova no ar! Confira a `);
@@ -157,6 +168,14 @@ class NotificationCard extends PolymerElement {
         case "admin":
           this.$.title.removeAttribute("class");
           this.set("cardTitle", `` );
+          break;
+        case "selected":
+          this.set('cardTitle', 'Você selecionou ');
+          this.set('additionalText', `. Conheça suas ideias em: ${this.notification.message.body}`)
+          break;
+        case "press":
+          this.set('cardTitle', 'Você pressionou ');
+          this.set('additionalText', ' para que ele se comprometa contra a corrupção!')
           break;
         default:
           return "";

@@ -62,7 +62,7 @@ class MissionComment extends CommonBehaviorsMixin(PolymerElement) {
           <iron-image src="{{userPhoto}}" sizing="cover"></iron-image>
         </div>
       <div class="card-content">
-        <h3> {{userName(comment)}} </h3>
+        <h3> {{userName}} </h3>
         <p> {{comment.comment}} </p>
       </div>
     </div>
@@ -74,31 +74,32 @@ class MissionComment extends CommonBehaviorsMixin(PolymerElement) {
     return {
       comment: {
         type: Object,
-        value: function() {}
+        value: function() {},
+        observer: '_commentChanged'
       },
       key: String,
-      userPhoto: String
+      userPhoto: String,
+      userName: String
     }
   }
 
-  userName(comment) {
-    this.requestPhoto(comment);
-    return this.parseDisplayName(comment.user.display_name);
+  _setCommentInfos() {
+    this.$.api.method = "GET";
+    this.$.api.path = `profiles/${this.comment.user.profile_id}/`;
+    this.$.api.request().then((ajax) => {
+      if (ajax.response.image != null) {
+        this.set("userPhoto", ajax.response.image);
+      } else {
+        this.set("userPhoto", '/images/generic/avatar_default-thumb.png');
+      }
+      this.set("userName", this.parseDisplayName(this.comment.user.display_name));
+    });
   }
 
-  requestPhoto(comment) {
-    setTimeout(function(){
-      this.$.api.method = "GET";
-      this.$.api.path = `profiles/${comment.user.profile_id}/`;
-      this.$.api.request().then(function(ajax) {
-        if (ajax.response.image != null) {
-          this.userPhoto = ajax.response.image;
-        } else {
-          this.userPhoto = '/images/generic/avatar_default-thumb.png';
-        }
-      }.bind(this));
-    }.bind(this), 100);
+  _commentChanged() {
+    if (!this.comment) return;
+    if (!this.comment.user) return;
+    this._setCommentInfos();
   }
-
 }
 customElements.define(MissionComment.is, MissionComment);
