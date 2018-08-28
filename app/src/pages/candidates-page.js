@@ -285,6 +285,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             this.set("allCandidates", ajax.response);
             this.hideLoading();
           });
+      } else {
+        this._getAllCandidates();
       }
     }
   }
