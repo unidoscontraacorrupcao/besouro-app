@@ -1,10 +1,10 @@
 var config = {
-  apiKey: "AIzaSyAi9uS0rxpp7nWpNO4TZ8H7F7aCtRTbuyk",
-  authDomain: "teste-besouro.firebaseapp.com",
-  databaseURL: "https://teste-besouro.firebaseio.com",
-  projectId: "teste-besouro",
-  storageBucket: "teste-besouro.appspot.com",
-  messagingSenderId: "805814933034"
+  apiKey: "AIzaSyCNMrIxhegV1xKZrKVnxgFM_x9cjMp67e0",
+  authDomain: "besouro-4fbd9.firebaseapp.com",
+  databaseURL: "https://besouro-4fbd9.firebaseio.com",
+  projectId: "besouro-4fbd9",
+  storageBucket: "besouro-4fbd9.appspot.com",
+  messagingSenderId: "266133977216"
 };
 firebase.initializeApp(config);
 

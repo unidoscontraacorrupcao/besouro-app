@@ -74,7 +74,7 @@ class NotificationCard extends PolymerElement {
         <iron-icon icon="{{cardIcon}}"></iron-icon>
       </div>
       <div class="card-content">
-        <h4>{{cardTitle}}<span id="title" class="target">{{notification.message.title}}</span><span>{{additionalText}}</span></h4>
+        <h4>{{cardTitle}}<span id="title" class="target">{{notification.message.body}}</span><span>{{additionalText}}</span></h4>
         <span>{{cardDate}}</span>
       </div>
     </div>
@@ -171,7 +171,7 @@ class NotificationCard extends PolymerElement {
           break;
         case "selected":
           this.set('cardTitle', 'Você selecionou ');
-          this.set('additionalText', `. Conheça suas ideias em: ${this.notification.message.body}`)
+          this.set('additionalText', `. Conheça suas ideias em: ${this.notification.message.link}`)
           break;
         case "press":
           this.set('cardTitle', 'Você pressionou ');

@@ -181,7 +181,7 @@ class SettingsPage extends PolymerElement {
             </div>
           </div>
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="category">
               <div class="category-icon">
                 <iron-icon icon="app:trophy-settings"></iron-icon>
@@ -196,7 +196,7 @@ class SettingsPage extends PolymerElement {
               </div>
               <paper-toggle-button checked="{{settings.approved_notifications}}"></paper-toggle-button>      
             </div>
-          </div>
+          </div> -->
 
           <div class="row">
             <div class="category">

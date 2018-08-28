@@ -181,10 +181,10 @@ class NotificationsPage extends PolymerElement {
           this.set('route.path', '/profile');
           break;
         case "admin":
-          window.open(notification.message.body, "_blank");
+          if(notification.message.link) window.open(notification.message.link, "_blank");
           break;
         case "selected":
-          window.open(notification.message.body, "_blank");
+          if(notification.message.link) window.open(notification.message.link, "_blank");
           break;
         case "press":
           break;
