@@ -280,6 +280,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else if (this.candidate.score == "bad") {
+      this._hidePressBtn();
       var colors = ["rgba(230,0,0,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else {
