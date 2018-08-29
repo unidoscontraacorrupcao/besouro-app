@@ -10,6 +10,8 @@
     "node_modules/@webcomponents/webcomponentsjs/*.js",
     "!node_modules/@webcomponents/webcomponentsjs/gulpfile.js",
     "node_modules/@webcomponents/webcomponentsjs/bundles/*.js",
+    "node_modules/firebase/firebase-app.js",
+    "node_modules/firebase/firebase-messaging.js",
     "firebase-messaging-sw.js",
     "firebase.js"
   ],
