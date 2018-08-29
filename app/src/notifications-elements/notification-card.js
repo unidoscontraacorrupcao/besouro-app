@@ -130,7 +130,7 @@ class NotificationCard extends PolymerElement {
           this.cardIcon = "app:trophy-notifications"
           break;
         case /conversation/.test(notification.channel.sort):
-          this.cardIcon = "app:notification-opinion-active"
+          this.cardIcon = "app:conversations-notifications"
           break;
         case /selected/.test(notification.channel.sort):
           this.cardIcon = "app:thumbs-up-notifications"
@@ -155,6 +155,7 @@ class NotificationCard extends PolymerElement {
       this.$.api.request().then((ajax) => {
         var mission_name = ajax.response.title;
         this.set("cardTitle", `Há opiniões disponíveis na missão ${mission_name}.`);
+        this.set('notification.message.body', '');
         this.getDate(notification);
       });
     } else {

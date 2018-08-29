@@ -888,6 +888,9 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
       this.route["shared"] = this.data.key;
       this.route.__queryParams = {};
     }
+    if (this.route.__queryParams && this.route.__queryParams["notification"] === "true") {
+      this.set("route.show_conversation", true);
+    }
     this.set("comments_pagination", 0);
     this._missionChanged();
   }

@@ -209,7 +209,7 @@ class SettingsPage extends PolymerElement {
             <div class="category">
               <div class="category-icon">
                 <iron-icon icon="app:thumb-down-settings"></iron-icon>
-                <span>Reprovados</span>
+                <span>Pressionados</span>
               </div>
               <paper-toggle-button checked="{{settings.disapproved_notifications}}"></paper-toggle-button>      
             </div>
