@@ -40,6 +40,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
       #close paper-icon-button { width:28px; }
 
+      .card { padding-bottom: 20px; }
       .card-footer  {
         width: 90%;
         margin: auto;
@@ -209,7 +210,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         <div id="medias">
             <paper-icon-button on-click="_redirectToSocialLink" data-item="facebook_url" icon="app:social-facebook"></paper-icon-button>
             <paper-icon-button on-click="_redirectToSocialLink" data-item="twitter_url" icon="app:social-twitter"></paper-icon-button>
-            <paper-icon-button on-click="_redirectToSocialLink" data-item="insta_url" icon="app:social-insta"></paper-icon-button>
+            <paper-icon-button on-click="_redirectToSocialLink" data-item="instagram_url" icon="app:social-insta"></paper-icon-button>
             <paper-icon-button on-click="_redirectToSocialLink" data-item="youtube_url" icon="app:social-youtube"></paper-icon-button>
             <paper-icon-button on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
         </div>
@@ -244,9 +245,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           <div class="item">
             <div class="item-header">
               <div class="item-title">
-                <span>Aderiu totalmente às novas medidas</span>
+                <span>Aderiu totalmente às novas medidas?</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -272,7 +273,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <div class="item-title">
                 <span>Total de processos a que responde</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -369,7 +370,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     var item = e.target.parentNode.parentNode;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
-      item.setAttribute("style", "height: 110px");
+      item.setAttribute("style", "height: 90px");
       e.target.set("icon",  "app:expand-less");
     }
     else {
@@ -378,9 +379,24 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
+  _toggleBig(e) {
+    var item = e.target.parentNode.parentNode;
+    var itemHeight = item.clientHeight;
+    if (itemHeight == 40) {
+      item.setAttribute("style", "height: 200px");
+      e.target.set("icon",  "app:expand-less");
+    }
+    else {
+      item.setAttribute("style", "height: 40px");
+      e.target.icon = "app:expand-more";
+    }
+  }
+
+
   _redirectToSocialLink(e) {
     var link = e.target.dataset.item;
-    window.open(this.candidate[`${link}`]);
+    if (/http:\/\/|https:\/\//.test(this.candidate[link]))
+      window.open(this.candidate[`${link}`], '_blank');
   }
 }
 customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);
