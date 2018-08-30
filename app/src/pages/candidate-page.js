@@ -11,6 +11,7 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import 'share-menu/share-menu.js';
 
+import '../app-elements/styles/candidate-card-shared-styles.js';
 import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-scrollable-dialog.js';
 import '../app-elements/app-form-header.js';
@@ -26,6 +27,7 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="shared-styles"></style>
+    <style include="candidate-card-shared-styles"></style>
     <style>
 
       :host {
@@ -466,79 +468,69 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
     <div class="stats-content">
       <div>
         <span>
-          <span class="stats-number">{{acceptedMissionCount}} </span>
-            aceitaram <span class="space">&nbsp;&verbar;&nbsp;</span>
+          <span class="stats-number">{{candidateStatus.selected_count}} </span>
+            selecionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
           </span>
       </div>
 
       <div>
         <span>
-          <span class="stats-number">{{concludedMissionCount}}</span>
-          concluiram <span class="space">&nbsp;&verbar;&nbsp;</span>
+          <span class="stats-number">{{candidateStatus.pressed_count}}</span>
+          pressionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
         </span>
       </div>
 
       <div>
         <span>
-          <span class="stats-number">{{pendingMissionCount}}</span>
-          pendentes</span>
+          <span class="stats-number">{{candidateStatus.fav_count}}</span>
+          favoritaram</span>
       </div>
     </div>
   </div>
 
-    <template is="dom-if" if="{{mission}}">
+    <template is="dom-if" if="{{candidate}}">
       <div class="content">
-        <h2>Entenda a missão</h2>
-
-        <!-- description field is inserted by the insertDescriptionHtml method -->
-        <p id="ckDescription"></p>
-
-        <h2>recompensa</h2>
-
-        <!-- reward field is inserted by the insertDescriptionHtml method -->
-        <p id="ckReward"></p>
-
-        <div class="comments">
-          <h2>Comentários</h2>
-          <template is="dom-repeat" items="{{comments}}" as="comment" >
-            <mission-comment comment="{{comment}}"></mission-comment>
-          </template>
-          <div id="load-more-comments">
-            <span on-click="_getMissionComments">carregar mais comentários</span>
+        <h2>{{candidate.name}}</h2>
+        <div id="candidate-infos">
+          <div>
+            <div id="candidacy">
+              <span>candidatura:</span>
+              <span><b>{{candidate.candidacy}}</b></span>
+            </div>
           </div>
-          <div class="comment">
-            <div class="message">
-              <paper-textarea
-                id="commentInput"
-                label="Escreva um comentário"
-                required=""
-                error-message="O campo não pode ser vazio.">
-              </paper-textarea>
-              <paper-button
-                on-tap="_addComment"
-                class="plain">Enviar
-              </paper-button>
+          <div>
+            <div id="urn">
+              <span>urna:</span>
+              <span><b>{{candidate.urn}}</b></span>
+            </div>
+          </div>
+          <div>
+            <div id="party-uf">
+              <span>partido - UF:</span>
+              <span><b>{{candidate.party}} - {{candidate.uf}}</b></span>
             </div>
           </div>
         </div>
       </div>
     </template>
     </app-header-layout>
-
-    <template is="dom-if" if="{{!mission.id}}">
-      <div id="inboxLoading">
-          <div class="progress">
-            <div class="spinner">
-              <paper-spinner active=""></paper-spinner>
-            </div>
-            <paper-progress indeterminate=""></paper-progress>
-          </div>
-      </div>
-    </template>
 `;
   }
 
   static get is() { return 'candidate-page'; }
+
+  static get properties() {
+    return {
+      route: {
+        type: Object,
+        notify: true
+      },
+      candidate: Object,
+      candidateStatus: Object,
+      key: String
+    };
+  }
+
 
   static get observers() {
     return [
@@ -546,28 +538,36 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
     ]
   }
 
-  static get properties() {
-    return {
-      missionAction: {
-        type: String,
-        value: ''
-      },
-      route: {
-        type: Object,
-        notify: true
-      },
-      mission: {
-        type: Object
-      }
-    };
+  routePathChanged(path) {
+    this._getCandidate();
+    this._getCandidateStatistics();
+  }
+
+  _getCandidate() {
+    var user = this.getUser();
+    this.$.api.path = `candidates/${this.data.key}`;
+    this.$.api.method = "GET";
+    this.$.api.request().then((ajax) => {
+      this.set("candidate", ajax.response)
+      this._setLayerImage(this.candidate.image);
+    });
+  }
+
+  _getCandidateStatistics() {
+    var user = this.getUser();
+    this.$.api.path = `candidates/${this.data.key}/status`;
+    this.$.api.method = "GET";
+    this.$.api.request().then((ajax) => {
+      this.set("candidateStatus", ajax.response)
+    });
   }
 
   _returnToCandidates() { this.set('route.path', '/candidates'); }
 
 
-  _setLayerImage(missionImage) {
-    if(missionImage && this.mission) {
-      this.updateStyles({ '--layer-image': `url(${missionImage})` });
+  _setLayerImage(candidatePhoto) {
+    if(this.candidate) {
+      this.updateStyles({ '--layer-image': `url(${candidatePhoto})` });
     }
   }
 
