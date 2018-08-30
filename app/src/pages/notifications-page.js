@@ -184,7 +184,14 @@ class NotificationsPage extends PolymerElement {
           if(notification.message.link) window.open(notification.message.link, "_blank");
           break;
         case "selected":
-          if(notification.message.link) window.open(notification.message.link, "_blank");
+          if(notification.message.link) {
+            if (/^www/.test(notification.message.link)) {
+              notification.message.link = 'http://' + notification.message.link;
+              window.open(notification.message.link, "_blank");
+            } else {
+              window.open(notification.message.link, "_blank");
+            }
+          }
           break;
         case "press":
           break;
