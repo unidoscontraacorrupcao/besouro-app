@@ -40,7 +40,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
       #close paper-icon-button { width:28px; }
 
-      .card { padding-bottom: 20px; }
       .card-footer  {
         width: 90%;
         margin: auto;
@@ -52,15 +51,15 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       }
 
       #social-medias {
-        width: 75%;
+        width: 85%;
         margin: auto;
-        margin-bottom: 12px;
+        margin: 22px auto 12px auto;
       }
 
       #social-medias span {
         text-transform: uppercase;
         font-family: Folio;
-        font-size: 14px;
+        font-size: 16px;
       }
 
       #medias {
@@ -83,16 +82,16 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         width: 90%;
         margin: auto;
         text-align: center;
-        padding-bottom: 46px;
+        padding: 30px 0 30px 0;
         text-decoration: underline;
         color: var(--accent-color);
       }
 
-      #see-more span {
+      #see-more paper-button {
         text-transform: uppercase;
         color: var(--accent-color);
         font-family: folio;
-        font-size: 16px;
+        font-size: 18px;
       }
 
       @keyframes ignored-candidate {
@@ -283,9 +282,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
         </div>
 
-        <!-- <div id="see-more">
-            <span>conheça mais</span>
-        </div> -->
+         <div id="see-more">
+            <paper-button on-click="_showCandidate">conheça mais</paper-button>
+        </div>
 
       </div>
 `;
@@ -382,6 +381,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   _hideSupportBtn () {
     var cardFooter = this.shadowRoot.querySelector(".card-footer");
     cardFooter.style.display = "none";
+    this.shadowRoot.querySelector("hr").style.display = "none";
   }
 
   _showSupportBtn() {
@@ -430,10 +430,14 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-
   _redirectToSocialLink(e) {
     var link = e.target.dataset.item;
     window.open(this.candidate[`${link}`], '_blank');
+  }
+
+  _showCandidate() {
+    this.dispatchEvent(new CustomEvent("show-candidate",
+      { detail: {candidate: this.candidate.id} }));
   }
 }
 customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);

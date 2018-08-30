@@ -29,6 +29,7 @@ import '../pages/settings-page.js';
 import '../pages/help-page.js';
 import '../pages/reset-password-page.js';
 import '../pages/candidates-page.js';
+import '../pages/candidate-page.js';
 import './app-icons.js';
 import './app-theme.js';
 //import messaging from '../../firebase.js'
@@ -264,6 +265,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         role="main">
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
           <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></candidates-page>
+          <candidate-page name="candidate" route="{{route}}" on-open-drawer="_openDrawer"></candidates-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
@@ -335,7 +337,13 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
     };
   }
 
-  static get observers() { return ["_routePageChanged(routeData.page)", "routePathChanged(route.path)"]; }
+  static get observers() {
+    return [
+      "_routePageChanged(routeData.page)",
+      "routePathChanged(route.path)",
+      "_setUserToken(token, user)"
+    ];
+  }
 
   constructor() {
     super();
@@ -387,9 +395,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
     this.page = "not-found";
   }
 
-  _openDrawer(e) {
-    this.$.drawer.open();
-  }
+  _openDrawer(e) { this.$.drawer.open(); }
 
   gotoProfile(e) {
     this.set("route.path", "/profile");

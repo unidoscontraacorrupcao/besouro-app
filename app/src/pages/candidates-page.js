@@ -182,7 +182,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             <template is="dom-repeat" items="{{selectedCandidates}}">
               <selected-candidate-card
                 candidate="[[item]]"
-                on-unselect-candidate="_unselectCandidatesChanged">
+                on-unselect-candidate="_unselectCandidatesChanged"
+                on-show-candidate="_showCandidate">
               </selected-candidate-card>
             </template>
           </div>
@@ -564,6 +565,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this._toastMessage = message;
     this.$.pressedToast.open();
   }
+
+  _showCandidate(e) { this.set("route.path", `/candidate/${e.detail.candidate}`); }
 
 }
 window.customElements.define(CandidatesPage.is, CandidatesPage);

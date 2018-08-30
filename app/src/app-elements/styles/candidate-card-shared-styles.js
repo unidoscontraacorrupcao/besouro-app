@@ -256,7 +256,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       text-transform: uppercase;
       color: rgba(49,39,131,1);
       font-family: folio;
-      font-size: 14px;
+      font-size: 16px;
     }
 
     @media only screen and (max-width: 470px) {
