@@ -208,11 +208,11 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         <hr>
         <span>redes sociais deste candidato:</span>
         <div id="medias">
-            <paper-icon-button on-click="_redirectToSocialLink" data-item="facebook_url" icon="app:social-facebook"></paper-icon-button>
-            <paper-icon-button on-click="_redirectToSocialLink" data-item="twitter_url" icon="app:social-twitter"></paper-icon-button>
-            <paper-icon-button on-click="_redirectToSocialLink" data-item="instagram_url" icon="app:social-insta"></paper-icon-button>
-            <paper-icon-button on-click="_redirectToSocialLink" data-item="youtube_url" icon="app:social-youtube"></paper-icon-button>
-            <paper-icon-button on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
+            <paper-icon-button id="facebookBtn" on-click="_redirectToSocialLink" data-item="facebook_url" icon="app:social-facebook"></paper-icon-button>
+            <paper-icon-button id="twitterBtn" on-click="_redirectToSocialLink" data-item="twitter_url" icon="app:social-twitter"></paper-icon-button>
+            <paper-icon-button id="instagramBtn" on-click="_redirectToSocialLink" data-item="instagram_url" icon="app:social-insta"></paper-icon-button>
+            <paper-icon-button id="youtubeBtn" on-click="_redirectToSocialLink" data-item="youtube_url" icon="app:social-youtube"></paper-icon-button>
+            <paper-icon-button id="crowdBtn" on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
         </div>
       </div>
 
@@ -344,6 +344,35 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
+  _hideSocialMediaIcons() {
+    var medias = this.shadowRoot.querySelector("#social-medias");
+    medias.style.display = "block";
+    if ((this._invalidSocialMediaUrl('facebook_url')
+      && this._invalidSocialMediaUrl('youtube_url')
+      && this._invalidSocialMediaUrl('twitter_url')
+      && this._invalidSocialMediaUrl('instagram_url')
+      && this._invalidSocialMediaUrl('crowd_url'))) {
+      medias.style.display = "none";
+      this.shadowRoot.querySelector("#tse-data").style.marginTop = "20px";
+    }
+    else {
+      if (this._invalidSocialMediaUrl('facebook_url'))
+        this.$.facebookBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('youtube_url'))
+        this.$.youtubeBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('twitter_url'))
+        this.$.twitterBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('instagram_url'))
+        this.$.instagramBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('crowd_url'))
+        this.$.crowdBtn.style.display = "none";
+    }
+  }
+
+  _invalidSocialMediaUrl(url) {
+    return (!url || !/http:\/\/|https:\/\//.test(this.candidate[url]))
+  }
+
   _hideSupportBtn () {
     var cardFooter = this.shadowRoot.querySelector(".card-footer");
     cardFooter.style.display = "none";
@@ -357,7 +386,10 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     supportBtn.style.width = "300px";
   }
 
-  _candidateChanged() { this._chooseCandidateColor(); }
+  _candidateChanged() {
+    this._chooseCandidateColor();
+    this._hideSocialMediaIcons();
+  }
 
   constructor() { super(); }
 
@@ -395,8 +427,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
   _redirectToSocialLink(e) {
     var link = e.target.dataset.item;
-    if (/http:\/\/|https:\/\//.test(this.candidate[link]))
-      window.open(this.candidate[`${link}`], '_blank');
+    window.open(this.candidate[`${link}`], '_blank');
   }
 }
 customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);
