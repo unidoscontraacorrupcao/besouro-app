@@ -351,7 +351,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       && this._invalidSocialMediaUrl('youtube_url')
       && this._invalidSocialMediaUrl('twitter_url')
       && this._invalidSocialMediaUrl('instagram_url')
-      && this._invalidSocialMediaUrl('crowd_url'))) {
+      && this._invalidSocialMediaUrl('crowdfunding_url'))) {
       medias.style.display = "none";
       this.shadowRoot.querySelector("#tse-data").style.marginTop = "20px";
     }
@@ -364,13 +364,19 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         this.$.twitterBtn.style.display = "none";
       if (this._invalidSocialMediaUrl('instagram_url'))
         this.$.instagramBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('crowd_url'))
+      if (this._invalidSocialMediaUrl('crowdfunding_url'))
         this.$.crowdBtn.style.display = "none";
+        this._hideSupportBtn();
     }
   }
 
   _invalidSocialMediaUrl(url) {
-    return (!url || !/http:\/\/|https:\/\//.test(this.candidate[url]))
+    if (!this.candidate[url]) return true;
+    if (/^www/.test(this.candidate[url])) {
+      this.candidate[url] = 'http://' + this.candidate[url];
+      return false;
+    }
+    return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
   }
 
   _hideSupportBtn () {
