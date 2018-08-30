@@ -172,7 +172,11 @@ class NotificationCard extends PolymerElement {
           break;
         case "selected":
           this.set('cardTitle', 'Você selecionou ');
-          this.set('additionalText', `. Conheça suas ideias em: ${this.notification.message.link}`)
+          if(!this.notification.message.link) {
+            this.set('additionalText', '. Saiba mais sobre ele(a) na aba selecionados')
+          } else {
+            this.set('additionalText', `. Conheça suas ideias em: ${this.notification.message.link}`)
+          }
           break;
         case "press":
           this.set('cardTitle', 'Você pressionou ');

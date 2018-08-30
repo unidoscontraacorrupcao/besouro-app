@@ -146,17 +146,17 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <welcome-card>
             <div>
               <p>
-                Descubra quais candidatas/os atendem a três critérios: 1. Passado Limpo; 2. Compromisso com Democracia;
-                e 3. Adesão às Novas Medidas contra a Corrupção.
+                Aqui você vê as/os candidatas/os que registraram: 1. Passado Limpo; 2. 
+                Compromisso com Democracia; e 3. Adesão às Novas Medidas contra a Corrupção.
               </p>
-              <ul>
-                <li>VERDE é SIM nos três critérios</li>
-                <li>VERMELHO é NÃO em algum critério.</li>
-                <li>CINZA: ainda não respondeu</li>
-              </ul>
               <p>
-                Você pode selecionar aqueles que te interessarem Também pode pressionar para que
-                candidatas/os se comprometam! Veja mais detalhes em AJUDA, no menu.
+                SELECIONE para mais detalhes pessoais e eleitorais, bem como bens e processos. 
+                Também é possível PRESSIONAR quem não se comprometeu. Além de enviarmos 
+                um email, você conseguirá postar nas suas redes sociais.
+              </p>
+              <p>
+                Os nomes são apresentados aleatoriamente, sem nenhum tipo de 
+                viés nem preferência. Para dúvidas, acesse AJUDA.
               </p>
             </div>
           </welcome-card>

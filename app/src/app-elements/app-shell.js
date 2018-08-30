@@ -466,7 +466,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
   _getUserNotifications(page) {
     if(!this.user) return;
-    if(page === "" || page === "inbox" || page === "show-mission" || page === "profile" || page === "notifications") {
+    if(page === "" || page === "inbox" || page === "show-mission" || page === "profile" || page === "notifications" || page === "candidates") {
       this.$.api.method = "GET";
       this.$.api.path = `notifications/user/${this.user.uid}/unread`;
       this.$.api.request().then((ajax) => {
