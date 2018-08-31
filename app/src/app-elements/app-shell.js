@@ -478,6 +478,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
   //Get token for push notification
   _setUserToken(token, user) {
+    if(/Version\/(.*)Safari/.test(navigator.userAgent)) return;
     if(!user || !this.user || Object.keys(this.user).length == 0) return;
     messaging.getToken().then((currentToken) => {
       if (currentToken) {
