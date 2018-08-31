@@ -20,13 +20,13 @@ import '../app-elements/shared-styles.js';
 import '../mission-elements/mission-player.js';
 import '../app-elements/app-besouro-api.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+import {CardMixin} from '../mixin-elements/card-mixin.js';
 import {MissionMixin} from '../mixin-elements/mission-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { resolveCss } from '@polymer/polymer/lib/utils/resolve-url';
-class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
+class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerElement))) {
   static get template() {
     return html`
-    <style include="shared-styles"></style>
     <style include="candidate-card-shared-styles"></style>
     <style>
 
@@ -61,7 +61,6 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
           background-image: var(--layer-image);
           background-position: center;
           background-size: 125%;
-          background-color: grey;
           filter: contrast(.7) brightness(.6);
         };
       }
@@ -111,12 +110,25 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
       .tall { height: 175px; }
 
 
-      #share-mission {
-        position: absolute;
-        right: 0;
-        bottom: -20px;
-        margin-right: 10px;
+      #social-medias {
+        width: 85%;
+        margin: auto;
+        margin: 22px auto 12px auto;
       }
+
+      #social-medias span {
+        text-transform: uppercase;
+        font-family: Folio;
+        font-size: 16px;
+      }
+
+      #medias {
+        display: flex;
+        margin-top: 16px;
+      }
+
+      #medias > * { flex-grow: 1; }
+      #medias paper-icon-button {padding: 4px;}
 
       paper-icon-button {
         padding: 0;
@@ -145,105 +157,36 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
         text-transform: uppercase;
       }
 
-      .dark { color: black; }
-
-      .timing {
-        font-size: 19px;
-      }
-
-      .timing paper-icon-button { top: -16px; }
-      .timing span { top: -12px; }
-      .timing paper-icon-button, .timing span { position: absolute; }
-
-      .timing paper-icon-button {
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 6px;
-      }
-
-      .timing span {
-        left: 30px;
-        color: white;
-        font-family: opensans-bold;
-        font-size: 14px;
-      }
-
-      .progress {
-        position: absolute;
-        top: 0; bottom: 0;
-        left: 0; right: 0;
-      }
-
-      .progress paper-progress { width: 100%; }
-
-      .progress .spinner {
-        height: 125px;
-        text-align: center;
-        padding-top: 97px;
-      }
-
       .content { padding: 20px 20px; }
 
       .content p,
       .content h2 { margin: 10px 0; }
 
-      .comment {margin-bottom: 106px;}
-      .comment .message { display: flex; }
-
-      .comment .message paper-textarea { flex: 1; }
-
-      .comment .message paper-button { margin: auto 5px 5px; }
-
       .hide[disabled] { opacity: 0.4; }
 
-      .mission-author {
+      #tse-data { margin-bottom: 150px; }
+
+      #unselected {
         display: flex;
-        background-color: var(--primary-background-color);
-        height: 70px;
-        padding: 5px 0 5px 10px;
-      }
-
-      .author-photo { margin-top: 5px; }
-
-      .author-photo iron-image {
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
-        background-color: var(--dark-primary-color);
-      }
-
-      .author-name {
-        margin-left: 10px;
-        margin-top: 16px;
-        flex-grow: 1;
-        font-family: Folio;
-        font-size: 1.3em;
-      }
-
-      #author {
-        display: block;
-        margin-top: -10px;
-      }
-
-      .share-mission, .stats {
-        background-color: #f1f1f1;
-      }
-
-      .share-mission { height: 50px; }
-
-      .share-mission .share-mission-content {
-        width: 90%;
+        width: 70%;
         margin: auto;
-        font-size: 1em;
-        display: flex;
       }
 
-      .share-mission .share-mission-content h3 {
-        display: inline-block;
-        margin: 0;
-        flex-grow: 2;
-        padding-top: 8px;
+      #unselected paper-button {
+        flex-grow: 1;
+        height: 64px;
+        font-family: folio;
+      }
+
+      #unselected paper-button:first-child {
+        border-color: var(--secondary-text-color);
+        border-style: solid;
+        border-width: 1px;
+      }
+
+      #unselected paper-button:last-child {
+        background-color: var(--secondary-text-color);
+        color: white;
       }
 
       #share-btn { margin: 10px 25px 0 0; }
@@ -251,14 +194,14 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
 
       .stats {
         color: var(--light-text-color);
+        background-color: rgba(238,238,238,1);
+        height: 40px;
       }
 
       .stats .stats-number {
         color: var(--accent-color);
         font-weight: bold;
       }
-
-
       .stats-content {
         width: 80%;
         padding-top: 5px;
@@ -266,136 +209,31 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
         text-align: center;
         font-size: 1.2rem;
         font-family: Folio;
-        display: flex;
         height: 30px;
       }
 
-      .stats-content div {
-        margin-right: 5px;
-        display: inline;
-        flex-grow: 1;
+      .stats-columns {
+        display: flex;
       }
 
-      #action {
-        text-align: center;
-        margin-top: 10px;
-        margin-bottom: 10px;
+      .stats-columns div { flex-grow: 1; }
+
+
+      @media only screen and (max-width: 460px) {
+        .stats-content { font-size: 1.0rem; }
       }
 
-      #action paper-button {
-        border-top-left-radius: 27px;
-        border-bottom-left-radius: 27px;
-        border-top-right-radius: 27px;
-        border-bottom-right-radius: 27px;
+      @media only screen and (max-width: 390px) {
+        .stats-content {
+          font-size: 0.9rem;
+        }
+        .card-action { height: 65px;}
       }
 
-      .btn-realized-mission { background-color: #C1C6CA; }
-
-      .btn-started-mission { background: linear-gradient(to left, #79BE38, #92D242); }
-
-      .btn-new-mission { background: linear-gradient(to left, var(--light-accent-color), var(--accent-color)); }
-
-      .btn-text-mission {
-        color: #ffffff;
-        text-transform: initial;
-        font-size: 0.8em;
+      @media only screen and (max-width: 330px) {
+        .card-action span { font-size: 1.5em };
       }
-
-      #action iron-icon {
-        color: #ffffff;
-        margin-right: 5px;
-      }
-
-      paper-item {
-        margin-right: 30px;
-        margin-left: 10px;
-      }
-
-      .comments {
-        background-color: var(--primary-background-color);
-        padding: 10px 0px 60px 0px;
-      }
-      .comments h2 { margin-bottom: 20px; }
-
-      .card-action {
-        width: 75%;
-        max-width: 400px;
-        height: 80px;
-        margin: auto;
-        text-align: center;
-        margin-top: 70px;
-        margin-bottom: 70px;
-      }
-
-      .card-action a { text-decoration: none; }
-      .card-action span {
-       font-family: Folio;
-       text-transform: uppercase;
-       font-size: 2em;
-       color: white;
-       margin: auto;
-       letter-spacing: 3px;
-      }
-
-      .card-action div { padding-top: 15px; }
-
-    #mission-finished, #mission-accepted, #mission-blocked {
-      display: none;
-      flex-direction: column;
-    }
-
-    #mission-finished span,
-    #mission-finished paper-icon-button,
-    #mission-blocked span,
-    #mission-blocked  paper-icon-button {
-      color: rgba(183,184,183,1);
-    }
-
-    #mission-accepted span { color: var(--accent-color); }
-    #mission-accepted div:first-child {
-      border-color: var(--accent-color);
-      border-width: 1.5px;
-      border-style: solid;
-      padding: 10px 10px 10px 10px;
-    }
-
-    #mission-accepted div:nth-child(2) {
-      display: block;
-      font-size: 7px;
-    }
-
-    #mission-accepted div:nth-child(2) span { letter-spacing: 0; }
-    #mission-accepted div:nth-child(2) a { text-decoration: underline; }
-
-    #load-more-comments {
-      width: 90%;
-      margin: 52px auto 50px auto;
-      text-align: center;
-    }
-
-    #load-more-comments span {
-      font-family: Folio;
-      font-size: 18px;
-      text-transform: uppercase;
-      color: var(--secondary-text-color);
-    }
-
-    @media only screen and (max-width: 460px) {
-      .stats-content { font-size: 1.0rem; }
-    }
-
-    @media only screen and (max-width: 390px) {
-      .stats-content {
-        font-size: 0.9rem;
-      }
-      .card-action { height: 65px;}
-    }
-
-    @media only screen and (max-width: 330px) {
-      .card-action span { font-size: 1.5em };
-    }
     </style>
-
     <app-besouro-api id="api"></app-besouro-api>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal
@@ -466,24 +304,26 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   <div class="stats">
     <div class="stats-content">
-      <div>
-        <span>
-          <span class="stats-number">{{candidateStatus.selected_count}} </span>
-            selecionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
+      <div class="stats-columns">
+        <div>
+          <span>
+            <span class="stats-number">{{candidateStatus.selected_count}} </span>
+              selecionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
+            </span>
+        </div>
+
+        <div>
+          <span>
+            <span class="stats-number">{{candidateStatus.pressed_count}}</span>
+            pressionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
           </span>
-      </div>
+        </div>
 
-      <div>
-        <span>
-          <span class="stats-number">{{candidateStatus.pressed_count}}</span>
-          pressionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
-        </span>
-      </div>
-
-      <div>
-        <span>
-          <span class="stats-number">{{candidateStatus.fav_count}}</span>
-          favoritaram</span>
+        <div>
+          <span>
+            <span class="stats-number">{{candidateStatus.fav_count}}</span>
+            favoritaram</span>
+        </div>
       </div>
     </div>
   </div>
@@ -491,6 +331,36 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
     <template is="dom-if" if="{{candidate}}">
       <div class="content">
         <h2>{{candidate.name}}</h2>
+        <div id="unselected">
+          <paper-button on-click="_selectCandidate">
+            <div>
+              <div id="btn-icon">
+                <iron-icon icon="app:select-candidate"></iron-icon>
+              </div>
+              selecionar
+            </div>
+          </paper-button>
+          <paper-button on-click="_pressCandidate">
+            <div>
+              <div id="btn-icon">
+                <iron-icon icon="app:press-candidate"></iron-icon>
+              </div>
+              pressionar
+            </div>
+          </paper-button>
+        </div>
+
+      <div id="social-medias">
+        <hr>
+        <span>redes sociais deste candidato:</span>
+        <div id="medias">
+            <paper-icon-button id="facebookBtn" on-click="_redirectToSocialLink" data-item="facebook_url" icon="app:social-facebook"></paper-icon-button>
+            <paper-icon-button id="twitterBtn" on-click="_redirectToSocialLink" data-item="twitter_url" icon="app:social-twitter"></paper-icon-button>
+            <paper-icon-button id="instagramBtn" on-click="_redirectToSocialLink" data-item="instagram_url" icon="app:social-insta"></paper-icon-button>
+            <paper-icon-button id="youtubeBtn" on-click="_redirectToSocialLink" data-item="youtube_url" icon="app:social-youtube"></paper-icon-button>
+            <paper-icon-button id="crowdBtn" on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
+        </div>
+      </div>
         <div id="candidate-infos">
           <div>
             <div id="candidacy">
@@ -512,6 +382,73 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
           </div>
         </div>
       </div>
+
+        <div id="tse-data">
+          <div class="item">
+            <div class="item-header">
+              <div class="item-title">
+                <span>Nome Completo</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+            </div>
+          <div class="item-body">
+             <span>{{candidate.full_name}}</span>
+          </div>
+
+          </div>
+          <div class="item">
+            <div class="item-header">
+              <div class="item-title">
+                <span>Ocupação Profissional</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+            </div>
+            <div class="item-body">
+              <span>
+                {{candidate.occupation}}
+              </span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-header">
+              <div class="item-title">
+                <span>Aderiu totalmente às novas medidas?</span>
+              </div>
+              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
+            </div>
+            <div class="item-body">
+              <span>
+                {{candidate.justify_adhered_to_the_measures}}
+              </span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-header">
+              <div class="item-title">
+                <span>Total de bens e patrimônio</span>
+              </div>
+              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
+            </div>
+            <div class="item-body">
+              <span>
+                {{candidate.riches}}
+              </span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-header">
+              <div class="item-title">
+                <span>Total de processos a que responde</span>
+              </div>
+              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
+            </div>
+            <div class="item-body">
+              <span>
+                {{candidate.lawsuits}}
+              </span>
+            </div>
+          </div>
+        </div>
     </template>
     </app-header-layout>
 `;
@@ -525,12 +462,14 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
         type: Object,
         notify: true
       },
-      candidate: Object,
+      candidate: {
+        type: Object,
+        observer: "_candidateChanged"
+      },
       candidateStatus: Object,
       key: String
     };
   }
-
 
   static get observers() {
     return [
@@ -541,6 +480,17 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
   routePathChanged(path) {
     this._getCandidate();
     this._getCandidateStatistics();
+    this._setActionButton();
+  }
+
+  _setActionButton() {
+    if (this.candidateStatus == "unselected") {
+    }
+  }
+
+  _candidateChanged() {
+      if(!this.candidate) return;
+      this._chooseCandidateColor();
   }
 
   _getCandidate() {
@@ -549,7 +499,6 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
       this.set("candidate", ajax.response)
-      this._setLayerImage(this.candidate.image);
     });
   }
 
@@ -571,13 +520,76 @@ class CandidatePage extends MissionMixin(CommonBehaviorsMixin(PolymerElement)) {
     }
   }
 
-  ready() {
-    super.ready();
-  }
-
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
     this.set("route.path", "/login");
+  }
+
+  _toggle(e) {
+    var item = e.target.parentNode.parentNode;
+    var itemHeight = item.clientHeight;
+    if (itemHeight == 40) {
+      item.setAttribute("style", "height: 90px");
+      e.target.set("icon",  "app:expand-less");
+    }
+    else {
+      item.setAttribute("style", "height: 40px");
+      e.target.icon = "app:expand-more";
+    }
+  }
+
+  _toggleBig(e) {
+    var item = e.target.parentNode.parentNode;
+    var itemHeight = item.clientHeight;
+    if (itemHeight == 40) {
+      item.setAttribute("style", "height: 200px");
+      e.target.set("icon",  "app:expand-less");
+    }
+    else {
+      item.setAttribute("style", "height: 40px");
+      e.target.icon = "app:expand-more";
+    }
+  }
+
+  _chooseCandidateColor() {
+    this._showPressBtn();
+    if (this.candidate.score == "good") {
+      this._hidePressBtn();
+      var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
+      this._setHeaderGradient(colors);
+    } else if (this.candidate.score == "bad") {
+      this._hidePressBtn();
+      var colors = ["rgba(230,0,0,0.5)", "rgba(0,0,0,1)"];
+      this._setHeaderGradient(colors);
+    } else {
+      var colors = ["rgba(183,184,183,0.5)", "rgba(0,0,0,1)"];
+      this._setHeaderGradient(colors);
+    }
+  }
+
+  _hidePressBtn () {
+    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
+    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
+    pressBtn.style.display = "none";
+    selectBtn.style.margin = "20px auto";
+    selectBtn.style.width = "262px";
+  }
+
+  _showPressBtn() {
+    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
+    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
+    console.log(pressBtn);
+    pressBtn.style.display = "block";
+    selectBtn.style.marginLeft = "auto";
+    selectBtn.style.marginRight = "5px";
+    selectBtn.style.width = "128px";
+  }
+
+  _setHeaderGradient(colors) {
+    if(this.candidate) {
+      var image = this._linearGradient(colors, "to bottom", this.candidate.image);
+      this.updateStyles({ '--layer-image': `${image}`});
+    }
   }
 }
 
