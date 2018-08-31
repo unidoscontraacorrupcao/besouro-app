@@ -64,7 +64,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       }
       .toast-text {
         color: white;
-        text-transform: uppercase;
         margin-top: 0;
       }
 
@@ -107,12 +106,12 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     <app-besouro-api id="api"></app-besouro-api>
     <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
     <paper-toast id="selectedToast" class="error" text="{{_toastMessage}}">
-      <h3 class="toast-text">Candidato(a) selecionado com sucesso</h3>
-      <p class="toast-text">Agradecemos sua participação! Continue selecionando candidatos que te interessem e não deixe de conferir sua caixa de notificações para acompanhar as novidades</p>
+      <h3 class="toast-text">selecionado(a) com sucesso</h3>
+      <p class="toast-text">Veja mais detalhes sobre {{targetCandidate}} na aba SELECIONADOS</p>
     </paper-toast>
     <paper-toast id="pressedToast" class="error" text="{{_toastMessage}}">
-      <h3 class="toast-text">Candidato(a) pressionado com sucesso</h3>
-      <p class="toast-text">Agradecemos sua participação! Continue pressionando candidatos que não se comprometeram ainda e não deixe de conferir as novidades na sua caixa de notificações</p>
+      <h3 class="toast-text">Pressionado(a) com sucesso</h3>
+      <p class="toast-text">{{targetCandidate}} receberá um email nosso para que mude de opinião!</p>
     </paper-toast>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
@@ -244,7 +243,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       },
       filters: {
         type: Object
-      }
+      },
+      targetCandidate: String
     };
   }
 
@@ -435,6 +435,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
 
    _selectedCandidatesChanged(e) {
+    this.set('targetCandidate', e.detail.candidate.candidate);
     this._showSelectedToast('');
     this._showSelectedCardAnimation(e);
     setTimeout(() => {
@@ -448,6 +449,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _pressedCandidatesChanged(e) {
+    this.set('targetCandidate', e.detail.candidate.candidate);
     this._showPressedToast('');
     this._showPressedCardAnimation(e);
     setTimeout(() => {
