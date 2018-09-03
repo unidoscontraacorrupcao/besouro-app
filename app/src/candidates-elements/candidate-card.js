@@ -194,7 +194,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       </div>
 
       <div class="card-footer">
-        <paper-button on-click="_selectCandidate">
+        <paper-button on-click="_wrapSelectCandidate">
           <div>
             <div id="btn-icon">
               <iron-icon icon="app:select-candidate"></iron-icon>
@@ -202,7 +202,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
             selecionar
           </div>
         </paper-button>
-        <paper-button on-click="_pressCandidate">
+        <paper-button on-click="_wrapPressCandidate">
           <div>
             <div id="btn-icon">
               <iron-icon icon="app:press-candidate"></iron-icon>
@@ -271,6 +271,19 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     card.classList.remove("ignored-candidate-animation");
   }
 
+  _wrapSelectCandidate() {
+    this.showLoading();
+    this._selectCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("selected-candidate"))
+    });
+  }
+
+  _wrapPressCandidate() {
+    this.showLoading();
+    this._pressCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("pressed-candidate"));
+    });
+  }
 
   constructor() { super(); }
 

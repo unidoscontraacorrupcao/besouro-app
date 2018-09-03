@@ -301,20 +301,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _supportCandidate() { window.open(this.candidate.crowdfunding_url); }
-
-  _pressCandidate() {
-    var user = this.getUser();
-    this.$.api.method = "POST";
-    this.$.api.path = "pressed-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("pressed-candidate"));
-    });
-  }
-
   _unselectCandidate() {
     var user = this.getUser();
     this.$.api.method = "POST";
@@ -341,41 +327,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       var colors = ["rgba(183,184,183,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     }
-  }
-
-  _hideSocialMediaIcons() {
-    var medias = this.shadowRoot.querySelector("#social-medias");
-    medias.style.display = "block";
-    if ((this._invalidSocialMediaUrl('facebook_url')
-      && this._invalidSocialMediaUrl('youtube_url')
-      && this._invalidSocialMediaUrl('twitter_url')
-      && this._invalidSocialMediaUrl('instagram_url')
-      && this._invalidSocialMediaUrl('crowdfunding_url'))) {
-      medias.style.display = "none";
-      this.shadowRoot.querySelector("#tse-data").style.marginTop = "20px";
-    }
-    else {
-      if (this._invalidSocialMediaUrl('facebook_url'))
-        this.$.facebookBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('youtube_url'))
-        this.$.youtubeBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('twitter_url'))
-        this.$.twitterBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('instagram_url'))
-        this.$.instagramBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('crowdfunding_url'))
-        this.$.crowdBtn.style.display = "none";
-        this._hideSupportBtn();
-    }
-  }
-
-  _invalidSocialMediaUrl(url) {
-    if (!this.candidate[url]) return true;
-    if (/^www/.test(this.candidate[url])) {
-      this.candidate[url] = 'http://' + this.candidate[url];
-      return false;
-    }
-    return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
   }
 
   _hideSupportBtn () {

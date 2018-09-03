@@ -47,9 +47,7 @@ let Mixin = function(superClass) {
     this.$.api.user = user;
     //TODO: replace 1 by the candidate id.
     this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("selected-candidate"));
-    });
+    return this.$.api.request();
   }
 
   _pressCandidate() {
@@ -63,9 +61,7 @@ let Mixin = function(superClass) {
     this.$.api.user = user;
     //TODO: replace 1 by the candidate id.
     this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("pressed-candidate"));
-    });
+    return this.$.api.request();
   }
 
   _ignoreCandidate() {
@@ -82,6 +78,44 @@ let Mixin = function(superClass) {
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("ignored-candidate"));
     });
+  }
+
+  _supportCandidate() { window.open(this.candidate.crowdfunding_url); }
+
+  _hideSocialMediaIcons() {
+    var medias = this.shadowRoot.querySelector("#social-medias");
+    medias.style.display = "block";
+    if ((this._invalidSocialMediaUrl('facebook_url')
+      && this._invalidSocialMediaUrl('youtube_url')
+      && this._invalidSocialMediaUrl('twitter_url')
+      && this._invalidSocialMediaUrl('instagram_url')
+      && this._invalidSocialMediaUrl('crowdfunding_url'))) {
+      medias.style.display = "none";
+      this.shadowRoot.querySelector("#tse-data").style.marginTop = "20px";
+    }
+    else {
+      if (this._invalidSocialMediaUrl('facebook_url'))
+        this.$.facebookBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('youtube_url'))
+        this.$.youtubeBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('twitter_url'))
+        this.$.twitterBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('instagram_url'))
+        this.$.instagramBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('crowdfunding_url'))
+        this.$.crowdBtn.style.display = "none";
+        this._hideSupportBtn();
+    }
+  }
+
+  _invalidSocialMediaUrl(url) {
+    if (!this.candidate[url]) return true;
+    if (!this.candidate[url] == 'SEM INFORMAÇÕES') return true;
+    if (/^www/.test(this.candidate[url])) {
+      this.candidate[url] = 'http://' + this.candidate[url];
+      return false;
+    }
+    return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
   }
 
   }

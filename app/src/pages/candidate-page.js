@@ -185,8 +185,14 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         color: var(--secondary-text-color);
       }
 
-      #unselected paper-button:last-child {
+      #unselected paper-button:nth-child(2) {
         background-color: var(--secondary-text-color);
+        color: white;
+      }
+
+      #unselected  paper-button:last-child {
+        background-color: rgba(0,159,227,1);
+        border-color: rgba(0,159,227,1);
         color: white;
       }
 
@@ -332,7 +338,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       <div class="content">
         <h2>{{candidate.name}}</h2>
         <div id="unselected">
-          <paper-button on-click="_selectCandidate">
+          <paper-button on-click="_wrapSelectCandidate">
             <div>
               <div id="btn-icon">
                 <iron-icon icon="app:select-candidate"></iron-icon>
@@ -340,12 +346,22 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               selecionar
             </div>
           </paper-button>
+
           <paper-button on-click="_pressCandidate">
             <div>
               <div id="btn-icon">
                 <iron-icon icon="app:press-candidate"></iron-icon>
               </div>
               pressionar
+            </div>
+          </paper-button>
+
+          <paper-button on-click="_supportCandidate">
+            <div>
+              <div id="btn-icon">
+                <iron-icon icon="app:wallet"></iron-icon>
+              </div>
+              apoiar
             </div>
           </paper-button>
         </div>
@@ -465,7 +481,10 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         type: Object,
         observer: "_candidateChanged"
       },
-      candidateStatus: Object,
+      candidateStatus: {
+        type: Object,
+        observer: "_candidateStatusChanged"
+      },
       key: String
     };
   }
@@ -486,6 +505,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   _candidateChanged() {
       if(!this.candidate) return;
       this._chooseCandidateColor();
+      this._hideSocialMediaIcons();
   }
 
   _getCandidate() {
@@ -562,9 +582,19 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     }
   }
 
+  _candidateStatusChanged() {
+    if (!this.candidateStatus) return;
+    console.log(this.candidateStatus);
+    if (this.candidateStatus.status == 'selected') { this._showSupportBtn(); }
+    if (this.candidateStatus.status == 'pressed') { console.log("candidato pressionado"); }
+    if (this.candidateStatus.status == 'unselected') { this._showPressBtn(); }
+  }
+
   _hidePressBtn () {
-    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
+    var pressBtn = this.shadowRoot.querySelector("paper-button:nth-child(2)");
     var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
+    var supportBtn = this.shadowRoot.querySelector("#unselected paper-button:last-child");
+    supportBtn.style.display = "none";
     pressBtn.style.display = "none";
     selectBtn.style.margin = "20px auto";
     selectBtn.style.width = "262px";
@@ -572,7 +602,9 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   _showPressBtn() {
     var selectBtn = this.shadowRoot.querySelector("#unselected paper-button:first-child");
-    var pressBtn = this.shadowRoot.querySelector("#unselected paper-button:last-child");
+    var pressBtn = this.shadowRoot.querySelector("#unselected paper-button:nth-child(2)");
+    var supportBtn = this.shadowRoot.querySelector("#unselected paper-button:last-child");
+    supportBtn.style.display = "none";
     pressBtn.style.display = "block";
     selectBtn.style.marginLeft = "auto";
     selectBtn.style.marginRight = "5px";
@@ -580,12 +612,33 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     pressBtn.style.width = "128px";
   }
 
+  _showSupportBtn() {
+    var selectBtn = this.shadowRoot.querySelector("#unselected paper-button:first-child");
+    var pressBtn = this.shadowRoot.querySelector("#unselected paper-button:nth-child(2)");
+    var supportBtn = this.shadowRoot.querySelector("#unselected paper-button:last-child");
+    selectBtn.style.display = "none";
+    pressBtn.style.display = "none";
+    if (!this._invalidSocialMediaUrl(this.candidate.crowdfunding_url)) {
+      supportBtn.style.display = "block";
+      supportBtn.style.margin = "auto";
+      supportBtn.style.width = "300px";
+    }
+  }
+
+
   _setHeaderGradient(colors) {
     if(this.candidate) {
       var image = this._linearGradient(colors, "to bottom",
         `url(${this.candidate.image})`);
       this.updateStyles({ '--layer-image': `${image}`});
     }
+  }
+
+  _wrapSelectCandidate() {
+    this.showLoading();
+    this._selectCandidate().then((ajax) => {
+      this._getCandidateStatistics();
+    });
   }
 }
 
