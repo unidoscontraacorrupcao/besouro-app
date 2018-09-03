@@ -1,10 +1,12 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '../app-elements/app-constants.js';
+import '../app-elements/app-besouro-api.js';
 
 class ApiForgotPassword extends PolymerElement {
   static get template() {
     return html`
+    <app-besouro-api id="api"></app-besouro-api>
     <app-constants id="constants"></app-constants>
     <iron-ajax
       id="ajax"
@@ -30,9 +32,13 @@ class ApiForgotPassword extends PolymerElement {
   request(email) {
     let validation = this._validate(email);
     if(validation.isValid) {
-      this._url = this.$.constants.api.forgotPassword;
-      this._email = email;
-      this.$.ajax.generateRequest();
+      let apiBaseUrl = this.$.api.baseUrl;
+      this.$.api.authUrl = `${apiBaseUrl}/reset/`;
+      this.$.api.authRequest().then((result) => {
+        this._url = this.$.constants.api.forgotPassword;
+        this._email = email;
+        this.$.ajax.generateRequest();
+      });
     } else {
       this._dispatch(validation.errors);
     }
