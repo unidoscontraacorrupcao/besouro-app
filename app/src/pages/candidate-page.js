@@ -21,10 +21,9 @@ import '../mission-elements/mission-player.js';
 import '../app-elements/app-besouro-api.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import {CardMixin} from '../mixin-elements/card-mixin.js';
-import {MissionMixin} from '../mixin-elements/mission-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { resolveCss } from '@polymer/polymer/lib/utils/resolve-url';
-class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerElement))) {
+class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="candidate-card-shared-styles"></style>
@@ -55,13 +54,13 @@ class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerE
 
       app-header {
         height: 250px;
-        color: var(--light-text-color);
+        color: white;
         /* https://bugs.chromium.org/p/chromium/issues/detail?id=637072 */
         --app-header-background-front-layer: {
           background-image: var(--layer-image);
           background-position: center;
-          background-size: 125%;
-          filter: contrast(.7) brightness(.6);
+          background-size: contain;
+          background-repeat: no-repeat;
         };
       }
 
@@ -176,12 +175,14 @@ class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerE
         flex-grow: 1;
         height: 64px;
         font-family: folio;
+        text-align: center;
       }
 
       #unselected paper-button:first-child {
         border-color: var(--secondary-text-color);
         border-style: solid;
         border-width: 1px;
+        color: var(--secondary-text-color);
       }
 
       #unselected paper-button:last-child {
@@ -328,7 +329,6 @@ class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerE
     </div>
   </div>
 
-    <template is="dom-if" if="{{candidate}}">
       <div class="content">
         <h2>{{candidate.name}}</h2>
         <div id="unselected">
@@ -449,7 +449,6 @@ class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerE
             </div>
           </div>
         </div>
-    </template>
     </app-header-layout>
 `;
   }
@@ -471,11 +470,7 @@ class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerE
     };
   }
 
-  static get observers() {
-    return [
-      'routePathChanged(route.path)'
-    ]
-  }
+  static get observers() { return [ 'routePathChanged(route.path)' ] }
 
   routePathChanged(path) {
     this._getCandidate();
@@ -576,18 +571,19 @@ class CandidatePage extends MissionMixin(CardMixin(CommonBehaviorsMixin(PolymerE
   }
 
   _showPressBtn() {
-    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
-    console.log(pressBtn);
+    var selectBtn = this.shadowRoot.querySelector("#unselected paper-button:first-child");
+    var pressBtn = this.shadowRoot.querySelector("#unselected paper-button:last-child");
     pressBtn.style.display = "block";
     selectBtn.style.marginLeft = "auto";
     selectBtn.style.marginRight = "5px";
     selectBtn.style.width = "128px";
+    pressBtn.style.width = "128px";
   }
 
   _setHeaderGradient(colors) {
     if(this.candidate) {
-      var image = this._linearGradient(colors, "to bottom", this.candidate.image);
+      var image = this._linearGradient(colors, "to bottom",
+        `url(${this.candidate.image})`);
       this.updateStyles({ '--layer-image': `${image}`});
     }
   }

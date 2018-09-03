@@ -114,7 +114,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     #btn-icon {
       width: 25%;
-      margin: auto auto 10px auto;
+      margin: auto auto auto auto;
     }
 
     #card-image { position: relative; }
