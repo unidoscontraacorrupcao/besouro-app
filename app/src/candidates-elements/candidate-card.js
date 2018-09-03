@@ -226,55 +226,6 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     }
   }
 
-  _selectCandidate() {
-    var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) {
-      this.dispatchEvent(new CustomEvent("unauthorized"));
-      return;
-    }
-    this.$.api.method = "POST";
-    this.$.api.path = "selected-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("selected-candidate", {detail: {"candidate": ajax.response}}));
-    });
-  }
-
-  _pressCandidate() {
-    var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) {
-      this.dispatchEvent(new CustomEvent("unauthorized"));
-      return;
-    }
-    this.$.api.method = "POST";
-    this.$.api.path = "pressed-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("pressed-candidate", {detail: {"candidate": ajax.response}}));
-    });
-  }
-
-  _ignoreCandidate() {
-    var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) {
-      this.dispatchEvent(new CustomEvent("unauthorized"));
-      return;
-    }
-    this.$.api.method = "POST";
-    this.$.api.path = "ignored-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("ignored-candidate"));
-    });
-  }
-
-
   _chooseCandidateColor() {
     this._showPressBtn();
     if (this.candidate.score == "good") {

@@ -35,6 +35,55 @@ let Mixin = function(superClass) {
       return `linear-gradient(${direction}, ${colors[0]}, ${colors[1]}, ${colors[2]}), ${imagePath}`;
 
     }
+
+  _selectCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+    this.$.api.method = "POST";
+    this.$.api.path = "selected-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("selected-candidate"));
+    });
+  }
+
+  _pressCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+    this.$.api.method = "POST";
+    this.$.api.path = "pressed-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("pressed-candidate"));
+    });
+  }
+
+  _ignoreCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+    this.$.api.method = "POST";
+    this.$.api.path = "ignored-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("ignored-candidate"));
+    });
+  }
+
   }
 }
 
