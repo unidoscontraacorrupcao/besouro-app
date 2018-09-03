@@ -31,7 +31,7 @@ import '../pages/reset-password-page.js';
 import '../pages/candidates-page.js';
 import './app-icons.js';
 import './app-theme.js';
-// import messaging from '../../firebase.js'
+//import messaging from '../../firebase.js'
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
