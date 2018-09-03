@@ -180,7 +180,7 @@ class NotificationCard extends PolymerElement {
           break;
         case "press":
           this.set('cardTitle', 'Você pressionou ');
-          this.set('additionalText', ' para que ele se comprometa contra a corrupção!')
+          this.set('additionalText', ' para que ele(a) se comprometa contra a corrupção!')
           break;
         default:
           return "";
