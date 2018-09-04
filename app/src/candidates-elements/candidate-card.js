@@ -274,14 +274,14 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   _wrapSelectCandidate() {
     this.showLoading();
     this._selectCandidate().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("selected-candidate"))
+      this.dispatchEvent(new CustomEvent("selected-candidate", {detail: {"candidate": ajax.response}}))
     });
   }
 
   _wrapPressCandidate() {
     this.showLoading();
     this._pressCandidate().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("pressed-candidate"));
+      this.dispatchEvent(new CustomEvent("pressed-candidate", {detail: {"candidate": ajax.response}}));
     });
   }
 
