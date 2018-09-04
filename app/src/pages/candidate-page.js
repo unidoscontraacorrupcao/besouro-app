@@ -599,6 +599,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     if (!this.data || Object.keys(this.data).length == 0) return;
     this.$.api.path = `candidates/${this.data.key}/status`;
     this.$.api.method = "GET";
+    this.$.api.params = {"user": user.uid};
     this.$.api.request().then((ajax) => {
       this.set("candidateStatus", ajax.response)
     });
