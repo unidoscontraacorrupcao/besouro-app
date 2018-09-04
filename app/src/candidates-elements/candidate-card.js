@@ -321,9 +321,6 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
   constructor() { super(); }
 
-  ready() {
-    super.ready();
-    this._chooseCandidateColor();
-  }
+  ready() { super.ready(); }
 }
 customElements.define(CandidateCard.is, CandidateCard);

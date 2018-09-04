@@ -308,7 +308,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
       if(!this.user || Object.keys(this.user).length == 0) {
-        this.set("allCandidates", ajax.response);
+        this.set("allCandidates", ajax.response.results);
       } else {
         this.set("allCandidates", ajax.response);
       }
