@@ -135,6 +135,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           tab="{{inboxtab}}"
           on-reload-candidates="_reloadCandidates"
           on-filtered-candidates="_showFilteredCandidates"
+          on-total-filtered="_getTotalFiltered"
           user="{{user}}"
           filters="{{filters}}"
           id="filter">
@@ -245,7 +246,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       filters: {
         type: Object
       },
-      targetCandidate: String
+      targetCandidate: String,
+      totalFiltered: {
+        type: Number,
+        observer: 'toggleLoadMoreButton'
+      }
     };
   }
 
@@ -325,12 +330,14 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.set("allCandidates", candidates.results);
       else
         this.set("allCandidates", candidates);
+      this.toggleLoadMoreButton();
     }
     if (tab == 1) {
       if (candidates.results)
         this.set("selectedCandidates", candidates.results);
       else
         this.set("selectedCandidates", candidates);
+      this.toggleLoadMoreButton();
     }
   }
 
@@ -351,6 +358,18 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       const count = `0${ajax.response.total}`.slice(-2);
       this.set("selectedCount", count);
     });
+  }
+
+  _getTotalFiltered(e) {
+    this.set('totalFiltered', e.detail.total);
+  }
+
+  toggleLoadMoreButton() {
+    if(this.totalFiltered === this.allCandidates.length) {
+      this.$.loadMoreCandidates.style.display = "none";
+    } else {
+      this.$.loadMoreCandidates.style.display = "block";
+    }
   }
 
   _getSelectedCandidates(limit=0) {
@@ -383,8 +402,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     else {
       this.$.api.path = `users/${this.getUser().uid}/candidates`;
     }
-
     this.showLoading();
+    
     this.$.api.method = "GET";
     this.limit += 10;
     this.$.api.params = this.filters;
@@ -395,6 +414,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       else
         this.set("allCandidates", ajax.response);
       this.hideLoading();
+      this.toggleLoadMoreButton();
     });
   }
 
@@ -414,8 +434,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       if (ajax.response.results)
         this.set("selectedCandidates", ajax.response.results);
       else
-      this.set("selectedCandidates", ajax.response);
+        this.set("selectedCandidates", ajax.response);
       this.hideLoading();
+      this.toggleLoadMoreButton();
     });
   }
 
@@ -433,7 +454,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     var card = e.target.shadowRoot.querySelector(".card");
     card.classList.add("ignored-candidate-animation");
   }
-
 
    _selectedCandidatesChanged(e) {
     this.set('targetCandidate', e.detail.candidate.candidate);

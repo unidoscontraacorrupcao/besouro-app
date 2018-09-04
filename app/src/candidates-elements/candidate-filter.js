@@ -293,10 +293,9 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   _fiterAllCandidates() {
     var user = this.getUser();
-
     this._setFilters();
     this.$.api.params = this.filters;
-    if (!this.user || Object.keys(this.user).length == 0) {
+    if (!user || Object.keys(user).length == 0) {
       this.$.api.path = `candidates`;
     }
     else {
@@ -306,11 +305,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 0}}));
       this._toggle();
+      this._getTotalFiltered();
     });
   }
 
   _filterSelectedCandidates() {
     var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) return;
     this.$.api.path = `users/${user.uid}/selected-candidates`;
     this._setFilters();
     this.$.api.params = this.filters;
@@ -319,6 +320,25 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         {detail: {candidates: ajax.response, "tab": 1}}));
       this._toggle();
     });
+  }
+
+  _getTotalFiltered() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      let apiBaseUrl = this.$.api.baseUrl;
+      this.$.api.authUrl = `${apiBaseUrl}/candidates/total-filtered-candidates`;
+      this.$.api.authRequest().then((ajax) => {
+        this.dispatchEvent(new CustomEvent("total-filtered",
+          {detail: {total: ajax.response.total}}));
+      });
+    } else {
+      this.$.api.method = "GET";
+      this.$.api.path = `users/${user.uid}/total-filtered-candidates/`;
+      this.$.api.request().then((ajax) => {
+        this.dispatchEvent(new CustomEvent("total-filtered",
+          {detail: {total: ajax.response.total}}));
+      });
+    }
   }
 
   _setFilters() {
