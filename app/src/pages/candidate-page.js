@@ -548,6 +548,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   _getCandidate() {
     var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) return;
+    if (!this.data || Object.keys(this.data).length == 0) return;
     this.$.api.path = `candidates/${this.data.key}`;
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
@@ -557,7 +559,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   _getCandidateStatistics() {
     var user = this.getUser();
-    if (!user || Object.keys(this.user).length == 0) return;
+    if (!user || Object.keys(user).length == 0) return;
+    if (!this.data || Object.keys(this.data).length == 0) return;
     this.$.api.path = `candidates/${this.data.key}/status`;
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
