@@ -37,8 +37,13 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         --layer-image: '';
       }
 
+      .content {
+        max-width: 800px;
+        margin: auto;
+      }
+
       .content h2 {
-        font-size: 1.3em;
+        font-size: 1.8em;
         font-family: Folio;
         text-transform: uppercase;
         color: var(--secondary-text-color);
@@ -49,6 +54,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         color: rgba(51,51,51,1);
         font-family: helvetica-neue;
       }
+
+      hr { margin-bottom: 38px; }
 
       mission-player { margin: auto; }
 
@@ -109,11 +116,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       .tall { height: 175px; }
 
 
-      #social-medias {
-        width: 85%;
-        margin: auto;
-        margin: 22px auto 12px auto;
-      }
+      #social-medias { margin: 22px auto 12px auto; }
 
       #social-medias span {
         text-transform: uppercase;
@@ -167,13 +170,14 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
       #unselected {
         display: flex;
-        width: 70%;
-        margin: auto;
+        width: 90%;
+        margin: 40px auto 40px auto;
       }
 
       #unselected paper-button {
         flex-grow: 1;
-        height: 64px;
+        height: 74px;
+        max-width: 300px;
         font-family: folio;
         text-align: center;
       }
@@ -225,6 +229,12 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
       .stats-columns div { flex-grow: 1; }
 
+      #candidate-infos {width: 85%;}
+
+      #candidate-infos div span:nth-child(2) {
+        font-family: folio;
+        font-size: 18px;
+      }
 
       @media only screen and (max-width: 460px) {
         .stats-content { font-size: 1.0rem; }
@@ -282,14 +292,51 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
         <app-toolbar class="tall">
           <p bottom-item main-title="" class="title">
-            {{mission.title}}
-            <div bottom-item class="timing">
-
-            <paper-icon-button
-              icon="app:mission-timing">
-            </paper-icon-button>
-            <span>{{mission.remainig_days}}</span>
+        <div id="political-infos">
+          <div class="info">
+            <div id="short">
+              <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="right">
+                Nosso critério de passado limpo é rígido. 
+                A referência são os crimes da Lei da Ficha Limpa, mas 
+                para nós eles nunca prescrevem. No caso de quem tentará 
+                reeleição, veremos quem responde a processo no STF.
+              </paper-tooltip>
             </div>
+            <div>
+              <span>{{candidate.has_clean_pass}}</span>
+            </div>
+          </div>
+          <div class="info">
+            <div>
+              <span>Comprometeu-se com democracia?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="top">
+                O critério de compromisso com os princípios 
+                democráticos baseia-se na adesão ao Pacto 
+                pela Democracia – iniciativa da sociedade pela 
+                preservação e revigoramento da vida política e 
+                democrática do país.
+              </paper-tooltip>
+            </div>
+            <div>
+              <span>{{candidate.committed_to_democracy}}</span>
+            </div>
+          </div>
+          <div class="info">
+            <div>
+              <span>Aderiu às novas medidas?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="left">
+                No caso do combate à corrupção, a/o candidata/o 
+                terá de se comprometer a, se eleita/o, pôr nossas 
+                propostas em tramitação e atuar por sua aprovação. 
+                Ressalvas terão de ser identificadas e justificadas.
+              </paper-tooltip>
+            </div>
+            <div>
+              <span>{{candidate.adhered_to_the_measures}}</span>
+            </div>
+          </div>
+        </div>
           </p>
       <mission-player
         id="player"
@@ -297,15 +344,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         mission="{{mission}}"
         mission-key="{{data.key}}">
       </mission-player>
-
-      <div class="actions">
-
-        <paper-icon-button
-          on-tap="_shareMission"
-          id="share-mission"
-          icon="app:share">
-        </paper-icon-button>
-      </div>
     </app-toolbar>
   </app-header>
 
@@ -337,6 +375,26 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
       <div class="content">
         <h2>{{candidate.name}}</h2>
+        <div id="candidate-infos">
+          <div>
+            <div id="candidacy">
+              <span>candidatura:</span>
+              <span><b>{{candidate.candidacy}}</b></span>
+            </div>
+          </div>
+          <div>
+            <div id="urn">
+              <span>urna:</span>
+              <span><b>{{candidate.urn}}</b></span>
+            </div>
+          </div>
+          <div>
+            <div id="party-uf">
+              <span>partido - UF:</span>
+              <span><b>{{candidate.party}} - {{candidate.uf}}</b></span>
+            </div>
+          </div>
+        </div>
         <div id="unselected">
           <paper-button on-click="_wrapSelectCandidate">
             <div>
@@ -377,28 +435,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
             <paper-icon-button id="crowdBtn" on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
         </div>
       </div>
-        <div id="candidate-infos">
-          <div>
-            <div id="candidacy">
-              <span>candidatura:</span>
-              <span><b>{{candidate.candidacy}}</b></span>
-            </div>
-          </div>
-          <div>
-            <div id="urn">
-              <span>urna:</span>
-              <span><b>{{candidate.urn}}</b></span>
-            </div>
-          </div>
-          <div>
-            <div id="party-uf">
-              <span>partido - UF:</span>
-              <span><b>{{candidate.party}} - {{candidate.uf}}</b></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
         <div id="tse-data">
           <div class="item">
             <div class="item-header">
@@ -465,6 +501,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
             </div>
           </div>
         </div>
+      </div>
+
     </app-header-layout>
 `;
   }
@@ -519,6 +557,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   _getCandidateStatistics() {
     var user = this.getUser();
+    if (!user || Object.keys(this.user).length == 0) return;
     this.$.api.path = `candidates/${this.data.key}/status`;
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
@@ -618,7 +657,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     var supportBtn = this.shadowRoot.querySelector("#unselected paper-button:last-child");
     selectBtn.style.display = "none";
     pressBtn.style.display = "none";
-    if (!this._invalidSocialMediaUrl(this.candidate.crowdfunding_url)) {
+    if (!this._invalidSocialMediaUrl("crowdfunding_url")) {
       supportBtn.style.display = "block";
       supportBtn.style.margin = "auto";
       supportBtn.style.width = "300px";

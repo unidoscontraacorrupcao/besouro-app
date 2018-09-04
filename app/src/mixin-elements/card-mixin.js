@@ -85,11 +85,11 @@ let Mixin = function(superClass) {
   _hideSocialMediaIcons() {
     var medias = this.shadowRoot.querySelector("#social-medias");
     medias.style.display = "block";
-    if ((this._invalidSocialMediaUrl('facebook_url')
+    if (this._invalidSocialMediaUrl('facebook_url')
       && this._invalidSocialMediaUrl('youtube_url')
       && this._invalidSocialMediaUrl('twitter_url')
       && this._invalidSocialMediaUrl('instagram_url')
-      && this._invalidSocialMediaUrl('crowdfunding_url'))) {
+      && this._invalidSocialMediaUrl('crowdfunding_url')) {
       medias.style.display = "none";
       this.shadowRoot.querySelector("#tse-data").style.marginTop = "20px";
     }
@@ -104,13 +104,17 @@ let Mixin = function(superClass) {
         this.$.instagramBtn.style.display = "none";
       if (this._invalidSocialMediaUrl('crowdfunding_url'))
         this.$.crowdBtn.style.display = "none";
-        this._hideSupportBtn();
     }
+  }
+
+  _redirectToSocialLink(e) {
+    var link = e.target.dataset.item;
+    window.open(this.candidate[`${link}`], '_blank');
   }
 
   _invalidSocialMediaUrl(url) {
     if (!this.candidate[url]) return true;
-    if (!this.candidate[url] == 'SEM INFORMAÇÕES') return true;
+    if (this.candidate[url] == 'SEM INFORMAÇÕES') return true;
     if (/^www/.test(this.candidate[url])) {
       this.candidate[url] = 'http://' + this.candidate[url];
       return false;

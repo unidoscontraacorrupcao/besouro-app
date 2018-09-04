@@ -381,11 +381,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _redirectToSocialLink(e) {
-    var link = e.target.dataset.item;
-    window.open(this.candidate[`${link}`], '_blank');
-  }
-
   _showCandidate() {
     this.dispatchEvent(new CustomEvent("show-candidate",
       { detail: {candidate: this.candidate.id} }));
