@@ -132,7 +132,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <div>
                 <paper-icon-button on-click="_unselectCandidate" icon="app:remove-selected"></paper-icon-button>
               </div>
-              <span on-click="_unselectCandidate">remover seleção</span>
+              <span on-click="_wrapUnselectCandidate">remover seleção</span>
             </div>
           </div>
           <div id="candidate-infos">
@@ -301,13 +301,8 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _unselectCandidate() {
-    var user = this.getUser();
-    this.$.api.method = "POST";
-    this.$.api.path = `users/${user.uid}/unselect-candidate/`;
-    this.$.api.body = {"candidate": this.candidate.id};
-    this.$.api.user = user;
-    this.$.api.request().then((ajax) => {
+  _wrapUnselectCandidate() {
+    this._unselectCandidate().then((ajax) => {
       this.dispatchEvent(new CustomEvent("unselect-candidate"));
     });
   }
@@ -336,11 +331,16 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   }
 
   _showSupportBtn() {
-    var cardFooter = this.shadowRoot.querySelector(".card-footer");
-    cardFooter.style.display = "flex";
-    var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    supportBtn.style.margin = "auto";
-    supportBtn.style.width = "300px";
+    if(!this._invalidSocialMediaUrl("crowdfunding_url")) {
+      var cardFooter = this.shadowRoot.querySelector(".card-footer");
+      cardFooter.style.display = "flex";
+      var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
+      supportBtn.style.margin = "auto";
+      supportBtn.style.width = "300px";
+    }
+    else {
+      this._hideSupportBtn();
+    }
   }
 
   _candidateChanged() {

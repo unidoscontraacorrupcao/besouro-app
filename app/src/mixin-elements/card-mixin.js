@@ -42,10 +42,10 @@ let Mixin = function(superClass) {
       this.dispatchEvent(new CustomEvent("unauthorized"));
       return;
     }
+
     this.$.api.method = "POST";
     this.$.api.path = "selected-candidates/";
     this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
     this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
     return this.$.api.request();
   }
@@ -59,7 +59,6 @@ let Mixin = function(superClass) {
     this.$.api.method = "POST";
     this.$.api.path = "pressed-candidates/";
     this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
     this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
     return this.$.api.request();
   }
@@ -78,6 +77,15 @@ let Mixin = function(superClass) {
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("ignored-candidate"));
     });
+  }
+
+  _unselectCandidate() {
+    var user = this.getUser();
+    this.$.api.method = "POST";
+    this.$.api.path = `users/${user.uid}/unselect-candidate/`;
+    this.$.api.body = {"candidate": this.candidate.id};
+    this.$.api.user = user;
+    return this.$.api.request();
   }
 
   _supportCandidate() { window.open(this.candidate.crowdfunding_url); }
@@ -114,7 +122,8 @@ let Mixin = function(superClass) {
 
   _invalidSocialMediaUrl(url) {
     if (!this.candidate[url]) return true;
-    if (this.candidate[url] == 'SEM INFORMAÇÕES') return true;
+    if (this.candidate[url] == "SEM INFORMAÇÕES") return true;
+    if (this.candidate[url] == "não tenho") return true;
     if (/^www/.test(this.candidate[url])) {
       this.candidate[url] = 'http://' + this.candidate[url];
       return false;
