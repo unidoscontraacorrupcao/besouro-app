@@ -223,6 +223,10 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
           </div>
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <a name="candidates" href="candidates" hidden$="[[!user.uid]]">
+            <paper-icon-button icon="app:candidates" drawer-toggle></paper-icon-button>
+            Candidatos
+          </a>
           <a name="inbox" href="inbox" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navMissions" drawer-toggle></paper-icon-button>
             Missões
@@ -237,7 +241,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
           </a> -->
           <hr hidden$="[[!user.uid]]">
           <a name="rules" on-tap="_redirectToHelp" disabled>
-            Ajuda
+            FAQ
           </a>
           <a name="privacy" on-tap="_redirectToPrivacy" disabled>
             Privacidade
@@ -340,8 +344,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   static get observers() {
     return [
       "_routePageChanged(routeData.page)",
-      "routePathChanged(route.path)",
-      "_setUserToken(token, user)"
+      "routePathChanged(route.path)"
     ];
   }
 
