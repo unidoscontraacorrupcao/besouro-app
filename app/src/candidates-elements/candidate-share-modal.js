@@ -189,11 +189,13 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
   _setShareContent() {
     this.share.url = `https://dev.besouro.ejplatform.org/candidate/${this.candidate.id}`;
     if (this.candidate.score == "good") {
-      this.share.text = "Quem é contra corrupção e defende a democracia merece nosso apoio! Essa é uma candidatura comprometida. Saiba mais sobre ela aqui.";
+      this.share.text = `Quem é contra corrupção e defende a democracia merece nosso apoio! Essa é uma candidatura comprometida. Saiba mais sobre ela aqui.`;
     } else if (this.candidate.score == "bad") {
-      this.share.text = "Quem não tem passado limpo não pode nos representar. não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.";
+      this.share.text = `Quem não tem passado limpo não pode nos representar. O candidato ${this.candidate.name } não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`;
     } else {
-      this.share.text = "Quem luta contra corrupção e defende a democracia não desiste nunca. não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.";
+      this.share.text = `Quem luta contra corrupção e defende a democracia não desiste nunca.\
+      O candidato ${this.candidate.name } não respondeu tudo o que pede a campanha.\ 
+      Vamos ajudá-la/o a se lembrar.`;
     }
       this.set('modalText', this.share.text);
   }
