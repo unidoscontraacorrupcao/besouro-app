@@ -4,6 +4,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 
+import '../candidates-elements/candidate-share-modal.js'
 import '../app-elements/shared-styles.js';
 import '../app-elements/styles/candidate-card-shared-styles.js';
 import '../app-elements/app-dialog.js';
@@ -101,6 +102,10 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       }
     }
     </style>
+
+    <app-dialog id="candidateShareDialog">
+      <candidate-share-modal></candidate-share-modal>
+    </app-dialog>
 
     <app-besouro-api id="api"></app-besouro-api>
 
@@ -294,6 +299,8 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       this.dispatchEvent(new CustomEvent("pressed-candidate", {detail: {"candidate": ajax.response}}));
     });
   }
+
+  _shareCandidate() { this.$.candidateShareDialog.present(); }
 
   constructor() { super(); }
 
