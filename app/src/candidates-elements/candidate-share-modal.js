@@ -44,7 +44,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
     }
 
       .header-content {
-        background-color: #009FE3;
+        background-color: var(--accent-color);
         height: 76px;
         position: absolute;
         top: 0;
@@ -91,7 +91,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
         text-align: center;
       }
 
-      .icon-header paper-icon-button { padding: 0; }
+      .icon-header paper-icon-button { padding: 0px; }
 
       .icon-header #closeModal {
         position: absolute;
@@ -100,6 +100,28 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
         color: white;
         padding: 10px;
       }
+
+      #icons div:first-child { margin-bottom: 22px; }
+
+      #icons div:first-child span {
+        text-align: center;
+        text-transform: unset !important;
+        color: var(--light-text-color);
+        font-size: 16px;
+      }
+
+      #icons div:last-child {
+        width: 90%;
+        margin: auto;
+      }
+
+      #icons div:last-child paper-icon-button {
+        padding: 0;
+        margin-left: 10px;
+        width: 60px;
+        height: 60px;
+      }
+
 
     </style>
 
@@ -117,8 +139,9 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
 
     <div class="modal-header">
       <div class="header-content">
-        <div id="header-text"><span>compartilhe o candidato no seu facebook</span></div>
+        <div id="header-text"><span>compartilhando candidato[a]</span></div>
         <div class="icon-header">
+          <paper-icon-button slot="suffix" icon="app:pink-share"></paper-icon-button>
           <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
         </div>
       </div>
@@ -126,43 +149,66 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
         <p> Quem luta contra corrupção e defende a democracia não desiste nunca.
 Subtexto: <nome-do-candidato> não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.</p>
 
-        <paper-button on-click="_shareCandidate">
+        <div id="icons">
           <div>
-            <div id="btn-icon">
-              <iron-icon icon="app:facebook"></iron-icon>
-            </div>
-            compartilhar
+            <span>compartilhar via</span>
           </div>
-        </paper-button>
+          <div>
+            <paper-icon-button on-click="_fbShare" icon="app:candidate-share-facebook"></paper-icon-button>
+            <paper-icon-button on-click="_twitterShare" icon="app:candidate-share-twitter"></paper-icon-button>
+            <paper-icon-button on-click="_instagramShare" icon="app:candidate-share-instagram"></paper-icon-button>
+            <paper-icon-button on-click="_telegramShare" icon="app:candidate-share-telegram"></paper-icon-button>
+            <paper-icon-button on-click="_whatsAppShare" icon="app:candidate-share-whatsapp"></paper-icon-button>
+          </div>
+        </div>
       </div>
     </div>
 `;
   }
 
   static get is() { return 'candidate-share-modal'; }
-  static get properties() {
-    return {
-    }
+  static get properties() { return {} }
+
+  _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
+
+  _fbShare(){
+    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
+    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
+    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
+    ajudá-la/o a se lembrar.";
+    this.$.shareMenu._facebookTap();
   }
 
-  _dismiss() {
-    this.dispatchEvent(new CustomEvent('close-modal'));
+  _twitterShare(){
+    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
+    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
+    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
+    ajudá-la/o a se lembrar.";
+    this.$.shareMenu._twitterTap();
   }
 
-  _shareCandidate(){
-    FB.ui({
-      method: 'share',
-      quote: 'ajude-nos a combater a corrupção',
-      href: 'https://developers.facebook.com/docs/',
-    }, function(response){}); 
+  _instagramShare() {
+    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
+    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
+    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
+    ajudá-la/o a se lembrar.";
+    this.$.shareMenu._instapaperTap();
   }
 
-  ready() {
-    super.ready();
-    this.hideLoading();
-    //var receiptPaperIcon = this.$.uploadIcon;
-    //var ironIcon = receiptPaperIcon.shadowRoot.querySelector("iron-icon");
-    //ironIcon.setAttribute("style", "width: 40px; height: 40px;");
+  _telegramShare() {
+    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
+    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
+    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
+    ajudá-la/o a se lembrar.";
+    this.$.shareMenu._telegramTap();
+  }
+
+  _whatsAppShare() {
+    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
+    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
+    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
+    ajudá-la/o a se lembrar.";
+    this.$.shareMenu._whatsappTap();
   }
 }
 customElements.define(CandidateShareModal.is, CandidateShareModal);
