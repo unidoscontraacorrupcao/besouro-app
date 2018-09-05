@@ -146,8 +146,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
         </div>
       </div>
       <div id="confirmation-text">
-        <p> Quem luta contra corrupção e defende a democracia não desiste nunca.
-Subtexto: <nome-do-candidato> não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.</p>
+        <p> {{modalText}}</p>
 
         <div id="icons">
           <div>
@@ -167,47 +166,63 @@ Subtexto: <nome-do-candidato> não respondeu tudo o que pede a campanha. Vamos a
   }
 
   static get is() { return 'candidate-share-modal'; }
-  static get properties() { return {} }
+  static get properties() {
+    return {
+      candidate: {
+        type: Object,
+        value: {},
+        observer: '_candidateChanged'
+      },
+      share: {
+        type: Object,
+        value: {}
+      },
+      modalText: String
+    }
+  }
+
+  _candidateChanged() {
+    if (!this.candidate || Object.keys(this.candidate).length == 0) return;
+    this._setShareContent();
+  }
+
+  _setShareContent() {
+    this.share.url = `https://dev.besouro.ejplatform.org/candidate/${this.candidate.id}`;
+    if (this.candidate.score == "good") {
+      this.share.text = "Quem é contra corrupção e defende a democracia merece nosso apoio! Essa é uma candidatura comprometida. Saiba mais sobre ela aqui.";
+    } else if (this.candidate.score == "bad") {
+      this.share.text = "Quem não tem passado limpo não pode nos representar. não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.";
+    } else {
+      this.share.text = "Quem luta contra corrupção e defende a democracia não desiste nunca. não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.";
+    }
+      this.set('modalText', this.share.text);
+  }
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 
   _fbShare(){
-    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
-    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
-    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
-    ajudá-la/o a se lembrar.";
+    this.$.shareMenu.url = this.share.url;
+    this.$.shareMenu.text = this.share.text;
     this.$.shareMenu._facebookTap();
   }
-
   _twitterShare(){
-    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
-    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
-    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
-    ajudá-la/o a se lembrar.";
+    this.$.shareMenu.url = this.share.url;
+    this.$.shareMenu.text = this.share.text;
     this.$.shareMenu._twitterTap();
   }
-
   _instagramShare() {
-    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
-    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
-    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
-    ajudá-la/o a se lembrar.";
+    this.$.shareMenu.url = this.share.url;
+    this.$.shareMenu.text = this.share.text;
     this.$.shareMenu._instapaperTap();
   }
-
   _telegramShare() {
-    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
-    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
-    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
-    ajudá-la/o a se lembrar.";
+    this.$.shareMenu.url = this.share.url;
+    this.$.shareMenu.text = this.share.text;
     this.$.shareMenu._telegramTap();
   }
-
   _whatsAppShare() {
-    this.$.shareMenu.url = "app.unidoscontracorrupcao.org.br";
-    this.$.shareMenu.text = " Quem luta contra corrupção e defende a democracia\
-    não desiste nunca. não respondeu tudo o que pede a campanha. Vamos\
-    ajudá-la/o a se lembrar.";
+    this.$.shareMenu.url = this.share.url;
+    this.$.shareMenu.text = this.share.text;
     this.$.shareMenu._whatsappTap();
   }
 }
