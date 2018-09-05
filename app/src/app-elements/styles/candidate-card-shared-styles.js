@@ -177,13 +177,47 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       font-size: 20px;
     }
 
-    #close {
+    #share-candidate, #close {
       position: absolute;
-      top: 15px;
       right: 0;
-      background-color: var(--accent-color);
       height: 29px;
+    }
+
+    #close div div:first-child {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    #close span { margin: 8px 8px 8px 10px; }
+
+    #share-candidate {
+      z-index: 1;
+      top: 15px;
+      background-color : white;
+      color: var(--secondary-text-color);
+      font-family: folio;
+    }
+
+    #share-candidate div div:first-child {
+      float: left;
+      margin: -6px;
+    }
+
+    #share-candidate div div:last-child {
+      float: right;
+      margin: 8px 5px 0 0;
+    }
+
+    #close {
+      top: 15px;
+      background-color: var(--accent-color);
       width: 69px;
+    }
+
+    #close div div:first-child {
+      top: -19px;
+      left: -35px;
     }
 
     #close div {
@@ -193,20 +227,11 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       position: relative;
     }
 
-    #close div div:first-child {
-      position: absolute;
-      top: -19px;
-      left: -35px;
-      bottom: 0;
-      right: 0;
-    }
-
     #close paper-icon-button {
       width: 26px;
       height: auto;
     }
 
-    #close span { margin: 8px 8px 8px 10px; }
 
     #tse-data {
       border-color: rgba(49,39,131,1);
@@ -273,7 +298,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       }
 
     }
-    
+
     @media only screen and (max-width: 400px) {
       #political-infos .info div:first-child {
         width: 100%;

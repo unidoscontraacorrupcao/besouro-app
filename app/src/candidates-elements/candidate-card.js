@@ -140,6 +140,16 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       </div>
 
       <div id="card-image">
+          <div on-click="_shareCandidate" id="share-candidate">
+            <div>
+              <div>
+                <paper-icon-button icon="app:share"></paper-icon-button>
+              </div>
+              <div>
+                <span>compartilhar</span>
+              </div>
+            </div>
+          </div>
         <iron-image
           sizing="contain"
           preload="" fade=""
