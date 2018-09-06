@@ -169,9 +169,9 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="right">
                 Nosso critério de passado limpo é rígido. 
-                A referência são os crimes da Lei da Ficha Limpa, mas 
-                para nós eles nunca prescrevem. No caso de quem tentará 
-                reeleição, veremos quem responde a processo no STF.
+                A referência são os crimes da Lei da Ficha Limpa. 
+                No caso de candidata/o à reeleição, veremos quem é 
+                réu no STF.
               </paper-tooltip>
             </div>
             <div>
