@@ -131,6 +131,7 @@ let Mixin = function(superClass) {
     return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
   }
 
+    _shareCandidate() { this.$.candidateShareDialog.present(); }
   }
 }
 

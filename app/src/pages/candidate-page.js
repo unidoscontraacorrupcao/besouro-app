@@ -11,6 +11,7 @@ import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import 'share-menu/share-menu.js';
 
+import '../candidates-elements/candidate-share-modal.js'
 import '../app-elements/styles/candidate-card-shared-styles.js';
 import '../mission-elements/unauthorized-modal.js';
 import '../app-elements/app-scrollable-dialog.js';
@@ -185,7 +186,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         text-align: center;
       }
 
-      #user-actions #selectButton, 
+      #user-actions #selectButton,
       #supportButtons paper-button:first-child,
       #user-actions #pressedButton {
           border-color: var(--secondary-text-color);
@@ -242,14 +243,18 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         font-size: 18px;
       }
 
-    #political-infos {
-      position: relative;
-      z-index: 1;
-      bottom: 50px;
-    }
-    #political-infos .info iron-icon { color: unset; }
+      #political-infos {
+        position: relative;
+        z-index: 1;
+        bottom: 50px;
+      }
 
-    app-toolbar {z-index: 5}
+      #political-infos .info iron-icon { color: unset; }
+
+      app-toolbar {z-index: 5}
+
+      #share-candidate paper-icon-button { padding: 9px; }
+      #share-candidate div div:last-child { margin-top: 2px; }
 
       @media only screen and (max-width: 460px) {
         .stats-content {
@@ -270,6 +275,10 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         #candidate-infos{ width: 100%; }
       }
     </style>
+    <app-dialog id="candidateShareDialog">
+      <candidate-share-modal candidate="{{candidate}}" ></candidate-share-modal>
+    </app-dialog>
+
     <app-besouro-api id="api"></app-besouro-api>
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal
@@ -277,14 +286,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         on-go-to-register="_goToLogin">
       </unauthorized-modal>
     </app-dialog>
-
-    <share-menu
-      id="shareMenu"
-      title="{{mission.title}}"
-      text="{{stripHtmlTags(mission.description)}}"
-      url="{{address}}/{{data.key}}?shared=true"
-      enabled-services='["telegram", "whatsapp"]'>
-    </share-menu>
 
     <app-route
       route="{{route}}"
@@ -298,6 +299,16 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         fixed=""
         condenses=""
         effects="waterfall resize-title blend-background parallax-background">
+          <div on-click="_shareCandidate" id="share-candidate">
+            <div>
+              <div>
+                <paper-icon-button icon="app:share"></paper-icon-button>
+              </div>
+              <div>
+                <span>compartilhar</span>
+              </div>
+            </div>
+          </div>
         <app-toolbar>
           <paper-icon-button
             icon="app:arrow-back"

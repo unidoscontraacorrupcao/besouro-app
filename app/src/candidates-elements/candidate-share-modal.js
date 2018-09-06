@@ -204,27 +204,27 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
 
   _fbShare(){
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.share.text;
+    this.$.shareMenu.text = this.modalText;
     this.$.shareMenu._facebookTap();
   }
   _twitterShare(){
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.share.text;
+    this.$.shareMenu.text = this.modalText;
     this.$.shareMenu._twitterTap();
   }
   _instagramShare() {
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.share.text;
+    this.$.shareMenu.text = this.modalText;
     this.$.shareMenu._instapaperTap();
   }
   _telegramShare() {
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.share.text;
+    this.$.shareMenu.text = this.modalText;
     this.$.shareMenu._telegramTap();
   }
   _whatsAppShare() {
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.share.text;
+    this.$.shareMenu.text = this.modalText;
     this.$.shareMenu._whatsappTap();
   }
 }

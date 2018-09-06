@@ -4,6 +4,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
 
 import '../app-elements/shared-styles.js';
+import '../candidates-elements/candidate-share-modal.js'
 import '../app-elements/styles/candidate-card-shared-styles.js';
 import '../app-elements/app-dialog.js';
 import '../app-elements/app-scrollable-dialog.js';
@@ -120,6 +121,10 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       }
     </style>
 
+    <app-dialog id="candidateShareDialog">
+      <candidate-share-modal candidate="{{candidate}}" ></candidate-share-modal>
+    </app-dialog>
+
     <app-besouro-api id="api"></app-besouro-api>
 
     <div class="card">
@@ -159,6 +164,16 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       </div>
 
       <div id="card-image">
+          <div on-click="_shareCandidate" id="share-candidate">
+            <div>
+              <div>
+                <paper-icon-button icon="app:share"></paper-icon-button>
+              </div>
+              <div>
+                <span>compartilhar</span>
+              </div>
+            </div>
+          </div>
         <iron-image
           sizing="contain"
           preload="" fade=""

@@ -70,6 +70,8 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       text-transform: uppercase;
       color: var(--paragraph-color);
       line-height: 0.95;
+      font-family: folio;
+      font-size: 18px;
     }
 
     .card-footer {
