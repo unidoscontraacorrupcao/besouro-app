@@ -146,16 +146,16 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <welcome-card>
             <div>
               <p>
-                Aqui você vê as/os candidatas/os que registraram: 1. Passado Limpo; 2. 
+                Aqui você vê as/os candidatas/os que registraram: 1. Passado Limpo; 2.
                 Compromisso com Democracia; e 3. Adesão às Novas Medidas contra a Corrupção.
               </p>
               <p>
-                SELECIONE para mais detalhes pessoais e eleitorais, bem como bens e processos. 
-                Também é possível PRESSIONAR quem não se comprometeu. Além de enviarmos 
+                SELECIONE para mais detalhes pessoais e eleitorais, bem como bens e processos.
+                Também é possível PRESSIONAR quem não se comprometeu. Além de enviarmos
                 um email, você conseguirá postar nas suas redes sociais.
               </p>
               <p>
-                Os nomes são apresentados aleatoriamente, sem nenhum tipo de 
+                Os nomes são apresentados aleatoriamente, sem nenhum tipo de
                 viés nem preferência. Para dúvidas, acesse AJUDA.
               </p>
             </div>
@@ -403,7 +403,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       this.$.api.path = `users/${this.getUser().uid}/candidates`;
     }
     this.showLoading();
-    
+
     this.$.api.method = "GET";
     this.limit += 10;
     this.$.api.params = this.filters;
@@ -448,6 +448,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _showPressedCardAnimation(e) {
     var card = e.target.shadowRoot.querySelector(".card");
     card.classList.add("pressed-candidate-animation");
+    e.target._shareCandidate();
   }
 
   _showIgnoredCardAnimation(e) {

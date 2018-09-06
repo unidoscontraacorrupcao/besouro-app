@@ -276,7 +276,9 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       }
     </style>
     <app-dialog id="candidateShareDialog">
-      <candidate-share-modal candidate="{{candidate}}" ></candidate-share-modal>
+      <candidate-share-modal candidate="[[candidate]]"
+        on-close-modal="_closeModal">
+      </candidate-share-modal>
     </app-dialog>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -753,6 +755,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     this.showLoading();
     this._pressCandidate().then((ajax) => {
       this._getCandidateStatistics();
+      this._shareCandidate();
     });
   }
   _wrapUnselectCandidate() {
@@ -760,6 +763,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       this._getCandidateStatistics();
     });
   }
+
+  _closeModal() { this.$.candidateShareDialog.dismiss(); }
 }
 
 window.customElements.define(CandidatePage.is, CandidatePage);
