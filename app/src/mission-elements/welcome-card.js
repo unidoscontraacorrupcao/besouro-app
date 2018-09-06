@@ -8,14 +8,10 @@ class WelcomeCard extends PolymerElement {
     return html`
     <style include="shared-styles"></style>
     <style>
+
       :host {
         display: block;
-      }
-
-      .welcome-card {
-        display: block;
         padding: 0px;
-        line-height: 0.7;
         position: relative;
         max-width: 500px;
         margin: 20px auto;
@@ -37,7 +33,7 @@ class WelcomeCard extends PolymerElement {
         line-height: 1.3;
       }
 
-      .welcome-card span { color: var(--accent-color); }
+      :host span { color: var(--accent-color); }
 
 
       #welcome-title {
@@ -55,18 +51,16 @@ class WelcomeCard extends PolymerElement {
       }
 
       @media screen and (min-width: 1100px) {
-        .welcome-card {
+        :host {
           max-width: unset;
           width: 90%;
         }
       }
     </style>
 
-    <div class="welcome-card">
-      <div id="card-content">
-        <div id="welcome-title"> boas vindas!</div>
-        <slot></slot>
-      </div>
+    <div id="card-content">
+      <div id="welcome-title"> boas vindas!</div>
+      <slot></slot>
     </div>
 
 `;
