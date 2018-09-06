@@ -171,8 +171,9 @@ class NotificationsPage extends PolymerElement {
         this.set('route.show_conversation', true);
         this.set('route.path', `/show-mission/${mission_id}`);
       });
-    }
-    else {
+    } else if(channel_sort.length == 4) {
+      this.set('route.path', `/candidate/${notification.message.target}`);
+    } else {
       switch(notification.channel.sort) {
         case "mission":
           this.set('route.path', `/show-mission/${notification.message.target}`);
