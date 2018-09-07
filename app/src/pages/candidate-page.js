@@ -578,22 +578,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   static get observers() { return [ 'routePathChanged(route.path)' ] }
 
-  routePathChanged(path) {
-    this._getCandidate();
-    this._getCandidateStatistics();
-    this._setActionButton();
-  }
-
-  _setActionButton() {
-    if (this.candidateStatus == "unselected") {
-    }
-  }
-
-  _candidateChanged() {
-      if(!this.candidate) return;
-      this._chooseCandidateColor();
-      this._hideSocialMediaIcons();
-  }
+  routePathChanged(path) { this._getCandidate(); }
 
   _getCandidate() {
     var user = this.getUser();
@@ -603,6 +588,9 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     this.$.api.method = "GET";
     this.$.api.request().then((ajax) => {
       this.set("candidate", ajax.response)
+      this._chooseCandidateColor();
+      this._hideSocialMediaIcons();
+      this._getCandidateStatistics();
     });
   }
 
@@ -672,7 +660,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   }
 
   _candidateStatusChanged() {
-    if (!this.candidateStatus) return;
+    if (!this.candidateStatus || Object.keys(this.candidateStatus).length == 0) return;
     this._hideButtons();
     this._showButtonsByStatus();
   }
