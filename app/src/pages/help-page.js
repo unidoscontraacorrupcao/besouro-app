@@ -56,7 +56,7 @@ class HelpPage extends PolymerElement {
       <app-header slot="header" condenses reveals fixed effects="waterfall">
         <app-toolbar>
           <paper-icon-button class="header-icon" icon="app:arrow-back" on-tap="_redirectToInbox"></paper-icon-button>
-          <div main-title >Ajuda</div>
+          <div main-title >FAQ</div>
           <!-- <paper-icon-button class="header-icon" icon="app:search"></paper-icon-button> -->
         </app-toolbar>
       </app-header>
