@@ -83,6 +83,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
       app-header[shadow] .tall .actions { display: none; }
 
+      app-header[shadow] #share-candidate { display: none; }
+
       app-toolbar {
         width: 90%;
         margin: auto;
@@ -99,6 +101,10 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         display: none;
       }
 
+      app-header app-toolbar paper-icon-button {
+        width: 25px;
+        height: 25px;
+      }
       app-header[shadow] paper-icon-button[icon="app:arrow-back"] {
         color: black;
       }
@@ -157,9 +163,10 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         margin: 5px 0;
       }
 
-      h1[condensed-title] {
+      span[condensed-title] {
         font-family: Folio;
         text-transform: uppercase;
+        margin-left: 10px;
       }
 
       .content { padding: 20px 20px; }
@@ -186,14 +193,22 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         text-align: center;
       }
 
+      #unselectedButtons, #pressedButton {
+        margin: auto;
+        display: flex;
+      }
+
       #user-actions #selectButton,
       #supportButtons paper-button:first-child,
-      #user-actions #pressedButton {
+      #user-actions #unselectedButtons paper-button,
+      #user-actions #pressedButton paper-button {
           border-color: var(--secondary-text-color);
           border-style: solid;
           border-width: 1px;
-          color: var(--secondary-text-color);
+          text-align: center;
         }
+
+      #user-actions #pressedButton paper-button { color: var(--secondary-text-color); }
 
       #user-actions #pressButton {
         background-color: var(--secondary-text-color);
@@ -301,26 +316,24 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         fixed=""
         condenses=""
         effects="waterfall resize-title blend-background parallax-background">
-          <div on-click="_shareCandidate" id="share-candidate">
-            <div>
-              <div>
-                <paper-icon-button icon="app:share"></paper-icon-button>
-              </div>
-              <div>
-                <span>compartilhar</span>
-              </div>
-            </div>
-          </div>
         <app-toolbar>
           <paper-icon-button
             icon="app:arrow-back"
             on-tap="_returnToCandidates">
           </paper-icon-button>
 
-            <span condensed-title class="dark title">{{candidate.name}}</span>
-            <!-- <paper-icon-button icon="app:mission-edit"></paper-icon-button> -->
+          <span condensed-title class="dark title">{{candidate.name}}</span>
         </app-toolbar>
-
+        <div on-click="_shareCandidate" id="share-candidate">
+          <div>
+            <div>
+              <paper-icon-button icon="app:share"></paper-icon-button>
+            </div>
+            <div>
+              <span>compartilhar</span>
+            </div>
+          </div>
+        </div>
         <app-toolbar class="tall">
           <p bottom-item main-title="" class="title">
           </p>
@@ -383,21 +396,21 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       <div class="stats-columns">
         <div>
           <span>
-            <span class="stats-number">{{candidateStatus.selected_count}} </span>
+            <span class="stats-number">{{candidateMetrics.selected_count}} </span>
               selecionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
             </span>
         </div>
 
         <div>
           <span>
-            <span class="stats-number">{{candidateStatus.pressed_count}}</span>
+            <span class="stats-number">{{candidateMetrics.pressed_count}}</span>
             pressionaram <span class="space">&nbsp;&verbar;&nbsp;</span>
           </span>
         </div>
 
         <div>
           <span>
-            <span class="stats-number">{{candidateStatus.fav_count}}</span>
+            <span class="stats-number">{{candidateMetrics.fav_count}}</span>
             favoritaram</span>
         </div>
       </div>
@@ -427,23 +440,25 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
           </div>
         </div>
         <div id="user-actions">
-          <paper-button id="selectButton" on-click="_wrapSelectCandidate">
-            <div>
-              <div id="btn-icon">
-                <iron-icon icon="app:select-candidate"></iron-icon>
+          <div id="unselectedButtons">
+            <paper-button id="selectButton" on-click="_wrapSelectCandidate">
+              <div>
+                <div id="btn-icon">
+                  <iron-icon icon="app:select-candidate"></iron-icon>
+                </div>
+                selecionar
               </div>
-              selecionar
-            </div>
-          </paper-button>
+            </paper-button>
 
-          <paper-button id="pressButton" on-click="_wrapPressCandidate">
-            <div>
-              <div id="btn-icon">
-                <iron-icon icon="app:press-candidate"></iron-icon>
+            <paper-button id="pressButton" on-click="_wrapPressCandidate">
+              <div>
+                <div id="btn-icon">
+                  <iron-icon icon="app:press-candidate"></iron-icon>
+                </div>
+                pressionar
               </div>
-              pressionar
-            </div>
-          </paper-button>
+            </paper-button>
+          </div>
 
           <div id="supportButtons">
             <paper-button on-click="_wrapUnselectCandidate">
@@ -463,14 +478,16 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </div>
             </paper-button>
           </div>
-          <paper-button disabled id="pressedButton">
-            <div>
-              <div id="btn-icon">
-                <iron-icon icon="app:pressed-candidate"></iron-icon>
+          <div id="pressedButton">
+            <paper-button disabled>
+              <div>
+                <div id="btn-icon">
+                  <iron-icon icon="app:pressed-candidate"></iron-icon>
+                </div>
+                pressionado
               </div>
-              pressionado
-            </div>
-          </paper-button>
+            </paper-button>
+          </div>
         </div>
 
       <div id="social-medias">
@@ -569,8 +586,12 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         observer: "_candidateChanged"
       },
       candidateStatus: {
-        type: Object,
+        type: String,
         observer: "_candidateStatusChanged"
+      },
+      candidateMetrics: {
+        type: Object,
+        observer: "_candidateMetricsChanged"
       },
       key: String
     };
@@ -581,8 +602,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   routePathChanged(path) { this._getCandidate(); }
 
   _getCandidate() {
-    var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) return;
     if (!this.data || Object.keys(this.data).length == 0) return;
     this.$.api.path = `candidates/${this.data.key}`;
     this.$.api.method = "GET";
@@ -595,14 +614,34 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   }
 
   _getCandidateStatistics() {
+    this._getCandidateMetrics();
     var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) return;
-    if (!this.data || Object.keys(this.data).length == 0) return;
+    if (!user || Object.keys(user).length == 0) {
+      console.log("eai");
+      this._hideButtons();
+      this._showUnselectedBtns();
+      return;
+    }
+    else {
+      this._getCandidateStatusByUser(user);
+    }
+  }
+
+  _getCandidateStatusByUser(user) {
     this.$.api.path = `candidates/${this.data.key}/status`;
     this.$.api.method = "GET";
     this.$.api.params = {"user": user.uid};
     this.$.api.request().then((ajax) => {
       this.set("candidateStatus", ajax.response)
+    });
+  }
+
+  _getCandidateMetrics() {
+    this.$.api.path = `candidates/${this.data.key}/metrics`;
+    this.$.api.method = "GET";
+    this.$.api.params = {};
+    this.$.api.request().then((ajax) => {
+      this.set("candidateMetrics", ajax.response)
     });
   }
 
@@ -668,17 +707,15 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   _showButtonsByStatus() {
     if (this.candidateStatus.status == 'selected') { this._showSupportBtn(); }
     if (this.candidateStatus.status == 'pressed') { this._showPressedBtn(); }
-    if (this.candidateStatus.status == 'unselected') { this._showPressBtn(); }
+    if (this.candidateStatus.status == 'unselected') { this._showUnselectedBtns(); }
   }
 
   _hideButtons () {
-    var selectBtn = this.shadowRoot.querySelector("#user-actions #selectButton");
-    var pressBtn = this.shadowRoot.querySelector("#user-actions #pressButton");
+    var unselectedBtns = this.shadowRoot.querySelector("#user-actions #unselectedButtons");
     var pressedBtn = this.shadowRoot.querySelector("#user-actions #pressedButton");
     var supportBtns = this.shadowRoot.querySelector("#user-actions #supportButtons");
     supportBtns.style.display = "none";
-    pressBtn.style.display = "none";
-    selectBtn.style.display = "none";
+    unselectedBtns.style.display = "none";
     pressedBtn.style.display = "none";
   }
 
@@ -693,19 +730,28 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     selectBtn.style.width = "262px";
   }
 
-  _showPressBtn() {
-    var pressBtn = this.shadowRoot.querySelector("#user-actions #pressButton");
-    var selectBtn = this.shadowRoot.querySelector("#user-actions #selectButton");
-    pressBtn.style.display = "block";
-    selectBtn.style.display = "block";
-    selectBtn.style.marginLeft = "auto";
-    selectBtn.style.marginRight = "5px";
-    selectBtn.style.width = "128px";
-    pressBtn.style.width = "128px";
+  _showUnselectedBtns() {
+    this.shadowRoot.querySelector("#user-actions #unselectedButtons").style.display = "flex";
+    var selectBtn = this.shadowRoot.querySelector("#user-actions #unselectedButtons paper-button:first-child");
+    var pressBtn = this.shadowRoot.querySelector("#user-actions #unselectedButtons paper-button:last-child");
+    if (this.candidate && (this.candidate.score == "good" || this.candidate.score == "bad"))  {
+      pressBtn.style.display = "none";
+      selectBtn.style.display = "block";
+      selectBtn.style.width = "262px";
+    }
+    else {
+      pressBtn.style.display = "block";
+      selectBtn.style.display = "block";
+      selectBtn.style.marginLeft = "auto";
+      selectBtn.style.marginRight = "5px";
+      selectBtn.style.width = "128px";
+      pressBtn.style.width = "128px";
+    }
   }
 
   _showPressedBtn() {
-    var pressedBtn = this.shadowRoot.querySelector("#user-actions #pressedButton");
+    this.shadowRoot.querySelector("#user-actions #pressedButton").style.display = "flex";
+    var pressedBtn = this.shadowRoot.querySelector("#user-actions #pressedButton paper-button");
     pressedBtn.style.display = "block";
     pressedBtn.style.width = "262px";
   }
@@ -733,19 +779,32 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   }
 
   _wrapSelectCandidate() {
-    this.showLoading();
-    this._selectCandidate().then((ajax) => {
-      this._getCandidateStatistics();
-    });
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.set("route.redirect_back", `/candidate/${this.data.key}/`);
+      this.$.unauthorizedDialog.present();
+    }
+    else {
+      this._selectCandidate().then((ajax) => {
+        this._getCandidateStatistics();
+      });
+    }
   }
 
   _wrapPressCandidate() {
-    this.showLoading();
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.set("route.redirect_back", `/candidate/${this.data.key}/`);
+      this.$.unauthorizedDialog.present();
+    }
+    else {
+    }
     this._pressCandidate().then((ajax) => {
       this._getCandidateStatistics();
       this._shareCandidate();
     });
   }
+
   _wrapUnselectCandidate() {
     this._unselectCandidate().then((ajax) => {
       this._getCandidateStatistics();
@@ -753,6 +812,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   }
 
   _closeModal() { this.$.candidateShareDialog.dismiss(); }
+  _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
 }
 
 window.customElements.define(CandidatePage.is, CandidatePage);

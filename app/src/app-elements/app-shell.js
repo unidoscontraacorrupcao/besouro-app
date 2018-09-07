@@ -461,7 +461,11 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _onLoginComplete(e) {
-    this.set("route.path", this._afterLogin);
+    if (this.route.redirect_back) {
+      let redirect = this.route.redirect_back;
+      this.route.redirect_back = '';
+      this.set("route.path", redirect);
+    }
     this._afterLogin = `/`;
   }
 

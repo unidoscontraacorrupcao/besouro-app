@@ -149,14 +149,8 @@ class UnauthorizedModal extends PolymerElement {
   }
 
   static get is() { return 'unauthorized-modal'; }
-  static get properties() {
-    return {
-      missionId: String
-    }
-  }
-  _goToRegister() {
-    this.dispatchEvent(new CustomEvent('go-to-register'));
-  }
+  static get properties() { return { } }
+  _goToRegister() { this.dispatchEvent(new CustomEvent('go-to-register')); }
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 }
