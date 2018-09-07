@@ -44,6 +44,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       .card-footer  {
         width: 90%;
         margin: auto;
+        height: 98px;
       }
 
       hr {
@@ -77,7 +78,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         border-color: rgba(0,159,227,1);
       }
 
-      #btn-icon { margin: auto 20px 7px auto; }
+      #btn-icon { margin: 5px 0; }
 
       #see-more {
         width: 90%;
@@ -112,6 +113,11 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       .ignored-candidate-animation {
         animation: ignored-candidate 0.8s;
         -webkit-animation: ignored-candidate 0.8s;
+      }
+
+      .card-footer paper-button:first-child {
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
       }
 
       @media screen and (min-width: 1100px) {
@@ -230,14 +236,22 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       </div>
 
       <div class="card-footer">
-      <paper-button on-click="_supportCandidate">
-        <div>
-          <div id="btn-icon">
-            <iron-icon icon="app:wallet"></iron-icon>
+        <paper-button on-click="_favoriteCandidate" id="favoriteBtn">
+          <div>
+            <div id="btn-icon">
+              <iron-icon icon="app:favorite"></iron-icon>
+            </div>
+            favoritar
           </div>
-          apoiar
-        </div>
-      </paper-button>
+        </paper-button>
+        <paper-button on-click="_supportCandidate" id="supportBtn">
+          <div>
+            <div id="btn-icon">
+              <iron-icon icon="app:wallet"></iron-icon>
+            </div>
+            apoiar
+          </div>
+        </paper-button>
       </div>
       <div id="social-medias">
         <hr>
@@ -318,8 +332,8 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
         </div>
 
-         <div id="see-more">
-            <paper-button on-click="_showCandidate">conheça mais</paper-button>
+        <div id="see-more">
+          <paper-button on-click="_showCandidate">conheça mais</paper-button>
         </div>
 
       </div>
@@ -343,7 +357,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     });
   }
 
-
   _chooseCandidateColor() {
     if (this.candidate.score == "good") {
       this._showSupportBtn();
@@ -361,18 +374,17 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   }
 
   _hideSupportBtn () {
-    var cardFooter = this.shadowRoot.querySelector(".card-footer");
-    cardFooter.style.display = "none";
-    this.shadowRoot.querySelector("hr").style.display = "none";
+    var supportBtn = this.shadowRoot.querySelector("#supportBtn");
+    supportBtn.style.display = "none";
+    let favoriteBtn = this.shadowRoot.querySelector("#favoriteBtn");
+    favoriteBtn.style.width = "262px";
+    favoriteBtn.style.margin = "20px auto";
   }
 
   _showSupportBtn() {
     if(!this._invalidSocialMediaUrl("crowdfunding_url")) {
-      var cardFooter = this.shadowRoot.querySelector(".card-footer");
-      cardFooter.style.display = "flex";
-      var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
-      supportBtn.style.margin = "auto";
-      supportBtn.style.width = "300px";
+      var supportBtn = this.shadowRoot.querySelector("#supportBtn");
+      supportBtn.style.display = "flex";
     }
     else {
       this._hideSupportBtn();

@@ -131,6 +131,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
             <paper-tab><span class="tabs-text">TODOS</span></paper-tab>
             <paper-tab><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
+            <paper-tab><span class="tabs-text">FAVORITOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
         <candidate-filter
@@ -195,6 +196,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <div id="loadMoreSelectedCandidates">
             <span on-click="_getMoreSelectedCandidates">carregar mais candidatos</span>
           </div>
+        </div>
+        <div class="inbox">
         </div>
       </iron-pages>
     </app-header-layout>
@@ -515,7 +518,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _tabChanged() {
-    if (this.inboxtab == 1) {
+    if (this.inboxtab == 1 || this.inboxtab == 2) {
       if (!this.user || Object.keys(this.user).length == 0) {
         this.$.unauthorizedDialog.present();
       }

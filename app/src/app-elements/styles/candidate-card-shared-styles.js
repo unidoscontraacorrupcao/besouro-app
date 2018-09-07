@@ -112,6 +112,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     .card-footer paper-button div {
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
 
     #btn-icon {
