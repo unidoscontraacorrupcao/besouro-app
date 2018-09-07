@@ -155,7 +155,6 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
           <div>
             <paper-icon-button on-click="_fbShare" icon="app:candidate-share-facebook"></paper-icon-button>
             <paper-icon-button on-click="_twitterShare" icon="app:candidate-share-twitter"></paper-icon-button>
-            <paper-icon-button on-click="_instagramShare" icon="app:candidate-share-instagram"></paper-icon-button>
             <paper-icon-button on-click="_telegramShare" icon="app:candidate-share-telegram"></paper-icon-button>
             <paper-icon-button on-click="_whatsAppShare" icon="app:candidate-share-whatsapp"></paper-icon-button>
           </div>
@@ -211,11 +210,6 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
     this.$.shareMenu.url = this.share.url;
     this.$.shareMenu.text = this.modalText;
     this.$.shareMenu._twitterTap();
-  }
-  _instagramShare() {
-    this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.modalText;
-    this.$.shareMenu._instapaperTap();
   }
   _telegramShare() {
     this.$.shareMenu.url = this.share.url;
