@@ -176,7 +176,8 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
         type: Object,
         value: {}
       },
-      modalText: String
+      modalText: String,
+      quoteText: String
     }
   }
 
@@ -188,35 +189,38 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
   _setShareContent() {
     this.share.url = `https://dev.besouro.ejplatform.org/candidate/${this.candidate.id}`;
     if (this.candidate.score == "good") {
-      this.share.text = `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name } tem uma candidatura comprometida. Saiba mais sobre ela aqui.`;
+      this.set('quoteText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Compartilhe.`)
+      this.set('modalText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Saiba mais sobre ela aqui.`);
     } else if (this.candidate.score == "bad") {
-      this.share.text = `Quem não tem passado limpo não pode nos representar. ${this.candidate.name } não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`;
+      this.share.text = `Quem não tem passado limpo não pode nos representar. ${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`;
+      this.set('modalText', `Quem não tem passado limpo não pode nos representar. ${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`);
+      this.set('quoteText', this.modalText);
     } else {
-      this.share.text = `Quem luta contra corrupção e defende a democracia não desiste nunca. ${this.candidate.name } não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.`;
+      this.set('modalText', `Quem luta contra corrupção e defende a democracia não desiste nunca. ${this.candidate.name} não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.`);
+      this.set('quoteText', this.modalText);
     }
-      this.set('modalText', this.share.text);
   }
 
   _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
 
   _fbShare(){
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.modalText;
+    this.$.shareMenu.text = this.quoteText;
     this.$.shareMenu._facebookTap();
   }
   _twitterShare(){
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.modalText;
+    this.$.shareMenu.text = this.quoteText;
     this.$.shareMenu._twitterTap();
   }
   _telegramShare() {
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.modalText;
+    this.$.shareMenu.text = this.quoteText;
     this.$.shareMenu._telegramTap();
   }
   _whatsAppShare() {
     this.$.shareMenu.url = this.share.url;
-    this.$.shareMenu.text = this.modalText;
+    this.$.shareMenu.text = this.quoteText;
     this.$.shareMenu._whatsappTap();
   }
 }
