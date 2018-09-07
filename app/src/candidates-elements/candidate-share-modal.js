@@ -192,9 +192,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
     } else if (this.candidate.score == "bad") {
       this.share.text = `Quem não tem passado limpo não pode nos representar. ${this.candidate.name } não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`;
     } else {
-      this.share.text = `Quem luta contra corrupção e defende a democracia não desiste nunca.\
-      ${this.candidate.name } não respondeu tudo o que pede a campanha.\
-      Vamos ajudá-la/o a se lembrar.`;
+      this.share.text = `Quem luta contra corrupção e defende a democracia não desiste nunca. ${this.candidate.name } não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.`;
     }
       this.set('modalText', this.share.text);
   }
