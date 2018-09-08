@@ -139,7 +139,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
 
     <div class="modal-header">
       <div class="header-content">
-        <div id="header-text"><span>compartilhando candidato[a]</span></div>
+        <div id="header-text"><span>pressionando candidato[a]</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:pink-share"></paper-icon-button>
           <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
@@ -189,8 +189,8 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
   _setShareContent() {
     this.share.url = `https://dev.besouro.ejplatform.org/candidate/${this.candidate.id}`;
     if (this.candidate.score == "good") {
-      this.set('quoteText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Compartilhe.`)
-      this.set('modalText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Saiba mais sobre ela aqui.`);
+      this.set('modalText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Compartilhe.`)
+      this.set('quoteText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Saiba mais sobre ela aqui.`);
     } else if (this.candidate.score == "bad") {
       this.share.text = `Quem não tem passado limpo não pode nos representar. ${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`;
       this.set('modalText', `Quem não tem passado limpo não pode nos representar. ${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`);
