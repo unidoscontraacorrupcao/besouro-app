@@ -131,7 +131,11 @@ let Mixin = function(superClass) {
     return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
   }
 
-    _shareCandidate() { this.$.candidateShareDialog.present(); }
+    _shareCandidate() {
+      var shareComponent = this.shadowRoot.querySelector("candidate-share-modal");
+      shareComponent.setCandidate(this.candidate);
+      this.$.candidateShareDialog.present();
+    }
   }
 }
 

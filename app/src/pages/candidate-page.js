@@ -291,7 +291,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       }
     </style>
     <app-dialog id="candidateShareDialog">
-      <candidate-share-modal candidate="[[candidate]]"
+      <candidate-share-modal
         on-close-modal="_closeModal">
       </candidate-share-modal>
     </app-dialog>
