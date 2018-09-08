@@ -32,7 +32,7 @@ import '../pages/candidates-page.js';
 import '../pages/candidate-page.js';
 import './app-icons.js';
 import './app-theme.js';
-//import messaging from '../../firebase.js'
+import messaging from '../../firebase.js'
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -495,7 +495,6 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
   //Get token for push notification
   _setUserToken(token, user) {
-    if(/Version\/(.*)Safari/.test(navigator.userAgent)) return;
     if(!user || !this.user || Object.keys(this.user).length == 0) return;
     messaging.getToken().then((currentToken) => {
       if (currentToken) {
