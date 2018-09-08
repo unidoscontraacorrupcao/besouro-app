@@ -14,6 +14,7 @@ import '../mission-elements/welcome-card.js';
 import '../mission-elements/empty-card.js';
 import '../candidates-elements/candidate-card.js';
 import '../candidates-elements/selected-candidate-card.js';
+import '../candidates-elements/favorite-candidate-card.js';
 import '../candidates-elements/candidate-filter.js';
 import '../candidates-elements/empty-search-card.js';
 import '../app-elements/app-besouro-api.js';
@@ -67,14 +68,15 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         margin-top: 0;
       }
 
-      #loadMoreSelectedCandidates, #loadMoreCandidates {
+      #loadMoreSelectedCandidates, #loadMoreCandidates, #loadMoreFavoriteCandidates {
         width: 90%;
         margin: 52px auto 50px auto;
         text-align: center;
       }
 
       #loadMoreSelectedCandidates span,
-      #loadMoreCandidates span{
+      #loadMoreCandidates span,
+      #loadMoreFavoriteCandidates span {
         font-family: Folio;
         font-size: 18px;
         text-transform: uppercase;
@@ -189,6 +191,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
               <selected-candidate-card
                 candidate="[[item]]"
                 on-unselect-candidate="_unselectCandidatesChanged"
+                on-favorite-candidate="_favoriteCandidateChanged"
                 on-show-candidate="_showCandidate">
               </selected-candidate-card>
             </template>
@@ -198,6 +201,19 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           </div>
         </div>
         <div class="inbox">
+          <div class="candidates">
+            <template is="dom-repeat" items="{{favoriteCandidates}}">
+              <favorite-candidate-card
+                candidate="[[item]]"
+                on-unselect-candidate="_unselectCandidatesChanged"
+                on-favorite-candidate="_favoriteCandidateChanged"
+                on-show-candidate="_showCandidate">
+              </favorite-candidate-card>
+            </template>
+          </div>
+          <div id="loadMoreFavoriteCandidates">
+            <span on-click="_getMoreSelectedCandidates">carregar mais candidatos</span>
+          </div>
         </div>
       </iron-pages>
     </app-header-layout>
@@ -276,6 +292,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       } else {
         this._firstFilter();
         this._getSelectedCandidates();
+        this._getFavoriteCandidates();
         this._requestGeocoder();
       }
     }
@@ -401,6 +418,28 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.$.loadMoreSelectedCandidates.style.display = "block";
       }
       this.set("selectedCandidates", ajax.response);
+      this.hideLoading();
+    });
+  }
+
+  _getFavoriteCandidates(limit=0) {
+    if(!this.user || Object.keys(this.user).length == 0) return;
+    this.showLoading();
+    this.$.api.path = `users/${this.getUser().uid}/favorite-candidates`;
+    this.$.api.method = "GET";
+    if (limit > 0) {
+      this.set("selectedLimit", 10);
+      this.$.api.params = {"limit": limit};
+    }
+    else
+      this.$.api.params = {"limit": this.selectedLimit};
+    this.$.api.request().then((ajax) => {
+      if (ajax.response.length < 10) {
+        this.$.loadMoreFavoriteCandidates.style.display = "none";
+      } else {
+        this.$.loadMoreFavoriteCandidates.style.display = "block";
+      }
+      this.set("favoriteCandidates", ajax.response);
       this.hideLoading();
     });
   }

@@ -75,6 +75,22 @@ let Mixin = function(superClass) {
     this.dispatchEvent(new CustomEvent("ignored-candidate"));
   }
 
+  _favoriteCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+    this.$.api.method = "POST";
+    this.$.api.path = "favorite-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("favorite-candidate"));
+    });
+  }
+
   _unselectCandidate() {
     var user = this.getUser();
     this.$.api.method = "POST";

@@ -138,6 +138,21 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         z-index: 10;
       }
 
+      #loading {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%);
+      }
+
+      #loading paper-spinner {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+        background-color: var(--default-primary-color);
+        border-radius: 50%;
+      }
+
       .page-loading paper-spinner {
         width: 40px;
         height: 40px;
