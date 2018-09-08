@@ -344,7 +344,8 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   static get observers() {
     return [
       "_routePageChanged(routeData.page)",
-      "routePathChanged(route.path)"
+      "routePathChanged(route.path)",
+      "_setUserToken(token, user)"
     ];
   }
 
