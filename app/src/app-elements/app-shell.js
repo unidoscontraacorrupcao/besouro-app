@@ -12,8 +12,6 @@ import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-toast/paper-toast.js';
-import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 import '../app-elements/app-besouro-api.js';
 import "share-menu/share-menu.js";
@@ -30,13 +28,18 @@ import '../pages/notifications-page.js';
 import '../pages/settings-page.js';
 import '../pages/help-page.js';
 import '../pages/reset-password-page.js';
+import '../pages/candidates-page.js';
 import './app-icons.js';
 import './app-theme.js';
+//import messaging from '../../firebase.js'
+import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
 setPassiveTouchGestures(true);
 
-class AppShell extends PolymerElement {
+class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
     <style>
@@ -60,6 +63,7 @@ class AppShell extends PolymerElement {
 
       app-drawer[persistent] {
         --app-drawer-width: 256px;
+        z-index: 0;
       }
 
       app-toolbar {
@@ -259,6 +263,7 @@ class AppShell extends PolymerElement {
         fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged"
         role="main">
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
+          <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></candidates-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
@@ -283,10 +288,15 @@ class AppShell extends PolymerElement {
             on-user-update="_onUserUpdate"
             on-access-denial="_onProfileAccessDenial"
             on-to-inbox-pressed="_goToInbox"
-            on-back-pressed="_goToInbox"></profile-page>
+            on-back-pressed="_goToHome"></profile-page>
       </iron-pages>
       <template is="dom-if" if="{{canShowBottomBar}}">
-        <app-actions on-go-to-inbox="_goToInbox" on-go-to-notifications="_goToNotifications" unread={{unread}}></app-actions>
+        <app-actions
+          on-go-to-inbox="_goToInbox"
+          on-go-to-notifications="_goToNotifications"
+          on-go-to-candidates="_goToCandidates"
+          unread={{unread}}>
+        </app-actions>
       </template>
     </app-drawer-layout>
     <script src="/node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
@@ -325,18 +335,18 @@ class AppShell extends PolymerElement {
     };
   }
 
-  static get observers() { return ["_routePageChanged(routeData.page)"]; }
+  static get observers() { return ["_routePageChanged(routeData.page)", "routePathChanged(route.path)"]; }
 
   constructor() {
     super();
     this._afterLogin = `/`;
-    this.user = this._getUser();
+    this.user = this.getUser();
   }
 
   _routePageChanged(page) {
     // If no page was found in the route data, page will be an empty string.
     // Default to 'inbox' in that case.
-    this.page = page || "inbox";
+    this.page = page || "candidates";
     this.canShowBottomBar = !this.noBottomBarList.includes(this.page);
     if (!this.$.drawer.persistent) {
       this.$.drawer.close();
@@ -346,13 +356,17 @@ class AppShell extends PolymerElement {
     if (!exception_pages.includes(this.page)) {
       this._checkToken().then((ajax) => {
         if (ajax.response.expired) {
-          this._resetUser();
+          this.resetUser();
           this.set('route.path', '/login');
         } else {
           this._getUserNotifications(page);
         }
       });
     }
+  }
+
+  routePathChanged(path) {
+    if(path === '' || path === '/') this.set('route.path', '/candidates');
   }
 
   _pageChanged(page) {
@@ -382,6 +396,10 @@ class AppShell extends PolymerElement {
   }
 
   _goToInbox() {
+    this.set(`route.path`, `/inbox`);
+  }
+
+  _goToHome() {
     this.set(`route.path`, `/`);
   }
 
@@ -406,6 +424,10 @@ class AppShell extends PolymerElement {
     }
   }
 
+  _goToCandidates() {
+    this.set("route.path", "/candidates");
+  }
+
   _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
 
   // User
@@ -416,11 +438,11 @@ class AppShell extends PolymerElement {
 
   _onUserUpdate(e, user) {
     if (user.key != 0) {
-      this._saveUser(user);
+      this.saveUser(user);
     } else {
-      this._saveUser({});
+      this.saveUser({});
     }
-    this.user = this._getUser();
+    this.user = this.getUser();
   }
 
   // Login
@@ -444,7 +466,7 @@ class AppShell extends PolymerElement {
 
   _getUserNotifications(page) {
     if(!this.user) return;
-    if(page === "" || page === "inbox" || page === "show-mission" || page === "profile" || page === "notifications") {
+    if(page === "" || page === "inbox" || page === "show-mission" || page === "profile" || page === "notifications" || page === "candidates") {
       this.$.api.method = "GET";
       this.$.api.path = `notifications/user/${this.user.uid}/unread`;
       this.$.api.request().then((ajax) => {
@@ -454,24 +476,44 @@ class AppShell extends PolymerElement {
     }
   }
 
+  //Get token for push notification
+  _setUserToken(token, user) {
+    if(/Version\/(.*)Safari/.test(navigator.userAgent)) return;
+    if(!user || !this.user || Object.keys(this.user).length == 0) return;
+    messaging.getToken().then((currentToken) => {
+      if (currentToken) {
+        return Promise.resolve(currentToken);
+      } else {
+        // Need to request permissions to show notifications.
+        return messaging.requestPermission().then(function(result) {
+          return messaging.getToken();
+        });
+      }
+    }).then((currentToken) => {
+      let apiBaseUrl = this.$.api.baseUrl;
+      const data = {
+        user_id: user.uid,
+        registration_id: currentToken
+      }
+      this.$.api.authUrl = `${apiBaseUrl}/create-user-device/`;
+      this.$.api.method = "POST";
+      this.$.api.body = data;
+      this.$.api.user = user;
+      this.$.api.authRequest().then((ajax) => {
+      }, (error) => {
+        console.log('Failed to update token');
+      });
+    }).catch((err) =>{
+      console.log('Notificações não habilitadas');
+    });
+  }
+
   // Profile
 
   _onProfileAccessDenial(e) {
     this._afterLogin = `/profile`;
     this.set(`route.path`, `/login`);
   }
-
-  // Storage
-
-  _saveUser(user) {
-    localStorage.setItem("user", JSON.stringify(user));
-  }
-
-  _getUser() {
-    return JSON.parse(localStorage.getItem("user"));
-  }
-
-  _resetUser() { localStorage.removeItem('user'); }
 
   _shareLink(e) {
     const shareLinkNode = this.shadowRoot.querySelector("#shareMenu");
@@ -488,7 +530,7 @@ class AppShell extends PolymerElement {
   }
 
   _checkToken() {
-    var currentUser = this._getUser();
+    var currentUser = this.getUser();
     if (currentUser && currentUser.key) {
       var base = this.$.api.baseUrl;
       this.$.api.authUrl = `${base}/check-token`;

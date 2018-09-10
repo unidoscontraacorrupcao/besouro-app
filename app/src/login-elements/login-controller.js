@@ -221,8 +221,6 @@ class LoginController extends PolymerElement {
   }
 
   _onAuthUser(e, result) {
-    console.log(e);
-    console.log(result);
     if(result.success) {
       this._user.uid = result.data.id;
       if(`form` in this._signUp) {

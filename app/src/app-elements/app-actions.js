@@ -18,8 +18,7 @@ class AppActions extends mixinBehaviors(
         bottom: 0;
         background: white;
         width: calc(100% - 256px);
-        border-top-style: solid;
-        border-top-color: #E7E7E7;
+        box-shadow: 0 -5px 5px -5px #cccccc;
         z-index: 1000;
       }
 
@@ -61,19 +60,15 @@ class AppActions extends mixinBehaviors(
         margin: 8px auto;
       }
 
-      #new-mission-btn paper-icon-button {
+      paper-icon-button {
         width: 40px;
+        height: 40px;
         color: white;
       }
 
-      #app-actions #new-mission-btn paper-icon-button,
-      #app-actions #missions-btn paper-icon-button,
-      #app-actions #notifications-btn paper-icon-button,
-      #app-actions #profile-btn paper-icon-button
-      {
-        display: block;
-        padding: 3px;
-      }
+    #candidates-btn paper-icon-button {
+        width: 50px;
+    }
 
    @media only screen and (max-width: 640px) {
       #app-actions { width: 100%; }
@@ -87,32 +82,41 @@ class AppActions extends mixinBehaviors(
         <div id="actions-content">
           <div id="missions-btn">
             <div class="icon-container">
-              <paper-icon-button icon="app:navMissions" on-tap="_returnToInbox"></paper-icon-button>
+              <paper-icon-button
+                icon="app:navMissions"
+                data-item="inbox"
+                on-click="_goToDataItem">
+              </paper-icon-button>
               <span>missões</span>
             </div>
           </div>
-          <!--
-          <div>
-            <div id="new-mission-btn" style="display: none">
-              <paper-icon-button on-tap="_openMissionForm" icon="app:add"></paper-icon-button>
+          <div id="candidates-btn">
+            <div class="icon-container">
+              <paper-icon-button
+                on-click="_goToDataItem"
+                data-item="candidates"
+                icon="app:candidates">
+              </paper-icon-button>
+              <span>candidatos</span>
             </div>
           </div>
-          -->
           <div id="notifications-btn">
             <div class="icon-container">
-              <paper-icon-button id="btn-notifications" icon="app:navNotifications" on-tap="_goToNotifications"></paper-icon-button>
+              <paper-icon-button
+                id="btn-notifications"
+                icon="app:navNotifications"
+                data-item="notifications"
+                on-click="_goToDataItem">
+              </paper-icon-button>
               <template is="dom-if" if="{{unread}}">
-                <paper-badge for="btn-notifications" label="{{unread}}"></paper-badge>
+                <paper-badge
+                  for="btn-notifications"
+                  label="{{unread}}">
+                </paper-badge>
               </template>
               <span>notificações</span>
             </div>
           </div>
-          <!-- <div id="profile-btn">
-            <div class="icon-container">
-              <paper-icon-button icon="app:profile" on-tap="_goToProfile"></paper-icon-button>
-              <span>perfil</span>
-            </div>
-          </div> -->
         </div>
       </div>
 `;
@@ -138,16 +142,9 @@ class AppActions extends mixinBehaviors(
     };
   }
 
-  _returnToInbox() {
-    this.dispatchEvent(new CustomEvent("go-to-inbox"));
-  }
-
-  _goToProfile() {
-    this.dispatchEvent(new CustomEvent("go-to-profile"));
-  }
-
-  _goToNotifications() {
-    this.dispatchEvent(new CustomEvent("go-to-notifications"));
+  _goToDataItem(e) {
+    var target = e.target.dataset.item;
+    this.dispatchEvent(new CustomEvent(`go-to-${target}`))
   }
 }
 customElements.define(AppActions.is, AppActions);

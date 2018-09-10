@@ -132,7 +132,7 @@ class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
           Entrar
         </paper-button>
       </div>
-      <div class="social">
+      <div class="social" id="socialButtons">
         <div class="social-text">
         Você também pode usar suas redes sociais
         </div>
@@ -225,6 +225,11 @@ class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
   ready() {
     super.ready();
     this.hideLoading();
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      this.$.socialButtons.style.display = 'none';
+    } else {
+      this.$.socialButtons.style.display = 'block';
+    }
   }
 }
 
