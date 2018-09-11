@@ -32,7 +32,6 @@ import '../pages/candidates-page.js';
 import '../pages/candidate-page.js';
 import './app-icons.js';
 import './app-theme.js';
-import messaging from '../../firebase.js'
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -397,8 +396,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   static get observers() {
     return [
       "_routePageChanged(routeData.page)",
-      "routePathChanged(route.path)",
-      "_setUserToken(token, user)"
+      "routePathChanged(route.path)"
     ];
   }
 
@@ -543,39 +541,6 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       });
     }
   }
-
-  //Get token for push notification
-  _setUserToken(token, user) {
-    if(!user || !this.user || Object.keys(this.user).length == 0) return;
-    messaging.getToken().then((currentToken) => {
-      if (currentToken) {
-        return Promise.resolve(currentToken);
-      } else {
-        // Need to request permissions to show notifications.
-        return messaging.requestPermission().then(function(result) {
-          return messaging.getToken();
-        });
-      }
-    }).then((currentToken) => {
-      let apiBaseUrl = this.$.api.baseUrl;
-      const data = {
-        user_id: user.uid,
-        registration_id: currentToken
-      }
-      this.$.api.authUrl = `${apiBaseUrl}/create-user-device/`;
-      this.$.api.method = "POST";
-      this.$.api.body = data;
-      this.$.api.user = user;
-      this.$.api.authRequest().then((ajax) => {
-      }, (error) => {
-        console.log('Failed to update token');
-      });
-    }).catch((err) =>{
-      console.log('Notificações não habilitadas');
-    });
-  }
-
-  // Profile
 
   _onProfileAccessDenial(e) {
     this._afterLogin = `/profile`;
