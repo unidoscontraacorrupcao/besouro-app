@@ -448,7 +448,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _showPressedCardAnimation(e) {
     var card = e.target.shadowRoot.querySelector(".card");
     card.classList.add("pressed-candidate-animation");
-    e.target._shareCandidate();
+    e.target._shareCandidate(true);
   }
 
   _showIgnoredCardAnimation(e) {

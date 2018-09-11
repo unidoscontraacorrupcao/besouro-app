@@ -801,7 +801,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     }
     this._pressCandidate().then((ajax) => {
       this._getCandidateStatistics();
-      this._shareCandidate();
+      this._shareCandidate(true);
     });
   }
 

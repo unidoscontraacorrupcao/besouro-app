@@ -131,8 +131,10 @@ let Mixin = function(superClass) {
     return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
   }
 
-    _shareCandidate() {
+    _shareCandidate(pressCandidate=false) {
       var shareComponent = this.shadowRoot.querySelector("candidate-share-modal");
+      if (typeof pressCandidate == "boolean" && pressCandidate)
+        shareComponent.action = "Pressionando";
       shareComponent.setCandidate(this.candidate);
       this.$.candidateShareDialog.present();
     }

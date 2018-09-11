@@ -139,7 +139,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
 
     <div class="modal-header">
       <div class="header-content">
-        <div id="header-text"><span>pressionando candidato[a]</span></div>
+        <div id="header-text"><span>{{action}} candidato[a]</span></div>
         <div class="icon-header">
           <paper-icon-button slot="suffix" icon="app:pink-share"></paper-icon-button>
           <paper-icon-button on-tap="_dismiss" id="closeModal" icon="app:closeModal"></paper-icon-button>
@@ -176,7 +176,11 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
         value: {}
       },
       modalText: String,
-      quoteText: String
+      quoteText: String,
+      action: {
+        type: String,
+        value: "Compartilhando"
+      }
     }
   }
 
