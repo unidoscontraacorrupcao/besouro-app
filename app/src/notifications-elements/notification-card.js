@@ -124,31 +124,32 @@ class NotificationCard extends PolymerElement {
           this.cardIcon = "app:mission-notifications";
           break;
         case /admin/.test(notification.channel.sort):
-          this.cardIcon = "app:alert-users-notifications"
+          this.cardIcon = "app:alert-users-notifications";
           break;
         case /trophy/.test(notification.channel.sort):
-          this.cardIcon = "app:trophy-notifications"
+          this.cardIcon = "app:trophy-notifications";
           break;
         case /conversation/.test(notification.channel.sort):
-          this.cardIcon = "app:conversations-notifications"
+          this.cardIcon = "app:conversations-notifications";
           break;
         case /selected/.test(notification.channel.sort):
-          this.cardIcon = "app:thumbs-up-notifications"
+          this.cardIcon = "app:thumbs-up-notifications";
           break;
         case /press/.test(notification.channel.sort):
-          this.cardIcon = "app:thumb-down-notifications"
+          this.cardIcon = "app:thumb-down-notifications";
+          break;
+        case /candidate/.test(notification.channel.sort):
+          this.cardIcon = "app:thumb-down-notifications";
           break;
         default:
-          this.cardIcon = "app:alert-users-notifications"
+          this.cardIcon = "app:alert-users-notifications";
           break;
     }
   }
 
   setCardTitle(notification) {
     if (!notification) return;
-    
     var channel_sort = notification.channel.sort.split('-');
-    
     if(channel_sort.length == 2) {
       var mission_id = channel_sort[1];
       this.$.api.path = `missions/${mission_id}`;
@@ -158,6 +159,9 @@ class NotificationCard extends PolymerElement {
         this.set('notification.message.body', '');
         this.getDate(notification);
       });
+    } else if(channel_sort.length == 4) {
+      this.set('additionalText', ' : Acabei de "me comprometer com a democracia"/"aderir às novas medidas". Gostaria de me reavaliar como candidato?');
+      this.getDate(notification);
     } else {
       switch(notification.channel.sort) {
         case "mission":

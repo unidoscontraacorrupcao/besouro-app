@@ -29,9 +29,10 @@ import '../pages/settings-page.js';
 import '../pages/help-page.js';
 import '../pages/reset-password-page.js';
 import '../pages/candidates-page.js';
+import '../pages/candidate-page.js';
 import './app-icons.js';
 import './app-theme.js';
-//import messaging from '../../firebase.js'
+import messaging from '../../firebase.js'
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
 import { setPassiveTouchGestures } from '@polymer/polymer/lib/utils/settings.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -222,6 +223,10 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
           </div>
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <a name="candidates" href="candidates" hidden$="[[!user.uid]]">
+            <paper-icon-button icon="app:candidates" drawer-toggle></paper-icon-button>
+            Candidatos
+          </a>
           <a name="inbox" href="inbox" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navMissions" drawer-toggle></paper-icon-button>
             Missões
@@ -236,7 +241,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
           </a> -->
           <hr hidden$="[[!user.uid]]">
           <a name="rules" on-tap="_redirectToHelp" disabled>
-            Ajuda
+            FAQ
           </a>
           <a name="privacy" on-tap="_redirectToPrivacy" disabled>
             Privacidade
@@ -264,6 +269,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         role="main">
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
           <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></candidates-page>
+          <candidate-page name="candidate" route="{{route}}" on-open-drawer="_openDrawer"></candidate-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
           <mission-receipts-page name="mission-receipts" route-data="{{routeData}}" route="{{route}}" user="{{user}}"></mission-receipts-page>
@@ -335,7 +341,13 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
     };
   }
 
-  static get observers() { return ["_routePageChanged(routeData.page)", "routePathChanged(route.path)"]; }
+  static get observers() {
+    return [
+      "_routePageChanged(routeData.page)",
+      "routePathChanged(route.path)",
+      "_setUserToken(token, user)"
+    ];
+  }
 
   constructor() {
     super();
@@ -387,9 +399,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
     this.page = "not-found";
   }
 
-  _openDrawer(e) {
-    this.$.drawer.open();
-  }
+  _openDrawer(e) { this.$.drawer.open(); }
 
   gotoProfile(e) {
     this.set("route.path", "/profile");
@@ -452,8 +462,15 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _onLoginComplete(e) {
-    this.set("route.path", this._afterLogin);
-    this._afterLogin = `/`;
+    if (this.route.redirect_back) {
+      let redirect = this.route.redirect_back;
+      this.route.redirect_back = '';
+      this.set("route.path", redirect);
+    }
+    else {
+      this.set("route.path", this._afterLogin);
+    }
+      this._afterLogin = `/`;
   }
 
   _onLogoutComplete(e) {
@@ -478,7 +495,6 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
   //Get token for push notification
   _setUserToken(token, user) {
-    if(/Version\/(.*)Safari/.test(navigator.userAgent)) return;
     if(!user || !this.user || Object.keys(this.user).length == 0) return;
     messaging.getToken().then((currentToken) => {
       if (currentToken) {

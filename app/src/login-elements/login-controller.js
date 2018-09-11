@@ -193,7 +193,7 @@ class LoginController extends PolymerElement {
           password: errors.password
         });
         if(errors.non_field_errors) {
-          this._toastIt(errors.non_field_errors);
+          this._toastIt('Verifique se seu e-mail e senha estão corretos');
         } else {
           this._toastInvalidFields();
         }
@@ -212,7 +212,7 @@ class LoginController extends PolymerElement {
         this.$.signUp.emptyPassword();
       } else {
         this.$.signUp.exposeErrors({
-          email: errors.email,
+          email: 'Um usuário já está registrado com este e-mail',
           password: errors.password1
         });
         this._toastInvalidFields();
@@ -302,7 +302,7 @@ class LoginController extends PolymerElement {
         this.$.forgotPassword.exposeErrors({
           email: errors.email
         });
-        this._toastInvalidFields();
+        this._toastIt(`Algum erro ocorreu. Se persistir aguarde uns minutos e tente novamente.`);
       }
     }
   }
@@ -323,6 +323,9 @@ class LoginController extends PolymerElement {
     let result = { valid: true, errors: { email: ``, password: `` } };
 
     result.errors.email = this._validateEmptiness(form.email);
+    if(result.errors.email == ``) {
+      result.errors.email = this._validateEmail(form.email);
+    }
     result.errors.password = this._validateEmptiness(form.password);
 
     result.valid = result.errors.email == `` && result.errors.password == ``;

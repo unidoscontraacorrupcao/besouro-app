@@ -102,6 +102,11 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
           margin-bottom: 5vh;
         }
 
+        paper-icon-button {
+          height: 70px;
+          width: auto;
+        }
+
       </style>
       <div id="loading">
         <paper-spinner active=""></paper-spinner>
@@ -147,7 +152,7 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
         </div>
         <div class="social-buttons" >
           <div class="social-button facebook">
-            <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
+            <paper-icon-button icon="app:candidate-share-facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
         </div>
         <div id="social-notice">

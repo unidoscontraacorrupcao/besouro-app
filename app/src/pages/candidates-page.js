@@ -135,6 +135,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           tab="{{inboxtab}}"
           on-reload-candidates="_reloadCandidates"
           on-filtered-candidates="_showFilteredCandidates"
+          on-total-filtered="_getTotalFiltered"
           user="{{user}}"
           filters="{{filters}}"
           id="filter">
@@ -145,16 +146,16 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <welcome-card>
             <div>
               <p>
-                Aqui você vê as/os candidatas/os que registraram: 1. Passado Limpo; 2. 
+                Aqui você vê as/os candidatas/os que registraram: 1. Passado Limpo; 2.
                 Compromisso com Democracia; e 3. Adesão às Novas Medidas contra a Corrupção.
               </p>
               <p>
-                SELECIONE para mais detalhes pessoais e eleitorais, bem como bens e processos. 
-                Também é possível PRESSIONAR quem não se comprometeu. Além de enviarmos 
+                SELECIONE para mais detalhes pessoais e eleitorais, bem como bens e processos.
+                Também é possível PRESSIONAR quem não se comprometeu. Além de enviarmos
                 um email, você conseguirá postar nas suas redes sociais.
               </p>
               <p>
-                Os nomes são apresentados aleatoriamente, sem nenhum tipo de 
+                Os nomes são apresentados aleatoriamente, sem nenhum tipo de
                 viés nem preferência. Para dúvidas, acesse AJUDA.
               </p>
             </div>
@@ -182,7 +183,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             <template is="dom-repeat" items="{{selectedCandidates}}">
               <selected-candidate-card
                 candidate="[[item]]"
-                on-unselect-candidate="_unselectCandidatesChanged">
+                on-unselect-candidate="_unselectCandidatesChanged"
+                on-show-candidate="_showCandidate">
               </selected-candidate-card>
             </template>
           </div>
@@ -244,7 +246,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       filters: {
         type: Object
       },
-      targetCandidate: String
+      targetCandidate: String,
+      totalFiltered: {
+        type: Number,
+        observer: 'toggleLoadMoreButton'
+      }
     };
   }
 
@@ -324,12 +330,14 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.set("allCandidates", candidates.results);
       else
         this.set("allCandidates", candidates);
+      this.toggleLoadMoreButton();
     }
     if (tab == 1) {
       if (candidates.results)
         this.set("selectedCandidates", candidates.results);
       else
         this.set("selectedCandidates", candidates);
+      this.toggleLoadMoreButton();
     }
   }
 
@@ -350,6 +358,18 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       const count = `0${ajax.response.total}`.slice(-2);
       this.set("selectedCount", count);
     });
+  }
+
+  _getTotalFiltered(e) {
+    this.set('totalFiltered', e.detail.total);
+  }
+
+  toggleLoadMoreButton() {
+    if(this.totalFiltered === this.allCandidates.length) {
+      this.$.loadMoreCandidates.style.display = "none";
+    } else {
+      this.$.loadMoreCandidates.style.display = "block";
+    }
   }
 
   _getSelectedCandidates(limit=0) {
@@ -382,8 +402,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     else {
       this.$.api.path = `users/${this.getUser().uid}/candidates`;
     }
-
     this.showLoading();
+
     this.$.api.method = "GET";
     this.limit += 10;
     this.$.api.params = this.filters;
@@ -394,6 +414,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       else
         this.set("allCandidates", ajax.response);
       this.hideLoading();
+      this.toggleLoadMoreButton();
     });
   }
 
@@ -413,8 +434,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       if (ajax.response.results)
         this.set("selectedCandidates", ajax.response.results);
       else
-      this.set("selectedCandidates", ajax.response);
+        this.set("selectedCandidates", ajax.response);
       this.hideLoading();
+      this.toggleLoadMoreButton();
     });
   }
 
@@ -426,13 +448,13 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _showPressedCardAnimation(e) {
     var card = e.target.shadowRoot.querySelector(".card");
     card.classList.add("pressed-candidate-animation");
+    e.target._shareCandidate();
   }
 
   _showIgnoredCardAnimation(e) {
     var card = e.target.shadowRoot.querySelector(".card");
     card.classList.add("ignored-candidate-animation");
   }
-
 
    _selectedCandidatesChanged(e) {
     this.set('targetCandidate', e.detail.candidate.candidate);
@@ -564,6 +586,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this._toastMessage = message;
     this.$.pressedToast.open();
   }
+
+  _showCandidate(e) { this.set("route.path", `/candidate/${e.detail.candidate}`); }
 
 }
 window.customElements.define(CandidatesPage.is, CandidatesPage);

@@ -5,6 +5,21 @@ $_documentContainer.setAttribute('style', 'display: none;');
 $_documentContainer.innerHTML = `<dom-module id="card-shared-styles">
   <template>
   <style>
+      app-header {
+        background: var(--default-primary-color);
+        color: var(--secondary-text-color);
+      }
+
+      app-header-layout {
+        overflow: hidden;
+      }
+
+      app-drawer-layout:-webkit-full-screen-ancestor app-header,
+      app-header-layout:-webkit-full-screen-ancestor app-header,
+      app-drawer-layout:-webkit-full-screen-ancestor app-drawer {
+        z-index: -1 !important;
+      }
+
       .card {
         line-height: 0.7;
         position: relative;
@@ -37,6 +52,21 @@ $_documentContainer.innerHTML = `<dom-module id="card-shared-styles">
         margin: 0 20px;
         display: flex;
         flex-direction: column;
+      }
+
+      @media screen and (min-width: 641px) {
+        app-header [drawer-toggle] {
+          display: none;
+        }
+        paper-tabs {
+          width: 100%;
+          margin: 0 auto;
+        }
+      }
+      @media screen and (min-width: 961px) {
+        app-header-layout {
+          height: calc(100% - 50px);
+        }
       }
 
     </style>

@@ -4,6 +4,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
 
 import '../app-elements/shared-styles.js';
+import '../candidates-elements/candidate-share-modal.js'
 import '../app-elements/styles/candidate-card-shared-styles.js';
 import '../app-elements/app-dialog.js';
 import '../app-elements/app-scrollable-dialog.js';
@@ -40,7 +41,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
       #close paper-icon-button { width:28px; }
 
-      .card { padding-bottom: 20px; }
       .card-footer  {
         width: 90%;
         margin: auto;
@@ -52,15 +52,15 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       }
 
       #social-medias {
-        width: 75%;
+        width: 85%;
         margin: auto;
-        margin-bottom: 12px;
+        margin: 22px auto 12px auto;
       }
 
       #social-medias span {
         text-transform: uppercase;
         font-family: Folio;
-        font-size: 14px;
+        font-size: 16px;
       }
 
       #medias {
@@ -83,16 +83,16 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         width: 90%;
         margin: auto;
         text-align: center;
-        padding-bottom: 46px;
+        padding: 30px 0 30px 0;
         text-decoration: underline;
         color: var(--accent-color);
       }
 
-      #see-more span {
+      #see-more paper-button {
         text-transform: uppercase;
         color: var(--accent-color);
         font-family: folio;
-        font-size: 16px;
+        font-size: 18px;
       }
 
       @keyframes ignored-candidate {
@@ -121,6 +121,10 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       }
     </style>
 
+    <app-dialog id="candidateShareDialog">
+      <candidate-share-modal></candidate-share-modal>
+    </app-dialog>
+
     <app-besouro-api id="api"></app-besouro-api>
 
     <div class="card">
@@ -133,7 +137,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               <div>
                 <paper-icon-button on-click="_unselectCandidate" icon="app:remove-selected"></paper-icon-button>
               </div>
-              <span on-click="_unselectCandidate">remover seleção</span>
+              <span on-click="_wrapUnselectCandidate">remover seleção</span>
             </div>
           </div>
           <div id="candidate-infos">
@@ -160,6 +164,16 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       </div>
 
       <div id="card-image">
+          <div on-click="_shareCandidate" id="share-candidate">
+            <div>
+              <div>
+                <paper-icon-button icon="app:share"></paper-icon-button>
+              </div>
+              <div>
+                <span>compartilhar</span>
+              </div>
+            </div>
+          </div>
         <iron-image
           sizing="contain"
           preload="" fade=""
@@ -283,9 +297,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
         </div>
 
-        <!-- <div id="see-more">
-            <span>conheça mais</span>
-        </div> -->
+         <div id="see-more">
+            <paper-button on-click="_showCandidate">conheça mais</paper-button>
+        </div>
 
       </div>
 `;
@@ -302,27 +316,8 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _supportCandidate() { window.open(this.candidate.crowdfunding_url); }
-
-  _pressCandidate() {
-    var user = this.getUser();
-    this.$.api.method = "POST";
-    this.$.api.path = "pressed-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("pressed-candidate"));
-    });
-  }
-
-  _unselectCandidate() {
-    var user = this.getUser();
-    this.$.api.method = "POST";
-    this.$.api.path = `users/${user.uid}/unselect-candidate/`;
-    this.$.api.body = {"candidate": this.candidate.id};
-    this.$.api.user = user;
-    this.$.api.request().then((ajax) => {
+  _wrapUnselectCandidate() {
+    this._unselectCandidate().then((ajax) => {
       this.dispatchEvent(new CustomEvent("unselect-candidate"));
     });
   }
@@ -344,52 +339,23 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _hideSocialMediaIcons() {
-    var medias = this.shadowRoot.querySelector("#social-medias");
-    medias.style.display = "block";
-    if ((this._invalidSocialMediaUrl('facebook_url')
-      && this._invalidSocialMediaUrl('youtube_url')
-      && this._invalidSocialMediaUrl('twitter_url')
-      && this._invalidSocialMediaUrl('instagram_url')
-      && this._invalidSocialMediaUrl('crowdfunding_url'))) {
-      medias.style.display = "none";
-      this.shadowRoot.querySelector("#tse-data").style.marginTop = "20px";
-    }
-    else {
-      if (this._invalidSocialMediaUrl('facebook_url'))
-        this.$.facebookBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('youtube_url'))
-        this.$.youtubeBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('twitter_url'))
-        this.$.twitterBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('instagram_url'))
-        this.$.instagramBtn.style.display = "none";
-      if (this._invalidSocialMediaUrl('crowdfunding_url'))
-        this.$.crowdBtn.style.display = "none";
-        this._hideSupportBtn();
-    }
-  }
-
-  _invalidSocialMediaUrl(url) {
-    if (!this.candidate[url]) return true;
-    if (/^www/.test(this.candidate[url])) {
-      this.candidate[url] = 'http://' + this.candidate[url];
-      return false;
-    }
-    return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
-  }
-
   _hideSupportBtn () {
     var cardFooter = this.shadowRoot.querySelector(".card-footer");
     cardFooter.style.display = "none";
+    this.shadowRoot.querySelector("hr").style.display = "none";
   }
 
   _showSupportBtn() {
-    var cardFooter = this.shadowRoot.querySelector(".card-footer");
-    cardFooter.style.display = "flex";
-    var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    supportBtn.style.margin = "auto";
-    supportBtn.style.width = "300px";
+    if(!this._invalidSocialMediaUrl("crowdfunding_url")) {
+      var cardFooter = this.shadowRoot.querySelector(".card-footer");
+      cardFooter.style.display = "flex";
+      var supportBtn = this.shadowRoot.querySelector("paper-button:first-child");
+      supportBtn.style.margin = "auto";
+      supportBtn.style.width = "300px";
+    }
+    else {
+      this._hideSupportBtn();
+    }
   }
 
   _candidateChanged() {
@@ -430,10 +396,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-
-  _redirectToSocialLink(e) {
-    var link = e.target.dataset.item;
-    window.open(this.candidate[`${link}`], '_blank');
+  _showCandidate() {
+    this.dispatchEvent(new CustomEvent("show-candidate",
+      { detail: {candidate: this.candidate.id} }));
   }
 }
 customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);

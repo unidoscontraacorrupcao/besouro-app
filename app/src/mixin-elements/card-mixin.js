@@ -35,6 +35,107 @@ let Mixin = function(superClass) {
       return `linear-gradient(${direction}, ${colors[0]}, ${colors[1]}, ${colors[2]}), ${imagePath}`;
 
     }
+
+  _selectCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+
+    this.$.api.method = "POST";
+    this.$.api.path = "selected-candidates/";
+    this.$.api.user = user;
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    return this.$.api.request();
+  }
+
+  _pressCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+    this.$.api.method = "POST";
+    this.$.api.path = "pressed-candidates/";
+    this.$.api.user = user;
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    return this.$.api.request();
+  }
+
+  _ignoreCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+    this.$.api.method = "POST";
+    this.$.api.path = "ignored-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    this.$.api.request().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("ignored-candidate"));
+    });
+  }
+
+  _unselectCandidate() {
+    var user = this.getUser();
+    this.$.api.method = "POST";
+    this.$.api.path = `users/${user.uid}/unselect-candidate/`;
+    this.$.api.body = {"candidate": this.candidate.id};
+    this.$.api.user = user;
+    return this.$.api.request();
+  }
+
+  _supportCandidate() { window.open(this.candidate.crowdfunding_url); }
+
+  _hideSocialMediaIcons() {
+    var medias = this.shadowRoot.querySelector("#social-medias");
+    medias.style.display = "block";
+    if (this._invalidSocialMediaUrl('facebook_url')
+      && this._invalidSocialMediaUrl('youtube_url')
+      && this._invalidSocialMediaUrl('twitter_url')
+      && this._invalidSocialMediaUrl('instagram_url')
+      && this._invalidSocialMediaUrl('crowdfunding_url')) {
+      medias.style.display = "none";
+      this.shadowRoot.querySelector("#tse-data").style.marginTop = "20px";
+    }
+    else {
+      if (this._invalidSocialMediaUrl('facebook_url'))
+        this.$.facebookBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('youtube_url'))
+        this.$.youtubeBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('twitter_url'))
+        this.$.twitterBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('instagram_url'))
+        this.$.instagramBtn.style.display = "none";
+      if (this._invalidSocialMediaUrl('crowdfunding_url'))
+        this.$.crowdBtn.style.display = "none";
+    }
+  }
+
+  _redirectToSocialLink(e) {
+    var link = e.target.dataset.item;
+    window.open(this.candidate[`${link}`], '_blank');
+  }
+
+  _invalidSocialMediaUrl(url) {
+    if (!this.candidate[url]) return true;
+    if (this.candidate[url] == "SEM INFORMAÇÕES") return true;
+    if (this.candidate[url] == "não tenho") return true;
+    if (/^www/.test(this.candidate[url])) {
+      this.candidate[url] = 'http://' + this.candidate[url];
+      return false;
+    }
+    return (!/http:\/\/|https:\/\//.test(this.candidate[url]))
+  }
+
+    _shareCandidate() {
+      var shareComponent = this.shadowRoot.querySelector("candidate-share-modal");
+      shareComponent.setCandidate(this.candidate);
+      this.$.candidateShareDialog.present();
+    }
   }
 }
 

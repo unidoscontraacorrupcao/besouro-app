@@ -4,6 +4,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 
+import '../candidates-elements/candidate-share-modal.js'
 import '../app-elements/shared-styles.js';
 import '../app-elements/styles/candidate-card-shared-styles.js';
 import '../app-elements/app-dialog.js';
@@ -88,6 +89,9 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       -webkit-animation: ignored-candidate 0.8s;
     }
 
+    #btn-icon { margin: auto auto 10px auto; }
+
+
     @media screen and (min-width: 1100px) {
       :host {
         flex: 0 0 49%;
@@ -97,8 +101,13 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         height: 108px;
       }
     }
-
     </style>
+
+    <app-dialog id="candidateShareDialog">
+      <candidate-share-modal
+        on-close-modal="_closeModal">
+      </candidate-share-modal>
+    </app-dialog>
 
     <app-besouro-api id="api"></app-besouro-api>
 
@@ -138,6 +147,16 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       </div>
 
       <div id="card-image">
+          <div on-click="_shareCandidate" id="share-candidate">
+            <div>
+              <div>
+                <paper-icon-button icon="app:share"></paper-icon-button>
+              </div>
+              <div>
+                <span>compartilhar</span>
+              </div>
+            </div>
+          </div>
         <iron-image
           sizing="contain"
           preload="" fade=""
@@ -150,9 +169,9 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="right">
                 Nosso critério de passado limpo é rígido. 
-                A referência são os crimes da Lei da Ficha Limpa, mas 
-                para nós eles nunca prescrevem. No caso de quem tentará 
-                reeleição, veremos quem responde a processo no STF.
+                A referência são os crimes da Lei da Ficha Limpa. 
+                No caso de candidata/o à reeleição, veremos quem é 
+                réu no STF.
               </paper-tooltip>
             </div>
             <div>
@@ -192,7 +211,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       </div>
 
       <div class="card-footer">
-        <paper-button on-click="_selectCandidate">
+        <paper-button on-click="_wrapSelectCandidate">
           <div>
             <div id="btn-icon">
               <iron-icon icon="app:select-candidate"></iron-icon>
@@ -200,7 +219,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
             selecionar
           </div>
         </paper-button>
-        <paper-button on-click="_pressCandidate">
+        <paper-button on-click="_wrapPressCandidate">
           <div>
             <div id="btn-icon">
               <iron-icon icon="app:press-candidate"></iron-icon>
@@ -223,55 +242,6 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       }
     }
   }
-
-  _selectCandidate() {
-    var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) {
-      this.dispatchEvent(new CustomEvent("unauthorized"));
-      return;
-    }
-    this.$.api.method = "POST";
-    this.$.api.path = "selected-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("selected-candidate", {detail: {"candidate": ajax.response}}));
-    });
-  }
-
-  _pressCandidate() {
-    var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) {
-      this.dispatchEvent(new CustomEvent("unauthorized"));
-      return;
-    }
-    this.$.api.method = "POST";
-    this.$.api.path = "pressed-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("pressed-candidate", {detail: {"candidate": ajax.response}}));
-    });
-  }
-
-  _ignoreCandidate() {
-    var user = this.getUser();
-    if (!user || Object.keys(user).length == 0) {
-      this.dispatchEvent(new CustomEvent("unauthorized"));
-      return;
-    }
-    this.$.api.method = "POST";
-    this.$.api.path = "ignored-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("ignored-candidate"));
-    });
-  }
-
 
   _chooseCandidateColor() {
     this._showPressBtn();
@@ -318,9 +288,20 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     card.classList.remove("ignored-candidate-animation");
   }
 
+  _wrapSelectCandidate() {
+    this.showLoading();
+    this._selectCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("selected-candidate", {detail: {"candidate": ajax.response}}))
+    });
+  }
 
-  constructor() { super(); }
+  _wrapPressCandidate() {
+    this.showLoading();
+    this._pressCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("pressed-candidate", {detail: {"candidate": ajax.response}}));
+    });
+  }
 
-  ready() { super.ready(); }
+  _closeModal() { this.$.candidateShareDialog.dismiss(); }
 }
 customElements.define(CandidateCard.is, CandidateCard);
