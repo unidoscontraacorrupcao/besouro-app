@@ -177,10 +177,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
       },
       modalText: String,
       quoteText: String,
-      action: {
-        type: String,
-        value: "Compartilhando"
-      }
+      action: String
     }
   }
 

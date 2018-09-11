@@ -135,6 +135,8 @@ let Mixin = function(superClass) {
       var shareComponent = this.shadowRoot.querySelector("candidate-share-modal");
       if (typeof pressCandidate == "boolean" && pressCandidate)
         shareComponent.action = "Pressionando";
+      else
+        shareComponent.action = "Compartilhando";
       shareComponent.setCandidate(this.candidate);
       this.$.candidateShareDialog.present();
     }
