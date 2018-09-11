@@ -204,7 +204,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
       this.set('modalText', `Quem não tem passado limpo não pode nos representar. ${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`);
       this.set('quoteText', this.modalText);
     } else {
-      this.set('modalText', `Quem luta contra corrupção e defende a democracia não desiste nunca. ${this.candidate.name} não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.`);
+      this.set('modalText', `Quem luta contra a corrupção e defende a democracia exige compromisso. ${this.candidate.name} não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.`);
       this.set('quoteText', this.modalText);
     }
   }
