@@ -2,6 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
+import '@polymer/paper-tooltip/paper-tooltip.js';
 
 import '../app-elements/shared-styles.js';
 import '../candidates-elements/candidate-share-modal.js'
@@ -108,6 +109,25 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         80% {opacity: 0.2;}
         90% {opacity: 0.1;}
         100% {opacity: 0;}
+      }
+
+      @keyframes selected-candidate {
+        0% {left: unset;}
+        10% {left: 10px;}
+        20% {left: 20px;}
+        30% {left: 30px;}
+        40% {left: 40px;}
+        50% {left: 50px;}
+        60% {left: 60px;}
+        70% {left: 70px; opacity: 0.3;}
+        80% {left: 80px; opacity: 0.2;}
+        90% {left: 90px; opacity: 0.1;}
+        100% {opacity: 0;}
+      }
+
+      .selected-candidate-animation {
+        animation: selected-candidate 0.8s;
+        -webkit-animation: selected-candidate 0.8s;
       }
 
       .ignored-candidate-animation {
@@ -357,6 +377,12 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     });
   }
 
+  _wrapfavoriteCandidate() {
+    this._favoriteCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("favorite-candidate"));
+    });
+  }
+
   _chooseCandidateColor() {
     if (this.candidate.score == "good") {
       this._showSupportBtn();
@@ -394,6 +420,13 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   _candidateChanged() {
     this._chooseCandidateColor();
     this._hideSocialMediaIcons();
+    this._removeCardAnimations();
+  }
+
+  _removeCardAnimations() {
+    var card = this.shadowRoot.querySelector(".card");
+    card.classList.remove("selected-candidate-animation");
+    card.classList.remove("ignored-candidate-animation");
   }
 
   constructor() { super(); }

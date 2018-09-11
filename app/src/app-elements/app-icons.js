@@ -566,6 +566,15 @@ $_documentContainer.innerHTML = `<iron-iconset-svg size="24" name="app">
 </g>
 </g>
 
+<g id="unfavorite" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+<g id="Mobile-Portrait-Interna-Candidate-3" transform="translate(-149.000000, -494.000000)">
+<g id="icon_button-unfavorite" transform="translate(149.000000, 494.000000)">
+<path d="M16.5,0 C14.2085625,0 12.4746875,1.36416396 11,2.78970135 C9.5954375,1.27698579 7.7914375,0 5.5,0 C2.272875,0 0,2.81480866 0,5.884875 C0,7.53149623 0.6648125,8.7171193 1.392875,9.83160499 L9.9405625,20.2274271 C10.899625,21.2575243 11.081125,21.2575243 12.0401875,20.2274271 L20.607125,9.83160499 C21.46375,8.7171193 22,7.53149623 22,5.884875 C22,2.81480866 19.727125,0 16.5,0 L16.5,0 Z" id="Fill-72-Copy-10" fill="#FFFFFE"></path>
+<polyline id="Path-13-Copy" stroke="#E6007E" stroke-width="2" stroke-linejoin="round" points="10.9995117 1 9 4.375 12.2504883 7.75 9 11.125 12.2504883 14.5 9.75 17.875 10.9995117 21.25"></polyline>
+</g>
+</g>
+</g>
+
 </defs></svg>
 </iron-iconset-svg>`;
 

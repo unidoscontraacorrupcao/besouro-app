@@ -57,7 +57,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         padding-bottom: 80px;
         overflow-x: hidden;
       }
-      welcome-card, selected-candidate-card { margin-top: 56px; }
+      welcome-card, selected-candidate-card, favorite-candidate-card { margin-top: 56px; }
       paper-toast {
         --paper-font-common-base: Folio;
         font-family: Folio;
@@ -205,8 +205,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             <template is="dom-repeat" items="{{favoriteCandidates}}">
               <favorite-candidate-card
                 candidate="[[item]]"
-                on-unselect-candidate="_unselectCandidatesChanged"
-                on-favorite-candidate="_favoriteCandidateChanged"
+                on-unfavorite-candidate="_unfavoriteCandidatesChanged"
                 on-show-candidate="_showCandidate">
               </favorite-candidate-card>
             </template>
@@ -538,11 +537,30 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _userCandidatesChanged() {
     this._getAllCandidates();
     this._getSelectedCandidates();
+    this._getFavoriteCandidates();
   }
 
   _unselectCandidatesChanged(e) {
     this._showIgnoredCardAnimation(e);
     setTimeout(() => {
+      this._userCandidatesChanged();
+    }, 500);
+  }
+
+  _unfavoriteCandidatesChanged(e) {
+    this._showIgnoredCardAnimation(e);
+    setTimeout(() => {
+      this._userCandidatesChanged();
+    }, 500);
+  }
+
+  _favoriteCandidateChanged(e) {
+    this._showSelectedCardAnimation(e);
+    setTimeout(() => {
+      if (this.limit == 1)
+        this.limit = 10;
+      else
+        this.limit -=1;
       this._userCandidatesChanged();
     }, 500);
   }

@@ -89,11 +89,12 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         color: var(--accent-color);
       }
 
-      #see-more paper-button {
+      #see-more a {
         text-transform: uppercase;
         color: var(--accent-color);
         font-family: folio;
         font-size: 18px;
+        cursor: pointer;
       }
 
       @keyframes ignored-candidate {
@@ -116,8 +117,13 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       }
 
       .card-footer paper-button:first-child {
-        color: var(--accent-color);
-        border: 1px solid var(--accent-color);
+        background-color: var(--accent-color);
+        color: var(--default-primary-color);
+        border: none;
+      }
+
+      #urn-number {
+        color: var(--accent-color) !important;
       }
 
       @media screen and (min-width: 1100px) {
@@ -138,14 +144,6 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       <div class="card-header">
         <div class="container">
           <span id="candidate-name"> {{candidate.name}} </span>
-          <div id="close">
-            <div>
-              <div>
-                <paper-icon-button on-click="_unselectCandidate" icon="app:remove-selected"></paper-icon-button>
-              </div>
-              <span on-click="_wrapUnselectCandidate">remover seleção</span>
-            </div>
-          </div>
           <div id="candidate-infos">
             <div class="flex">
               <div id="candidacy">
@@ -156,7 +154,7 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
             <div>
               <div id="urn">
                 <span>urna:</span>
-                <span><b>{{candidate.urn}}</b></span>
+                <span id="urn-number"><b>{{candidate.urn}}</b></span>
               </div>
             </div>
             <div>
@@ -188,8 +186,14 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
         <div id="political-infos">
           <div class="info">
-            <div>
-              <span>Tem passado limpo?</span>
+            <div id="short">
+              <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="right">
+                Nosso critério de passado limpo é rígido. 
+                A referência são os crimes da Lei da Ficha Limpa. 
+                No caso de candidata/o à reeleição, veremos quem é 
+                réu no STF.
+              </paper-tooltip>
             </div>
             <div>
               <span><br>{{candidate.has_clean_pass}}</br></span>
@@ -197,7 +201,14 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
           <div class="info">
             <div>
-              <span>Comprometeu-se com democracia?</span>
+              <span>Comprometeu-se com democracia?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="top">
+                O critério de compromisso com os princípios 
+                democráticos baseia-se na adesão ao Pacto 
+                pela Democracia – iniciativa da sociedade pela 
+                preservação e revigoramento da vida política e 
+                democrática do país.
+              </paper-tooltip>
             </div>
             <div>
               <span><br>{{candidate.committed_to_democracy}}</br></span>
@@ -205,7 +216,13 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
           <div class="info">
             <div>
-              <span>Aderiu às novas medidas?</span>
+              <span>Aderiu às novas medidas?<iron-icon icon="app:help"></iron-icon></span>
+              <paper-tooltip position="left">
+                No caso do combate à corrupção, a/o candidata/o 
+                terá de se comprometer a, se eleita/o, pôr nossas 
+                propostas em tramitação e atuar por sua aprovação. 
+                Ressalvas terão de ser identificadas e justificadas.
+              </paper-tooltip>
             </div>
             <div>
               <span><br>{{candidate.adhered_to_the_measures}}</br></span>
@@ -215,12 +232,12 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       </div>
 
       <div class="card-footer">
-        <paper-button on-click="_favoriteCandidate" id="favoriteBtn">
+        <paper-button on-click="_wrapUnfavoriteCandidate" id="favoriteBtn">
           <div>
             <div id="btn-icon">
-              <iron-icon icon="app:favorite"></iron-icon>
+              <iron-icon icon="app:unfavorite"></iron-icon>
             </div>
-            favoritar
+            desfavoritar
           </div>
         </paper-button>
         <paper-button on-click="_supportCandidate" id="supportBtn">
@@ -232,88 +249,10 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
         </paper-button>
       </div>
-      <div id="social-medias">
-        <hr>
-        <span>redes sociais deste candidato:</span>
-        <div id="medias">
-            <paper-icon-button id="facebookBtn" on-click="_redirectToSocialLink" data-item="facebook_url" icon="app:social-facebook"></paper-icon-button>
-            <paper-icon-button id="twitterBtn" on-click="_redirectToSocialLink" data-item="twitter_url" icon="app:social-twitter"></paper-icon-button>
-            <paper-icon-button id="instagramBtn" on-click="_redirectToSocialLink" data-item="instagram_url" icon="app:social-insta"></paper-icon-button>
-            <paper-icon-button id="youtubeBtn" on-click="_redirectToSocialLink" data-item="youtube_url" icon="app:social-youtube"></paper-icon-button>
-            <paper-icon-button id="crowdBtn" on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
-        </div>
+
+      <div id="see-more">
+        <a on-click="_showCandidate">ver detalhes</a>
       </div>
-
-        <div id="tse-data">
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Nome Completo</span>
-              </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
-            </div>
-          <div class="item-body">
-             <span>{{candidate.full_name}}</span>
-          </div>
-
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Ocupação Profissional</span>
-              </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.occupation}}
-              </span>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Aderiu totalmente às novas medidas?</span>
-              </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.justify_adhered_to_the_measures}}
-              </span>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Total de bens e patrimônio</span>
-              </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.riches}}
-              </span>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Total de processos a que responde</span>
-              </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.lawsuits}}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div id="see-more">
-          <paper-button on-click="_showCandidate">conheça mais</paper-button>
-        </div>
 
       </div>
 `;
@@ -330,9 +269,9 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _wrapUnselectCandidate() {
-    this._unselectCandidate().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("unselect-candidate"));
+  _wrapUnfavoriteCandidate() {
+    this._unfavoriteCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("unfavorite-candidate"));
     });
   }
 
@@ -372,7 +311,12 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
   _candidateChanged() {
     this._chooseCandidateColor();
-    this._hideSocialMediaIcons();
+    this._removeCardAnimations();
+  }
+
+  _removeCardAnimations() {
+    var card = this.shadowRoot.querySelector(".card");
+    card.classList.remove("ignored-candidate-animation");
   }
 
   constructor() { super(); }

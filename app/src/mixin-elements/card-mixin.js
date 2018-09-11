@@ -100,6 +100,15 @@ let Mixin = function(superClass) {
     return this.$.api.request();
   }
 
+  _unfavoriteCandidate() {
+    var user = this.getUser();
+    this.$.api.method = "POST";
+    this.$.api.path = `users/${user.uid}/unfavorite-candidate/`;
+    this.$.api.body = {"candidate": this.candidate.id};
+    this.$.api.user = user;
+    return this.$.api.request();
+  }
+
   _supportCandidate() { window.open(this.candidate.crowdfunding_url); }
 
   _hideSocialMediaIcons() {
