@@ -138,7 +138,7 @@ class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
         </div>
         <div class="social-buttons">
           <div class="social-button facebook">
-            <paper-icon-button icon="app:facebook" on-tap="_onAuthFacebook"></paper-icon-button>
+            <paper-icon-button icon="app:candidate-share-facebook" on-tap="_onAuthFacebook"></paper-icon-button>
           </div>
         </div>
         <div id="social-notice">
