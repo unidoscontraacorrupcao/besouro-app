@@ -243,11 +243,6 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
   ready() {
     super.ready();
     this.hideLoading();
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      this.$.socialButtons.style.display = 'none';
-    } else {
-      this.$.socialButtons.style.display = 'block';
-    }
   }
 }
 
