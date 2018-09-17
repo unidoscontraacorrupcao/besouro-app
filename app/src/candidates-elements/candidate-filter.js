@@ -202,6 +202,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
                 <paper-item>AM</paper-item>
                 <paper-item>BA</paper-item>
                 <paper-item>CE</paper-item>
+                <paper-item>DF</paper-item>
                 <paper-item>ES</paper-item>
                 <paper-item>GO</paper-item>
                 <paper-item>MA</paper-item>
@@ -222,7 +223,6 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
                 <paper-item>SP</paper-item>
                 <paper-item>SE</paper-item>
                 <paper-item>TO</paper-item>
-                <paper-item>DF</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
