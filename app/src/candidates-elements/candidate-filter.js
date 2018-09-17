@@ -233,6 +233,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
                 <paper-item>não responderam</paper-item>
                 <paper-item>não se comprometeram</paper-item>
                 <paper-item>se comprometeram</paper-item>
+                <paper-item>não tem passado limpo</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
             <paper-button on-tap="_filter">filtrar</paper-button>
@@ -369,6 +370,9 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         case 'se comprometeram':
           filters["filter_by_adhered"] = 'SIM';
           break;
+        case 'não tem passado limpo':
+          filters["filter_by_clean_pass"] = 'NÃO';
+          break;
         default:
           break;
       }
@@ -382,6 +386,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     filters["filter_by_candidacy"] = '';
     filters["filter_by_uf"] = '';
     filters["filter_by_adhered"] = '';
+    filters["filter_by_clean_pass"] = '';
     this.set("filters", filters);
   }
 
