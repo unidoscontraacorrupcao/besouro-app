@@ -367,9 +367,8 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
     var exception_pages = ["login", "reset-password"];
     if (!exception_pages.includes(this.page)) {
       this._checkToken().then((ajax) => {
-        if (ajax.response.expired) {
-          this.resetUser();
-          this.set('route.path', '/login');
+        if (ajax.response.token) {
+          this._updateUserToken(ajax.response.token);
         } else {
           this._getUserNotifications(page);
         }
@@ -551,12 +550,22 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       var base = this.$.api.baseUrl;
       this.$.api.authUrl = `${base}/check-token`;
       this.$.api.user = currentUser;
+      this.$.api.params = {};
+      this.$.api.params["user_id"] = currentUser.uid;
       this.$.api.method = "GET";
       return this.$.api.authRequest();
     }
     return new Promise((resolve, reject) => {
-      resolve({"response": {"expired": false}});
+      resolve({"response": {"token": ''}});
     })
+  }
+
+  _updateUserToken(token) {
+    var currentUser = this.getUser();
+    if (currentUser && currentUser.key) {
+      currentUser.key = token;
+      this.saveUser(currentUser);
+    }
   }
 }
 
