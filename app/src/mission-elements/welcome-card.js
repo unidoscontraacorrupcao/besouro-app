@@ -35,13 +35,12 @@ class WelcomeCard extends PolymerElement {
 
       :host span { color: var(--accent-color); }
 
-
       #welcome-title {
         color: var(--secondary-text-color);
         text-transform: uppercase;
         font-family: Folio;
         font-size: 24px;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
       }
 
       #card-content {

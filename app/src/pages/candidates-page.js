@@ -104,6 +104,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     </div>
 
     <app-besouro-api id="api"></app-besouro-api>
+
     <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
     <paper-toast id="selectedToast" class="error" text="{{_toastMessage}}">
       <h3 class="toast-text">selecionado(a) com sucesso</h3>
@@ -113,6 +114,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       <h3 class="toast-text">Pressionado(a) com sucesso</h3>
       <p class="toast-text">{{targetCandidate}} receberá um email nosso para que mude de opinião!</p>
     </paper-toast>
+
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
     </app-dialog>
@@ -156,7 +158,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
               </p>
               <p>
                 Os nomes são apresentados aleatoriamente, sem nenhum tipo de
-                viés nem preferência. Para dúvidas, acesse AJUDA.
+                viés nem preferência. Para dúvidas, acesse FAQ.
               </p>
             </div>
           </welcome-card>
