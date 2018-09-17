@@ -16,6 +16,7 @@ import './sign-up-view.js';
 import './login-view.js';
 import './facebook-login.js';
 import './forgot-password-view.js';
+import './launcher-view.js';
 class LoginController extends PolymerElement {
   static get template() {
     return html`
@@ -30,6 +31,13 @@ class LoginController extends PolymerElement {
       </style>
 
       <app-besouro-api id="api"></app-besouro-api>
+
+      <launcher-view 
+        id="launcher"
+        on-sign-up="_showSignUp"
+        on-login="_showLogin"
+        on-auth-facebook="_requestFacebookLogin">
+      </launcher-view>
 
       <facebook-login
         id="facebook"
@@ -156,6 +164,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `flex`;
     this.$.login.style.display = `none`;
     this.$.forgotPassword.style.display = `none`;
+    this.$.launcher.style.display = `none`;
     window.scroll(0,0);
     this._clearForms();
   }
@@ -164,6 +173,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `flex`;
     this.$.forgotPassword.style.display = `none`;
+    this.$.launcher.style.display = `none`;
     window.scroll(0,0);
     this._clearForms();
   }
@@ -172,6 +182,7 @@ class LoginController extends PolymerElement {
     this.$.signUp.style.display = `none`;
     this.$.login.style.display = `none`;
     this.$.forgotPassword.style.display = `flex`;
+    this.$.launcher.style.display = `none`;
     window.scroll(0,0);
     this._clearForms();
   }

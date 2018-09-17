@@ -60,6 +60,22 @@ $_documentContainer.innerHTML = `<dom-module id="modal-shared-styles">
         line-height: 19px;
         color: #312783;
       }
+
+      .facebook-button {
+        background-color: #4460A0;
+        max-width: unset;
+      }
+
+      paper-button iron-icon {
+        padding: 10px;
+      }
+
+      .login {
+        text-align: center;
+        padding: 2vh 6vh 0;
+        flex: 1;
+      }
+
     </style>
   </template>
 </dom-module>`;

@@ -13,7 +13,7 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
       <style include="modal-shared-styles"></style>
       <style>
         :host {
-          display: flex;
+          display: none;
           background-color: #F5F5F5;
           flex-direction: column;
           min-height: 100vh;
@@ -23,7 +23,7 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
         }
         .fill {
           flex: 1;
-          padding: 2vh 6vh 0;
+          padding: 0 6vh;
         }
         .image {
           height: 98px;
@@ -42,11 +42,11 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
           padding-bottom: 0.5vh;
           color: #312783;
           font-family: Folio;
-          font-size: 50px;
+          font-size: 45px;
           line-height: 55px;
         }
         .fields {
-          margin-top: 4vh;
+          margin-top: 3vh;
         }
         paper-input {
           --paper-input-container-color: #B7B8B7;
@@ -59,14 +59,15 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
           word-wrap: break-word;
         }
         paper-button {
-          display: block;
-          height: auto;
+          display: flex;
+          align-items: center;
+          height: 70px;
           max-width: 170px;
           color: white;
           background-color: #E6007E;
           font-family: Folio;
           font-size: 24px;
-          letter-spacing: 5px;
+          letter-spacing: 3px;
           line-height: 26px;
           text-align: center;
           margin: 4vh auto 0;
@@ -74,25 +75,18 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
         }
         .forgot-password {
           margin-top: 1vh;
-          color: #e6007e;
+          color: var(--light-text-color);
           font-size: 14px;
           font-weight: bold;
           line-height: 19px;
-          text-align: center;
-        }
-        .line {
-          box-sizing: border-box;
-          margin-top: 4vh;
-          width: 100%;
-          border: 1px solid #b7b8b7;
-          opacity: 0.3;
+          text-align: right;
         }
         .sign-up-text {
           margin-top: 3.7vh;
           text-transform: uppercase;
           color: #312783;
           font-family: Folio;
-          font-size: 50px;
+          font-size: 45px;
           line-height: 55px;
           text-align: center;
         }
@@ -101,12 +95,33 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
           max-width: none;
           margin-bottom: 5vh;
         }
-
-        paper-icon-button {
-          height: 70px;
-          width: auto;
+        .signup-text {
+          color: var(--accent-color);
         }
-
+        .signup-option {
+          display: block;
+          color: var(--secondary-text-color);
+          margin: 15px 0;
+        }
+        .social-text {
+          color: var(--light-text-color);
+        }
+        .login {
+          padding: 0 6vh;
+        }
+        @media only screen and (max-width: 400px) {
+          paper-button {
+            font-size: 20px;
+          }
+        }
+        @media only screen and (max-width: 340px) {
+          .main-title {
+            font-size: 40px;
+          }
+          paper-button {
+            font-size: 18px;
+          }
+        }
       </style>
       <div id="loading">
         <paper-spinner active=""></paper-spinner>
@@ -116,7 +131,7 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
         </div>
         <div class="main-title">
-          Faça Login
+          Login via email
         </div>
         <div class="fields">
           <paper-input id="email"
@@ -139,20 +154,21 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
             {{_errors.password}}
           </paper-input-error>
         </div>
-        <paper-button on-tap="_onLogin">
-          Entrar
-        </paper-button>
         <div class="forgot-password" on-tap="_onForgotPassword">
           esqueci minha senha
         </div>
+        <paper-button on-tap="_onLogin">
+          Entrar
+        </paper-button>
       </div>
       <div class="social" id="socialButtons">
         <div class="social-text">
-          Você também pode usar suas redes sociais
+          ainda não tem login? <span on-tap="_onSignUp" class="signup-text">Cadastre-se!</span>
+          <span class="signup-option">ou</span>
         </div>
-        <div class="social-buttons" >
-          <div class="social-button facebook">
-            <paper-icon-button icon="app:candidate-share-facebook" on-tap="_onAuthFacebook"></paper-icon-button>
+        <div class="login" >
+          <div class="login-buttons">
+            <paper-button class="facebook-button" on-tap="_onAuthFacebook"><iron-icon icon="app:facebook-square"></iron-icon>login via facebook</paper-button>
           </div>
         </div>
         <div id="social-notice">
@@ -160,15 +176,6 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
             Não publicamos nem cedemos nenhuma informação para essas redes
           </span>
         </div>
-      </div>
-      <div class="fill">
-        <div class="line"></div>
-        <div class="sign-up-text">
-          Ainda não faz parte do app?
-        </div>
-        <paper-button class="sign-up-button" on-tap="_onSignUp">
-          Cadastre-se
-        </paper-button>
       </div>
     `;
   }

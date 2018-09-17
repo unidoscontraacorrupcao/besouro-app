@@ -23,7 +23,7 @@ class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
         }
         .fill {
           flex: 1;
-          padding: 2vh 6vh 0;
+          padding: 0 6vh;
         }
         .image {
           height: 98px;
@@ -59,23 +59,25 @@ class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
           word-wrap: break-word;
         }
         paper-button {
-          display: block;
-          height: auto;
+          display: flex;
+          align-items: center;
+          height: 70px;
           max-width: 170px;
           color: white;
           background-color: #e6007e;
           font-family: Folio;
           font-size: 24px;
-          letter-spacing: 5px;
+          letter-spacing: 3px;
           line-height: 26px;
           text-align: center;
           margin: 4vh auto 0;
           border-radius: 0;
         }
-
+        .login {
+          padding: 0 6vh;
+        }
         .line {
           box-sizing: border-box;
-          margin-top: 4vh;
           width: 100%;
           border: 1px solid #b7b8b7;
           opacity: 0.3;
@@ -86,6 +88,19 @@ class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
           color: #009fe3;
           max-width: none;
           margin-bottom: 5vh;
+        }
+        @media only screen and (max-width: 400px) {
+          paper-button {
+            font-size: 20px;
+          }
+        }
+        @media only screen and (max-width: 340px) {
+          .main-title {
+            font-size: 40px;
+          }
+          paper-button {
+            font-size: 18px;
+          }
         }
       </style>
       <div id="loading">
@@ -136,9 +151,9 @@ class SignUpView extends CommonBehaviorsMixin(PolymerElement) {
         <div class="social-text">
         Você também pode usar suas redes sociais
         </div>
-        <div class="social-buttons">
-          <div class="social-button facebook">
-            <paper-icon-button icon="app:candidate-share-facebook" on-tap="_onAuthFacebook"></paper-icon-button>
+        <div class="login" >
+          <div class="login-buttons">
+            <paper-button class="facebook-button" on-tap="_onAuthFacebook"><iron-icon icon="app:facebook-square"></iron-icon>login via facebook</paper-button>
           </div>
         </div>
         <div id="social-notice">

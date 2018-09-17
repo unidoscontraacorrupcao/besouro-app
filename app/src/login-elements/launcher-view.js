@@ -7,13 +7,13 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 import '../app-elements/styles/modal-shared-styles.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
-class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
+class LauncherView extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
       <style include="modal-shared-styles"></style>
       <style>
         :host {
-          display: none;
+          display: flex;
           background-color: #f5f5f5;
           flex-direction: column;
           min-height: 100vh;
@@ -45,24 +45,15 @@ class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
           font-size: 45px;
           line-height: 55px;
         }
-        .fields {
-          margin-top: 4vh;
-        }
-        paper-input {
-          --paper-input-container-color: #b7b8b7;
-          --paper-input-container-focus-color: #312783;
-          --paper-input-container-input-color: #312783;
-        }
-        div.fields > paper-input-error {
-          position: relative;
-          white-space: normal;
-          word-wrap: break-word;
+        .login {
+          text-align: center;
+          padding: 2vh 6vh 0;
+          flex: 1;
         }
         paper-button {
           display: flex;
           align-items: center;
           height: 70px;
-          max-width: 170px;
           color: white;
           background-color: #e6007e;
           font-family: Folio;
@@ -93,8 +84,12 @@ class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
           max-width: none;
           margin-bottom: 5vh;
         }
-        .login {
-          padding: 0 6vh;
+        #login-notice {
+          width: 300px;
+          margin: 20px auto;
+          color: var(--light-text-color);
+          font-family: folio;
+          font-size: 18px;
         }
         @media only screen and (max-width: 400px) {
           paper-button {
@@ -102,55 +97,25 @@ class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
           }
         }
         @media only screen and (max-width: 340px) {
-          .main-title {
-            font-size: 40px;
-          }
           paper-button {
             font-size: 18px;
           }
         }
       </style>
-      <div id="loading">
-        <paper-spinner active=""></paper-spinner>
-      </div>
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>
         </div>
         <div class="main-title">
-          Refazer Senha
+          Boas Vindas!
         </div>
-        <div class="social">
-          <div class="social-text">
-            Preencha o campo abaixo e aguarde o recebimento do link de acesso
-          </div>
-        </div>
-        <div class="fields">
-          <paper-input id="email"
-            label="Email"
-            type="email"
-            value="{{_form.email}}"
-            invalid=[[_errors.email]]
-            required></paper-input>
-          <paper-input-error
-            hidden$=[[!_errors.email]] invalid>
-            {{_errors.email}}
-          </paper-input-error>
-        </div>
-        <paper-button on-tap="_onForgotPassword">
-          Enviar
-        </paper-button>
       </div>
-      <div class="social">
-        <div class="social-text">
-          Você também pode usar suas redes sociais
+      <div class="login">
+        <div class="login-buttons">
+          <paper-button on-tap="_onLogin"><iron-icon icon="app:login-mail"></iron-icon>login via email</paper-button>
+          <paper-button class="facebook-button" on-tap="_onAuthFacebook"><iron-icon icon="app:facebook-square"></iron-icon>login via facebook</paper-button>
         </div>
-        <div class="login" >
-          <div class="login-buttons">
-            <paper-button class="facebook-button" on-tap="_onAuthFacebook"><iron-icon icon="app:facebook-square"></iron-icon>login via facebook</paper-button>
-          </div>
-        </div>
-        <div id="social-notice">
+        <div id="login-notice">
           <span>
             Não publicamos nem cedemos nenhuma informação para essas redes
           </span>
@@ -168,64 +133,25 @@ class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
     `;
   }
 
-  static get is() { return `forgot-password-view`; }
+  static get is() { return `launcher-view`; }
 
   static get properties() {
     return {
-      _errors: Object,
-      _form: Object
     };
   }
 
   constructor() {
     super();
-    this._form = this._getEmptyForm();
-    this._errors = this._getEmptyErrors();
-  }
-
-  exposeErrors(errors) {
-    this._errors = errors;
-  }
-
-  clearErrors(errors) {
-    this._errors = this._getEmptyErrors();
-  }
-
-  emptyForm() {
-    this._form = this._getEmptyForm();
-    this._errors = this._getEmptyErrors();
-    this.$.email.updateValueAndPreserveCaret(``);
-  }
-
-  _onForgotPassword(e) {
-    this.dispatchEvent(new CustomEvent(`forgot-password`, {
-      detail: this._form
-    }));
   }
 
   _onSignUp(e) { this.dispatchEvent(new CustomEvent(`sign-up`)); }
+  _onLogin(e) { this.dispatchEvent(new CustomEvent(`login`)); }
+
   _onAuthFacebook(e) {
     this.showLoading();
     this.dispatchEvent(new CustomEvent(`auth-facebook`));
   }
 
-
-  _getEmptyForm() {
-    return {
-      email: ``
-    };
-  }
-
-  _getEmptyErrors() {
-    return {
-      email: ``
-    };
-  }
-
-  ready() {
-    super.ready();
-    this.hideLoading();
-  }
 }
 
-window.customElements.define(ForgotPasswordView.is, ForgotPasswordView);
+window.customElements.define(LauncherView.is, LauncherView);
