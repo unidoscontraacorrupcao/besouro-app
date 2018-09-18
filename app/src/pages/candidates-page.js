@@ -302,7 +302,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _getAllCandidates(limit=0) {
     this.showLoading();
     this.$.api.params = this.filters;
-    if (limit > 0){
+    if(sessionStorage.getItem('ignored')) {
+      this.filters["filter_by_ignored"] = sessionStorage.getItem('ignored');
+    }
+    if (limit > 0) {
       this.set("limit", 10);
       this.$.api.params['limit'] = limit;
     }

@@ -64,19 +64,15 @@ let Mixin = function(superClass) {
   }
 
   _ignoreCandidate() {
-    var user = this.getUser();
+    let user = this.getUser();
     if (!user || Object.keys(user).length == 0) {
       this.dispatchEvent(new CustomEvent("unauthorized"));
       return;
     }
-    this.$.api.method = "POST";
-    this.$.api.path = "ignored-candidates/";
-    this.$.api.user = user;
-    //TODO: replace 1 by the candidate id.
-    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("ignored-candidate"));
-    });
+    let ignoredCandidates = JSON.parse(sessionStorage.getItem('ignored')) || [];
+    ignoredCandidates.push(this.candidate.id);
+    sessionStorage.setItem('ignored', JSON.stringify(ignoredCandidates));
+    this.dispatchEvent(new CustomEvent("ignored-candidate"));
   }
 
   _unselectCandidate() {

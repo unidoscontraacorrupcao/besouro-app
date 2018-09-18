@@ -345,6 +345,10 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _setFilters() {
     let filters = {}
     filters["filter_by_name"] = this.filterByName;
+    if(sessionStorage.getItem('ignored'))
+      filters["filter_by_ignored"] = sessionStorage.getItem('ignored');
+    else 
+      filters["filter_by_ignored"] = [];
     if (this.$.partyName.value == 'todos' || this.$.partyName.value == undefined)
       filters["filter_by_party"] = '';
     else

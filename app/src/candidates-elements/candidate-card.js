@@ -115,12 +115,12 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       <div class="card-header">
         <div class="container">
           <span id="candidate-name"> {{candidate.name}} </span>
-          <div id="close">
+          <div id="close" on-click="_ignoreCandidate">
             <div>
               <div>
-                <paper-icon-button on-click="_ignoreCandidate" icon="app:closeModal"></paper-icon-button>
+                <paper-icon-button icon="app:closeModal"></paper-icon-button>
               </div>
-              <span on-click="_ignoreCandidate">fechar</span>
+              <span>fechar</span>
             </div>
           </div>
           <div id="candidate-infos">
