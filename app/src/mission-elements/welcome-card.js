@@ -17,7 +17,6 @@ class WelcomeCard extends PolymerElement {
         margin: 20px auto;
         background-color: var(--default-primary-color);
       }
-      
 
       ::slotted(p) {
         font-family: helvetica-neue;
@@ -43,10 +42,25 @@ class WelcomeCard extends PolymerElement {
         padding-bottom: 10px;
       }
 
-      #card-content {
+      #cardContent {
         width: 90%;
         margin: auto;
         padding: 20px 0 20px 0;
+      }
+      
+      .close-dialog {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        top: 10px;
+        right: 10px;
+        background-color: var(--accent-color);
+        width: 20px;
+        height: 20px;
+        color: var(--primary-background-color);
+        cursor: pointer;
       }
 
       @media screen and (min-width: 1100px) {
@@ -57,11 +71,11 @@ class WelcomeCard extends PolymerElement {
       }
     </style>
 
-    <div id="card-content">
+    <div id="cardContent">
+      <span class="close-dialog" on-tap="hideWelcomeCard">x</span>
       <div id="welcome-title"> boas vindas!</div>
       <slot></slot>
     </div>
-
 `;
   }
 
@@ -74,6 +88,24 @@ class WelcomeCard extends PolymerElement {
 
   constructor() {
     super();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.welcomeCardVisibility();
+  }
+
+  welcomeCardVisibility() {
+    if(localStorage.getItem('welcomeHide')) {
+      this.$.cardContent.style.display = 'none';
+    } else {
+      this.$.cardContent.style.display = 'block';
+    }
+  }
+
+  hideWelcomeCard() {
+    localStorage.setItem('welcomeHide', true);
+    this.welcomeCardVisibility();
   }
 
 }

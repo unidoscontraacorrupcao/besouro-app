@@ -277,6 +277,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     .item-title {
       margin-top: 13px;
       display: inline-block;
+      padding-left: 10px;
     }
 
     .item-title span {

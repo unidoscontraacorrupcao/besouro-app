@@ -114,6 +114,9 @@ class LoginController extends PolymerElement {
     this.$.apiLogout.request(key);
     this._user = this._getEmptyUser();
     this._dispatchUser();
+    if(localStorage.getItem('welcomeHide')) {
+      localStorage.removeItem('welcomeHide');
+    }
   }
 
   // View Events
