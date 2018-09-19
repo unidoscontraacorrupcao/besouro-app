@@ -251,8 +251,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
       .stats-columns div { flex-grow: 1; }
 
-      #candidate-infos {width: 85%;}
-
       #candidate-infos div span:nth-child(2) {
         font-family: folio;
         font-size: 18px;
