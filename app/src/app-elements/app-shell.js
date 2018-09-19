@@ -92,15 +92,16 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         border: 2px solid white;
         border-radius: 50%;
         background: var(--secondary-text-color);
+        cursor: pointer;
       }
 
-      app-toolbar > div[main-title] {
+      app-toolbar > div.main-title {
         margin-top: 20px;
         margin-left: 10px;
         width: 60%;
       }
 
-      div[main-title] > .username {
+      div.main-title > .username {
         color: white;
         max-width: 100%;
         font-family: Folio;
@@ -108,12 +109,26 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         line-height: 26px;
         overflow: hidden;
         text-overflow: ellipsis;
+        cursor: pointer;
+        text-decoration: none;
       }
 
-      div[main-title] > .email {
+      div.main-title > .username a {
+        color: white;
+        max-width: 100%;
+        font-family: Folio;
+        font-size: 24px;
+        line-height: 26px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      div.main-title > .email {
         color: #312783;
         max-width: 100%;
-        margin-top: 20px;
+        margin-top: 5px;
         font-family: Folio;
         font-size: 14px;
         overflow: hidden;
@@ -121,18 +136,30 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         line-height: 16px;
       }
 
+      div.main-title > .profile a {
+        color: var(--primary-background-color);
+        font-family: Folio;
+        text-transform: uppercase;
+        font-size: 14px;
+        margin-top: 5px;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
       app-toolbar > div[bottom-item] {
         margin: 10px 0 15px 30px;
         color: white;
         font-family: Folio;
-        font-size: 16px;
-        line-height: 16px;
+        font-size: 14px;
+        line-height: 14px;
+        text-transform: uppercase;
         cursor: pointer;
       }
 
       div[bottom-item] > a {
-        color: #312783;
+        color: var(--primary-background-color);
         text-decoration: none;
+        opacity: 0.6;
       }
 
       .drawer-list {
@@ -144,6 +171,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
 
       .drawer-list a {
         display: block;
+        position: relative;
         margin-top: 25px;
         padding: 0 16px;
         text-transform: uppercase;
@@ -152,6 +180,16 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         font-family: Folio;
         font-size: 24px;
         line-height: 26px;
+      }
+
+      .drawer-list a paper-badge {
+        --paper-badge: {
+          width: 15px;
+          height: 15px;
+          margin-left: -15px;
+          margin-top: 20px;
+          font-weight: 800;
+        }
       }
 
       .drawer-list a[name="sign_it"],
@@ -182,6 +220,12 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         border: 1px solid #b7b8b7;
         opacity: 0.3;
       }
+
+      .candidates-link  {
+        width: 40px;
+        padding: 3px;
+      }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -202,17 +246,20 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
-          <iron-image src="{{user.photoURL}}" sizing="cover" hidden$="[[!user.uid]]"></iron-image>
+          <iron-image on-tap="gotoProfile" src="{{user.photoURL}}" sizing="cover" hidden$="[[!user.uid]]"></iron-image>
       <iron-image src="/images/generic/avatar_default-menu.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
-          <div main-title>
+          <div class="main-title">
             <div class="username" hidden$="[[!user.uid]]">
-              {{user.displayName}}
+              <a href="profile">{{user.displayName}}</a>
             </div>
             <div class="username" hidden$="[[user.uid]]">
               Visitante
             </div>
             <div class="email" hidden$="[[!user.uid]]">
               {{user.email}}
+            </div>
+            <div class="profile" hidden$="[[!user.uid]]">
+              <a href="profile">ver perfil</a>
             </div>
           </div>
           <div bottom-item on-tap="_signOut" hidden$="[[!user.uid]]">
@@ -224,16 +271,22 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="candidates" href="candidates" hidden$="[[!user.uid]]">
-            <paper-icon-button icon="app:candidates" drawer-toggle></paper-icon-button>
+            <paper-icon-button class="candidates-link" icon="app:candidates" drawer-toggle></paper-icon-button>
             Candidatos
           </a>
           <a name="inbox" href="inbox" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navMissions" drawer-toggle></paper-icon-button>
             Missões
           </a>
-          <a name="profile" href="profile" hidden$="[[!user.uid]]">
-            <paper-icon-button icon="app:profile" drawer-toggle></paper-icon-button>
-            Perfil
+          <a name="profile" href="notifications" hidden$="[[!user.uid]]">
+            <paper-icon-button icon="app:navNotifications" drawer-toggle id="notifications-link"></paper-icon-button>
+            <template is="dom-if" if="{{unread}}">
+              <paper-badge
+                for="notifications-link"
+                label="{{unread}}">
+              </paper-badge>
+            </template>
+            Notificações
           </a>
           <!-- <a name="notifications" href="" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navNotifications" drawer-toggle></paper-icon-button>

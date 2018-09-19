@@ -68,6 +68,10 @@ class AppActions extends mixinBehaviors(
 
       paper-badge {
         --paper-badge: {
+          width: 15px;
+          height: 15px;
+          margin-left: -15px;
+          margin-top: 20px;
           font-weight: 800;
         }
       }
@@ -76,55 +80,59 @@ class AppActions extends mixinBehaviors(
         width: 50px;
     }
 
-   @media only screen and (max-width: 640px) {
-      #app-actions { width: 100%; }
-      #actions-content {
-        width: 90%;
-        margin: auto;
+    @media only screen and (max-width: 640px) {
+        #app-actions { width: 100%; }
+        #actions-content {
+          width: 90%;
+          margin: auto;
+      }
     }
-  }
+
+    @media only screen and (min-width: 640px) {
+      #app-actions { display: none; }
+    }
   </style>
-      <div id="app-actions">
-        <div id="actions-content">
-          <div id="missions-btn">
-            <div class="icon-container">
-              <paper-icon-button
-                icon="app:navMissions"
-                data-item="inbox"
-                on-click="_goToDataItem">
-              </paper-icon-button>
-              <span>missões</span>
-            </div>
+    <div id="app-actions">
+      <div id="actions-content">
+        <div id="missions-btn">
+          <div class="icon-container">
+            <paper-icon-button
+              icon="app:navMissions"
+              data-item="inbox"
+              on-click="_goToDataItem">
+            </paper-icon-button>
+            <span>missões</span>
           </div>
-          <div id="candidates-btn">
-            <div class="icon-container">
-              <paper-icon-button
-                on-click="_goToDataItem"
-                data-item="candidates"
-                icon="app:candidates">
-              </paper-icon-button>
-              <span>candidatos</span>
-            </div>
+        </div>
+        <div id="candidates-btn">
+          <div class="icon-container">
+            <paper-icon-button
+              on-click="_goToDataItem"
+              data-item="candidates"
+              icon="app:candidates">
+            </paper-icon-button>
+            <span>candidatos</span>
           </div>
-          <div id="notifications-btn">
-            <div class="icon-container">
-              <paper-icon-button
-                id="btn-notifications"
-                icon="app:navNotifications"
-                data-item="notifications"
-                on-click="_goToDataItem">
-              </paper-icon-button>
-              <template is="dom-if" if="{{unread}}">
-                <paper-badge
-                  for="btn-notifications"
-                  label="{{unread}}">
-                </paper-badge>
-              </template>
-              <span>notificações</span>
-            </div>
+        </div>
+        <div id="notifications-btn">
+          <div class="icon-container">
+            <paper-icon-button
+              id="btn-notifications"
+              icon="app:navNotifications"
+              data-item="notifications"
+              on-click="_goToDataItem">
+            </paper-icon-button>
+            <template is="dom-if" if="{{unread}}">
+              <paper-badge
+                for="btn-notifications"
+                label="{{unread}}">
+              </paper-badge>
+            </template>
+            <span>notificações</span>
           </div>
         </div>
       </div>
+    </div>
 `;
   }
 

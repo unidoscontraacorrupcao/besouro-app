@@ -213,12 +213,6 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
           margin: 0 auto;
         }
       }
-      @media screen and (min-width: 961px) {
-        app-header-layout {
-          height: calc(100% - 50px);
-        }
-      }
-
     </style>
   </template>
 </dom-module>`;
