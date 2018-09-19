@@ -199,6 +199,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       background-color : white;
       color: var(--secondary-text-color);
       font-family: folio;
+      cursor: pointer;
     }
 
     #share-candidate div div:first-child {
@@ -208,13 +209,20 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     #share-candidate div div:last-child {
       float: right;
-      margin: 8px 5px 0 0;
+      margin: 8px 5px 0;
+    }
+
+    #share-candidate paper-icon-button {
+      width: 32px;
+      height: 40px;
+      margin-left: 5px;
     }
 
     #close {
       top: 15px;
       background-color: var(--accent-color);
       width: 69px;
+      cursor: pointer;
     }
 
     #close div div:first-child {
@@ -233,7 +241,6 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       width: 26px;
       height: auto;
     }
-
 
     #tse-data {
       border-color: rgba(49,39,131,1);
