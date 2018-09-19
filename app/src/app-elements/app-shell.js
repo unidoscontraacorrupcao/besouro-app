@@ -369,10 +369,9 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       this._checkToken().then((ajax) => {
         if (ajax.response.token) {
           this._updateUserToken(ajax.response.token);
-        } else {
-          this._getUserNotifications(page);
         }
       });
+      this._getUserNotifications(page);
     }
   }
 

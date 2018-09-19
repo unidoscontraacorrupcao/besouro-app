@@ -66,6 +66,12 @@ class AppActions extends mixinBehaviors(
         color: white;
       }
 
+      paper-badge {
+        --paper-badge: {
+          font-weight: 800;
+        }
+      }
+
     #candidates-btn paper-icon-button {
         width: 50px;
     }
