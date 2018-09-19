@@ -107,12 +107,12 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
     <paper-toast id="toast" class="error" text="{{_toastMessage}}"></paper-toast>
     <paper-toast id="selectedToast" class="error" text="{{_toastMessage}}">
-      <h3 class="toast-text">selecionado(a) com sucesso</h3>
-      <p class="toast-text">Veja mais detalhes sobre {{targetCandidate}} na aba SELECIONADOS</p>
+      <h3 class="toast-text">SELECIONADO(A) COM SUCESSO</h3>
+      <p class="toast-text">Veja mais detalhes sobre {{targetCandidate}} na aba "Selecionados"</p>
     </paper-toast>
     <paper-toast id="pressedToast" class="error" text="{{_toastMessage}}">
-      <h3 class="toast-text">Pressionado(a) com sucesso</h3>
-      <p class="toast-text">{{targetCandidate}} receberá um email nosso para que mude de opinião!</p>
+      <h3 class="toast-text">PRESSIONADO(A) COM SUCESSO</h3>
+      <p class="toast-text">{{targetCandidate}} receberá um email da campanha Unidos Contra a Corrupção para que mude de opinião!</p>
     </paper-toast>
 
     <app-dialog id="unauthorizedDialog">
