@@ -79,7 +79,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         border-color: rgba(0,159,227,1);
       }
 
-      #btn-icon { margin: 5px 0; }
+      #btn-icon { margin: auto auto 10px auto; }
 
       #see-more {
         width: 90%;
@@ -268,7 +268,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         <paper-button on-click="_wrapFavoriteCandidate" id="favoriteBtn">
           <div>
             <div id="btn-icon">
-              <iron-icon icon="app:star"></iron-icon>
+              <iron-icon icon="app:favorite"></iron-icon>
             </div>
             salvar como santinho
           </div>

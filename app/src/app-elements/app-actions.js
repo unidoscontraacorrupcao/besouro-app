@@ -55,6 +55,11 @@ class AppActions extends mixinBehaviors(
         margin: auto;
       }
 
+      .star-button {
+        color: var(--secondary-text-color);
+        width: 50px;
+      }
+
       #new-mission-btn {
         margin-top: 20px;
         width: 40px;
@@ -98,7 +103,7 @@ class AppActions extends mixinBehaviors(
   </style>
     <div id="app-actions">
       <div id="actions-content">
-        <div id="missions-btn">
+        <!-- <div id="missions-btn">
           <div class="icon-container">
             <paper-icon-button
               icon="app:navMissions"
@@ -106,6 +111,17 @@ class AppActions extends mixinBehaviors(
               on-click="_goToDataItem">
             </paper-icon-button>
             <span>missões</span>
+          </div>
+        </div> -->
+        <div id="favorites-btn">
+          <div class="icon-container">
+            <paper-icon-button
+              class="star-button"
+              icon="app:favorite-navbar"
+              data-item="favorites"
+              on-click="_goToDataItem">
+            </paper-icon-button>
+            <span>santinho</span>
           </div>
         </div>
         <div id="candidates-btn">

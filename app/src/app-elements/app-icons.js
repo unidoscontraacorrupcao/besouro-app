@@ -561,17 +561,26 @@ $_documentContainer.innerHTML = `<iron-iconset-svg size="24" name="app">
 </g>
 </g>
 
-<g id="favorite" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-<g id="Mobile-Portrait-Interna-Candidate-2" transform="translate(-83.000000, -493.000000)" fill="#E6007E">
-<path d="M99.5,493 C97.2085625,493 95.4746875,494.364164 94,495.789701 C92.5954375,494.276986 90.7914375,493 88.5,493 C85.272875,493 83,495.814809 83,498.884875 C83,500.531496 83.6648125,501.717119 84.392875,502.831605 L92.9405625,513.227427 C93.899625,514.257524 94.081125,514.257524 95.0401875,513.227427 L103.607125,502.831605 C104.46375,501.717119 105,500.531496 105,498.884875 C105,495.814809 102.727125,493 99.5,493 L99.5,493 Z" id="icon_button-favorite"></path>
+<g id="favorite" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" viewBox="0 0 20 20">
+<g id="Mobile-Portrait-candidates-Selecionades-Santos" transform="translate(-150.000000, -507.000000)" fill="#FFFFFF">
+<g id="button-santinho" transform="translate(29.000000, 499.000000)">
+<polyline id="Fill-71-Copy-2" points="141 15.6525 134.10125 14.6 131 8 127.89875 14.6 121 15.6525 125.990625 20.7625 124.809375 28 131 24.58125 137.190625 28 136.009375 20.7625 141 15.6525"></polyline>
+</g>
+</g>
+</g>
+
+<g id="favorite-navbar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" viewBox="0 0 20 20">
+<g id="Mobile-Portrait-candidates-Selecionades-Santos" transform="translate(-150.000000, -507.000000)" fill="#312783">
+<g id="button-santinho" transform="translate(29.000000, 499.000000)">
+<polyline id="Fill-71-Copy-2" points="141 15.6525 134.10125 14.6 131 8 127.89875 14.6 121 15.6525 125.990625 20.7625 124.809375 28 131 24.58125 137.190625 28 136.009375 20.7625 141 15.6525"></polyline>
+</g>
 </g>
 </g>
 
 <g id="unfavorite" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-<g id="Mobile-Portrait-Interna-Candidate-3" transform="translate(-149.000000, -494.000000)">
-<g id="icon_button-unfavorite" transform="translate(149.000000, 494.000000)">
-<path d="M16.5,0 C14.2085625,0 12.4746875,1.36416396 11,2.78970135 C9.5954375,1.27698579 7.7914375,0 5.5,0 C2.272875,0 0,2.81480866 0,5.884875 C0,7.53149623 0.6648125,8.7171193 1.392875,9.83160499 L9.9405625,20.2274271 C10.899625,21.2575243 11.081125,21.2575243 12.0401875,20.2274271 L20.607125,9.83160499 C21.46375,8.7171193 22,7.53149623 22,5.884875 C22,2.81480866 19.727125,0 16.5,0 L16.5,0 Z" id="Fill-72-Copy-10" fill="#FFFFFE"></path>
-<polyline id="Path-13-Copy" stroke="#E6007E" stroke-width="2" stroke-linejoin="round" points="10.9995117 1 9 4.375 12.2504883 7.75 9 11.125 12.2504883 14.5 9.75 17.875 10.9995117 21.25"></polyline>
+<g id="Mobile-Portrait-candidates-Santinho" transform="translate(-149.000000, -492.000000)" fill="#E6007E" fill-rule="nonzero">
+<g id="button-santinho" transform="translate(29.000000, 484.000000)">
+<path d="M137.812744,15.1875 L140.96875,15.65625 L136,20.78125 L137.1875,27.9997559 L131,24.6872559 L124.812256,27.9997559 L125.312256,24.6872559 L137.812744,15.1875 Z M121.78125,25.40625 L120.5625,23.8125 L125.374878,20.1873779 L121.03125,15.65625 L127.906128,14.5623779 L131,8.09362793 L133.687378,13.7811279 L139.218872,9.65625 C139.989624,10.65625 140.375,11.15625 140.375,11.15625 C140.375,11.15625 134.177083,15.90625 121.78125,25.40625 Z" id="Combined-Shape"></path>
 </g>
 </g>
 </g>

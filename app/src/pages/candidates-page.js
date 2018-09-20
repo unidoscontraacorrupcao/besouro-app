@@ -133,7 +133,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
             <paper-tab><span class="tabs-text">TODOS</span></paper-tab>
             <paper-tab><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
-            <paper-tab><span class="tabs-text">SANTINHO</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
+            <paper-tab><span class="tabs-text">SANTINHO</span><span class=tabs-number>{{favoriteCount}}</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
         <candidate-filter
@@ -236,7 +236,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       },
       pageTitle: {
         type: String,
-        value: "CANDIDATOS"
+        value: "TODOS OS CANDIDATOS"
       },
       allCandidates: {
         type: Array,
@@ -274,7 +274,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       totalFiltered: {
         type: Number,
         observer: 'toggleLoadMoreButton'
-      }
+      },
+      favoriteCount: String
     };
   }
 
@@ -388,6 +389,17 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     });
   }
 
+  _getTotalFavorite() {
+    if(!this.user || Object.keys(this.user).length == 0) return;
+    this.$.api.path = `users/${this.getUser().uid}/total-favorite-candidates`;
+    this.$.api.method = "GET";
+    this.$.api.params = {};
+    this.$.api.request().then((ajax) => {
+      const count = `0${ajax.response.total}`.slice(-2);
+      this.set("favoriteCount", count);
+    });
+  }
+
   _getTotalFiltered(e) {
     this.set('totalFiltered', e.detail.total);
   }
@@ -425,6 +437,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _getFavoriteCandidates(limit=0) {
     if(!this.user || Object.keys(this.user).length == 0) return;
+    this._getTotalFavorite();
     this.showLoading();
     this.$.api.path = `users/${this.getUser().uid}/favorite-candidates`;
     this.$.api.method = "GET";
@@ -581,6 +594,25 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       if (!this.user || Object.keys(this.user).length == 0) {
         this.$.unauthorizedDialog.present();
       }
+    }
+    switch (this.inboxtab) {
+      case 0:
+        this.set('pageTitle', 'TODOS OS CANDIDATOS');
+        break;
+      case 1:
+        this.set('pageTitle', 'SELECIONADOS');
+        if (!this.user || Object.keys(this.user).length == 0) {
+          this.$.unauthorizedDialog.present();
+        }
+        break;
+      case 2:
+        this.set('pageTitle', 'SANTINHO');
+        if (!this.user || Object.keys(this.user).length == 0) {
+          this.$.unauthorizedDialog.present();
+        }
+        break;
+      default:
+        break;
     }
   }
 

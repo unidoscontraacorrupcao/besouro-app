@@ -98,6 +98,14 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
       border: none;
     }
 
+    #close div {
+      margin: 0;
+      padding: 10px;
+    }
+
+    #close span {
+      margin: 0;
+    }
 
     @media screen and (min-width: 1100px) {
       :host {
@@ -124,10 +132,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
           <span id="candidate-name" on-tap="_showCandidate"> {{candidate.name}} </span>
           <div id="close" on-click="_ignoreCandidate">
             <div>
-              <div>
-                <paper-icon-button icon="app:closeModal"></paper-icon-button>
-              </div>
-              <span>fechar</span>
+              <span>esconder</span>
             </div>
           </div>
           <div id="candidate-infos">
@@ -238,7 +243,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
         <paper-button on-click="_wrapFavoriteCandidate" id="favorite-button">
           <div>
             <div id="btn-icon">
-              <iron-icon icon="app:star"></iron-icon>
+              <iron-icon icon="app:favorite"></iron-icon>
             </div>
             salvar como santinho
           </div>
