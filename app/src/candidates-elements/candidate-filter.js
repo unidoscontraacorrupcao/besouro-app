@@ -29,7 +29,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       }
 
       #filter {
-        background-color: white;
+        background-color: var(--filter-color);
         height: 40px;
         width: 360px;
         left: 0;
@@ -50,26 +50,31 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         display: flex;
       }
 
-    #filter-header div { flex-grow: 2; }
+      #filter-header div { flex-grow: 2; }
 
 
       #filter-header span {
-        float: left;
-        padding-top: 7px;
         font-family: folio;
         text-transform: uppercase;
+        margin-right: auto;
+        cursor: pointer;
       }
 
-    #filter-header iron-icon {
-      float: left;
-      margin: 12px 6px 11px 10px;
-      padding: -2px;
-      width: 14px;
-      height: auto;
-    }
+      #filter-header iron-icon {
+        padding: 0 10px;
+        width: 15px;
+        height: 15px;
+      }
 
-      #filter-reload { margin-top: 4px; }
-      #filter-header paper-icon-button {float: right;}
+      #filter-header paper-icon-button { width: 35px; }
+
+      #filter-header #filterToggle {
+        width: 40px;
+      }
+
+      #filter-fields {
+        background-color: var(--primary-background-color);
+      }
 
       .row {
         width: 90%;
@@ -193,9 +198,9 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
       <div id="filter">
         <div id="filter-header">
-          <div on-click="_toggle">
+          <div on-tap="_toggle">
             <iron-icon icon="app:filter-icon"></iron-icon>
-            <span>filtre os resultados da lista</span>
+            <span >filtre os resultados da busca</span>
           </div>
           <paper-icon-button id="filterToggle" on-click="_toggle" icon="app:icon-down"></paper-icon-button>
           <paper-icon-button id="filter-reload" on-click="_reload" icon="app:icon-reload"></paper-icon-button>
