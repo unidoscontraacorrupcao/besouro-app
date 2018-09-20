@@ -133,7 +133,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
             <paper-tab><span class="tabs-text">TODOS</span></paper-tab>
             <paper-tab><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
-            <paper-tab><span class="tabs-text">FAVORITOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
+            <paper-tab><span class="tabs-text">SANTINHO</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
         <candidate-filter
@@ -177,7 +177,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
                 on-selected-candidate="_selectedCandidatesChanged"
                 on-pressed-candidate="_pressedCandidatesChanged"
                 on-ignored-candidate="_ignoredCandidatesChanged"
-                on-unauthorized="_openRestrictModal">
+                on-unauthorized="_openRestrictModal"
+                on-favorite-candidate="_favoriteCandidateChanged"
+                on-show-candidate="_showCandidate">
               </candidate-card>
             </template>
           </div>

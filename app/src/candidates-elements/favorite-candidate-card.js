@@ -143,7 +143,7 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
       <div class="card-header">
         <div class="container">
-          <span id="candidate-name"> {{candidate.name}} </span>
+          <span id="candidate-name" on-tap="_showCandidate"> {{candidate.name}} </span>
           <div id="candidate-infos">
             <div class="flex">
               <div id="candidacy">
@@ -179,6 +179,7 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
             </div>
           </div>
         <iron-image
+          on-tap="_showCandidate"
           sizing="contain"
           preload="" fade=""
           src="{{candidate.image}}">

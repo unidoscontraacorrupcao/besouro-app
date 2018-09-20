@@ -56,7 +56,7 @@ class WelcomeCard extends PolymerElement {
         border-radius: 50%;
         top: 10px;
         right: 10px;
-        background-color: var(--accent-color);
+        background-color: #B7B8B7;
         width: 20px;
         height: 20px;
         color: var(--primary-background-color);

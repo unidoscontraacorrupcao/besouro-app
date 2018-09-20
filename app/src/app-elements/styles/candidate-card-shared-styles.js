@@ -25,6 +25,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       font-size: 24px;
       color: var(--secondary-text-color);
       margin-bottom: 16px;
+      cursor: pointer;
     }
 
     #candidate-infos {
@@ -221,7 +222,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     #close {
       top: 15px;
-      background-color: var(--accent-color);
+      background-color: #B7B8B7;
       width: 69px;
       cursor: pointer;
     }

@@ -140,6 +140,14 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         border: 1px solid var(--accent-color);
       }
 
+      #favoriteBtn {
+        width: 262px;
+        margin: 20px auto;
+        background-color: var(--accent-color);
+        border: none;
+        color: var(--primary-background-color);
+      }
+
       @media screen and (min-width: 1100px) {
         :host {
           flex: 0 0 49%;
@@ -159,7 +167,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
       <div class="card-header">
         <div class="container">
-          <span id="candidate-name"> {{candidate.name}} </span>
+          <span id="candidate-name" on-tap="_showCandidate"> {{candidate.name}} </span>
           <div id="close">
             <div>
               <div>
@@ -202,7 +210,8 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               </div>
             </div>
           </div>
-        <iron-image
+        <iron-image 
+          on-tap="_showCandidate"
           sizing="contain"
           preload="" fade=""
           src="{{candidate.image}}">
@@ -256,22 +265,22 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       </div>
 
       <div class="card-footer">
-        <paper-button on-click="_favoriteCandidate" id="favoriteBtn">
+        <paper-button on-click="_wrapFavoriteCandidate" id="favoriteBtn">
           <div>
             <div id="btn-icon">
-              <iron-icon icon="app:favorite"></iron-icon>
+              <iron-icon icon="app:star"></iron-icon>
             </div>
-            favoritar
+            salvar como santinho
           </div>
         </paper-button>
-        <paper-button on-click="_supportCandidate" id="supportBtn">
+        <!-- <paper-button on-click="_supportCandidate" id="supportBtn">
           <div>
             <div id="btn-icon">
               <iron-icon icon="app:wallet"></iron-icon>
             </div>
             apoiar
           </div>
-        </paper-button>
+        </paper-button> -->
       </div>
       <div id="social-medias">
         <hr>
@@ -377,45 +386,43 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     });
   }
 
-  _wrapfavoriteCandidate() {
-    this._favoriteCandidate().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("favorite-candidate"));
-    });
+  _wrapFavoriteCandidate() {
+    this._favoriteCandidate();
   }
 
   _chooseCandidateColor() {
     if (this.candidate.score == "good") {
-      this._showSupportBtn();
+      // this._showSupportBtn();
       var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else if (this.candidate.score == "bad") {
-      this._hideSupportBtn();
+      // this._hideSupportBtn();
       var colors = ["rgba(230,0,0,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else {
-      this._hideSupportBtn();
+      // this._hideSupportBtn();
       var colors = ["rgba(183,184,183,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     }
   }
 
-  _hideSupportBtn () {
-    var supportBtn = this.shadowRoot.querySelector("#supportBtn");
-    supportBtn.style.display = "none";
-    let favoriteBtn = this.shadowRoot.querySelector("#favoriteBtn");
-    favoriteBtn.style.width = "262px";
-    favoriteBtn.style.margin = "20px auto";
-  }
+  // _hideSupportBtn () {
+  //   var supportBtn = this.shadowRoot.querySelector("#supportBtn");
+  //   supportBtn.style.display = "none";
+  //   let favoriteBtn = this.shadowRoot.querySelector("#favoriteBtn");
+  //   favoriteBtn.style.width = "262px";
+  //   favoriteBtn.style.margin = "20px auto";
+  // }
 
-  _showSupportBtn() {
-    if(!this._invalidSocialMediaUrl("crowdfunding_url")) {
-      var supportBtn = this.shadowRoot.querySelector("#supportBtn");
-      supportBtn.style.display = "flex";
-    }
-    else {
-      this._hideSupportBtn();
-    }
-  }
+  // _showSupportBtn() {
+  //   if(!this._invalidSocialMediaUrl("crowdfunding_url")) {
+  //     var supportBtn = this.shadowRoot.querySelector("#supportBtn");
+  //     supportBtn.style.display = "flex";
+  //   }
+  //   else {
+  //     this._hideSupportBtn();
+  //   }
+  // }
 
   _candidateChanged() {
     this._chooseCandidateColor();
