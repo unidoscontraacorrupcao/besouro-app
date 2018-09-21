@@ -13,6 +13,10 @@ class AppActions extends mixinBehaviors(
   static get template() {
     return html`
   <style>
+      :host {
+        display: block;
+      }
+
       #app-actions {
         position: fixed;
         bottom: 0;

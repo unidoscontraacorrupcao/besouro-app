@@ -226,6 +226,14 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         padding: 3px;
       }
 
+      #actions {
+        transition: all .3s ease;
+      }
+
+      #actions.hidden {
+        transform: translateY(65px);
+      }
+
     </style>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -321,7 +329,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged"
         role="main">
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
-          <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></candidates-page>
+          <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer" on-open-filter="_hideActions" on-close-filter="_showActions"></candidates-page>
           <candidate-page name="candidate" route="{{route}}" on-open-drawer="_openDrawer"></candidate-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
@@ -351,6 +359,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       </iron-pages>
       <template is="dom-if" if="{{canShowBottomBar}}">
         <app-actions
+          id="actions"
           on-go-to-inbox="_goToInbox"
           on-go-to-notifications="_goToNotifications"
           on-go-to-candidates="_goToCandidates"
@@ -619,6 +628,21 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       this.saveUser(currentUser);
     }
   }
+
+  _hideActions() {
+    const actions = this.shadowRoot.querySelector('#actions');
+    if(actions) {
+      actions.classList.add('hidden');
+    }
+  }
+
+  _showActions() {
+    const actions = this.shadowRoot.querySelector('#actions');
+    if(actions) {
+      actions.classList.remove('hidden');
+    }
+  }
+
 }
 
 window.customElements.define(AppShell.is, AppShell);

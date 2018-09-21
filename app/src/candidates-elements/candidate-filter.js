@@ -285,10 +285,12 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         item.setAttribute("style", "height: 250px");
       }
       this.$.filterToggle.set("icon",  "app:icon-up");
+      this.dispatchEvent(new CustomEvent('open-filter', { bubbles: true, composed: true }));
     }
     else {
       item.setAttribute("style", "height: 40px");
       this.$.filterToggle.icon = "app:icon-down";
+      this.dispatchEvent(new CustomEvent('close-filter', { bubbles: true, composed: true }));
     }
   }
 
