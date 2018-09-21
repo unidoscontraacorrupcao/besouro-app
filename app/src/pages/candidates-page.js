@@ -145,7 +145,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         <app-toolbar sticky="">
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
             <paper-tab><span class="tabs-text">TODOS</span></paper-tab>
-            <paper-tab><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
+            <paper-tab id="selectedTab"><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
             <paper-tab><span class="tabs-text">SANTINHO</span><span class=tabs-number>{{favoriteCount}}</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
@@ -449,8 +449,17 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.$.loadMoreSelectedCandidates.style.display = "block";
       }
       this.set("selectedCandidates", ajax.response);
+      this.toggleSelectedNav();
       this.hideLoading();
     });
+  }
+
+  toggleSelectedNav() {
+    if(!this.selectedCandidates.length) {
+      this.$.selectedTab.style.display = 'none';
+    } else {
+      this.$.selectedTab.style.display = 'block';
+    }
   }
 
   _getFavoriteCandidates(limit=0) {
