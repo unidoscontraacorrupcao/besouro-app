@@ -438,7 +438,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
             </div>
           </div>
         </div>
-        <div id="user-actions">
+        <!-- <div id="user-actions">
           <div id="unselectedButtons">
             <paper-button id="selectButton" on-click="_wrapSelectCandidate">
               <div>
@@ -487,7 +487,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </div>
             </paper-button>
           </div>
-        </div>
+        </div> -->
 
       <div id="social-medias">
         <hr>
@@ -615,8 +615,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     this._getCandidateMetrics();
     var user = this.getUser();
     if (!user || Object.keys(user).length == 0) {
-      this._hideButtons();
-      this._showUnselectedBtns();
+      // this._hideButtons();
+      // this._showUnselectedBtns();
       return;
     }
     else {
@@ -660,7 +660,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     var item = e.target.parentNode.parentNode;
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
-      item.setAttribute("style", "height: 90px");
+      item.setAttribute("style", "height: 95px");
       e.target.set("icon",  "app:expand-less");
     }
     else {
@@ -697,8 +697,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   _candidateStatusChanged() {
     if (!this.candidateStatus || Object.keys(this.candidateStatus).length == 0) return;
-    this._hideButtons();
-    this._showButtonsByStatus();
+    // this._hideButtons();
+    // this._showButtonsByStatus();
   }
 
   _showButtonsByStatus() {

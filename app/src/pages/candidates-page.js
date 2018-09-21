@@ -129,6 +129,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       <h3 class="toast-text">PRESSIONADO(A) COM SUCESSO</h3>
       <p class="toast-text">{{targetCandidate}} receberá um email da campanha Unidos Contra a Corrupção para que mude de opinião!</p>
     </paper-toast>
+    <paper-toast id="favoriteToast" class="error" text="{{_toastMessage}}">
+      <h3 class="toast-text">CANDIDATO/A ADICIONADO A SANTINHOS</h3>
+      <p class="toast-text">Continue adicionando candidatos/as para o dia da eleição e acesse sua aba SANTINHO</p>
+    </paper-toast>
 
     <app-dialog id="unauthorizedDialog">
       <unauthorized-modal on-close-modal="_dismissUnauthorizedModal" on-go-to-register="_goToLogin"></unauthorized-modal>
@@ -597,6 +601,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _favoriteCandidateChanged(e) {
+    this._showFavoriteToast('');
     this._showSelectedCardAnimation(e);
     setTimeout(() => {
       if (this.limit == 1)
@@ -713,6 +718,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   _showPressedToast(message) {
     this._toastMessage = message;
     this.$.pressedToast.open();
+  }
+
+  _showFavoriteToast(message) {
+    this._toastMessage = message;
+    this.$.favoriteToast.open();
   }
 
   _showCandidate(e) { this.set("route.path", `/candidate/${e.detail.candidate}`); }

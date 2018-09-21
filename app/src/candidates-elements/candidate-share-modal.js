@@ -200,7 +200,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
       this.set('modalText', `${this.candidate.name} responde a processo na Justiça por crimes listados na Lei da Ficha Limpa e/ou rejeitou o Pacto pela Democracia e/ou rejeitou as Novas Medidas contra a Corrupção. Vamos divulgar?.`);
       this.set('quoteText', this.modalText);
     } else {
-      this.set('modalText', `Quem luta contra a corrupção e defende a democracia exige compromisso. ${this.candidate.name} não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.`);
+      this.set('modalText', `Quem luta contra a corrupção e defende a democracia exige compromisso. ${this.candidate.name} não respondeu tudo o que pede a campanha. Compartilhe a informação.`);
       this.set('quoteText', this.modalText);
     }
   }

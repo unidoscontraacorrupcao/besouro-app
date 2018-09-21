@@ -196,6 +196,9 @@ class NotificationsPage extends PolymerElement {
           break;
         case "press":
           break;
+        case "favorite":
+          this.set('route.path', `/candidate/${notification.message.target}`);
+          break;
         default:
           break;
       }

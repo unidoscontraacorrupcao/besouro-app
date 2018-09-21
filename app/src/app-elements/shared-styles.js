@@ -143,13 +143,14 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         top: 50%;
         right: 50%;
         transform: translate(50%);
+        z-index: 10;
       }
 
       #loading paper-spinner {
         width: 40px;
         height: 40px;
         padding: 5px;
-        background-color: var(--default-primary-color);
+        background-color: transparent;
         border-radius: 50%;
       }
 
@@ -157,7 +158,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         width: 40px;
         height: 40px;
         padding: 5px;
-        background-color: var(--default-primary-color);
+        background-color: transparent;
         border-radius: 50%;
       }
 
