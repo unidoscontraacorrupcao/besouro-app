@@ -84,6 +84,19 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         cursor: pointer;
       }
 
+      #noMoreCandidates {
+        display: none;
+        text-align: center;
+        padding: 20px;
+      }
+
+      #noMoreCandidates span {
+        font-family: Folio;
+        font-size: 18px;
+        text-transform: uppercase;
+        color: var(--secondary-text-color);
+      }
+
       welcome-card p {
         color: var(--paragraph-color);
       }
@@ -185,6 +198,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           </div>
           <div id="loadMoreCandidates">
             <span on-click="_getMoreCandidates">carregar mais candidatos</span>
+          </div>
+          <div id="noMoreCandidates">
+            <span>Não há mais candidatos</span>
           </div>
         </div>
         <div class="inbox">
@@ -407,8 +423,10 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   toggleLoadMoreButton() {
     if(this.totalFiltered === this.allCandidates.length) {
       this.$.loadMoreCandidates.style.display = "none";
+      this.$.noMoreCandidates.style.display = "block";
     } else {
       this.$.loadMoreCandidates.style.display = "block";
+      this.$.noMoreCandidates.style.display = "none";
     }
   }
 
