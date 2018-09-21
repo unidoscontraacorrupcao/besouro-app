@@ -29,7 +29,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       }
 
       #filter {
-        background-color: var(--filter-color);
+        background-color: var(--primary-background-color);
         height: 40px;
         width: 360px;
         left: 0;
