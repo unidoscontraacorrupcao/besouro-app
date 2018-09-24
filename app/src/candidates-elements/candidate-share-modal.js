@@ -197,8 +197,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
       this.set('modalText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Compartilhe.`);
       this.set('quoteText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Saiba mais sobre ela aqui.`);
     } else if (this.candidate.score == "bad") {
-      this.share.text = `Quem não tem passado limpo não pode nos representar. ${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`;
-      this.set('modalText', `Quem não tem passado limpo não pode nos representar. ${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar e pedir sua desistência.`);
+      this.set('modalText', `${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar?.`);
       this.set('quoteText', this.modalText);
     } else {
       this.set('modalText', `Quem luta contra a corrupção e defende a democracia exige compromisso. ${this.candidate.name} não respondeu tudo o que pede a campanha. Vamos ajudá-la/o a se lembrar.`);
