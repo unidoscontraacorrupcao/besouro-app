@@ -76,7 +76,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
 
       #confirmation-text p {
         font-family: helvetica-neue;
-        font-size: 16px;
+        font-size: 21px;
         color: #333333;
         margin: 34px auto 40px auto;
         width: 90%;
@@ -194,7 +194,7 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
   _setShareContent() {
     this.share.url = `http://localhost:8081/candidate/${this.candidate.id}`;
     if (this.candidate.score == "good") {
-      this.set('modalText', `Quem é contra corrupção e defende a democracia merece nosso apoio! ${this.candidate.name} tem uma candidatura comprometida. Compartilhe.`);
+      this.set('modalText', `Quem é contra corrupção e defende a democracia merece ser lembrado! ${this.candidate.name} tem uma candidatura comprometida. Compartilhe.`);
       this.set('quoteText', `Quem é contra corrupção e defende a democracia merece ser lembrado! ${this.candidate.name} tem uma candidatura comprometida. Saiba mais sobre ela aqui.`);
     } else if (this.candidate.score == "bad") {
       this.set('modalText', `${this.candidate.name} não atestou passado limpo ou não se comprometeu. Vamos divulgar?.`);
