@@ -47,7 +47,10 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         color: var(--primary-background-color);
         align-items: center;
         height: 40px;
+        display: flex;
       }
+
+    #filter-header div { flex-grow: 2; }
 
 
       #filter-header span {
@@ -56,6 +59,14 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         font-family: folio;
         text-transform: uppercase;
       }
+
+    #filter-header iron-icon {
+      float: left;
+      margin: 12px 6px 11px 10px;
+      padding: -2px;
+      width: 14px;
+      height: auto;
+    }
 
       #filter-reload { margin-top: 4px; }
       #filter-header paper-icon-button {float: right;}
@@ -182,9 +193,12 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
       <div id="filter">
         <div id="filter-header">
-          <span>filtre os resultados da lista</span>
+          <div on-click="_toggle">
+            <iron-icon icon="app:filter-icon"></iron-icon>
+            <span>filtre os resultados da lista</span>
+            <paper-icon-button id="filterToggle" on-click="_toggle" icon="app:icon-down"></paper-icon-button>
+          </div>
           <paper-icon-button id="filter-reload" on-click="_reload" icon="app:icon-reload"></paper-icon-button>
-          <paper-icon-button id="filterToggle" on-click="_toggle" icon="app:icon-down"></paper-icon-button>
         </div>
         <div id="filter-fields">
           <div class="row">
