@@ -47,6 +47,7 @@ $_documentContainer.innerHTML = `<custom-style>
       --disabled-text-color: #666666;
       --divider-color: #e0e0e0;
       --paragraph-color: #333333;
+      --filter-color: #0094e5;
 
       --paper-checkbox-checked-color: #E15E36;
       --paper-checkbox-checked-ink-color: #E15E36;

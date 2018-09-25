@@ -43,11 +43,12 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       }
 
       #filter-header {
-        width: 90%;
-        margin: auto;
-        color: var(--secondary-text-color);
-        height: 35px;
+        background-color: var(--filter-color);
+        color: var(--primary-background-color);
+        align-items: center;
+        height: 40px;
       }
+
 
       #filter-header span {
         float: left;
