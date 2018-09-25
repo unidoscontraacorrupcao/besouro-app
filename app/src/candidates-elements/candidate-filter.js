@@ -71,10 +71,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         margin-right: 20px;
       }
 
-      #adheredOpts {
-        margin-right: 20px;
-        flex: 1;
-      }
+      #adheredOpts { margin-right: 20px; }
 
       #adheredOpts paper-item {
         --paper-item: {
@@ -91,11 +88,60 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         flex: 1;
       }
 
+      paper-item {
+        color: var(--secondary-text-color);
+        font-family: folio;
+        text-transform: uppercase;
+      }
+
+
+      paper-dropdown-menu {
+        --paper-input-container-input: {
+          color: var(--secondary-text-color);
+          font-family: folio;
+        }
+      }
+
+      .filter-circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-left: 10px;
+      }
+
+      #not-answer-circle { background-color: gray; }
+      #not-clean-pass-circle, #not-compromise-circle { background-color: red; }
+      #compromise-circle { background-color: green; }
+
+
       @media only screen and (max-width: 360px) {
         #filter {
           width: 300px;
         }
+
+        #adheredOpts paper-item {
+          --paper-item: {
+            font-size: 14px;
+          }
+        }
+
+          .filter-circle {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            margin-left: 4px;
+          }
+
       }
+
+      @media only screen and (max-width: 320px) {
+        #adheredOpts paper-item {
+          --paper-item: {
+              font-size: 11px;
+          }
+        }
+      }
+
 
       @media screen and (min-width: 1100px) {
         #filter {
@@ -141,21 +187,23 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         </div>
         <div id="filter-fields">
           <div class="row">
+            <paper-dropdown-menu id="adheredOpts" label="mostrando candidatos">
+              <paper-listbox slot="dropdown-content" selected="0">
+                <paper-item>TODOS</paper-item>
+                <paper-item>se comprometeu <div class="filter-circle" id="compromise-circle"></div></paper-item>
+                <paper-item>não se comprometeu <div class="filter-circle" id="not-compromise-circle"></div></paper-item>
+                <paper-item>não tem passado limpo <div class="filter-circle" id="not-clean-pass-circle"></div></paper-item>
+                <paper-item>não respondeu <div class="filter-circle" id="not-answer-circle"></div></paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
             <paper-input value="{{filterByName}}" always-float-label label="pesquise pelo nome" id="candidateName">
               <iron-icon icon="app:icon-search" slot="suffix"></iron-icon>
             </paper-input>
-            <paper-dropdown-menu id="candidacyOpts" label="tipo de candidatura">
-              <paper-listbox slot="dropdown-content" selected="0">
-                <paper-item>todas</paper-item>
-                <paper-item>senador</paper-item>
-                <paper-item>deputado federal</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
           </div>
           <div class="row">
           <paper-dropdown-menu id=partyName label="partido">
               <paper-listbox slot="dropdown-content" selected="0">
-                <paper-item>todos</paper-item>
+                <paper-item>TODOS</paper-item>
                 <paper-item>AVANTE</paper-item>
                 <paper-item>DC</paper-item>
                 <paper-item>DEM</paper-item>
@@ -193,9 +241,18 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
                 <paper-item>SD</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
+            <paper-dropdown-menu id="candidacyOpts" label="tipo de candidatura">
+              <paper-listbox slot="dropdown-content" selected="0">
+                <paper-item>TODAS</paper-item>
+                <paper-item>senador</paper-item>
+                <paper-item>deputado federal</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="row">
             <paper-dropdown-menu id="ufOpts" label="UF">
               <paper-listbox slot="dropdown-content">
-                <paper-item>todas</paper-item>
+                <paper-item>TODAS</paper-item>
                 <paper-item>AC</paper-item>
                 <paper-item>AL</paper-item>
                 <paper-item>AP</paper-item>
@@ -223,17 +280,6 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
                 <paper-item>SP</paper-item>
                 <paper-item>SE</paper-item>
                 <paper-item>TO</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
-          </div>
-          <div class="row">
-            <paper-dropdown-menu id="adheredOpts" label="Visualizando">
-              <paper-listbox slot="dropdown-content" selected="0">
-                <paper-item>todos</paper-item>
-                <paper-item>não responderam</paper-item>
-                <paper-item>não se comprometeram</paper-item>
-                <paper-item>se comprometeram</paper-item>
-                <paper-item>não tem passado limpo</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
             <paper-button on-tap="_filter">filtrar</paper-button>
@@ -272,7 +318,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   setStateOnFilter(user) {
     if(!user) return;
     if(user.state) this.$.ufOpts.value = user.state;
-    else this.$.ufOpts.value = 'todas';
+    else this.$.ufOpts.value = 'TODAS';
   }
 
   _toggle(e) {
@@ -349,31 +395,31 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     filters["filter_by_name"] = this.filterByName;
     if(sessionStorage.getItem('ignored'))
       filters["filter_by_ignored"] = sessionStorage.getItem('ignored');
-    else 
+    else
       filters["filter_by_ignored"] = [];
-    if (this.$.partyName.value == 'todos' || this.$.partyName.value == undefined)
+    if (this.$.partyName.value == 'TODOS' || this.$.partyName.value == undefined)
       filters["filter_by_party"] = '';
     else
       filters["filter_by_party"] = this.$.partyName.value;
-    if (this.$.candidacyOpts.value == 'todas' || this.$.candidacyOpts.value == undefined)
+    if (this.$.candidacyOpts.value == 'TODAS' || this.$.candidacyOpts.value == undefined)
       filters["filter_by_candidacy"] = '';
     else
       filters["filter_by_candidacy"] = this.$.candidacyOpts.value;
-    if (this.$.ufOpts.value == "todas" || this.$.ufOpts.value == undefined)
+    if (this.$.ufOpts.value == "TODAS" || this.$.ufOpts.value == undefined)
       filters["filter_by_uf"] = '';
     else
       filters["filter_by_uf"] = this.$.ufOpts.value;
-    if (this.$.adheredOpts.value == 'todos' || this.$.adheredOpts.value == undefined)
+    if (this.$.adheredOpts.value == 'TODOS' || this.$.adheredOpts.value == undefined)
       filters["filter_by_adhered"] = '';
     else
       switch (this.$.adheredOpts.value) {
-        case 'não responderam':
+        case 'não respondeu':
           filters["filter_by_adhered"] = 'SEM RESPOSTA';
           break;
-        case 'não se comprometeram':
+        case 'não se comprometeu':
           filters["filter_by_adhered"] = 'NÃO';
           break;
-        case 'se comprometeram':
+        case 'se comprometeu':
           filters["filter_by_adhered"] = 'SIM';
           break;
         case 'não tem passado limpo':
@@ -417,10 +463,10 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   clearFields() {
     this.$.candidateName.value = '';
-    this.$.candidacyOpts.value = 'todas';
-    this.$.ufOpts.value = 'todas';
-    this.$.partyName.value = 'todos';
-    this.$.adheredOpts.value = 'todos';
+    this.$.candidacyOpts.value = 'TODAS';
+    this.$.ufOpts.value = 'TODAS';
+    this.$.partyName.value = 'TODOS';
+    this.$.adheredOpts.value = 'TODOS';
     const lists = this.shadowRoot.querySelectorAll('paper-listbox');
     lists.forEach(element => {
       element.selected = 0;
