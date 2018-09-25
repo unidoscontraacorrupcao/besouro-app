@@ -168,11 +168,10 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
             <div id="short">
               <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="right">
-                Nosso critério de passado limpo é mais rígido.
-                A referência são os crimes da Lei da Ficha Limpa,
-                mas para nós eles nunca prescrevem. No caso de
-                quem tentará reeleição, veremos quem responde a 
-                processo no STF.
+                Nosso critério de passado limpo é mais rígido: a referência
+                são os crimes da Lei da Ficha Limpa, mas sem o recorte temporal
+                da lei. No caso de quem tentará reeleição,
+                veremos quem é réu no STF.
               </paper-tooltip>
             </div>
             <div>
@@ -183,10 +182,10 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
             <div>
               <span>Comprometeu-se com democracia?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="top">
-                O critério de compromisso com os princípios 
-                democráticos baseia-se na adesão ao Pacto 
-                pela Democracia – iniciativa da sociedade pela 
-                preservação e revigoramento da vida política e 
+                O critério de compromisso com os princípios
+                democráticos baseia-se na adesão ao Pacto
+                pela Democracia – iniciativa da sociedade pela
+                preservação e revigoramento da vida política e
                 democrática do país.
               </paper-tooltip>
             </div>
@@ -198,9 +197,9 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
             <div>
               <span>Aderiu às novas medidas?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="left">
-                No caso do combate à corrupção, a/o candidata/o 
-                terá de se comprometer a, se eleita/o, pôr nossas 
-                propostas em tramitação e atuar por sua aprovação. 
+                No caso do combate à corrupção, a/o candidata/o
+                terá de se comprometer a, se eleita/o, pôr nossas
+                propostas em tramitação e atuar por sua aprovação.
                 Ressalvas terão de ser identificadas e justificadas.
               </paper-tooltip>
             </div>
