@@ -377,7 +377,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           filters["filter_by_adhered"] = 'SIM';
           break;
         case 'não tem passado limpo':
-          filters["filter_by_clean_pass"] = 'NÃO';
+          filters["filter_by_clean_pass"] = 'NÃO,CONDENADO,RÉ,RÉU';
           break;
         default:
           break;
