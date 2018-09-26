@@ -188,7 +188,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         <div id="filter-header">
           <div on-tap="_toggle">
             <iron-icon icon="app:filter-icon"></iron-icon>
-            <span >filtre os resultados da busca</span>
+            <span>filtre os resultados da lista</span>
           </div>
           <paper-icon-button id="filterToggle" on-click="_toggle" icon="app:icon-down"></paper-icon-button>
           <paper-icon-button id="filter-reload" on-click="_reload" icon="app:icon-reload"></paper-icon-button>
