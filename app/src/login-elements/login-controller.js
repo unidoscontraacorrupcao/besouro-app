@@ -32,7 +32,7 @@ class LoginController extends PolymerElement {
 
       <app-besouro-api id="api"></app-besouro-api>
 
-      <launcher-view 
+      <launcher-view
         id="launcher"
         on-sign-up="_showSignUp"
         on-login="_showLogin"
@@ -48,7 +48,7 @@ class LoginController extends PolymerElement {
 
       <login-view id="login"
         on-login="_requestLogin",
-        on-sign-up="_showSignUp" 
+        on-sign-up="_showSignUp"
         on-forgot-password="_showForgotPassword"
         on-auth-facebook="_requestFacebookLogin">
       </login-view>
@@ -124,6 +124,7 @@ class LoginController extends PolymerElement {
   _requestLogin(e, form) {
     const VALIDATION = this._validateLoginForm(form);
     if(VALIDATION.valid) {
+      this.$.login.showLoading();
       this._login.form = form;
       let base = this.$.api.baseUrl;
       this.$.api.authUrl = `${base}/reset/`;
@@ -139,6 +140,7 @@ class LoginController extends PolymerElement {
   _requestSignUp(e, form) {
     const VALIDATION = this._validateSignUpForm(form);
     if(VALIDATION.valid) {
+      this.$.signUp.showLoading();
       this._signUp.form = form;
       let base = this.$.api.baseUrl;
       this.$.api.authUrl = `${base}/reset/`;
@@ -449,7 +451,9 @@ class LoginController extends PolymerElement {
     };
   }
 
-  _requestFacebookLogin() { this.$.facebook.login(); }
+  _requestFacebookLogin() {
+    this.$.facebook.login();
+  }
   _getEmptyLogin() { return {}; }
   _getEmptySignUp() { return {}; }
   _getEmptyForgotPassword() { return {}; }

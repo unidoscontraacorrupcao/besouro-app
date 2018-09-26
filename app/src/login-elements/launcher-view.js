@@ -102,6 +102,9 @@ class LauncherView extends CommonBehaviorsMixin(PolymerElement) {
           }
         }
       </style>
+      <div id="loading">
+        <paper-spinner active=""></paper-spinner>
+      </div>
       <div class="fill">
         <div class="image">
       <iron-image sizing="contain" src="/images/generic/logo.png"></iron-image>

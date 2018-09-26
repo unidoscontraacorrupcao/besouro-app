@@ -24,6 +24,7 @@ class LoginView extends CommonBehaviorsMixin(PolymerElement) {
         .fill {
           flex: 1;
           padding: 0 6vh;
+          max-height: 580px;
         }
         .image {
           height: 98px;
