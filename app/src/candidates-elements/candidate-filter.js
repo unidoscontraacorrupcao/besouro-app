@@ -77,18 +77,17 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       }
 
       .row {
-        width: 90%;
-        height: 70px;
-        margin: auto;
         display: flex;
+        padding: 0 10px;
       }
 
-      .row paper-input:first-child,
-      #partyName {
+      .row > *:first-child {
         margin-right: 20px;
       }
 
-      #adheredOpts { margin-right: 20px; }
+      .row > * {
+        flex: 50%;
+      }
 
       #adheredOpts paper-item {
         --paper-item: {
@@ -101,7 +100,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         background-color: var(--accent-color);
         font-family: folio;
         height: 70%;
-        margin-top: 6px;
+        margin: 6px 0 0;
         flex: 1;
       }
 
@@ -142,12 +141,12 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           }
         }
 
-          .filter-circle {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            margin-left: 4px;
-          }
+        .filter-circle {
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+          margin-left: 4px;
+        }
 
       }
 
@@ -158,7 +157,6 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           }
         }
       }
-
 
       @media screen and (min-width: 1100px) {
         #filter {
@@ -173,24 +171,14 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           padding: 0 20px;
         }
         .row {
-          width: unset;
-          height: unset;
-          margin: 0;
-          display: flex;
           flex-direction: column;
           justify-content: space-around;
           flex: 0 0 30%;
         }
-        paper-button {
-          margin: 0;
-          flex: unset;
-          height: unset;
+        .row > paper-button {
+          margin-bottom: 10px;
         }
-        #adheredOpts {
-          margin: 0;
-        }
-        .row paper-input:first-child,
-        #partyName {
+        #ufOpts {
           margin: 0;
         }
       }
@@ -346,9 +334,9 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
       if(window.innerWidth > 1100) {
-        item.setAttribute("style", "height: 200px");
+        item.setAttribute("style", "height: 190px");
       } else {
-        item.setAttribute("style", "height: 250px");
+        item.setAttribute("style", "height: 240px");
       }
       this.$.filterToggle.set("icon",  "app:icon-up");
       this.dispatchEvent(new CustomEvent('open-filter', { bubbles: true, composed: true }));

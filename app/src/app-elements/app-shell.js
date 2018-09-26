@@ -57,6 +57,10 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       app-drawer-layout:-webkit-full-screen-ancestor app-drawer {
         z-index: -1 !important;
       }
+      
+      app-drawer-layout {
+        overflow: hidden;
+      }
 
       app-drawer:not([persistent]) {
         --app-drawer-width: 80%;
