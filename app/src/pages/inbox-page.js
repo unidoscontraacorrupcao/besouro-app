@@ -159,8 +159,7 @@ class InboxPage extends PolymerElement {
       },
       allMissions: {
         type: Array,
-        value: [],
-        observer: "_onAllMissionsChanged"
+        value: []
       },
       userAcceptedMissions: {
         type: Array,

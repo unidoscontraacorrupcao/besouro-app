@@ -196,8 +196,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           <div on-click="_toggle">
             <iron-icon icon="app:filter-icon"></iron-icon>
             <span>filtre os resultados da lista</span>
-            <paper-icon-button id="filterToggle" on-click="_toggle" icon="app:icon-down"></paper-icon-button>
           </div>
+          <paper-icon-button id="filterToggle" on-click="_toggle" icon="app:icon-down"></paper-icon-button>
           <paper-icon-button id="filter-reload" on-click="_reload" icon="app:icon-reload"></paper-icon-button>
         </div>
         <div id="filter-fields">
@@ -365,9 +365,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     else {
       this.$.api.path = `users/${user.uid}/candidates`;
     }
+    this.dispatchEvent(new CustomEvent("loading"));
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 0}}));
+    this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
       this._getTotalFiltered();
     });
@@ -379,9 +381,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.path = `users/${user.uid}/selected-candidates`;
     this._setFilters();
     this.$.api.params = this.filters;
+    this.dispatchEvent(new CustomEvent("loading"));
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 1}}));
+      this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
     });
   }

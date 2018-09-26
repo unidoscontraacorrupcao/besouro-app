@@ -137,6 +137,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           tab="{{inboxtab}}"
           on-reload-candidates="_reloadCandidates"
           on-filtered-candidates="_showFilteredCandidates"
+          on-loading="showLoading"
+          on-hide-loading="hideLoading"
           on-total-filtered="_getTotalFiltered"
           user="{{user}}"
           filters="{{filters}}"

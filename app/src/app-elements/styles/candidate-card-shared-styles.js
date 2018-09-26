@@ -270,7 +270,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     .item-body span {
       font-family: helvetica-neue;
-      font-size: 18px;
+      font-size: 1.1rem;
       color: rgba(51,51,51,1);
       line-height: 1;
     }

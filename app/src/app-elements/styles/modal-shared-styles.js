@@ -18,6 +18,8 @@ $_documentContainer.innerHTML = `<dom-module id="modal-shared-styles">
         top: 50%;
         right: 50%;
         transform: translate(50%);
+        z-index: 1;
+        display: none;
       }
 
       #social-notice {

@@ -135,6 +135,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         top: 50%;
         right: 50%;
         transform: translate(50%);
+        z-index: 10;
       }
 
       .page-loading paper-spinner {
