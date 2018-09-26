@@ -365,9 +365,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     else {
       this.$.api.path = `users/${user.uid}/candidates`;
     }
+    this.dispatchEvent(new CustomEvent("loading"));
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 0}}));
+    this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
       this._getTotalFiltered();
     });
@@ -379,9 +381,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.$.api.path = `users/${user.uid}/selected-candidates`;
     this._setFilters();
     this.$.api.params = this.filters;
+    this.dispatchEvent(new CustomEvent("loading"));
     this.$.api.request().then((ajax) => {
       this.dispatchEvent(new CustomEvent("filtered-candidates",
         {detail: {candidates: ajax.response, "tab": 1}}));
+      this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
     });
   }
