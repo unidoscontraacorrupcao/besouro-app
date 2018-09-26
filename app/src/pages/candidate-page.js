@@ -584,12 +584,10 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         observer: "_candidateChanged"
       },
       candidateStatus: {
-        type: String,
-        observer: "_candidateStatusChanged"
+        type: String
       },
       candidateMetrics: {
-        type: Object,
-        observer: "_candidateMetricsChanged"
+        type: Object
       },
       key: String
     };
