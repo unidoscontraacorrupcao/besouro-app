@@ -86,9 +86,7 @@ let Mixin = function(superClass) {
     this.$.api.user = user;
     //TODO: replace 1 by the candidate id.
     this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
-    this.$.api.request().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("favorite-candidate"));
-    });
+    return this.$.api.request();
   }
 
   _unselectCandidate() {

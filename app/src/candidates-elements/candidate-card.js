@@ -322,7 +322,9 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   }
 
   _wrapFavoriteCandidate() {
-    this._favoriteCandidate();
+    this._favoriteCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("favorite-candidate"));
+    });
   }
 
   _closeModal() { this.$.candidateShareDialog.dismiss(); }

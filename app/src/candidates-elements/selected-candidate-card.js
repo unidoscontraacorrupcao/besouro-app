@@ -387,7 +387,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   }
 
   _wrapFavoriteCandidate() {
-    this._favoriteCandidate();
+    this._favoriteCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("favorite-candidate"));
+    });
   }
 
   _chooseCandidateColor() {
