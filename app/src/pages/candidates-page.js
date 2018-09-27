@@ -271,7 +271,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       },
       inboxtab: {
         type: Number,
-        observer: "_tabChanged"
+        observer: "_tabChanged",
+        notify: true
       },
       trophyData: {
         type: Object,
@@ -613,7 +614,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _tabChanged() {
-    if (this.inboxtab == 1 || this.inboxtab == 2) {
+    if (this.inboxtab == 1) {
       if (!this.user || Object.keys(this.user).length == 0) {
         this.$.unauthorizedDialog.present();
       }
@@ -623,12 +624,6 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.set('pageTitle', 'TODOS OS CANDIDATOS');
         break;
       case 1:
-        this.set('pageTitle', 'SELECIONADOS');
-        if (!this.user || Object.keys(this.user).length == 0) {
-          this.$.unauthorizedDialog.present();
-        }
-        break;
-      case 2:
         this.set('pageTitle', 'SANTINHO');
         if (!this.user || Object.keys(this.user).length == 0) {
           this.$.unauthorizedDialog.present();

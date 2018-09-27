@@ -181,6 +181,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         font-family: Folio;
         font-size: 24px;
         line-height: 26px;
+        cursor: pointer;
       }
 
       .drawer-list a[name="favorites"] {
@@ -267,7 +268,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
           <iron-image on-tap="gotoProfile" src="{{user.photoURL}}" sizing="cover" hidden$="[[!user.uid]]"></iron-image>
-      <iron-image src="/images/generic/avatar_default-menu.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
+          <iron-image src="/images/generic/avatar_default-menu.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
           <div class="main-title">
             <div class="username" hidden$="[[!user.uid]]">
               <a href="profile">{{user.displayName}}</a>
@@ -413,7 +414,9 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         value: ['privacy', 'help', 'not-found', 'login', 'reset-password']
       },
       unread: Number,
-      inboxtab: Number
+      inboxtab: {
+        type: Number
+      }
     };
   }
 
@@ -509,14 +512,14 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _goToFavorites() {
-    this.set('inboxtab', 2);
+    this.set('inboxtab', 1);
     this.set("route.path", "/candidates");
   }
 
   _goToFavoritesNavbar() {
-    this.set('inboxtab', 2);
+    this.set('inboxtab', 1);
     this.set("route.path", "/candidates");
-    this.$.drawer.close();
+    if(this.$.drawer.swipeOpen) this.$.drawer.toggle();
   }
 
   _goToCandidates() {
@@ -527,7 +530,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   _goToCandidatesNavbar() {
     this.set('inboxtab', 0);
     this.set("route.path", "/candidates");
-    this.$.drawer.close();
+    if(this.$.drawer.swipeOpen) this.$.drawer.toggle();
   }
 
   _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
