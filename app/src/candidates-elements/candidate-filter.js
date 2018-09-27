@@ -259,35 +259,34 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           </div>
           <div class="row">
             <paper-dropdown-menu id="ufOpts" label="UF">
-              <paper-listbox slot="dropdown-content">
-                <paper-item>TODAS</paper-item>
-                <paper-item>AC</paper-item>
-                <paper-item>AL</paper-item>
-                <paper-item>AP</paper-item>
-                <paper-item>AM</paper-item>
-                <paper-item>BA</paper-item>
-                <paper-item>CE</paper-item>
-                <paper-item>DF</paper-item>
-                <paper-item>ES</paper-item>
-                <paper-item>GO</paper-item>
-                <paper-item>MA</paper-item>
-                <paper-item>MT</paper-item>
-                <paper-item>MS</paper-item>
-                <paper-item>MG</paper-item>
-                <paper-item>PA</paper-item>
-                <paper-item>PB</paper-item>
-                <paper-item>PR</paper-item>
-                <paper-item>PE</paper-item>
-                <paper-item>PI</paper-item>
-                <paper-item>RJ</paper-item>
-                <paper-item>RN</paper-item>
-                <paper-item>RS</paper-item>
-                <paper-item>RO</paper-item>
-                <paper-item>RR</paper-item>
-                <paper-item>SC</paper-item>
-                <paper-item>SP</paper-item>
-                <paper-item>SE</paper-item>
-                <paper-item>TO</paper-item>
+              <paper-listbox slot="dropdown-content" attr-for-selected="name">
+                <paper-item name="TODAS">TODAS</paper-item>
+                <paper-item name="AL">AL</paper-item>
+                <paper-item name="AP">AP</paper-item>
+                <paper-item name="AM">AM</paper-item>
+                <paper-item name="BA">BA</paper-item>
+                <paper-item name="CE">CE</paper-item>
+                <paper-item name="DF">DF</paper-item>
+                <paper-item name="ES">ES</paper-item>
+                <paper-item name="GO">GO</paper-item>
+                <paper-item name="MA">MA</paper-item>
+                <paper-item name="MT">MT</paper-item>
+                <paper-item name="MS">MS</paper-item>
+                <paper-item name="MG">MG</paper-item>
+                <paper-item name="PA">PA</paper-item>
+                <paper-item name="PB">PB</paper-item>
+                <paper-item name="PR">PR</paper-item>
+                <paper-item name="PE">PE</paper-item>
+                <paper-item name="PI">PI</paper-item>
+                <paper-item name="RJ">RJ</paper-item>
+                <paper-item name="RN">RN</paper-item>
+                <paper-item name="RS">RS</paper-item>
+                <paper-item name="RO">RO</paper-item>
+                <paper-item name="RR">RR</paper-item>
+                <paper-item name="SC">SC</paper-item>
+                <paper-item name="SP">SP</paper-item>
+                <paper-item name="SE">SE</paper-item>
+                <paper-item name="TO">TO</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
             <paper-button on-tap="_filter">filtrar</paper-button>
@@ -325,8 +324,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
   setStateOnFilter(user) {
     if(!user) return;
-    if(user.state) this.$.ufOpts.value = user.state;
-    else this.$.ufOpts.value = 'TODAS';
+    const listbox = this.$.ufOpts.querySelector('paper-listbox');
+    if(listbox.selected) return;
+    if(user.state) {
+      listbox.selected = user.state;
+    } else {
+      listbox.selected = 'TODAS';
+    }
   }
 
   _toggle(e) {
@@ -476,13 +480,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   clearFields() {
     this.$.candidateName.value = '';
     this.$.candidacyOpts.value = 'TODAS';
-    this.$.ufOpts.value = 'TODAS';
     this.$.partyName.value = 'TODOS';
     this.$.adheredOpts.value = 'TODOS';
     const lists = this.shadowRoot.querySelectorAll('paper-listbox');
     lists.forEach(element => {
       element.selected = 0;
     });
+    this.$.ufOpts.querySelector('paper-listbox').selected = 'TODAS';
   }
 
 }

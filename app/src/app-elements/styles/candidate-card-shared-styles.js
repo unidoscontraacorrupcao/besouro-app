@@ -248,7 +248,6 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       border-color: rgba(49,39,131,1);
       border-style: solid;
       border-width: 1px;
-      width: 90%;
       margin: auto auto;
     }
 

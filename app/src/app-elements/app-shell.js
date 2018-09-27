@@ -58,9 +58,6 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         z-index: -1 !important;
       }
       
-      app-drawer-layout {
-        overflow: hidden;
-      }
 
       app-drawer:not([persistent]) {
         --app-drawer-width: 80%;
@@ -246,7 +243,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       }
 
       #actions.hidden {
-        transform: translateY(65px);
+        display: none;
       }
 
     </style>

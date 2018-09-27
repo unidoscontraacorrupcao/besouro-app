@@ -328,8 +328,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
       } else {
         if(this.getUser().state) {
           this.showLoading();
-          this.$.api.params = {};
-          this.$.api.params["filter_by_uf"] = this.getUser().state;
+          this.$.api.params = this.filters;
+          this.$.api.params["filter_by_uf"] = this.filters['filter_by_uf'] || this.getUser().state;
           this.$.api.params['limit'] = this.limit;
           this.$.api.path = `users/${this.getUser().uid}/candidates`;
           this.$.api.method = "GET";
