@@ -149,7 +149,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         <app-toolbar sticky="">
           <paper-tabs selected="{{inboxtab}}" fallback-selection="0">
             <paper-tab><span class="tabs-text">TODOS</span></paper-tab>
-            <paper-tab id="selectedTab"><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab>
+            <!-- <paper-tab id="selectedTab"><span class="tabs-text">SELECIONADOS</span><span class=tabs-number>{{selectedCount}}</span></paper-tab> -->
             <paper-tab><span class="tabs-text">SANTINHO</span><span class=tabs-number>{{favoriteCount}}</span></paper-tab>
           </paper-tabs>
         </app-toolbar>
@@ -207,7 +207,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
             <span>Não há mais candidatos</span>
           </div>
         </div>
-        <div class="inbox">
+        <!-- <div class="inbox">
           <div class="candidates">
             <template is="dom-repeat" items="{{selectedCandidates}}">
               <selected-candidate-card
@@ -221,7 +221,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <div id="loadMoreSelectedCandidates">
             <span on-click="_getMoreSelectedCandidates">carregar mais candidatos</span>
           </div>
-        </div>
+        </div> -->
         <div class="inbox">
           <div class="candidates">
             <template is="dom-repeat" items="{{favoriteCandidates}}">
@@ -313,7 +313,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this._getAllCandidates();
       } else {
         this._firstFilter();
-        this._getSelectedCandidates();
+        // this._getSelectedCandidates();
         this._getFavoriteCandidates();
         this._requestGeocoder();
       }
@@ -395,7 +395,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     if (tab == 0)
       this._getAllCandidates(10);
     if (tab == 1)
-      this._getSelectedCandidates();
+      this._getFavoriteCandidates();
   }
 
   _getTotalSelected() {
@@ -453,17 +453,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         this.$.loadMoreSelectedCandidates.style.display = "block";
       }
       this.set("selectedCandidates", ajax.response);
-      this.toggleSelectedNav();
       this.hideLoading();
     });
-  }
-
-  toggleSelectedNav() {
-    if(!this.selectedCandidates.length) {
-      this.$.selectedTab.style.display = 'none';
-    } else {
-      this.$.selectedTab.style.display = 'block';
-    }
   }
 
   _getFavoriteCandidates(limit=0) {
@@ -582,7 +573,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
 
   _userCandidatesChanged() {
     this._getAllCandidates();
-    this._getSelectedCandidates();
+    // this._getSelectedCandidates();
     this._getFavoriteCandidates();
   }
 
