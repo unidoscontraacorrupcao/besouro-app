@@ -39,7 +39,6 @@ class WelcomeCard extends PolymerElement {
         text-transform: uppercase;
         font-family: Folio;
         font-size: 24px;
-        padding-bottom: 10px;
       }
 
       #cardContent {
@@ -73,7 +72,7 @@ class WelcomeCard extends PolymerElement {
 
     <div id="cardContent">
       <span class="close-dialog" on-tap="hideWelcomeCard">x</span>
-      <div id="welcome-title"> boas vindas!</div>
+      <div id="welcome-title">boas vindas!</div>
       <slot></slot>
     </div>
 `;

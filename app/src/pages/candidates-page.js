@@ -170,17 +170,17 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           <welcome-card>
             <div>
               <p>
-                Aqui você vê as/os candidatas/os que registraram: 1. Passado Limpo; 2.
-                Compromisso com Democracia; e 3. Adesão às Novas Medidas contra a Corrupção.
+                Aqui você vê todas as candidatas e candidatos à Câmara dos Deputados e ao
+                Senado e se eles têm:
               </p>
               <p>
-                SELECIONE para mais detalhes pessoais e eleitorais, bem como bens e processos.
-                Também é possível PRESSIONAR quem não se comprometeu. Além de enviarmos
-                um email, você conseguirá postar nas suas redes sociais.
+                PASSADO LIMPO; <br>
+                Compromisso com DEMOCRACIA; e<br>
+                Adesão às NOVAS MEDIDAS contra a Corrupção.
               </p>
               <p>
-                Os nomes são apresentados aleatoriamente, sem nenhum tipo de
-                viés nem preferência. Para dúvidas, acesse FAQ.
+                PESQUISE sobre os candidatos e use o botão ESTRELA para salvar
+                suas preferências no SANTINHO digital. Para dúvidas, acesse FAQ.
               </p>
             </div>
           </welcome-card>

@@ -195,9 +195,9 @@ class CandidateShareModal extends CommonBehaviorsMixin(mixinBehaviors([PaperInpu
     this.share.url = `http://localhost:8081/candidate/${this.candidate.id}`;
     if (this.candidate.score == "good") {
       this.set('modalText', `Quem é contra corrupção e defende a democracia merece ser lembrado! ${this.candidate.name} tem uma candidatura comprometida. Compartilhe.`);
-      this.set('quoteText', `Quem é contra corrupção e defende a democracia merece ser lembrado! ${this.candidate.name} tem uma candidatura comprometida. Saiba mais sobre ela aqui.`);
+      this.set('quoteText', `Quem é contra corrupção e defende a democracia merece ser lembrado! ${this.candidate.name} tem uma candidatura comprometida. Salve como santinho e/ou compartilhe.`);
     } else if (this.candidate.score == "bad") {
-      this.set('modalText', `${this.candidate.name} responde a processo na Justiça por crimes listados na Lei da Ficha Limpa e/ou rejeitou o Pacto pela Democracia e/ou rejeitou as Novas Medidas contra a Corrupção. Vamos divulgar?.`);
+      this.set('modalText', `${this.candidate.name} responde a processo na Justiça por crimes listados na Lei da Ficha Limpa e/ou rejeitou o Pacto pela Democracia e/ou rejeitou as Novas Medidas contra a Corrupção. Compartilhe a informação.`);
       this.set('quoteText', this.modalText);
     } else {
       this.set('modalText', `Quem luta contra a corrupção e defende a democracia exige compromisso. ${this.candidate.name} não respondeu tudo o que pede a campanha. Compartilhe a informação.`);
