@@ -581,10 +581,11 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       },
       candidate: {
         type: Object,
-        observer: "_candidateChanged"
+        observer: '_candidateChanged'
       },
       candidateStatus: {
-        type: String
+        type: String,
+        observer: '_candidateStatusChanged'
       },
       candidateMetrics: {
         type: Object
@@ -613,7 +614,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     this._getCandidateMetrics();
     var user = this.getUser();
     if (!user || Object.keys(user).length == 0) {
-      console.log("eai");
       this._hideButtons();
       this._showUnselectedBtns();
       return;
