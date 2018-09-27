@@ -122,7 +122,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     </style>
 
     <app-dialog id="candidateShareDialog">
-      <candidate-share-modal></candidate-share-modal>
+      <candidate-share-modal
+        on-close-modal="_closeModal">
+      </candidate-share-modal>
     </app-dialog>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -419,5 +421,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     this.dispatchEvent(new CustomEvent("show-candidate",
       { detail: {candidate: this.candidate.id} }));
   }
+
+  _closeModal() { this.$.candidateShareDialog.dismiss(); }
 }
 customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);
