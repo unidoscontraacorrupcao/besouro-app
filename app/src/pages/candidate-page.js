@@ -578,19 +578,17 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Nome Completo</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
-          <div class="item-body">
-             <span>{{candidate.full_name}}</span>
+            <div class="item-body">
+              <span>{{candidate.full_name}}</span>
+            </div>
           </div>
 
-          </div>
           <div class="item">
             <div class="item-header">
               <div class="item-title">
                 <span>Ocupação Profissional</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -603,7 +601,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Aderiu totalmente às novas medidas?</span>
               </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -616,7 +613,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Total de bens e patrimônio</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -629,7 +625,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Total de processos a que responde</span>
               </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -729,32 +724,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
     this.set("route.path", "/login");
-  }
-
-  _toggle(e) {
-    var item = e.target.parentNode.parentNode;
-    var itemHeight = item.clientHeight;
-    if (itemHeight == 40) {
-      item.setAttribute("style", "height: 95px");
-      e.target.set("icon",  "app:expand-less");
-    }
-    else {
-      item.setAttribute("style", "height: 40px");
-      e.target.icon = "app:expand-more";
-    }
-  }
-
-  _toggleBig(e) {
-    var item = e.target.parentNode.parentNode;
-    var itemHeight = item.clientHeight;
-    if (itemHeight == 40) {
-      item.setAttribute("style", "height: 200px");
-      e.target.set("icon",  "app:expand-less");
-    }
-    else {
-      item.setAttribute("style", "height: 40px");
-      e.target.icon = "app:expand-more";
-    }
   }
 
   _chooseCandidateColor() {
