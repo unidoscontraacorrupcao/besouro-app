@@ -318,6 +318,11 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         type: Object,
         value: {},
         notify: true
+      },
+      filtered: {
+        type: Boolean,
+        notify: true,
+        value: false
       }
     }
   }
@@ -369,6 +374,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
       this._getTotalFiltered();
+      this.set('filtered', true);
     });
   }
 
@@ -462,8 +468,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _filter() {
     if (this.tab == 0)
       this._fiterAllCandidates();
-    else
-      this._filterSelectedCandidates();
+    // else
+    //   this._filterSelectedCandidates();
   }
 
   _reload() {

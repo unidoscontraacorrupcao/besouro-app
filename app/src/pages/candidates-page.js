@@ -161,6 +161,7 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
           on-hide-loading="hideLoading"
           on-total-filtered="_getTotalFiltered"
           user="{{user}}"
+          filtered="{{filtered}}"
           filters="{{filters}}"
           id="filter">
         </candidate-filter>
@@ -296,7 +297,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         type: Number,
         observer: 'toggleLoadMoreButton'
       },
-      favoriteCount: String
+      favoriteCount: String,
+      filtered: Boolean
     };
   }
 
@@ -330,7 +332,11 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         if(this.getUser().state) {
           this.showLoading();
           this.$.api.params = this.filters;
-          this.$.api.params["filter_by_uf"] = this.filters['filter_by_uf'] || this.getUser().state;
+          if(this.filtered) {
+            this.$.api.params['filter_by_uf'] = this.filters['filter_by_uf'];
+          } else {
+            this.$.api.params['filter_by_uf'] = this.getUser().state;
+          }
           this.$.api.params['limit'] = this.limit;
           this.$.api.path = `users/${this.getUser().uid}/candidates`;
           this.$.api.method = "GET";
