@@ -196,7 +196,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         <div id="filter-fields">
           <div class="row">
             <paper-dropdown-menu id="adheredOpts" label="mostrando candidatos">
-              <paper-listbox slot="dropdown-content" selected="0">
+              <paper-listbox slot="dropdown-content" selected="1">
                 <paper-item>TODOS</paper-item>
                 <paper-item>se comprometeu <div class="filter-circle" id="compromise-circle"></div></paper-item>
                 <paper-item>não se comprometeu <div class="filter-circle" id="not-compromise-circle"></div></paper-item>

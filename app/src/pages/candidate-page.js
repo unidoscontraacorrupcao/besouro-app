@@ -408,7 +408,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span>{{candidate.has_clean_pass}}</span>
+              <span id="cleanPass">{{candidate.has_clean_pass}}</span>
             </div>
           </div>
           <div class="info">
@@ -423,7 +423,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span>{{candidate.committed_to_democracy}}</span>
+              <span id="commitedToDem">{{candidate.committed_to_democracy}}</span>
             </div>
           </div>
           <div class="info">
@@ -437,7 +437,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span>{{candidate.adhered_to_the_measures}}</span>
+              <span id="adheredToMeasures">{{candidate.adhered_to_the_measures}}</span>
             </div>
           </div>
         </div>
@@ -677,6 +677,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       this._hideSocialMediaIcons();
       this._getCandidateStatistics();
       this._setFavoriteButton();
+      this._setPoliticalInfosColors();
     });
   }
 

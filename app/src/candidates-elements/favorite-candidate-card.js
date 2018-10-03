@@ -198,43 +198,43 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
             <div id="short">
               <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="right">
-                Nosso critério de passado limpo é rígido. 
-                A referência são os crimes da Lei da Ficha Limpa. 
-                No caso de candidata/o à reeleição, veremos quem é 
-                réu no STF.
+                Nosso critério de passado limpo é mais rígido: a referência
+                são os crimes da Lei da Ficha Limpa, mas sem o recorte temporal
+                da lei. No caso de quem tentará reeleição,
+                veremos quem é réu no STF.
               </paper-tooltip>
             </div>
             <div>
-              <span><br>{{candidate.has_clean_pass}}</br></span>
+              <span id="cleanPass"><br>{{candidate.has_clean_pass}}</br></span>
             </div>
           </div>
           <div class="info">
             <div>
               <span>Comprometeu-se com democracia?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="top">
-                O critério de compromisso com os princípios 
-                democráticos baseia-se na adesão ao Pacto 
-                pela Democracia – iniciativa da sociedade pela 
-                preservação e revigoramento da vida política e 
+                O critério de compromisso com os princípios
+                democráticos baseia-se na adesão ao Pacto
+                pela Democracia – iniciativa da sociedade pela
+                preservação e revigoramento da vida política e
                 democrática do país.
               </paper-tooltip>
             </div>
             <div>
-              <span><br>{{candidate.committed_to_democracy}}</br></span>
+              <span id="commitedToDem"><br>{{candidate.committed_to_democracy}}</br></span>
             </div>
           </div>
           <div class="info">
             <div>
               <span>Aderiu às novas medidas?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="left">
-                No caso do combate à corrupção, a/o candidata/o 
-                terá de se comprometer a, se eleita/o, pôr nossas 
-                propostas em tramitação e atuar por sua aprovação. 
+                No caso do combate à corrupção, a/o candidata/o
+                terá de se comprometer a, se eleita/o, pôr nossas
+                propostas em tramitação e atuar por sua aprovação.
                 Ressalvas terão de ser identificadas e justificadas.
               </paper-tooltip>
             </div>
             <div>
-              <span><br>{{candidate.adhered_to_the_measures}}</br></span>
+              <span id="adheredToMeasures"><br>{{candidate.adhered_to_the_measures}}</br></span>
             </div>
           </div>
         </div>
@@ -321,6 +321,7 @@ class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   _candidateChanged() {
     this._chooseCandidateColor();
     this._removeCardAnimations();
+    this._setPoliticalInfosColors();
   }
 
   _removeCardAnimations() {

@@ -313,6 +313,8 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     this.set("user", this.getUser());
     if (path == "/candidates") {
       if (!this.user || Object.keys(this.user).length == 0) {
+        if(!this.filtered)
+          this.filters['filter_by_adhered'] = 'SIM';
         this._getAllCandidates();
       } else {
         this._firstFilter();
@@ -329,25 +331,29 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     if(!this.user || Object.keys(this.user).length == 0) {
       this._getAllCandidates();
       } else {
+        this.showLoading();
+        this.$.api.params = this.filters;
+        if(this.filtered) {
+          this.$.api.params['filter_by_adhered'] = this.filters['filter_by_adhered'];
+        } else {
+          this.$.api.params['filter_by_adhered'] = 'SIM'
+        }
+
         if(this.getUser().state) {
-          this.showLoading();
-          this.$.api.params = this.filters;
           if(this.filtered) {
             this.$.api.params['filter_by_uf'] = this.filters['filter_by_uf'];
           } else {
             this.$.api.params['filter_by_uf'] = this.getUser().state;
           }
-          this.$.api.params['limit'] = this.limit;
-          this.$.api.path = `users/${this.getUser().uid}/candidates`;
-          this.$.api.method = "GET";
-          this.$.api.request().then((ajax) => {
-            this.set("allCandidates", ajax.response);
-            this.hideLoading();
-          });
-      } else {
-        this._getAllCandidates();
+        }
+        this.$.api.params['limit'] = this.limit;
+        this.$.api.path = `users/${this.getUser().uid}/candidates`;
+        this.$.api.method = "GET";
+        this.$.api.request().then((ajax) => {
+          this.set("allCandidates", ajax.response);
+          this.hideLoading();
+        });
       }
-    }
   }
 
   _getAllCandidates(limit=0) {

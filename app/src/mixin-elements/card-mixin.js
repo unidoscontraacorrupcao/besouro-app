@@ -159,6 +159,31 @@ let Mixin = function(superClass) {
       shareComponent.setCandidate(this.candidate);
       this.$.candidateShareDialog.present();
     }
+
+  _setPoliticalInfosColors() {
+    var cleanPass = this.$.cleanPass;
+    var commitedToDem = this.$.commitedToDem;
+    var adheredToMeasures = this.$.adheredToMeasures;
+
+    cleanPass.style.color = "white";
+    commitedToDem.style.color = "white";
+    adheredToMeasures.style.color = "white";
+
+    if (this.candidate.has_clean_pass == "SIM" &&
+        this.candidate.adhered_to_the_measures == "SIM" &&
+        this.candidate.committed_to_democracy == "SEM RESPOSTA") {
+        commitedToDem.style.color = "#E6007E";
+    }
+
+    if (this.candidate.has_clean_pass == "SIM" &&
+        this.candidate.adhered_to_the_measures == "SIM" &&
+        this.candidate.committed_to_democracy == "SIM") {
+        cleanPass.style.color = "#32CEA6";
+        commitedToDem.style.color = "#32CEA6";
+        adheredToMeasures.style.color = "#32CEA6";
+    }
+  }
+
   }
 }
 
