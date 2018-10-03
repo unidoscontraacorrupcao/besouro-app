@@ -378,10 +378,10 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     });
   }
 
-  _filterSelectedCandidates() {
+  _filterFavoritesCandidates() {
     var user = this.getUser();
     if (!user || Object.keys(user).length == 0) return;
-    this.$.api.path = `users/${user.uid}/selected-candidates`;
+    this.$.api.path = `users/${user.uid}/favorite-candidates`;
     this._setFilters();
     this.$.api.params = this.filters;
     this.dispatchEvent(new CustomEvent("loading"));
@@ -390,6 +390,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         {detail: {candidates: ajax.response, "tab": 1}}));
       this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
+      this.set('filtered', true);
     });
   }
 
@@ -468,8 +469,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _filter() {
     if (this.tab == 0)
       this._fiterAllCandidates();
-    // else
-    //   this._filterSelectedCandidates();
+     else
+       this._filterFavoritesCandidates();
   }
 
   _reload() {

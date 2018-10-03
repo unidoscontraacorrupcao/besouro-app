@@ -29,6 +29,12 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         display: block;
         height: 100vh;
       }
+
+      #favorite-empty {
+        display: block;
+        margin-top: 50px;
+        width: 100%;
+      }
       app-toolbar { font-size: 35px; }
       .tabs-text {
         font-size: 18px;
@@ -225,6 +231,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
         </div> -->
         <div class="inbox">
           <div class="candidates">
+          <template is="dom-if" if="{{!favoriteCandidates.length}}">
+            <empty-search-card id="favorite-empty"></empty-search-card>
+          </template>
             <template is="dom-repeat" items="{{favoriteCandidates}}">
               <favorite-candidate-card
                 candidate="[[item]]"
@@ -396,9 +405,9 @@ class CandidatesPage extends CommonBehaviorsMixin(PolymerElement) {
     }
     if (tab == 1) {
       if (candidates.results)
-        this.set("selectedCandidates", candidates.results);
+        this.set("favoriteCandidates", candidates.results);
       else
-        this.set("selectedCandidates", candidates);
+        this.set("favoriteCandidates", candidates);
       this.toggleLoadMoreButton();
     }
   }
