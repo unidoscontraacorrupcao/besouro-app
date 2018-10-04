@@ -261,6 +261,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
             <paper-dropdown-menu id="ufOpts" label="UF">
               <paper-listbox slot="dropdown-content" attr-for-selected="name">
                 <paper-item name="TODAS">TODAS</paper-item>
+                <paper-item name="AC">AC</paper-item>
                 <paper-item name="AL">AL</paper-item>
                 <paper-item name="AP">AP</paper-item>
                 <paper-item name="AM">AM</paper-item>
