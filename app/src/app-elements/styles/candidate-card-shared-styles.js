@@ -25,6 +25,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       font-size: 24px;
       color: var(--secondary-text-color);
       margin-bottom: 16px;
+      cursor: pointer;
     }
 
     #candidate-infos {
@@ -112,6 +113,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     .card-footer paper-button div {
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
 
     #btn-icon {
@@ -220,7 +222,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
 
     #close {
       top: 15px;
-      background-color: var(--accent-color);
+      background-color: #B7B8B7;
       width: 69px;
       cursor: pointer;
     }
@@ -246,31 +248,16 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       border-color: rgba(49,39,131,1);
       border-style: solid;
       border-width: 1px;
-      width: 90%;
       margin: auto auto;
     }
 
-    .item {
-      height: 40px;
-      overflow: hidden;
-      transition: height 0.5s;
-      border-bottom-style: solid;
-      border-bottom-color: rgba(49,39,131,1);
-      border-bottom-width: 1px;
-    }
-
-    .item-header { height: 45px; }
-
     .item-body {
-      width: 90%;
-      margin: auto;
-      text-align: left;
-      margin-top: 5px;
+      padding: 5px 10px;
     }
 
     .item-body span {
       font-family: helvetica-neue;
-      font-size: 1.1rem;
+      font-size: 16px;
       color: rgba(51,51,51,1);
       line-height: 1;
     }
@@ -282,8 +269,6 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
     }
 
     .item-title {
-      margin-top: 13px;
-      display: inline-block;
       padding-left: 10px;
     }
 
@@ -291,7 +276,7 @@ $_documentContainer.innerHTML = `<dom-module id="candidate-card-shared-styles">
       text-transform: uppercase;
       color: rgba(49,39,131,1);
       font-family: folio;
-      font-size: 16px;
+      font-size: 18px;
     }
 
     @media only screen and (max-width: 470px) {

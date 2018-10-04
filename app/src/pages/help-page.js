@@ -61,8 +61,11 @@ class HelpPage extends PolymerElement {
         </app-toolbar>
       </app-header>
         <div class="content">
-          <p><strong>O que é a campanha Unidos Contra a Corrupção?</strong><br />
+          <p><strong>O que é a campanha Unidos Contra a Corrupção?</strong><br/>
           A Campanha Unidos contra a Corrupção é uma ação para promover as Novas Medidas contra a Corrupção e para que eleitores e candidatos trabalhem juntos por um novo Congresso Nacional de 2019 comprometido com esta luta.</p>
+
+          <p><strong>Como funciona a campanha?</strong><br/>
+          na primeira fase da campanha, divulgamos as novas medidas contra a corrupção e começamos a coletar assinaturas dos brasileiros que apoiam essa agenda. na segunda fase, buscamos o comprometimento de todos os candidatos ao congresso nacional para que trabalhem, caso eleitos, desde o início do mandato para discussão e aprovação do pacote de medidas. na terceira fase, lançamos a plataforma online para que a sociedade possa conhecer os candidatos que se comprometeram com a campanha, pressionar aqueles que ainda não tiverem aderido e ajudar a eleger um congresso que implemente e avance com as propostas das novas medidas. agora, todas as pessoas que usarem a plataforma poderão pesquisar, filtrar e selecionar os nomes de sua preferência e gerar santinhos digitais (cartões virtuais) com as informações importantes para o dia da votação.</p>
 
           <p><strong>Quem está responsável pela campanha?</strong><br />
           O responsável pela campanha é uma coalizão de organizações sociais apartidárias e com longa trajetória de combate à corrupção no país, a saber, Contas Abertas, Instituto Cidade Democrática, Instituto Ethos, Movimento de Combate à Corrupção Eleitoral-MCCE, Observatório Social do Brasil e Transparência Internacional - Brasil.</p>
@@ -122,7 +125,7 @@ class HelpPage extends PolymerElement {
           </p>
 
           <p><strong>Como as pessoas poderão interagir? O papel da sociedade se encerra com as eleições?</strong><br />
-          Desde 31 de agosto, as/os eleitoras/es podem consultar as candidaturas na plataforma online app.unidoscontraacorrupcao.org.br, verificar seus compromissos assumidos (ou não), compartilhar informações com amigos e familiares e ainda exercer pressão sobre as/os próprias/os candidatas/os para que se comprometam. Depois das eleições, todos os que se cadastraram na plataforma online serão informados por e-mail, redes sociais e site da campanha sobre o passo-a-passo do acompanhamento e cobrança dos candidatos eleitos e que se assumiram compromissos com o encaminhamento de propostas no Congresso Nacional.
+          Em setembro de 2019, era permitido a eleitoras/es consultar candidatas/os na plataforma online, verificar seus compromissos assumidos (ou não), pesquisar e filtrar os nomes conforme os critérios da campanha, compartilhar as informações com amigos e familiares e ainda exercer pressão sobre as/os próprias/os candidatas/os para que se comprometessem. na semana que antecede às eleições, em outubro, todos os que navegam na plataforma poderão selecionar e salvar seus nomes favoritos e ainda gerar santinhos digitais (cartões virtuais) com todas as informações importantes para o dia da votação. nesta fase, as funções de compartilhamento e pressão ficarão desabilitadas. depois das eleições, todos os que se cadastraram na plataforma online serão informados por e-mail, redes sociais e site da campanha sobre o passo-a-passo do acompanhamento e cobrança dos candidatos eleitos e o encaminhamento das novas medidas contra a corrupção no congresso nacional.
           </p>
 
           <p><strong>Além dos 3 critérios, quais informações adicionais o app trará?</strong><br />

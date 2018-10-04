@@ -141,6 +141,9 @@ class NotificationCard extends PolymerElement {
         case /candidate/.test(notification.channel.sort):
           this.cardIcon = "app:thumb-down-notifications";
           break;
+        case /favorite/.test(notification.channel.sort):
+          this.cardIcon = "app:favorite";
+          break;
         default:
           this.cardIcon = "app:alert-users-notifications";
           break;
@@ -185,6 +188,10 @@ class NotificationCard extends PolymerElement {
         case "press":
           this.set('cardTitle', 'Você pressionou ');
           this.set('additionalText', ' para que ele(a) se comprometa contra a corrupção!')
+          break;
+        case "favorite":
+          this.set('cardTitle', 'Você adicionou o ');
+          this.set('additionalText', ' à sua lista de SANTINHOS! Para saber mais informações sobre ele/a acesse sua página! ')
           break;
         default:
           return "";

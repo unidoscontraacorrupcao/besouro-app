@@ -57,6 +57,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       app-drawer-layout:-webkit-full-screen-ancestor app-drawer {
         z-index: -1 !important;
       }
+      
 
       app-drawer:not([persistent]) {
         --app-drawer-width: 80%;
@@ -180,6 +181,18 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         font-family: Folio;
         font-size: 24px;
         line-height: 26px;
+        cursor: pointer;
+      }
+
+      .drawer-list a[name="favorites"] {
+        display: flex;
+        align-items: center;
+        line-height: normal;
+      }
+
+      .drawer-list a[name="favorites"] paper-icon-button {
+        padding-top: 6px;
+        margin-right: 5px;
       }
 
       .drawer-list a paper-badge {
@@ -231,7 +244,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       }
 
       #actions.hidden {
-        transform: translateY(65px);
+        display: none;
       }
 
     </style>
@@ -255,7 +268,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar class="tall">
           <iron-image on-tap="gotoProfile" src="{{user.photoURL}}" sizing="cover" hidden$="[[!user.uid]]"></iron-image>
-      <iron-image src="/images/generic/avatar_default-menu.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
+          <iron-image src="/images/generic/avatar_default-menu.png" sizing="cover" hidden$="[[user.uid]]"></iron-image>
           <div class="main-title">
             <div class="username" hidden$="[[!user.uid]]">
               <a href="profile">{{user.displayName}}</a>
@@ -278,13 +291,13 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
           </div>
         </app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="candidates" href="candidates" hidden$="[[!user.uid]]">
+          <a name="candidates" on-tap="_goToCandidatesNavbar" hidden$="[[!user.uid]]">
             <paper-icon-button class="candidates-link" icon="app:candidates" drawer-toggle></paper-icon-button>
             Candidatos
           </a>
-          <a name="inbox" href="inbox" hidden$="[[!user.uid]]">
-            <paper-icon-button icon="app:navMissions" drawer-toggle></paper-icon-button>
-            Missões
+          <a name="favorites" on-tap="_goToFavoritesNavbar" hidden$="[[!user.uid]]">
+            <paper-icon-button icon="app:favorite-navbar" drawer-toggle></paper-icon-button>
+            Santinho
           </a>
           <a name="profile" href="notifications" hidden$="[[!user.uid]]">
             <paper-icon-button icon="app:navNotifications" drawer-toggle id="notifications-link"></paper-icon-button>
@@ -308,7 +321,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
             Privacidade
           </a>
           <a name="back" class="drawer-item" href="http://www.unidoscontraacorrupcao.org.br" target="_blank">
-            Voltar às novas medidas
+            site da campanha
           </a>
           <a name="sign_it" href="http://www.unidoscontraacorrupcao.org.br/#assine" target="_blank">
             <span class="drawer-item-block">
@@ -329,7 +342,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         fallback-selection="not-found" on-selected-item-changed="_selectedPageChanged"
         role="main">
           <inbox-page name="inbox" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer"></inbox-page>
-          <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer" on-open-filter="_hideActions" on-close-filter="_showActions"></candidates-page>
+          <candidates-page name="candidates" route="{{route}}" user="{{user}}" on-open-drawer="_openDrawer" on-open-filter="_hideActions" on-close-filter="_showActions" inboxtab={{inboxtab}}></candidates-page>
           <candidate-page name="candidate" route="{{route}}" on-open-drawer="_openDrawer"></candidate-page>
           <mission-page name="mission" user="{{user}}" route="{{route}}"></mission-page>
           <show-mission-page name="show-mission" user="[[user]]" route-data="{{routeData}}" route="{{route}}"></show-mission-page>
@@ -363,6 +376,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
           on-go-to-inbox="_goToInbox"
           on-go-to-notifications="_goToNotifications"
           on-go-to-candidates="_goToCandidates"
+          on-go-to-favorites="_goToFavorites"
           unread={{unread}}>
         </app-actions>
       </template>
@@ -399,7 +413,10 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
         type: Array,
         value: ['privacy', 'help', 'not-found', 'login', 'reset-password']
       },
-      unread: Number
+      unread: Number,
+      inboxtab: {
+        type: Number
+      }
     };
   }
 
@@ -494,8 +511,26 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
     }
   }
 
-  _goToCandidates() {
+  _goToFavorites() {
+    this.set('inboxtab', 1);
     this.set("route.path", "/candidates");
+  }
+
+  _goToFavoritesNavbar() {
+    this.set('inboxtab', 1);
+    this.set("route.path", "/candidates");
+    if(this.$.drawer.swipeOpen) this.$.drawer.toggle();
+  }
+
+  _goToCandidates() {
+    this.set('inboxtab', 0);
+    this.set("route.path", "/candidates");
+  }
+
+  _goToCandidatesNavbar() {
+    this.set('inboxtab', 0);
+    this.set("route.path", "/candidates");
+    if(this.$.drawer.swipeOpen) this.$.drawer.toggle();
   }
 
   _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }

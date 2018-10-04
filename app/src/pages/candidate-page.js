@@ -7,6 +7,7 @@ import '@polymer/paper-spinner/paper-spinner.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-fab/paper-fab.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
+import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import 'share-menu/share-menu.js';
@@ -269,6 +270,52 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       #share-candidate paper-icon-button { padding: 9px; }
       #share-candidate div div:last-child { margin-top: 2px; }
 
+      #favoriteBtn {
+        display: none;
+        width: 262px;
+        margin: 20px auto;
+        background-color: var(--accent-color);
+        border: none;
+        color: var(--primary-background-color);
+      }
+
+      #unFavoriteBtn {
+        display: none;
+        width: 262px;
+        margin: 20px auto;
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
+        background-color: var(--primary-background-color);
+      }
+
+      .card-footer {
+        align-items: center;
+      }
+
+      #btn-icon { margin: auto auto 10px auto; }
+
+      .card-footer paper-button div {
+        line-height: 14px;
+      }
+
+      paper-toast.error {
+        --paper-toast-color: white;
+        --paper-toast-background-color: #e7007e;
+        margin-bottom: 65px;
+        text-align: center;
+        min-height: 100px;
+        width: 100%;
+      }
+      paper-toast {
+        --paper-font-common-base: Folio;
+        font-family: Folio;
+        font-weight: 200;
+      }
+      .toast-text {
+        color: white;
+        margin-top: 0;
+      }
+
       @media only screen and (max-width: 460px) {
         .stats-content {
           font-size: 1.0rem;
@@ -287,6 +334,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
         .card-action span { font-size: 1.5em };
         #candidate-infos{ width: 100%; }
       }
+
     </style>
     <app-dialog id="candidateShareDialog">
       <candidate-share-modal
@@ -307,6 +355,11 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       pattern="/candidate/:key"
       data="{{data}}">
     </app-route>
+
+    <paper-toast id="favoriteToast" class="error" text="{{_toastMessage}}">
+      <h3 class="toast-text">CANDIDATO/A ADICIONADO A SANTINHOS</h3>
+      <p class="toast-text">Continue adicionando candidatos/as para o dia da eleição e acesse sua aba SANTINHO</p>
+    </paper-toast>
 
     <app-header-layout has-scrolling-region="">
       <app-header
@@ -347,14 +400,15 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
             <div id="short">
               <span>Tem passado limpo?<iron-icon icon="app:help"></iron-icon></span>
               <paper-tooltip position="right">
-                Nosso critério de passado limpo é rígido.
-                A referência são os crimes da Lei da Ficha Limpa, mas
-                para nós eles nunca prescrevem. No caso de quem tentará
-                reeleição, veremos quem responde a processo no STF.
+                Nosso critério de passado limpo é mais rígido.
+                A referência são os crimes da Lei da Ficha Limpa,
+                mas para nós eles nunca prescrevem. No caso de
+                quem tentará reeleição, veremos quem responde a 
+                processo no STF.
               </paper-tooltip>
             </div>
             <div>
-              <span>{{candidate.has_clean_pass}}</span>
+              <span id="cleanPass">{{candidate.has_clean_pass}}</span>
             </div>
           </div>
           <div class="info">
@@ -369,7 +423,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span>{{candidate.committed_to_democracy}}</span>
+              <span id="commitedToDem">{{candidate.committed_to_democracy}}</span>
             </div>
           </div>
           <div class="info">
@@ -383,7 +437,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span>{{candidate.adhered_to_the_measures}}</span>
+              <span id="adheredToMeasures">{{candidate.adhered_to_the_measures}}</span>
             </div>
           </div>
         </div>
@@ -437,7 +491,26 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
             </div>
           </div>
         </div>
-        <div id="user-actions">
+
+        <div class="card-footer">
+          <paper-button on-click="_wrapFavoriteCandidate" id="favoriteBtn">
+            <div>
+              <div id="btn-icon">
+                <iron-icon icon="app:favorite"></iron-icon>
+              </div>
+              salvar como santinho
+            </div>
+          </paper-button>
+          <paper-button on-click="_wrapUnfavoriteCandidate" id="unFavoriteBtn">
+            <div>
+              <div id="btn-icon">
+                <iron-icon icon="app:unfavorite"></iron-icon>
+              </div>
+              desfazer santinho
+            </div>
+          </paper-button>
+        </div>
+        <!-- <div id="user-actions">
           <div id="unselectedButtons">
             <paper-button id="selectButton" on-click="_wrapSelectCandidate">
               <div>
@@ -486,7 +559,7 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               </div>
             </paper-button>
           </div>
-        </div>
+        </div> -->
 
       <div id="social-medias">
         <hr>
@@ -505,19 +578,17 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Nome Completo</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
-          <div class="item-body">
-             <span>{{candidate.full_name}}</span>
+            <div class="item-body">
+              <span>{{candidate.full_name}}</span>
+            </div>
           </div>
 
-          </div>
           <div class="item">
             <div class="item-header">
               <div class="item-title">
                 <span>Ocupação Profissional</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -530,7 +601,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Aderiu totalmente às novas medidas?</span>
               </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -543,7 +613,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Total de bens e patrimônio</span>
               </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -556,7 +625,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
               <div class="item-title">
                 <span>Total de processos a que responde</span>
               </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
             </div>
             <div class="item-body">
               <span>
@@ -595,7 +663,9 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   static get observers() { return [ 'routePathChanged(route.path)' ] }
 
-  routePathChanged(path) { this._getCandidate(); }
+  routePathChanged(path) { 
+    this._getCandidate();
+  }
 
   _getCandidate() {
     if (!this.data || Object.keys(this.data).length == 0) return;
@@ -606,6 +676,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       this._chooseCandidateColor();
       this._hideSocialMediaIcons();
       this._getCandidateStatistics();
+      this._setFavoriteButton();
+      this._setPoliticalInfosColors();
     });
   }
 
@@ -615,7 +687,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     if (!user || Object.keys(user).length == 0) {
       this._hideButtons();
       this._showUnselectedBtns();
-      return;
     }
     else {
       this._getCandidateStatusByUser(user);
@@ -654,32 +725,6 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
     this.set("route.path", "/login");
   }
 
-  _toggle(e) {
-    var item = e.target.parentNode.parentNode;
-    var itemHeight = item.clientHeight;
-    if (itemHeight == 40) {
-      item.setAttribute("style", "height: 90px");
-      e.target.set("icon",  "app:expand-less");
-    }
-    else {
-      item.setAttribute("style", "height: 40px");
-      e.target.icon = "app:expand-more";
-    }
-  }
-
-  _toggleBig(e) {
-    var item = e.target.parentNode.parentNode;
-    var itemHeight = item.clientHeight;
-    if (itemHeight == 40) {
-      item.setAttribute("style", "height: 200px");
-      e.target.set("icon",  "app:expand-less");
-    }
-    else {
-      item.setAttribute("style", "height: 40px");
-      e.target.icon = "app:expand-more";
-    }
-  }
-
   _chooseCandidateColor() {
     if (this.candidate.score == "good") {
       var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
@@ -695,8 +740,8 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   _candidateStatusChanged() {
     if (!this.candidateStatus || Object.keys(this.candidateStatus).length == 0) return;
-    this._hideButtons();
-    this._showButtonsByStatus();
+    // this._hideButtons();
+    // this._showButtonsByStatus();
   }
 
   _showButtonsByStatus() {
@@ -793,11 +838,11 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
       this.$.unauthorizedDialog.present();
     }
     else {
+      this._pressCandidate().then((ajax) => {
+        this._getCandidateStatistics();
+        this._shareCandidate(true);
+      });
     }
-    this._pressCandidate().then((ajax) => {
-      this._getCandidateStatistics();
-      this._shareCandidate(true);
-    });
   }
 
   _wrapUnselectCandidate() {
@@ -808,6 +853,51 @@ class CandidatePage extends CardMixin(CommonBehaviorsMixin(PolymerElement)) {
 
   _closeModal() { this.$.candidateShareDialog.dismiss(); }
   _dismissUnauthorizedModal() { this.$.unauthorizedDialog.dismiss(); }
+
+  _setFavoriteButton() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.$.favoriteBtn.style.display = 'block';
+      return;
+    } else {
+      this.$.api.path = `users/${this.getUser().uid}/is-favorite`;
+      this.$.api.params['candidate'] = this.candidate.id;
+      this.$.api.method = "GET";
+      this.$.api.request().then((ajax) => {
+        if(ajax.response.is_favorite) {
+          this.$.favoriteBtn.style.display = 'none';
+          this.$.unFavoriteBtn.style.display = 'block';
+        } else {
+          this.$.favoriteBtn.style.display = 'block';
+          this.$.unFavoriteBtn.style.display = 'none';
+        }
+      });
+    }
+  }
+
+  _wrapFavoriteCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.$.unauthorizedDialog.present();
+    } else {
+      this._favoriteCandidate().then(e => {
+        this.$.favoriteToast.open();
+        this._getCandidate();
+      });
+    }
+  }
+
+  _wrapUnfavoriteCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.$.unauthorizedDialog.present();
+    } else {
+      this._unfavoriteCandidate().then(e => {
+        this._getCandidate();
+      });
+    }
+  }
+
 }
 
 window.customElements.define(CandidatePage.is, CandidatePage);

@@ -75,10 +75,33 @@ let Mixin = function(superClass) {
     this.dispatchEvent(new CustomEvent("ignored-candidate"));
   }
 
+  _favoriteCandidate() {
+    var user = this.getUser();
+    if (!user || Object.keys(user).length == 0) {
+      this.dispatchEvent(new CustomEvent("unauthorized"));
+      return;
+    }
+    this.$.api.method = "POST";
+    this.$.api.path = "favorite-candidates/";
+    this.$.api.user = user;
+    //TODO: replace 1 by the candidate id.
+    this.$.api.body = {"user": user.uid, "candidate": this.candidate.id};
+    return this.$.api.request();
+  }
+
   _unselectCandidate() {
     var user = this.getUser();
     this.$.api.method = "POST";
     this.$.api.path = `users/${user.uid}/unselect-candidate/`;
+    this.$.api.body = {"candidate": this.candidate.id};
+    this.$.api.user = user;
+    return this.$.api.request();
+  }
+
+  _unfavoriteCandidate() {
+    var user = this.getUser();
+    this.$.api.method = "POST";
+    this.$.api.path = `users/${user.uid}/unfavorite-candidate/`;
     this.$.api.body = {"candidate": this.candidate.id};
     this.$.api.user = user;
     return this.$.api.request();
@@ -136,6 +159,31 @@ let Mixin = function(superClass) {
       shareComponent.setCandidate(this.candidate);
       this.$.candidateShareDialog.present();
     }
+
+  _setPoliticalInfosColors() {
+    var cleanPass = this.$.cleanPass;
+    var commitedToDem = this.$.commitedToDem;
+    var adheredToMeasures = this.$.adheredToMeasures;
+
+    cleanPass.style.color = "white";
+    commitedToDem.style.color = "white";
+    adheredToMeasures.style.color = "white";
+
+    if (this.candidate.has_clean_pass == "SIM" &&
+        this.candidate.adhered_to_the_measures == "SIM" &&
+        this.candidate.committed_to_democracy == "SEM RESPOSTA") {
+        commitedToDem.style.color = "#E6007E";
+    }
+
+    if (this.candidate.has_clean_pass == "SIM" &&
+        this.candidate.adhered_to_the_measures == "SIM" &&
+        this.candidate.committed_to_democracy == "SIM") {
+        cleanPass.style.color = "#32CEA6";
+        commitedToDem.style.color = "#32CEA6";
+        adheredToMeasures.style.color = "#32CEA6";
+    }
+  }
+
   }
 }
 

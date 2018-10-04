@@ -29,7 +29,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
       }
 
       #filter {
-        background-color: white;
+        background-color: var(--primary-background-color);
         height: 40px;
         width: 360px;
         left: 0;
@@ -50,40 +50,44 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         display: flex;
       }
 
-    #filter-header div { flex-grow: 2; }
+      #filter-header div { flex-grow: 2; }
 
 
       #filter-header span {
-        float: left;
-        padding-top: 7px;
         font-family: folio;
         text-transform: uppercase;
+        margin-right: auto;
+        cursor: pointer;
       }
 
-    #filter-header iron-icon {
-      float: left;
-      margin: 12px 6px 11px 10px;
-      padding: -2px;
-      width: 14px;
-      height: auto;
-    }
+      #filter-header iron-icon {
+        padding: 0 10px;
+        width: 15px;
+        height: 15px;
+      }
 
-      #filter-reload { margin-top: 4px; }
-      #filter-header paper-icon-button {float: right;}
+      #filter-header paper-icon-button { width: 35px; }
+
+      #filter-header #filterToggle {
+        width: 40px;
+      }
+
+      #filter-fields {
+        background-color: var(--primary-background-color);
+      }
 
       .row {
-        width: 90%;
-        height: 70px;
-        margin: auto;
         display: flex;
+        padding: 0 10px;
       }
 
-      .row paper-input:first-child,
-      #partyName {
+      .row > *:first-child {
         margin-right: 20px;
       }
 
-      #adheredOpts { margin-right: 20px; }
+      .row > * {
+        flex: 50%;
+      }
 
       #adheredOpts paper-item {
         --paper-item: {
@@ -96,7 +100,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         background-color: var(--accent-color);
         font-family: folio;
         height: 70%;
-        margin-top: 6px;
+        margin: 6px 0 0;
         flex: 1;
       }
 
@@ -137,12 +141,12 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           }
         }
 
-          .filter-circle {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            margin-left: 4px;
-          }
+        .filter-circle {
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+          margin-left: 4px;
+        }
 
       }
 
@@ -153,7 +157,6 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           }
         }
       }
-
 
       @media screen and (min-width: 1100px) {
         #filter {
@@ -168,24 +171,14 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           padding: 0 20px;
         }
         .row {
-          width: unset;
-          height: unset;
-          margin: 0;
-          display: flex;
           flex-direction: column;
           justify-content: space-around;
           flex: 0 0 30%;
         }
-        paper-button {
-          margin: 0;
-          flex: unset;
-          height: unset;
+        .row > paper-button {
+          margin-bottom: 10px;
         }
-        #adheredOpts {
-          margin: 0;
-        }
-        .row paper-input:first-child,
-        #partyName {
+        #ufOpts {
           margin: 0;
         }
       }
@@ -193,7 +186,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
 
       <div id="filter">
         <div id="filter-header">
-          <div on-click="_toggle">
+          <div on-tap="_toggle">
             <iron-icon icon="app:filter-icon"></iron-icon>
             <span>filtre os resultados da lista</span>
           </div>
@@ -203,7 +196,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         <div id="filter-fields">
           <div class="row">
             <paper-dropdown-menu id="adheredOpts" label="mostrando candidatos">
-              <paper-listbox slot="dropdown-content" selected="0">
+              <paper-listbox slot="dropdown-content" selected="1">
                 <paper-item>TODOS</paper-item>
                 <paper-item>se comprometeu <div class="filter-circle" id="compromise-circle"></div></paper-item>
                 <paper-item>não se comprometeu <div class="filter-circle" id="not-compromise-circle"></div></paper-item>
@@ -266,35 +259,34 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
           </div>
           <div class="row">
             <paper-dropdown-menu id="ufOpts" label="UF">
-              <paper-listbox slot="dropdown-content">
-                <paper-item>TODAS</paper-item>
-                <paper-item>AC</paper-item>
-                <paper-item>AL</paper-item>
-                <paper-item>AP</paper-item>
-                <paper-item>AM</paper-item>
-                <paper-item>BA</paper-item>
-                <paper-item>CE</paper-item>
-                <paper-item>DF</paper-item>
-                <paper-item>ES</paper-item>
-                <paper-item>GO</paper-item>
-                <paper-item>MA</paper-item>
-                <paper-item>MT</paper-item>
-                <paper-item>MS</paper-item>
-                <paper-item>MG</paper-item>
-                <paper-item>PA</paper-item>
-                <paper-item>PB</paper-item>
-                <paper-item>PR</paper-item>
-                <paper-item>PE</paper-item>
-                <paper-item>PI</paper-item>
-                <paper-item>RJ</paper-item>
-                <paper-item>RN</paper-item>
-                <paper-item>RS</paper-item>
-                <paper-item>RO</paper-item>
-                <paper-item>RR</paper-item>
-                <paper-item>SC</paper-item>
-                <paper-item>SP</paper-item>
-                <paper-item>SE</paper-item>
-                <paper-item>TO</paper-item>
+              <paper-listbox slot="dropdown-content" attr-for-selected="name">
+                <paper-item name="TODAS">TODAS</paper-item>
+                <paper-item name="AL">AL</paper-item>
+                <paper-item name="AP">AP</paper-item>
+                <paper-item name="AM">AM</paper-item>
+                <paper-item name="BA">BA</paper-item>
+                <paper-item name="CE">CE</paper-item>
+                <paper-item name="DF">DF</paper-item>
+                <paper-item name="ES">ES</paper-item>
+                <paper-item name="GO">GO</paper-item>
+                <paper-item name="MA">MA</paper-item>
+                <paper-item name="MT">MT</paper-item>
+                <paper-item name="MS">MS</paper-item>
+                <paper-item name="MG">MG</paper-item>
+                <paper-item name="PA">PA</paper-item>
+                <paper-item name="PB">PB</paper-item>
+                <paper-item name="PR">PR</paper-item>
+                <paper-item name="PE">PE</paper-item>
+                <paper-item name="PI">PI</paper-item>
+                <paper-item name="RJ">RJ</paper-item>
+                <paper-item name="RN">RN</paper-item>
+                <paper-item name="RS">RS</paper-item>
+                <paper-item name="RO">RO</paper-item>
+                <paper-item name="RR">RR</paper-item>
+                <paper-item name="SC">SC</paper-item>
+                <paper-item name="SP">SP</paper-item>
+                <paper-item name="SE">SE</paper-item>
+                <paper-item name="TO">TO</paper-item>
               </paper-listbox>
             </paper-dropdown-menu>
             <paper-button on-tap="_filter">filtrar</paper-button>
@@ -326,14 +318,24 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         type: Object,
         value: {},
         notify: true
+      },
+      filtered: {
+        type: Boolean,
+        notify: true,
+        value: false
       }
     }
   }
 
   setStateOnFilter(user) {
     if(!user) return;
-    if(user.state) this.$.ufOpts.value = user.state;
-    else this.$.ufOpts.value = 'TODAS';
+    const listbox = this.$.ufOpts.querySelector('paper-listbox');
+    if(listbox.selected) return;
+    if(user.state) {
+      listbox.selected = user.state;
+    } else {
+      listbox.selected = 'TODAS';
+    }
   }
 
   _toggle(e) {
@@ -341,9 +343,9 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     var itemHeight = item.clientHeight;
     if (itemHeight == 40) {
       if(window.innerWidth > 1100) {
-        item.setAttribute("style", "height: 200px");
+        item.setAttribute("style", "height: 190px");
       } else {
-        item.setAttribute("style", "height: 250px");
+        item.setAttribute("style", "height: 240px");
       }
       this.$.filterToggle.set("icon",  "app:icon-up");
       this.dispatchEvent(new CustomEvent('open-filter', { bubbles: true, composed: true }));
@@ -372,13 +374,14 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
     this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
       this._getTotalFiltered();
+      this.set('filtered', true);
     });
   }
 
-  _filterSelectedCandidates() {
+  _filterFavoritesCandidates() {
     var user = this.getUser();
     if (!user || Object.keys(user).length == 0) return;
-    this.$.api.path = `users/${user.uid}/selected-candidates`;
+    this.$.api.path = `users/${user.uid}/favorite-candidates`;
     this._setFilters();
     this.$.api.params = this.filters;
     this.dispatchEvent(new CustomEvent("loading"));
@@ -387,6 +390,7 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
         {detail: {candidates: ajax.response, "tab": 1}}));
       this.dispatchEvent(new CustomEvent("hide-loading"));
       this._toggle();
+      this.set('filtered', true);
     });
   }
 
@@ -465,8 +469,8 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   _filter() {
     if (this.tab == 0)
       this._fiterAllCandidates();
-    else
-      this._filterSelectedCandidates();
+     else
+       this._filterFavoritesCandidates();
   }
 
   _reload() {
@@ -483,13 +487,13 @@ class CandidateFilter extends CommonBehaviorsMixin(PolymerElement) {
   clearFields() {
     this.$.candidateName.value = '';
     this.$.candidacyOpts.value = 'TODAS';
-    this.$.ufOpts.value = 'TODAS';
     this.$.partyName.value = 'TODOS';
     this.$.adheredOpts.value = 'TODOS';
     const lists = this.shadowRoot.querySelectorAll('paper-listbox');
     lists.forEach(element => {
       element.selected = 0;
     });
+    this.$.ufOpts.querySelector('paper-listbox').selected = 'TODAS';
   }
 
 }

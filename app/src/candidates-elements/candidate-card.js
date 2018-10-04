@@ -91,6 +91,21 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
 
     #btn-icon { margin: auto auto 10px auto; }
 
+    #favorite-button {
+      width: 262px;
+      margin: 20px auto;
+      background-color: var(--accent-color);
+      border: none;
+    }
+
+    #close div {
+      margin: 0;
+      padding: 10px;
+    }
+
+    #close span {
+      margin: 0;
+    }
 
     @media screen and (min-width: 1100px) {
       :host {
@@ -114,13 +129,10 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     <div class="card">
       <div class="card-header">
         <div class="container">
-          <span id="candidate-name"> {{candidate.name}} </span>
+          <span id="candidate-name" on-tap="_showCandidate"> {{candidate.name}} </span>
           <div id="close" on-click="_ignoreCandidate">
             <div>
-              <div>
-                <paper-icon-button icon="app:closeModal"></paper-icon-button>
-              </div>
-              <span>fechar</span>
+              <span>esconder</span>
             </div>
           </div>
           <div id="candidate-infos">
@@ -158,6 +170,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
             </div>
           </div>
         <iron-image
+          on-tap="_showCandidate"
           sizing="contain"
           preload="" fade=""
           src="{{candidate.image}}">
@@ -175,7 +188,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span><br>{{candidate.has_clean_pass}}</br></span>
+              <span id="cleanPass"><br>{{candidate.has_clean_pass}}</br></span>
             </div>
           </div>
           <div class="info">
@@ -190,7 +203,7 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span><br>{{candidate.committed_to_democracy}}</br></span>
+              <span id="commitedToDem"><br>{{candidate.committed_to_democracy}}</br></span>
             </div>
           </div>
           <div class="info">
@@ -204,14 +217,14 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               </paper-tooltip>
             </div>
             <div>
-              <span><br>{{candidate.adhered_to_the_measures}}</br></span>
+              <span id="adheredToMeasures"><br>{{candidate.adhered_to_the_measures}}</br></span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="card-footer">
-        <paper-button on-click="_wrapSelectCandidate">
+        <!-- <paper-button on-click="_wrapSelectCandidate">
           <div>
             <div id="btn-icon">
               <iron-icon icon="app:select-candidate"></iron-icon>
@@ -225,6 +238,14 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
               <iron-icon icon="app:press-candidate"></iron-icon>
             </div>
             pressionar
+          </div>
+        </paper-button> -->
+        <paper-button on-click="_wrapFavoriteCandidate" id="favorite-button">
+          <div>
+            <div id="btn-icon">
+              <iron-icon icon="app:favorite"></iron-icon>
+            </div>
+            salvar como santinho
           </div>
         </paper-button>
       </div>
@@ -244,13 +265,13 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   }
 
   _chooseCandidateColor() {
-    this._showPressBtn();
+    // this._showPressBtn();
     if (this.candidate.score == "good") {
-      this._hidePressBtn();
+      // this._hidePressBtn();
       var colors = ["rgba(50,206,166,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else if (this.candidate.score == "bad") {
-      this._hidePressBtn();
+      // this._hidePressBtn();
       var colors = ["rgba(230,0,0,0.5)", "rgba(0,0,0,1)"];
       this.setCardImageGradient(colors, false, "to bottom");
     } else {
@@ -259,26 +280,27 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
     }
   }
 
-  _hidePressBtn () {
-    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
-    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    pressBtn.style.display = "none";
-    selectBtn.style.margin = "20px auto";
-    selectBtn.style.width = "262px";
-  }
+  // _hidePressBtn () {
+  //   var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
+  //   var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
+  //   pressBtn.style.display = "none";
+  //   selectBtn.style.margin = "20px auto";
+  //   selectBtn.style.width = "262px";
+  // }
 
-  _showPressBtn() {
-    var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
-    var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
-    pressBtn.style.display = "block";
-    selectBtn.style.marginLeft = "auto";
-    selectBtn.style.marginRight = "5px";
-    selectBtn.style.width = "128px";
-  }
+  // _showPressBtn() {
+  //   var selectBtn = this.shadowRoot.querySelector("paper-button:first-child");
+  //   var pressBtn = this.shadowRoot.querySelector("paper-button:last-child");
+  //   pressBtn.style.display = "block";
+  //   selectBtn.style.marginLeft = "auto";
+  //   selectBtn.style.marginRight = "5px";
+  //   selectBtn.style.width = "128px";
+  // }
 
   _candidateChanged() {
     this._removeCardAnimations();
     this._chooseCandidateColor();
+    this._setPoliticalInfosColors();
   }
 
   _removeCardAnimations() {
@@ -289,19 +311,28 @@ class CandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   }
 
   _wrapSelectCandidate() {
-    this.showLoading();
     this._selectCandidate().then((ajax) => {
       this.dispatchEvent(new CustomEvent("selected-candidate", {detail: {"candidate": ajax.response}}))
     });
   }
 
   _wrapPressCandidate() {
-    this.showLoading();
     this._pressCandidate().then((ajax) => {
       this.dispatchEvent(new CustomEvent("pressed-candidate", {detail: {"candidate": ajax.response}}));
     });
   }
 
+  _wrapFavoriteCandidate() {
+    this._favoriteCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("favorite-candidate"));
+    });
+  }
+
   _closeModal() { this.$.candidateShareDialog.dismiss(); }
+
+  _showCandidate() {
+    this.dispatchEvent(new CustomEvent("show-candidate",
+      { detail: {candidate: this.candidate.id} }));
+  }
 }
 customElements.define(CandidateCard.is, CandidateCard);

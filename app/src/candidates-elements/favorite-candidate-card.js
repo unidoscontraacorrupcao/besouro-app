@@ -2,7 +2,6 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-image/iron-image.js';
-import '@polymer/paper-tooltip/paper-tooltip.js';
 
 import '../app-elements/shared-styles.js';
 import '../candidates-elements/candidate-share-modal.js'
@@ -18,11 +17,11 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 /**
  * @polymer
- * @SelectedCandidateCard
+ * @FavoriteCandidateCard
  * @appliesMixin CommonBehaviorsMixin
  * @appliesMixin CardMixin
  */
-class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
+class FavoriteCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElement)) {
   static get template() {
     return html`
     <style include="candidate-card-shared-styles"></style>
@@ -79,7 +78,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         border-color: rgba(0,159,227,1);
       }
 
-      #btn-icon { margin: auto auto 10px auto; }
+      #btn-icon { margin: 5px 0; }
 
       #see-more {
         width: 90%;
@@ -90,11 +89,12 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         color: var(--accent-color);
       }
 
-      #see-more paper-button {
+      #see-more a {
         text-transform: uppercase;
-        color: var(--accent-color);
+        color: var(--secondary-text-color);
         font-family: folio;
         font-size: 18px;
+        cursor: pointer;
       }
 
       @keyframes ignored-candidate {
@@ -111,41 +111,27 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
         100% {opacity: 0;}
       }
 
-      @keyframes selected-candidate {
-        0% {left: unset;}
-        10% {left: 10px;}
-        20% {left: 20px;}
-        30% {left: 30px;}
-        40% {left: 40px;}
-        50% {left: 50px;}
-        60% {left: 60px;}
-        70% {left: 70px; opacity: 0.3;}
-        80% {left: 80px; opacity: 0.2;}
-        90% {left: 90px; opacity: 0.1;}
-        100% {opacity: 0;}
-      }
-
-      .selected-candidate-animation {
-        animation: selected-candidate 0.8s;
-        -webkit-animation: selected-candidate 0.8s;
-      }
-
       .ignored-candidate-animation {
         animation: ignored-candidate 0.8s;
         -webkit-animation: ignored-candidate 0.8s;
       }
 
       .card-footer paper-button:first-child {
-        color: var(--accent-color);
-        border: 1px solid var(--accent-color);
+        background-color: var(--accent-color);
+        color: var(--default-primary-color);
+        border: none;
+      }
+
+      #urn-number {
+        color: var(--accent-color) !important;
       }
 
       #favoriteBtn {
         width: 262px;
         margin: 20px auto;
-        background-color: var(--accent-color);
-        border: none;
-        color: var(--primary-background-color);
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
+        background-color: var(--primary-background-color);
       }
 
       @media screen and (min-width: 1100px) {
@@ -156,9 +142,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     </style>
 
     <app-dialog id="candidateShareDialog">
-      <candidate-share-modal
-        on-close-modal="_closeModal">
-      </candidate-share-modal>
+      <candidate-share-modal on-close-modal="_closeModal"></candidate-share-modal>
     </app-dialog>
 
     <app-besouro-api id="api"></app-besouro-api>
@@ -168,14 +152,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       <div class="card-header">
         <div class="container">
           <span id="candidate-name" on-tap="_showCandidate"> {{candidate.name}} </span>
-          <div id="close">
-            <div>
-              <div>
-                <paper-icon-button on-click="_unselectCandidate" icon="app:remove-selected"></paper-icon-button>
-              </div>
-              <span on-click="_wrapUnselectCandidate">remover seleção</span>
-            </div>
-          </div>
           <div id="candidate-infos">
             <div class="flex">
               <div id="candidacy">
@@ -186,7 +162,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
             <div>
               <div id="urn">
                 <span>urna:</span>
-                <span><b>{{candidate.urn}}</b></span>
+                <span id="urn-number"><b>{{candidate.urn}}</b></span>
               </div>
             </div>
             <div>
@@ -210,7 +186,7 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
               </div>
             </div>
           </div>
-        <iron-image 
+        <iron-image
           on-tap="_showCandidate"
           sizing="contain"
           preload="" fade=""
@@ -265,12 +241,12 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
       </div>
 
       <div class="card-footer">
-        <paper-button on-click="_wrapFavoriteCandidate" id="favoriteBtn">
+        <paper-button on-click="_wrapUnfavoriteCandidate" id="favoriteBtn">
           <div>
             <div id="btn-icon">
-              <iron-icon icon="app:favorite"></iron-icon>
+              <iron-icon icon="app:unfavorite"></iron-icon>
             </div>
-            salvar como santinho
+            desfazer santinho
           </div>
         </paper-button>
         <!-- <paper-button on-click="_supportCandidate" id="supportBtn">
@@ -282,94 +258,16 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
           </div>
         </paper-button> -->
       </div>
-      <div id="social-medias">
-        <hr>
-        <span>redes sociais deste candidato:</span>
-        <div id="medias">
-            <paper-icon-button id="facebookBtn" on-click="_redirectToSocialLink" data-item="facebook_url" icon="app:social-facebook"></paper-icon-button>
-            <paper-icon-button id="twitterBtn" on-click="_redirectToSocialLink" data-item="twitter_url" icon="app:social-twitter"></paper-icon-button>
-            <paper-icon-button id="instagramBtn" on-click="_redirectToSocialLink" data-item="instagram_url" icon="app:social-insta"></paper-icon-button>
-            <paper-icon-button id="youtubeBtn" on-click="_redirectToSocialLink" data-item="youtube_url" icon="app:social-youtube"></paper-icon-button>
-            <paper-icon-button id="crowdBtn" on-click="_redirectToSocialLink" data-item="crowdfunding_url" icon="app:social-link"></paper-icon-button>
-        </div>
+
+      <div id="see-more">
+        <a on-click="_showCandidate">ver detalhes</a>
       </div>
-
-        <div id="tse-data">
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Nome Completo</span>
-              </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
-            </div>
-          <div class="item-body">
-             <span>{{candidate.full_name}}</span>
-          </div>
-
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Ocupação Profissional</span>
-              </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.occupation}}
-              </span>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Aderiu totalmente às novas medidas?</span>
-              </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.justify_adhered_to_the_measures}}
-              </span>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Total de bens e patrimônio</span>
-              </div>
-              <paper-icon-button on-click="_toggle" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.riches}}
-              </span>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-header">
-              <div class="item-title">
-                <span>Total de processos a que responde</span>
-              </div>
-              <paper-icon-button on-click="_toggleBig" icon="app:expand-more"></paper-icon-button>
-            </div>
-            <div class="item-body">
-              <span>
-                {{candidate.lawsuits}}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div id="see-more">
-          <paper-button on-click="_showCandidate">conheça mais</paper-button>
-        </div>
 
       </div>
 `;
   }
 
-  static get is() { return 'selected-candidate-card'; }
+  static get is() { return 'favorite-candidate-card'; }
 
   static get properties() {
     return {
@@ -380,15 +278,9 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
     }
   }
 
-  _wrapUnselectCandidate() {
-    this._unselectCandidate().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("unselect-candidate"));
-    });
-  }
-
-  _wrapFavoriteCandidate() {
-    this._favoriteCandidate().then((ajax) => {
-      this.dispatchEvent(new CustomEvent("favorite-candidate"));
+  _wrapUnfavoriteCandidate() {
+    this._unfavoriteCandidate().then((ajax) => {
+      this.dispatchEvent(new CustomEvent("unfavorite-candidate"));
     });
   }
 
@@ -428,14 +320,12 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
 
   _candidateChanged() {
     this._chooseCandidateColor();
-    this._hideSocialMediaIcons();
     this._removeCardAnimations();
     this._setPoliticalInfosColors();
   }
 
   _removeCardAnimations() {
     var card = this.shadowRoot.querySelector(".card");
-    card.classList.remove("selected-candidate-animation");
     card.classList.remove("ignored-candidate-animation");
   }
 
@@ -478,5 +368,6 @@ class SelectedCandidateCard extends CommonBehaviorsMixin(CardMixin(PolymerElemen
   }
 
   _closeModal() { this.$.candidateShareDialog.dismiss(); }
+  
 }
-customElements.define(SelectedCandidateCard.is, SelectedCandidateCard);
+customElements.define(FavoriteCandidateCard.is, FavoriteCandidateCard);

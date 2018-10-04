@@ -62,7 +62,7 @@ $_documentContainer.innerHTML = `<custom-style>
       --paper-icon-button-disabled-text: #afb1b9;
 
       --paper-input-container-color: #7a7a7a;
-      --paper-input-container-focus-color: #E15E36;
+      --paper-input-container-focus-color: #0094e5;
       --paper-input-container-invalid-color: #f13c14;
       --paper-input-container-input-color: #7a7a7a;
 

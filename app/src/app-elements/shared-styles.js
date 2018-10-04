@@ -142,7 +142,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         width: 40px;
         height: 40px;
         padding: 5px;
-        background-color: var(--default-primary-color);
+        background-color: transparent;
         border-radius: 50%;
       }
 
