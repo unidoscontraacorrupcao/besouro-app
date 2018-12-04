@@ -443,7 +443,8 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
     <app-dialog id="acceptedDialog">
       <accept-mission-modal
         redirect-to-mission="[[_disableModalRedirect()]]"
-        on-close-modal="_closeAcceptModal">
+        on-close-modal="_closeAcceptModal"
+        on-open-conversation="_openConversationModal">
       </accept-mission-modal>
     </app-dialog>
 

@@ -156,10 +156,12 @@ class AcceptMissionModal extends PolymerElement {
       this.dispatchEvent(new CustomEvent('modal-show-mission',
         { detail: { mission: this.missionId }}));
     else
-      this.dispatchEvent(new CustomEvent('close-modal',
-        { detail: {}}));
+      this._dismiss();
   }
 
-  _dismiss() { this.dispatchEvent(new CustomEvent('close-modal')); }
+  _dismiss() {
+    this.dispatchEvent(new CustomEvent('close-modal'));
+    this.dispatchEvent(new CustomEvent('open-conversation'));
+  }
 }
 window.customElements.define(AcceptMissionModal.is, AcceptMissionModal);
