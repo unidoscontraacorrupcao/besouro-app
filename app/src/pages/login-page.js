@@ -11,20 +11,18 @@ class LoginPage extends PolymerElement {
         on-user-update="_onUserUpdate"></login-controller>
     `;
   }
-
   static get is() { return `login-page`; }
-
-  static get properties() { return {}; }
+  static get properties() {return { };}
 
   signOut(key) {
     this.$.login.signOut(key);
     this.dispatchEvent(new CustomEvent(`logout-complete`));
   }
-
   _onUserUpdate(e, user) {
     this.dispatchEvent(new CustomEvent(`user-update`, { detail: user } ));
     this.dispatchEvent(new CustomEvent(`complete`));
   }
+
 }
 
 window.customElements.define(LoginPage.is, LoginPage);

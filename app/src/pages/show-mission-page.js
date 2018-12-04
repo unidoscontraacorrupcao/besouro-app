@@ -699,7 +699,8 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
       comments_pagination: {
         type: Number,
         value: 0
-      }
+      },
+      redirectBack: String
     };
   }
 
@@ -716,6 +717,7 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
 
   _addComment(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
+      this.set("redirectBack", `show-mission/${this.data.key}`);
       this.$.unauthorizedDialog.present();
       return;
     }
@@ -757,6 +759,7 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
 
   _acceptMission(e) {
     if (!this.user || Object.keys(this.user).length == 0) {
+      this.set("redirectBack", `show-mission/${this.data.key}`);
       this.$.unauthorizedDialog.present();
       return;
     }
@@ -935,6 +938,7 @@ class ShowMissionPage extends MissionMixin(CommonBehaviorsMixin(PolymerElement))
   _closeAcceptModal() { this.$.acceptedDialog.dismiss(); }
   _goToLogin() {
     this.$.unauthorizedDialog.dismiss();
+    this.set("route.redirectBack", this.redirectBack);
     this.set("route.path", "/login");
   }
 

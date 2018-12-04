@@ -357,6 +357,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
           <not-found-page name="not-found"></not-found-page>
           <login-page id="login"
             name="login"
+            route-data="{{routeData}}"
             on-user-update="_onUserUpdate"
             on-complete="_onLoginComplete"
             on-logout-complete="_onLogoutComplete">
@@ -557,9 +558,9 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _onLoginComplete(e) {
-    if (this.route.redirect_back) {
-      let redirect = this.route.redirect_back;
-      this.route.redirect_back = '';
+    if (this.route.redirectBack) {
+      let redirect = this.route.redirectBack;
+      this.route.redirectBack = '';
       this.set("route.path", redirect);
     }
     else {

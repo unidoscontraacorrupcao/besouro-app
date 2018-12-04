@@ -385,13 +385,6 @@ class MissionPage extends PolymerElement {
     }
   }
 
-  _onUserChanged() {
-    this._getUserCampaigns();
-  }
-
-  _getUserCampaigns(){
-  }
-
   routePathChanged(page) {
     const btn = this.$.saveBtn;
     btn.removeEventListener("tap", this.editMissionFunc, false);
@@ -412,9 +405,6 @@ class MissionPage extends PolymerElement {
         btn.addEventListener("tap", this.saveMissionFunc)
       }.bind(this), 100);
     }
-
-    if (page === "/mission")
-      this._getUserCampaigns();
   }
 
   _editMission() {
