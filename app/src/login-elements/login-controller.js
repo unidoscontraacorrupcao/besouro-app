@@ -129,7 +129,20 @@ class LoginController extends PolymerElement {
       let base = this.$.api.baseUrl;
       this.$.api.authUrl = `${base}/reset/`;
       this.$.api.authRequest().then(function(ajax) {
-        this.$.apiLogin.request(form.email, form.password);
+        this.$.api.authUrl = `${base}/social-account-exists`;
+        this.$.api.method = "GET";
+        this.$.api.params = {"email": form.email};
+        this.$.api.authRequest().then(function(ajax) {
+          var social_login_exists = ajax.response.account_exists;
+            if(!social_login_exists )
+              this.$.apiLogin.request(form.email, form.password);
+          else {
+            this.$.login.hideLoading();
+            VALIDATION.errors.email = "Você entrou no aplicativo via login social. Por favor clique em login via facebook para acessar novamente";
+            this.$.login.exposeErrors(VALIDATION.errors);
+            this._toastInvalidFields();
+          }
+        }.bind(this));
       }.bind(this));
     } else {
       this.$.login.exposeErrors(VALIDATION.errors);
@@ -214,6 +227,7 @@ class LoginController extends PolymerElement {
           this._toastInvalidFields();
         }
       }
+      this.$.login.hideLoading();
     }
   }
 

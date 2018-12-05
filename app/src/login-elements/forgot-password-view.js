@@ -6,7 +6,9 @@ import '@polymer/paper-spinner/paper-spinner.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 
 import '../app-elements/styles/modal-shared-styles.js';
+import '../app-elements/app-besouro-api.js';
 import {CommonBehaviorsMixin} from '../mixin-elements/common-behaviors-mixin.js';
+
 class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
   static get template() {
     return html`
@@ -110,6 +112,8 @@ class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
           }
         }
       </style>
+      <app-besouro-api id="api"></app-besouro-api>
+
       <div id="loading">
         <paper-spinner active=""></paper-spinner>
       </div>
@@ -198,9 +202,22 @@ class ForgotPasswordView extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   _onForgotPassword(e) {
-    this.dispatchEvent(new CustomEvent(`forgot-password`, {
-      detail: this._form
-    }));
+    let base = this.$.api.baseUrl;
+    this.$.api.authUrl = `${base}/social-account-exists`;
+    this.$.api.method = "GET";
+    this.$.api.params = {"email": this._form.email};
+    this.$.api.authRequest().then(function(ajax) {
+      var social_login_exists = ajax.response.account_exists;
+      if(!social_login_exists )
+        this.dispatchEvent(new CustomEvent(`forgot-password`, {
+          detail: this._form
+        }));
+      else {
+        this.hideLoading();
+        var errors = {"email": "Você entrou no aplicativo via login social. Por favor clique em login via facebook para acessar novamente."};
+        this.exposeErrors(errors);
+      }
+    }.bind(this));
   }
 
   _onSignUp(e) { this.dispatchEvent(new CustomEvent(`sign-up`)); }
