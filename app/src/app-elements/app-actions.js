@@ -103,7 +103,7 @@ class AppActions extends mixinBehaviors(
   </style>
     <div id="app-actions">
       <div id="actions-content">
-        <!-- <div id="missions-btn">
+        <div id="missions-btn">
           <div class="icon-container">
             <paper-icon-button
               icon="app:navMissions"
@@ -112,8 +112,8 @@ class AppActions extends mixinBehaviors(
             </paper-icon-button>
             <span>missões</span>
           </div>
-        </div> -->
-        <div id="favorites-btn">
+        </div>
+      <!-- <div id="favorites-btn">
           <div class="icon-container">
             <paper-icon-button
               class="star-button"
@@ -123,8 +123,8 @@ class AppActions extends mixinBehaviors(
             </paper-icon-button>
             <span>santinho</span>
           </div>
-        </div>
-        <div id="candidates-btn">
+        </div> -->
+      <!-- <div id="candidates-btn">
           <div class="icon-container">
             <paper-icon-button
               on-click="_goToDataItem"
@@ -133,7 +133,7 @@ class AppActions extends mixinBehaviors(
             </paper-icon-button>
             <span>candidatos</span>
           </div>
-        </div>
+        </div> -->
         <div id="notifications-btn">
           <div class="icon-container">
             <paper-icon-button

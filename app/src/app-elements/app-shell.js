@@ -57,7 +57,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
       app-drawer-layout:-webkit-full-screen-ancestor app-drawer {
         z-index: -1 !important;
       }
-      
+
 
       app-drawer:not([persistent]) {
         --app-drawer-width: 80%;
@@ -456,7 +456,7 @@ class AppShell extends CommonBehaviorsMixin(PolymerElement) {
   }
 
   routePathChanged(path) {
-    if(path === '' || path === '/') this.set('route.path', '/candidates');
+    if(path === '' || path === '/') this.set('route.path', '/inbox');
   }
 
   _pageChanged(page) {

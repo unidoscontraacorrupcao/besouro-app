@@ -9,6 +9,7 @@ class ConversationModal extends MissionMixin(PolymerElement) {
     <style include="shared-styles">
       :host {
         display: block;
+        width: 500px;
       }
 
       confirmation-icon,
@@ -128,6 +129,12 @@ class ConversationModal extends MissionMixin(PolymerElement) {
     #voteMore a { text-decoration: underline; }
     #voteMore span { text-transform: none; }
 
+
+    @media only screen and (max-width: 768px) {
+      :host {
+        min-width: 240px;
+      }
+    }
     </style>
     <app-besouro-api id="api"></app-besouro-api>
 
